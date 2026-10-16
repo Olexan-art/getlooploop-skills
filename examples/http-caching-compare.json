@@ -1,7 +1,7 @@
 {
   "schema": "getlooploop/vectorscope-compare@1",
-  "generatedAt": "2026-10-16T17:40:32.064Z",
-  "skillVersion": 2,
+  "generatedAt": "2026-10-16T18:38:27.183Z",
+  "skillVersion": "2.102",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "url": "https://www.getlooploop.com/vectorscope"
@@ -9,13 +9,500 @@
   "howToRead": "Each page is a full single-page export under pages[]. topics is the one dictionary every page was grouped against; topicTable gives passages and characters per topic per page; topicGaps lists, per page, topics the others cover and it does not; facts and factGaps are the agent's list of citable facts and where each is stated; queries carry a verdict per page and the winner. Grouping, facts and verdicts are judgements; chunking and the cap are the product's exact rules.",
   "judgement": {
     "agent": null,
-    "model": null
+    "model": null,
+    "topics": [
+      {
+        "id": "what",
+        "name": "What the HTTP cache is and why it helps"
+      },
+      {
+        "id": "types",
+        "name": "Private, shared and managed caches"
+      },
+      {
+        "id": "freshness",
+        "name": "Freshness: max-age, Expires, heuristics, Vary"
+      },
+      {
+        "id": "validation",
+        "name": "Revalidation: ETag, Last-Modified, 304"
+      },
+      {
+        "id": "directives",
+        "name": "Preventing reuse: no-cache, no-store, reloads"
+      },
+      {
+        "id": "patterns",
+        "name": "Recommended settings and cache busting"
+      },
+      {
+        "id": "browser",
+        "name": "Browser support and request headers"
+      },
+      {
+        "id": "server",
+        "name": "Configuring response headers on a server"
+      }
+    ],
+    "facts": [
+      {
+        "id": "f1",
+        "fact": "Cache-Control: max-age=31536000 caches a response for one year, the usual setting for versioned files.",
+        "topic": "patterns",
+        "pages": {
+          "1": [
+            16,
+            20,
+            21
+          ],
+          "2": [
+            6,
+            10,
+            14
+          ]
+        }
+      },
+      {
+        "id": "f2",
+        "fact": "ETag carries a server-chosen token, often a hash of the content, that the client sends back in If-None-Match.",
+        "topic": "validation",
+        "pages": {
+          "1": [
+            10
+          ],
+          "2": [
+            8,
+            9
+          ]
+        }
+      },
+      {
+        "id": "f3",
+        "fact": "A 304 Not Modified response carries no body, so revalidation transfers very little.",
+        "topic": "validation",
+        "pages": {
+          "1": [
+            9
+          ],
+          "2": [
+            9
+          ]
+        }
+      },
+      {
+        "id": "f4",
+        "fact": "no-cache allows storing but forces revalidation before reuse; no-store forbids storing.",
+        "topic": "directives",
+        "pages": {
+          "1": [
+            13
+          ],
+          "2": [
+            7,
+            10
+          ]
+        }
+      },
+      {
+        "id": "f5",
+        "fact": "Without Cache-Control, responses are still cached heuristically.",
+        "topic": "freshness",
+        "pages": {
+          "1": [
+            5
+          ],
+          "2": [
+            5
+          ]
+        }
+      },
+      {
+        "id": "f6",
+        "fact": "The specification suggests reusing a heuristically cached response for about 10% of the time since it was last modified.",
+        "topic": "freshness",
+        "pages": {
+          "1": [
+            5
+          ]
+        }
+      },
+      {
+        "id": "f7",
+        "fact": "Expires was HTTP/1.0's freshness header; when both are present, max-age wins.",
+        "topic": "freshness",
+        "pages": {
+          "1": [
+            7
+          ]
+        }
+      },
+      {
+        "id": "f8",
+        "fact": "Vary keys stored responses by request headers such as Accept-Language.",
+        "topic": "freshness",
+        "pages": {
+          "1": [
+            8
+          ]
+        }
+      },
+      {
+        "id": "f9",
+        "fact": "A private cache belongs to one client; a shared cache sits between client and server and serves many users.",
+        "topic": "types",
+        "pages": {
+          "1": [
+            2
+          ]
+        }
+      },
+      {
+        "id": "f10",
+        "fact": "The immutable directive stops revalidation on reload for content that never changes.",
+        "topic": "patterns",
+        "pages": {
+          "1": [
+            16,
+            22
+          ]
+        }
+      },
+      {
+        "id": "f11",
+        "fact": "QPACK predefines one-week, one-month and one-year max-age values that compress to one byte in HTTP/3.",
+        "topic": "patterns",
+        "pages": {
+          "1": [
+            20
+          ]
+        }
+      },
+      {
+        "id": "f12",
+        "fact": "Clear-Site-Data: cache clears browser caches but has no effect on intermediate caches.",
+        "topic": "directives",
+        "pages": {
+          "1": [
+            17
+          ]
+        }
+      },
+      {
+        "id": "f13",
+        "fact": "ETag is recommended over Last-Modified because it is more accurate.",
+        "topic": "validation",
+        "pages": {
+          "2": [
+            8
+          ]
+        }
+      },
+      {
+        "id": "f14",
+        "fact": "Build tools such as webpack can add hash fingerprints to asset URLs automatically.",
+        "topic": "patterns",
+        "pages": {
+          "2": [
+            7
+          ]
+        }
+      },
+      {
+        "id": "f15",
+        "fact": "private, max-age=600 lets the browser, but not intermediary caches, keep a response for 10 minutes.",
+        "topic": "patterns",
+        "pages": {
+          "2": [
+            14
+          ]
+        }
+      }
+    ],
+    "queries": [
+      {
+        "id": "q1",
+        "query": "what is the difference between no-cache and no-store",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 13,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "The no-cache directive does not prevent the storing of responses but instead prevents the reuse of responses without revalidation. If you don't want a response stored in any cache, use no-store."
+          },
+          "2": {
+            "passage": 10,
+            "verdict": "partial",
+            "citable": true,
+            "quote": "Cache-Control: no-cache for resources that should be revalidated with the server before every use."
+          }
+        },
+        "winner": {
+          "winners": [
+            1
+          ],
+          "tie": false
+        }
+      },
+      {
+        "id": "q2",
+        "query": "what max-age should versioned static files get",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 20,
+            "verdict": "partial",
+            "citable": false,
+            "quote": "Numbers 37, 38, and 41 are for periods of one week, one month, and one year."
+          },
+          "2": {
+            "passage": 10,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "Cache-Control: max-age=31536000 for versioned resources."
+          }
+        },
+        "winner": {
+          "winners": [
+            2
+          ],
+          "tie": false
+        }
+      },
+      {
+        "id": "q3",
+        "query": "how does ETag revalidation work",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 10,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "If that response is stale, the client takes the value of the ETag response header for the cached response, and puts it into the If-None-Match request header, to ask the server if the resource has been modified"
+          },
+          "2": {
+            "passage": 9,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "The browser requests /file from the server and includes the If-None-Match header to instruct the server to only return the full file if the ETag of the file on the server doesn't match the browser's If-None-Match value."
+          }
+        },
+        "winner": {
+          "winners": [
+            1,
+            2
+          ],
+          "tie": true
+        }
+      },
+      {
+        "id": "q4",
+        "query": "what is a shared cache",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 2,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "The shared cache is located between the client and the server and can store responses that can be shared among users."
+          },
+          "2": {
+            "passage": null,
+            "verdict": "missing",
+            "citable": false,
+            "quote": null
+          }
+        },
+        "winner": {
+          "winners": [
+            1
+          ],
+          "tie": false
+        }
+      },
+      {
+        "id": "q5",
+        "query": "what happens if I don't set Cache-Control",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 5,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "HTTP is designed to cache as much as possible, so even if no Cache-Control is given, responses will get stored and reused if certain conditions are met."
+          },
+          "2": {
+            "passage": 5,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "Leaving out the Cache-Control response header does not disable HTTP caching!"
+          }
+        },
+        "winner": {
+          "winners": [
+            1,
+            2
+          ],
+          "tie": true
+        }
+      },
+      {
+        "id": "q6",
+        "query": "how to set caching headers in nginx",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": null,
+            "verdict": "missing",
+            "citable": false,
+            "quote": null
+          },
+          "2": {
+            "passage": 5,
+            "verdict": "partial",
+            "citable": false,
+            "quote": "here are instructions on configuring a few popular web servers"
+          }
+        },
+        "winner": {
+          "winners": [
+            2
+          ],
+          "tie": false
+        }
+      },
+      {
+        "id": "q7",
+        "query": "how to bust the cache when a file changes",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 19,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "it is a common best practice to change the URL each time the content changes, so that the URL unit can be cached for a longer period"
+          },
+          "2": {
+            "passage": 6,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "You change the URL of the resource and force the user to download the new response whenever its content changes."
+          }
+        },
+        "winner": {
+          "winners": [
+            1,
+            2
+          ],
+          "tie": true
+        }
+      },
+      {
+        "id": "q8",
+        "query": "does the browser revalidate when the user reloads",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 15,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "The reload and force reload actions are common examples of validation performed from the browser side."
+          },
+          "2": {
+            "passage": null,
+            "verdict": "missing",
+            "citable": false,
+            "quote": null
+          }
+        },
+        "winner": {
+          "winners": [
+            1
+          ],
+          "tie": false
+        }
+      }
+    ],
+    "plan": [
+      {
+        "priority": 1,
+        "page": 2,
+        "passages": [],
+        "check": "canonical_other",
+        "problem": "The page's canonical is https://web.dev/articles/http-cache, and in this run a plain fetch of that URL (no Accept-Language) was redirected to the French ?hl=fr version. A crawler that follows the canonical may store the page in a language the reader did not ask for.",
+        "fix": "Serve the canonical URL in its default language to clients that send no Accept-Language, and keep the language variants on hreflang alternates.",
+        "before": null,
+        "after": null
+      },
+      {
+        "priority": 2,
+        "page": 1,
+        "passages": [
+          22,
+          23,
+          24
+        ],
+        "check": "dominant_heading",
+        "problem": "Under \"Common caching patterns\" an h3 reads \"Validation\", the same text as the earlier h2. The chunker matches heading lines by text, so #22 to #24 are filed under the wrong section and \"Validation\" ends up holding 31% of the page.",
+        "fix": "Give the h3 its own name, such as \"Validating cache-busted files\", and open the passage with its subject.",
+        "before": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading.",
+        "after": "For cache-busted static files, also set Last-Modified and ETag, so that a reload revalidates the file instead of re-transmitting it."
+      },
+      {
+        "priority": 3,
+        "page": 1,
+        "passages": [
+          3
+        ],
+        "check": "mid_sentence_start",
+        "problem": "\"Types of caches\" runs to about 5,000 characters under one h2, so the window cuts it and #3 opens with \"proxy-revalidate However\".",
+        "fix": "Promote Private caches, Shared cache, Proxy caches and Managed caches to h2, so each type is a passage that names itself.",
+        "before": "proxy-revalidate However, in recent years, as HTTPS has become more common and client/server communication has become encrypted, proxy caches in the path can only tunnel a response and can't behave as a cache, in many cases.",
+        "after": "Proxy caches and HTTPS: now that most traffic is encrypted, a proxy cache on the path can usually only tunnel the response and cannot cache it."
+      },
+      {
+        "priority": 4,
+        "page": 2,
+        "passages": [
+          2
+        ],
+        "check": "nav_in_content",
+        "problem": "The browser-compatibility widget becomes the words \"Browser Support / Source\" three times; the passage says nothing a retriever can quote.",
+        "fix": "State the support in a sentence and keep the widget out of the extracted text (or give it an accessible text summary).",
+        "before": "Cache-Control Browser Support Source ETag Browser Support Source Last-Modified Browser Support Source",
+        "after": "Cache-Control, ETag and Last-Modified are supported in all major browsers."
+      },
+      {
+        "priority": 5,
+        "page": 2,
+        "passages": [
+          13
+        ],
+        "check": "thin_section",
+        "problem": "\"Appendix: Cache-Control flowchart\" is an image with a 60-character caption; the decision it draws never reaches the text.",
+        "fix": "Write the flowchart's decisions as a short list under the image.",
+        "before": "The decision process for setting your Cache-Control headers.",
+        "after": "Choosing Cache-Control: if the response must never be reused, use no-store; if it must be checked every time, use no-cache; otherwise use private (browser only) or public, with a max-age that matches how often it changes."
+      },
+      {
+        "priority": 6,
+        "page": 2,
+        "passages": [
+          0
+        ],
+        "check": null,
+        "problem": "The meta description is double-escaped, so passage #0 stores the literal text \"browser&#39;s\".",
+        "fix": "Escape the description once.",
+        "before": "The browser&#39;s HTTP Cache is your first line of defense against unnecessary network requests.",
+        "after": "The browser's HTTP cache is your first line of defense against unnecessary network requests."
+      }
+    ]
   },
   "pages": [
     {
       "n": 1,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T17:40:32.065Z",
+      "generatedAt": "2026-10-16T18:38:27.184Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -65,7 +552,9 @@
         "charsUnread": 0,
         "capReached": true,
         "duplicateChunks": 0,
-        "groupsMergedByPaletteLimit": null
+        "groupsMergedByPaletteLimit": null,
+        "charsPastCap": 167,
+        "charsInPassagesUnique": 32204
       },
       "textCoverage": {
         "exportedChars": 5992,
@@ -743,12 +1232,1771 @@
           "textHead": "Cache-Control HTTP header\nRFC 9111: Hypertext Transfer Protocol (HTTP/1.1): Caching\nCaching Tutorial - Mark Nottingham"
         }
       ],
-      "skillVersion": 2,
+      "skillVersion": "2.102",
+      "layers": {
+        "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
+        "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
+      },
+      "measured": {
+        "page": {
+          "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+          "requestedUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+          "title": "HTTP caching - HTTP | MDN",
+          "wordCount": 5153,
+          "headingsFound": 14,
+          "noindex": false
+        },
+        "retrieval": {
+          "chunkCap": 26,
+          "chunksIndexed": 26,
+          "capReached": true,
+          "charsInPassagesTotal": 34460,
+          "charsInPassagesUnique": 32204
+        },
+        "passages": [
+          {
+            "index": 0,
+            "heading": "HTTP caching - HTTP | MDN",
+            "charCount": 153,
+            "contentRole": "main",
+            "textHead": "HTTP caching - HTTP | MDN\nHTTP caching\nThe HTTP cache stores a response associated with a request and reuses the stored response for subsequent requests."
+          },
+          {
+            "index": 1,
+            "heading": null,
+            "charCount": 761,
+            "contentRole": "main",
+            "textHead": "HTTP caching\nThe HTTP cache stores a response associated with a request and reuses the stored response for subsequent requests.\nThere are several advantages to reusability. First, since there is no need to deliver the request to the origin "
+          },
+          {
+            "index": 2,
+            "heading": "Types of caches",
+            "charCount": 1997,
+            "contentRole": "main",
+            "textHead": "In the HTTP Caching spec, there are two main types of caches: private caches and shared caches. Private caches A private cache is a cache tied to a specific client — typically a browser cache. Since the stored response is not shared with ot"
+          },
+          {
+            "index": 3,
+            "heading": "Types of caches",
+            "charCount": 1998,
+            "contentRole": "main",
+            "textHead": "proxy-revalidate However, in recent years, as HTTPS has become more common and client/server communication has become encrypted, proxy caches in the path can only tunnel a response and can't behave as a cache, in many cases. So in that scen"
+          },
+          {
+            "index": 4,
+            "heading": "Types of caches",
+            "charCount": 1064,
+            "contentRole": "main",
+            "textHead": "Caching spec protocols in favor of explicit manipulation. For example, the following can be specified to opt-out of a private cache or proxy cache, while using your own strategy to cache only in a managed cache. http Cache-Control: no-store"
+          },
+          {
+            "index": 5,
+            "heading": "Heuristic caching",
+            "charCount": 979,
+            "contentRole": "main",
+            "textHead": "HTTP is designed to cache as much as possible, so even if no Cache-Control is given, responses will get stored and reused if certain conditions are met. This is called heuristic caching.\nFor example, take the following response. This respon"
+          },
+          {
+            "index": 6,
+            "heading": "Fresh and stale based on age",
+            "charCount": 1671,
+            "contentRole": "main",
+            "textHead": "Stored HTTP responses have two states: fresh and stale. The fresh state usually indicates that the response is still valid and can be reused, while the stale state means that the cached response has already expired.\nThe criterion for determ"
+          },
+          {
+            "index": 7,
+            "heading": "Expires or max-age",
+            "charCount": 665,
+            "contentRole": "main",
+            "textHead": "In HTTP/1.0, freshness used to be specified by the Expires header.\nThe Expires header specifies the lifetime of the cache using an explicit time rather than by specifying an elapsed time.\nhttp\nExpires: Tue, 28 Feb 2022 22:22:22 GMT\nHowever,"
+          },
+          {
+            "index": 8,
+            "heading": "Vary",
+            "charCount": 1966,
+            "contentRole": "main",
+            "textHead": "The way that responses are distinguished from one another is essentially based on their URLs:\nURL\nResponse body\nhttps://example.com/index.html\n<!doctype html>...\nhttps://example.com/style.css\nbody { ...\nhttps://example.com/script.js\nfunctio"
+          },
+          {
+            "index": 9,
+            "heading": "Validation",
+            "charCount": 1998,
+            "contentRole": "main",
+            "textHead": "Stale responses are not immediately discarded. HTTP has a mechanism to transform a stale response into a fresh one by asking the origin server. This is called validation, or sometimes, revalidation. Validation is done by using a conditional"
+          },
+          {
+            "index": 10,
+            "heading": "Validation",
+            "charCount": 1996,
+            "contentRole": "main",
+            "textHead": "to parse, and distributed servers have difficulty synchronizing file-update times. To solve such problems, the ETag response header was standardized as an alternative. ETag/If-None-Match The value of the ETag response header is an arbitrary"
+          },
+          {
+            "index": 11,
+            "heading": "Validation",
+            "charCount": 1999,
+            "contentRole": "main",
+            "textHead": "for caching; it is a standard HTTP header that is also used by content-management (CMS) systems to display the last-modified time, by crawlers to adjust crawl frequency, and for other various purposes. So considering the overall HTTP ecosys"
+          },
+          {
+            "index": 12,
+            "heading": "Validation",
+            "charCount": 529,
+            "contentRole": "main",
+            "textHead": "it must not be reused without revalidation once it is stale — so, in combination, the semantics seem to be the same as no-cache. However, that usage of max-age=0 is a remnant of the fact that many implementations prior to HTTP/1.1 were unab"
+          },
+          {
+            "index": 13,
+            "heading": "Don't cache",
+            "charCount": 1989,
+            "contentRole": "main",
+            "textHead": "The no-cache directive does not prevent the storing of responses but instead prevents the reuse of responses without revalidation. If you don't want a response stored in any cache, use no-store. http Cache-Control: no-store However, in gene"
+          },
+          {
+            "index": 14,
+            "heading": "Don't cache",
+            "charCount": 886,
+            "contentRole": "main",
+            "textHead": "following being used. http Cache-Control: no-store, no-cache, max-age=0, must-revalidate, proxy-revalidate It is recommended to use no-cache as an alternative for dealing with such outdated implementations, and it is not a problem if no-cac"
+          },
+          {
+            "index": 15,
+            "heading": "Reload and force reload",
+            "charCount": 1998,
+            "contentRole": "main",
+            "textHead": "Validation can be performed for requests as well as responses. The reload and force reload actions are common examples of validation performed from the browser side. Reload For recovering from window corruption or updating to the latest ver"
+          },
+          {
+            "index": 16,
+            "heading": "Reload and force reload",
+            "charCount": 1084,
+            "contentRole": "main",
+            "textHead": "with no-cache, you can be sure you'll get a 200 OK from the origin server. That behavior is also defined in the Fetch standard and can be reproduced in JavaScript by calling fetch() with the cache mode set to reload (note that it's not forc"
+          },
+          {
+            "index": 17,
+            "heading": "Deleting stored responses",
+            "charCount": 1271,
+            "contentRole": "main",
+            "textHead": "There is no way to delete responses on an intermediate server that have been stored with a long max-age.\nImagine that the following response from https://example.com/ was stored.\nhttp\nHTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: "
+          },
+          {
+            "index": 18,
+            "heading": "Request collapse",
+            "charCount": 655,
+            "contentRole": "main",
+            "textHead": "The shared cache is primarily located before the origin server and is intended to reduce traffic to the origin server.\nThus, if multiple identical requests arrive at a shared cache at the same time, the intermediate cache will forward a sin"
+          },
+          {
+            "index": 19,
+            "heading": "Common caching patterns",
+            "charCount": 1978,
+            "contentRole": "main",
+            "textHead": "There are many directives in the Cache-Control spec, and it may be difficult to understand all of them. But most websites can be covered by a combination of a handful of patterns. This section describes the common patterns in designing cach"
+          },
+          {
+            "index": 20,
+            "heading": "Common caching patterns",
+            "charCount": 1992,
+            "contentRole": "main",
+            "textHead": "based on a version number or hash value. Some of the ways to do that are shown below. # version in filename bundle.v123.js # version in query bundle.js?v=123 # hash in filename bundle.YsAIAAAA-QG4G6kCMAMBAAAAAAAoK.js # hash in query bundle."
+          },
+          {
+            "index": 21,
+            "heading": "Common caching patterns",
+            "charCount": 525,
+            "contentRole": "main",
+            "textHead": "the Authorization header is set. It is not required otherwise, because a response will be stored in the shared cache as long as max-age is given. So if the response is personalized with basic authentication, the presence of public may cause"
+          },
+          {
+            "index": 22,
+            "heading": "Validation",
+            "charCount": 1997,
+            "contentRole": "main",
+            "textHead": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading. It's easy to generate those headers for pre-built static files. The ETag value here may be a hash of the file. http # r"
+          },
+          {
+            "index": 23,
+            "heading": "Validation",
+            "charCount": 1990,
+            "contentRole": "main",
+            "textHead": "instead just want it to always be up-to-date. Furthermore, adding Last-Modified and ETag will allow clients to send conditional requests, and a 304 Not Modified can be returned if there have been no updates to the HTML: http HTTP/1.1 200 OK"
+          },
+          {
+            "index": 24,
+            "heading": "Validation",
+            "charCount": 201,
+            "contentRole": "main",
+            "textHead": "do the same if it could delete the contents in the Cache API when an update occurs on the server. For more information, see the documentation for your CDN, and consult the service worker documentation."
+          },
+          {
+            "index": 25,
+            "heading": "See also",
+            "charCount": 118,
+            "contentRole": "related",
+            "textHead": "Cache-Control HTTP header\nRFC 9111: Hypertext Transfer Protocol (HTTP/1.1): Caching\nCaching Tutorial - Mark Nottingham"
+          }
+        ],
+        "losses": {
+          "unit": "characters, whitespace runs folded to one space",
+          "consistent": true,
+          "waterfall": {
+            "raw": 93570,
+            "removed": 60964,
+            "kept": 32606,
+            "inPassagesUnique": 32204,
+            "notInPassages": 235,
+            "pastCap": 167
+          },
+          "passages": {
+            "unique": 32204,
+            "total": 34460,
+            "overlap": 2103,
+            "intro": 153,
+            "unlocated": 0
+          },
+          "notInPassages": {
+            "headingLines": 188,
+            "whitespace": 47,
+            "other": 0
+          },
+          "removals": {
+            "elementsMatched": 37,
+            "elementsWithText": 25,
+            "chars": 60964,
+            "byReason": [
+              {
+                "reason": "script_style",
+                "elements": 16,
+                "chars": 51227
+              },
+              {
+                "reason": "embedded",
+                "elements": 3,
+                "chars": 13
+              },
+              {
+                "reason": "head_meta",
+                "elements": 1,
+                "chars": 26
+              },
+              {
+                "reason": "header_chrome",
+                "elements": 1,
+                "chars": 1731
+              },
+              {
+                "reason": "footer",
+                "elements": 1,
+                "chars": 500
+              },
+              {
+                "reason": "aside",
+                "elements": 2,
+                "chars": 7432
+              },
+              {
+                "reason": "outside_main",
+                "elements": 1,
+                "chars": 35
+              }
+            ],
+            "items": [
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > section.content-section > div.article-footer__inner > mdn-content-feedback > template",
+                "chars": 16992,
+                "sample": ".content-feedback{border:none;margin:0 0 .25rem;padding:0}.content-feedback>labe"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "header.page-layout__header > div.breadcrumbs-bar > mdn-language-switcher > template",
+                "chars": 11342,
+                "sample": "*,:after,:before{box-sizing:border-box}button,input,select,textarea{font:inherit"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.left-sidebar > div.left-sidebar__header > mdn-sidebar-filter > template",
+                "chars": 9816,
+                "sample": ".visually-hidden{border:0!important;clip-path:inset(50%)!important;height:1px!im"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "header.page-layout__header > div.breadcrumbs-bar > mdn-toggle-sidebar > template",
+                "chars": 8397,
+                "sample": ":host{border-right:1px solid var(--color-border-primary);display:block;height:10"
+              },
+              {
+                "reason": "aside",
+                "tag": "aside",
+                "id": "main-sidebar",
+                "classes": [
+                  "layout__left-sidebar"
+                ],
+                "element": "aside#main-sidebar.layout__left-sidebar",
+                "path": "div.page-layout__main > div.layout__2-sidebars-inline > aside#main-sidebar.layout__left-sidebar",
+                "chars": 7207,
+                "sample": "HTTP Guides Overview of HTTP Evolution of HTTP A typical HTTP session HTTP messa"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "header.page-layout__header > div.breadcrumbs-bar > mdn-color-theme > template",
+                "chars": 2075,
+                "sample": ".color-theme{--color-theme-light-dark:url(/static/ssr/contrast.d86e85c43de8dee8."
+              },
+              {
+                "reason": "header_chrome",
+                "tag": "header",
+                "id": null,
+                "classes": [
+                  "page-layout__header"
+                ],
+                "element": "header.page-layout__header",
+                "path": "header.page-layout__header",
+                "chars": 1731,
+                "sample": "HTML HTML: Markup language HTML reference Elements Global attributes Attributes "
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > div#navigation__popup > div.navigation__search > mdn-search-button > template",
+                "chars": 774,
+                "sample": ".mdn-search-button{align-items:center;background-color:var(--color-background-pa"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.navigation > div.navigation__search > mdn-search-button > template",
+                "chars": 774,
+                "sample": ".mdn-search-button{align-items:center;background-color:var(--color-background-pa"
+              },
+              {
+                "reason": "footer",
+                "tag": "footer",
+                "id": null,
+                "classes": [
+                  "footer"
+                ],
+                "element": "footer.footer",
+                "path": "div.page-layout__footer > footer.footer",
+                "chars": 500,
+                "sample": "Your blueprint for a better internet. MDN About Blog Mozilla careers Advertise w"
+              },
+              {
+                "reason": "script_style",
+                "tag": "script",
+                "id": null,
+                "classes": [],
+                "element": "script",
+                "path": "head > script",
+                "chars": 321,
+                "sample": "try { document.documentElement.dataset.theme = localStorage.getItem(\"theme\") || "
+              },
+              {
+                "reason": "aside",
+                "tag": "aside",
+                "id": null,
+                "classes": [
+                  "layout__right-sidebar",
+                  "reference-layout__toc"
+                ],
+                "element": "aside.layout__right-sidebar.reference-layout__toc",
+                "path": "div.page-layout__main > div.layout__2-sidebars-inline > main#content > aside.layout__right-sidebar.reference-layout__toc",
+                "chars": 225,
+                "sample": "In this article Types of caches Heuristic caching Fresh and stale based on age E"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+                "chars": 92,
+                "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+                "chars": 92,
+                "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+                "chars": 92,
+                "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+                "chars": 92,
+                "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+                "chars": 92,
+                "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+                "chars": 92,
+                "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+                "chars": 92,
+                "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [],
+                "element": "template",
+                "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+                "chars": 92,
+                "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+              },
+              {
+                "reason": "outside_main",
+                "tag": "ul",
+                "id": null,
+                "classes": [
+                  "a11y-menu"
+                ],
+                "element": "ul.a11y-menu",
+                "path": "ul.a11y-menu",
+                "chars": 35,
+                "sample": "Skip to main content Skip to search"
+              },
+              {
+                "reason": "head_meta",
+                "tag": "head",
+                "id": null,
+                "classes": [],
+                "element": "head",
+                "path": "head",
+                "chars": 26,
+                "sample": "HTTP caching - HTTP | MDN"
+              },
+              {
+                "reason": "embedded",
+                "tag": "svg",
+                "id": null,
+                "classes": [],
+                "element": "svg",
+                "path": "… > footer.footer > div.footer__mozilla > a.footer__logo > svg",
+                "chars": 7,
+                "sample": "Mozilla"
+              },
+              {
+                "reason": "embedded",
+                "tag": "svg",
+                "id": null,
+                "classes": [],
+                "element": "svg",
+                "path": "… > div.footer__mdn > div.footer__intro > a.footer__logo > svg",
+                "chars": 3,
+                "sample": "MDN"
+              },
+              {
+                "reason": "embedded",
+                "tag": "svg",
+                "id": null,
+                "classes": [
+                  "logo__image"
+                ],
+                "element": "svg.logo__image",
+                "path": "… > nav.navigation > div.navigation__logo > a.logo > svg.logo__image",
+                "chars": 3,
+                "sample": "MDN"
+              }
+            ],
+            "omitted": {
+              "elements": 0,
+              "chars": 0
+            }
+          },
+          "sections": {
+            "mode": "h2",
+            "rows": [
+              {
+                "kind": "intro",
+                "heading": null,
+                "chars": 153,
+                "inPassages": 153,
+                "located": true
+              },
+              {
+                "kind": "before_first_h2",
+                "heading": null,
+                "chars": 761,
+                "inPassages": 761,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Types of caches",
+                "chars": 4666,
+                "inPassages": 4666,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Heuristic caching",
+                "chars": 979,
+                "inPassages": 979,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Fresh and stale based on age",
+                "chars": 1671,
+                "inPassages": 1671,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Expires or max-age",
+                "chars": 665,
+                "inPassages": 665,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Vary",
+                "chars": 1966,
+                "inPassages": 1966,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Validation",
+                "chars": 5945,
+                "inPassages": 5945,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Don't cache",
+                "chars": 2686,
+                "inPassages": 2686,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Reload and force reload",
+                "chars": 2886,
+                "inPassages": 2886,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Deleting stored responses",
+                "chars": 1271,
+                "inPassages": 1271,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Request collapse",
+                "chars": 655,
+                "inPassages": 655,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Common caching patterns",
+                "chars": 4128,
+                "inPassages": 4128,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Validation",
+                "chars": 3807,
+                "inPassages": 3807,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "See also",
+                "chars": 118,
+                "inPassages": 118,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Help improve MDN",
+                "chars": 150,
+                "inPassages": 0,
+                "located": true
+              }
+            ]
+          },
+          "placement": [
+            {
+              "index": 0,
+              "start": null,
+              "end": null,
+              "intro": 153
+            },
+            {
+              "index": 1,
+              "start": 0,
+              "end": 761,
+              "intro": 0
+            },
+            {
+              "index": 2,
+              "start": 778,
+              "end": 2775,
+              "intro": 0
+            },
+            {
+              "index": 3,
+              "start": 2578,
+              "end": 4576,
+              "intro": 0
+            },
+            {
+              "index": 4,
+              "start": 4380,
+              "end": 5444,
+              "intro": 0
+            },
+            {
+              "index": 5,
+              "start": 5463,
+              "end": 6442,
+              "intro": 0
+            },
+            {
+              "index": 6,
+              "start": 6472,
+              "end": 8143,
+              "intro": 0
+            },
+            {
+              "index": 7,
+              "start": 8163,
+              "end": 8828,
+              "intro": 0
+            },
+            {
+              "index": 8,
+              "start": 8834,
+              "end": 10800,
+              "intro": 0
+            },
+            {
+              "index": 9,
+              "start": 10812,
+              "end": 12810,
+              "intro": 0
+            },
+            {
+              "index": 10,
+              "start": 12620,
+              "end": 14616,
+              "intro": 0
+            },
+            {
+              "index": 11,
+              "start": 14425,
+              "end": 16424,
+              "intro": 0
+            },
+            {
+              "index": 12,
+              "start": 16228,
+              "end": 16757,
+              "intro": 0
+            },
+            {
+              "index": 13,
+              "start": 16770,
+              "end": 18759,
+              "intro": 0
+            },
+            {
+              "index": 14,
+              "start": 18570,
+              "end": 19456,
+              "intro": 0
+            },
+            {
+              "index": 15,
+              "start": 19481,
+              "end": 21479,
+              "intro": 0
+            },
+            {
+              "index": 16,
+              "start": 21283,
+              "end": 22367,
+              "intro": 0
+            },
+            {
+              "index": 17,
+              "start": 22394,
+              "end": 23665,
+              "intro": 0
+            },
+            {
+              "index": 18,
+              "start": 23683,
+              "end": 24338,
+              "intro": 0
+            },
+            {
+              "index": 19,
+              "start": 24363,
+              "end": 26341,
+              "intro": 0
+            },
+            {
+              "index": 20,
+              "start": 26165,
+              "end": 28157,
+              "intro": 0
+            },
+            {
+              "index": 21,
+              "start": 27966,
+              "end": 28491,
+              "intro": 0
+            },
+            {
+              "index": 22,
+              "start": 28503,
+              "end": 30500,
+              "intro": 0
+            },
+            {
+              "index": 23,
+              "start": 30305,
+              "end": 32295,
+              "intro": 0
+            },
+            {
+              "index": 24,
+              "start": 32109,
+              "end": 32310,
+              "intro": 0
+            },
+            {
+              "index": 25,
+              "start": 32320,
+              "end": 32438,
+              "intro": 0
+            }
+          ]
+        },
+        "robots": {
+          "url": "https://developer.mozilla.org/robots.txt",
+          "status": "ok",
+          "httpStatus": 200,
+          "bots": [
+            {
+              "token": "OAI-SearchBot",
+              "vendor": "OpenAI",
+              "kind": "search",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "ChatGPT-User",
+              "vendor": "OpenAI",
+              "kind": "user",
+              "honours": false,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "GPTBot",
+              "vendor": "OpenAI",
+              "kind": "training",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Claude-SearchBot",
+              "vendor": "Anthropic",
+              "kind": "search",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Claude-User",
+              "vendor": "Anthropic",
+              "kind": "user",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "ClaudeBot",
+              "vendor": "Anthropic",
+              "kind": "training",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "PerplexityBot",
+              "vendor": "Perplexity",
+              "kind": "search",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Perplexity-User",
+              "vendor": "Perplexity",
+              "kind": "user",
+              "honours": false,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Google-Extended",
+              "vendor": "Google",
+              "kind": "training",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Googlebot",
+              "vendor": "Google",
+              "kind": "index",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Bingbot",
+              "vendor": "Microsoft",
+              "kind": "index",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "CCBot",
+              "vendor": "Common Crawl",
+              "kind": "training",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            }
+          ]
+        },
+        "technical": {
+          "jsonLd": {
+            "blocks": 0,
+            "invalid": 0,
+            "types": []
+          },
+          "canonical": {
+            "present": true,
+            "count": 1,
+            "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+            "absolute": true,
+            "resolved": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+            "self": true
+          },
+          "metaDescription": {
+            "present": true,
+            "length": 114
+          },
+          "lang": "en-US"
+        },
+        "render": null,
+        "derived": {
+          "charsPastCap": 167,
+          "charsUnread": 0,
+          "phrases": [
+            {
+              "term": "cache control",
+              "count": 48,
+              "passages": 21,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "max age",
+              "count": 42,
+              "passages": 17,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "ok content type",
+              "count": 7,
+              "passages": 6,
+              "groups": 3,
+              "spread": 0.5,
+              "describesWholePage": false
+            },
+            {
+              "term": "content length",
+              "count": 7,
+              "passages": 6,
+              "groups": 3,
+              "spread": 0.5,
+              "describesWholePage": false
+            },
+            {
+              "term": "shared cache",
+              "count": 11,
+              "passages": 5,
+              "groups": 4,
+              "spread": 0.667,
+              "describesWholePage": true
+            },
+            {
+              "term": "origin server",
+              "count": 7,
+              "passages": 5,
+              "groups": 4,
+              "spread": 0.667,
+              "describesWholePage": true
+            },
+            {
+              "term": "cached response",
+              "count": 5,
+              "passages": 5,
+              "groups": 3,
+              "spread": 0.5,
+              "describesWholePage": false
+            },
+            {
+              "term": "managed cache",
+              "count": 10,
+              "passages": 4,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "gmt etag",
+              "count": 6,
+              "passages": 4,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "cache busting",
+              "count": 5,
+              "passages": 4,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "latest version",
+              "count": 4,
+              "passages": 4,
+              "groups": 3,
+              "spread": 0.5,
+              "describesWholePage": false
+            },
+            {
+              "term": "conditional request",
+              "count": 4,
+              "passages": 4,
+              "groups": 3,
+              "spread": 0.5,
+              "describesWholePage": false
+            },
+            {
+              "term": "none match",
+              "count": 9,
+              "passages": 3,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "private cache",
+              "count": 8,
+              "passages": 3,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "force reload",
+              "count": 7,
+              "passages": 3,
+              "groups": 1,
+              "spread": 0.167,
+              "describesWholePage": false
+            }
+          ],
+          "narrativeWords": [
+            {
+              "term": "response",
+              "count": 100,
+              "passages": 19,
+              "groups": 6,
+              "spread": 1,
+              "describesWholePage": true
+            },
+            {
+              "term": "request",
+              "count": 42,
+              "passages": 13,
+              "groups": 4,
+              "spread": 0.667,
+              "describesWholePage": true
+            },
+            {
+              "term": "header",
+              "count": 36,
+              "passages": 14,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "server",
+              "count": 34,
+              "passages": 13,
+              "groups": 6,
+              "spread": 1,
+              "describesWholePage": true
+            },
+            {
+              "term": "content",
+              "count": 31,
+              "passages": 12,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "modified",
+              "count": 29,
+              "passages": 7,
+              "groups": 4,
+              "spread": 0.667,
+              "describesWholePage": true
+            },
+            {
+              "term": "caching",
+              "count": 28,
+              "passages": 11,
+              "groups": 6,
+              "spread": 1,
+              "describesWholePage": true
+            },
+            {
+              "term": "stored",
+              "count": 25,
+              "passages": 11,
+              "groups": 6,
+              "spread": 1,
+              "describesWholePage": true
+            },
+            {
+              "term": "value",
+              "count": 25,
+              "passages": 8,
+              "groups": 4,
+              "spread": 0.667,
+              "describesWholePage": true
+            },
+            {
+              "term": "store",
+              "count": 24,
+              "passages": 9,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            }
+          ],
+          "checks": [
+            {
+              "code": "cap_overflow",
+              "severity": "high",
+              "passages": [
+                25
+              ],
+              "evidence": {
+                "charsPastCap": 167,
+                "charsUnread": 0,
+                "cap": 26,
+                "last": 25
+              },
+              "message": "167 characters after passage #25 are never stored."
+            },
+            {
+              "code": "dominant_heading",
+              "severity": "medium",
+              "passages": [
+                9,
+                10,
+                11,
+                12,
+                22,
+                23,
+                24
+              ],
+              "evidence": {
+                "heading": "Validation",
+                "share": 0.311,
+                "chars": 10710
+              },
+              "message": "“Validation” holds 31.1% of the indexed text."
+            },
+            {
+              "code": "mid_sentence_start",
+              "severity": "medium",
+              "passages": [
+                3,
+                10,
+                11,
+                12,
+                14,
+                16,
+                20,
+                21,
+                23,
+                24
+              ],
+              "evidence": {
+                "samples": [
+                  {
+                    "passage": 3,
+                    "text": "proxy-revalidate However, in recent years, as HTTPS has become more common and …"
+                  },
+                  {
+                    "passage": 10,
+                    "text": "to parse, and distributed servers have difficulty synchronizing file-update tim…"
+                  },
+                  {
+                    "passage": 11,
+                    "text": "for caching; it is a standard HTTP header that is also used by content-manageme…"
+                  },
+                  {
+                    "passage": 12,
+                    "text": "it must not be reused without revalidation once it is stale — so, in combinatio…"
+                  },
+                  {
+                    "passage": 14,
+                    "text": "following being used. http Cache-Control: no-store, no-cache, max-age=0, must-r…"
+                  },
+                  {
+                    "passage": 16,
+                    "text": "with no-cache, you can be sure you'll get a 200 OK from the origin server. That…"
+                  }
+                ],
+                "count": 10
+              },
+              "message": "10 passage(s) open on a lowercase word or a punctuation mark."
+            },
+            {
+              "code": "nav_in_content",
+              "severity": "medium",
+              "passages": [
+                8
+              ],
+              "evidence": {
+                "runs": 2,
+                "samples": [
+                  {
+                    "passage": 8,
+                    "lines": [
+                      "URL",
+                      "Response body",
+                      "https://example.com/index.html",
+                      "<!doctype html>...",
+                      "https://example.com/style.css"
+                    ],
+                    "count": 5
+                  },
+                  {
+                    "passage": 8,
+                    "lines": [
+                      "URL",
+                      "Accept-Language",
+                      "Response body",
+                      "https://example.com/index.html",
+                      "ja-JP",
+                      "<!doctype html>...",
+                      "https://example.com/index.html",
+                      "en-US"
+                    ],
+                    "count": 11
+                  }
+                ]
+              },
+              "message": "2 run(s) of four or more one-or-two-word lines."
+            },
+            {
+              "code": "jsonld_none",
+              "severity": "low",
+              "passages": [],
+              "evidence": {},
+              "message": "No JSON-LD on the page."
+            }
+          ]
+        }
+      },
       "judgement": {
         "agent": null,
-        "model": null
+        "model": null,
+        "groups": [
+          {
+            "id": 0,
+            "label": "Associated · Subsequent",
+            "labelSource": "keywords",
+            "chunkCount": 2,
+            "charCount": 914,
+            "shareOfIndexedChars": 0.027,
+            "cohesion": null,
+            "agentLabel": "What the HTTP cache is",
+            "note": null,
+            "topic": "what"
+          },
+          {
+            "id": 1,
+            "label": "Types of caches",
+            "labelSource": "heading",
+            "chunkCount": 3,
+            "charCount": 5059,
+            "shareOfIndexedChars": 0.147,
+            "cohesion": null,
+            "agentLabel": "Private, proxy and managed caches",
+            "note": null,
+            "topic": "types"
+          },
+          {
+            "id": 2,
+            "label": "Possible · Specifying",
+            "labelSource": "keywords",
+            "chunkCount": 4,
+            "charCount": 5281,
+            "shareOfIndexedChars": 0.153,
+            "cohesion": null,
+            "agentLabel": "Freshness, Expires, heuristic caching and Vary",
+            "note": "Vary is about the cache key, filed here because it decides which stored response is fresh for a request.",
+            "topic": "freshness"
+          },
+          {
+            "id": 3,
+            "label": "Validation",
+            "labelSource": "heading",
+            "chunkCount": 4,
+            "charCount": 6522,
+            "shareOfIndexedChars": 0.189,
+            "cohesion": null,
+            "agentLabel": "Revalidation with If-Modified-Since and ETag",
+            "note": null,
+            "topic": "validation"
+          },
+          {
+            "id": 4,
+            "label": "Force · Right",
+            "labelSource": "keywords",
+            "chunkCount": 6,
+            "charCount": 7883,
+            "shareOfIndexedChars": 0.229,
+            "cohesion": null,
+            "agentLabel": "no-cache, no-store, reloads, deletion and request collapse",
+            "note": null,
+            "topic": "directives"
+          },
+          {
+            "id": 5,
+            "label": "Resources · Bundle",
+            "labelSource": "keywords",
+            "chunkCount": 7,
+            "charCount": 8801,
+            "shareOfIndexedChars": 0.255,
+            "cohesion": null,
+            "agentLabel": "Common caching patterns and cache busting",
+            "note": "#22 to #24 sit under a second \"Validation\" heading, an h3 the chunker takes for the h2 of the same name.",
+            "topic": "patterns"
+          }
+        ],
+        "assignment": [
+          {
+            "index": 0,
+            "group": 0,
+            "duplicateOf": null
+          },
+          {
+            "index": 1,
+            "group": 0,
+            "duplicateOf": null
+          },
+          {
+            "index": 2,
+            "group": 1,
+            "duplicateOf": null
+          },
+          {
+            "index": 3,
+            "group": 1,
+            "duplicateOf": null
+          },
+          {
+            "index": 4,
+            "group": 1,
+            "duplicateOf": null
+          },
+          {
+            "index": 5,
+            "group": 2,
+            "duplicateOf": null
+          },
+          {
+            "index": 6,
+            "group": 2,
+            "duplicateOf": null
+          },
+          {
+            "index": 7,
+            "group": 2,
+            "duplicateOf": null
+          },
+          {
+            "index": 8,
+            "group": 2,
+            "duplicateOf": null
+          },
+          {
+            "index": 9,
+            "group": 3,
+            "duplicateOf": null
+          },
+          {
+            "index": 10,
+            "group": 3,
+            "duplicateOf": null
+          },
+          {
+            "index": 11,
+            "group": 3,
+            "duplicateOf": null
+          },
+          {
+            "index": 12,
+            "group": 3,
+            "duplicateOf": null
+          },
+          {
+            "index": 13,
+            "group": 4,
+            "duplicateOf": null
+          },
+          {
+            "index": 14,
+            "group": 4,
+            "duplicateOf": null
+          },
+          {
+            "index": 15,
+            "group": 4,
+            "duplicateOf": null
+          },
+          {
+            "index": 16,
+            "group": 4,
+            "duplicateOf": null
+          },
+          {
+            "index": 17,
+            "group": 4,
+            "duplicateOf": null
+          },
+          {
+            "index": 18,
+            "group": 4,
+            "duplicateOf": null
+          },
+          {
+            "index": 19,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 20,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 21,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 22,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 23,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 24,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 25,
+            "group": 5,
+            "duplicateOf": null
+          }
+        ],
+        "duplicates": 0,
+        "plan": null,
+        "queries": null,
+        "facts": null
+      },
+      "metrics": {
+        "words": {
+          "layer": "measured",
+          "label": "Words",
+          "formula": "The extracted body text split on whitespace; every non-empty piece is a word.",
+          "unit": "words",
+          "threshold": null,
+          "limits": "Counted after the cleaner, so menus, footers and hidden text are not in it. A page drawn by JavaScript reads low here; compare with --render."
+        },
+        "headings": {
+          "layer": "measured",
+          "label": "Headings found",
+          "formula": "h1 elements plus h2 elements (the first 40) left after the cleaner, with empty ones dropped.",
+          "unit": "headings",
+          "threshold": null,
+          "limits": "h3 and styled text are not counted: the chunker splits only at h2."
+        },
+        "passages": {
+          "layer": "measured",
+          "label": "Passages read",
+          "formula": "Sections at h2 headings (or paragraph blocks), long ones cut into 2,000-character windows with about 200 characters of overlap, slivers under 40 characters folded into the passage before, then the first 26 kept.",
+          "unit": "passages",
+          "threshold": "At most 26 per page (this tool's cap).",
+          "limits": "Other systems cut and cap differently; this is a working model of a typical retriever."
+        },
+        "slots": {
+          "layer": "measured",
+          "label": "Cap slots used",
+          "formula": "Passages kept, out of the 26-passage cap. \"Every slot filled\" when the chunker produced 26 or more.",
+          "unit": "slots",
+          "threshold": "26: a full cap means text may have been left out (see characters past the cap).",
+          "limits": "A full cap does not by itself mean text was lost: the last passage may end exactly at the end of the page."
+        },
+        "passage_chars": {
+          "layer": "measured",
+          "label": "Passage length",
+          "formula": "The length of one passage's text, as the chunker emitted it.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": "At most about 2,000, unless a sliver was folded in.",
+          "limits": "Neighbouring passages share about 200 characters by design."
+        },
+        "chars_in_passages": {
+          "layer": "measured",
+          "label": "Text in passages, overlap and intro included",
+          "formula": "The sum of every passage's length (page.charsIndexed). Passage #0 repeats the title, h1 and meta description; neighbours repeat about 200 characters.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": null,
+          "limits": "Counts repeated text more than once, so it can exceed the page's own text. For how much of the page reached a passage, read the unique number."
+        },
+        "chars_unique": {
+          "layer": "derived",
+          "label": "Unique text in passages",
+          "formula": "Each passage is located in the kept text (the intro part, title, h1 and description, set aside); the union of the located spans is counted once, so overlap is not counted twice.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "A passage the locator cannot place is reported as unlocated rather than guessed. Heading lines the chunker carries only as a passage's heading are not in it."
+        },
+        "chars_past_cap": {
+          "layer": "derived",
+          "label": "Characters past the cap",
+          "formula": "Only when every one of the 26 slots is filled: the kept text after the end of the last passage. Equivalently, kept text − unique text in passages − text between passages, counted after the last one.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": "Above 0 means a tail no retriever using this cap can return.",
+          "limits": "Replaces the 2.101 estimate, which subtracted the overlapping total and so undercounted, often to 0. That old number is still exported as charsUnread."
+        },
+        "chars_unread_legacy": {
+          "layer": "derived",
+          "label": "charsUnread (2.101 meaning)",
+          "formula": "When the cap is reached: extracted body characters − text in passages including overlap and intro; otherwise 0.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": null,
+          "limits": "Undercounts and can read 0 even when the cap cut a tail. Kept unchanged for compatibility; use characters past the cap."
+        },
+        "text_raw": {
+          "layer": "derived",
+          "label": "Text in the raw HTML",
+          "formula": "Kept text plus every removal in the table below. An estimate of the document's text, defined so the waterfall sums exactly.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Script and style bodies count as text here because the cleaner has to remove them; it is not the text a reader sees."
+        },
+        "text_removed": {
+          "layer": "measured",
+          "label": "Removed by the cleaner",
+          "formula": "For every element the cleaner removed (outermost only, so nothing counts twice): its own text at the moment of removal. Plus, when a main region was chosen, the text of everything outside it.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Observed on a second copy of the extraction, checked to give the same text; the removal itself is the product's rule and is not tuned here."
+        },
+        "text_kept": {
+          "layer": "measured",
+          "label": "Kept text",
+          "formula": "The extractor's body text (the chunker's input), whitespace folded.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Differs slightly from page.bodyChars, which counts line breaks as they are."
+        },
+        "not_in_passages": {
+          "layer": "derived",
+          "label": "Kept, but in no passage text",
+          "formula": "Kept text before the end of the last passage that no passage holds: h2 heading lines (carried as a passage's heading, not its text), the spaces between sections, and anything else (should be 0).",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "A retriever may still see a heading as the passage's metadata; this tool does not assume either way."
+        },
+        "overlap_chars": {
+          "layer": "derived",
+          "label": "Overlap",
+          "formula": "Located passage text − unique text in passages: what neighbouring windows repeat.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "By design, about 200 per cut inside a long section."
+        },
+        "intro_chars": {
+          "layer": "measured",
+          "label": "Intro",
+          "formula": "The title, h1 and meta description the chunker puts at the start of passage #0.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Not part of the body text, so it is outside the waterfall's kept stage."
+        },
+        "removal_chars": {
+          "layer": "measured",
+          "label": "Characters removed by one element",
+          "formula": "The removed element's text, whitespace folded, at the moment the cleaner removed it.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Elements with no text are counted but not listed. Beyond the first 200 the rest are summed, never dropped."
+        },
+        "section_reached": {
+          "layer": "derived",
+          "label": "Section text that reached a passage",
+          "formula": "For each section the chunker made (the intro, the text before the first h2, each h2), the part of its text inside some passage, over its length.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": "Under 100% means that section lost text, almost always to the cap.",
+          "limits": "When the page has no usable h2 split, the body is one row."
+        },
+        "robots_verdict": {
+          "layer": "measured",
+          "label": "robots.txt verdict",
+          "formula": "RFC 9309 over the site's /robots.txt: the group naming the token replaces *; the longest matching Allow or Disallow wins; Allow wins a tie.",
+          "unit": "allowed / blocked per crawler",
+          "threshold": null,
+          "limits": "A 4xx robots.txt means no rules; 5xx or no answer means all blocked. Some user-fetch crawlers say they may ignore robots.txt."
+        },
+        "markup": {
+          "layer": "measured",
+          "label": "Technical markup",
+          "formula": "From the raw HTML: every @type in application/ld+json blocks (through @graph), rel=canonical links, the meta description's length.",
+          "unit": "types, links, characters",
+          "threshold": "Meta description: 70–160 characters.",
+          "limits": "Read, not validated against schema.org."
+        },
+        "render_words": {
+          "layer": "measured",
+          "label": "Words with JavaScript",
+          "formula": "The same extraction and chunking over the DOM a local headless Chrome dumped after running the page's scripts.",
+          "unit": "words, passages",
+          "threshold": "50% more words and at least 150 more raises js_dependent.",
+          "limits": "Only with --render. The reading itself stays the plain fetch."
+        },
+        "group_chars": {
+          "layer": "derived",
+          "label": "Group size",
+          "formula": "Passages in the group, and the sum of their lengths.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": null,
+          "limits": "Computed over the agent's groups, so it moves with the grouping."
+        },
+        "group_share": {
+          "layer": "derived",
+          "label": "Share of indexed text",
+          "formula": "The group's characters over the characters of every passage (overlap included).",
+          "unit": "percent",
+          "threshold": null,
+          "limits": "Computed over the agent's groups. Overlap counts in both neighbours."
+        },
+        "vocabulary": {
+          "layer": "derived",
+          "label": "Phrase and word counts",
+          "formula": "Over the passages' text with the overlap removed: ×uses, the passages that use it (p), and how many groups it reaches (g/total).",
+          "unit": "occurrences, passages, groups",
+          "threshold": "A phrase needs 2 uses in 2 passages, or 3 in one.",
+          "limits": "What the page says, not search demand. The group count rests on the agent's groups."
+        },
+        "check_verdicts": {
+          "layer": "derived",
+          "label": "Check verdicts",
+          "formula": "Fixed rules over the measured values, each a named constant in checks.mjs with its reason; every finding names the passages it rests on.",
+          "unit": "findings, by severity",
+          "threshold": "Each check's threshold is in the check table of SKILL.md.",
+          "limits": "repeated_claim uses the agent's groups; every other check does not."
+        },
+        "groups": {
+          "layer": "judgement",
+          "label": "Groups and labels",
+          "formula": "The agent read every passage and grouped them by subject (at most 6); its label is its own. The label source is computed: a heading most members share, else two distinctive words.",
+          "unit": "groups",
+          "threshold": "At most 6 groups.",
+          "limits": "Not an embedding clustering; another model may group a little differently."
+        },
+        "duplicates": {
+          "layer": "judgement",
+          "label": "Repeats",
+          "formula": "Passages the agent marked as repeating an earlier, non-adjacent passage almost word for word.",
+          "unit": "passages",
+          "threshold": null,
+          "limits": "The product judges this from embeddings at cosine 0.94; here it is read."
+        },
+        "query_verdicts": {
+          "layer": "judgement",
+          "label": "Query test",
+          "formula": "For 5 to 10 typical queries, the agent names the best passage and a verdict (complete, partial, missing) and quotes the answer; the quote is checked verbatim.",
+          "unit": "queries",
+          "threshold": null,
+          "limits": "Judged from the passages only; it is not a measurement of what any assistant returns."
+        },
+        "plan": {
+          "layer": "judgement",
+          "label": "Rewrite plan",
+          "formula": "The agent's fixes in priority order; each 'before' is checked verbatim against its passage, each cited check against the checks that fired.",
+          "unit": "items",
+          "threshold": null,
+          "limits": "Advice, not a measurement."
+        },
+        "facts": {
+          "layer": "judgement",
+          "label": "Citable facts",
+          "formula": "The agent's list of concrete facts the passages state, each with the passages that state it.",
+          "unit": "facts",
+          "threshold": null,
+          "limits": "Fact gaps are only as fair as this list is complete."
+        },
+        "topic_cells": {
+          "layer": "derived",
+          "label": "Topic × page cells",
+          "formula": "Passages and characters of the groups the agent assigned to each shared topic.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": null,
+          "limits": "Computed over the agent's groups and topics."
+        },
+        "diff_counts": {
+          "layer": "derived",
+          "label": "Changes since the baseline",
+          "formula": "Passages matched by identical text, then by the same heading in order; the rest are added or removed.",
+          "unit": "passages",
+          "threshold": null,
+          "limits": "A passage that moved and changed heading counts as removed plus added."
+        }
       },
       "checks": [
+        {
+          "code": "cap_overflow",
+          "severity": "high",
+          "passages": [
+            25
+          ],
+          "evidence": {
+            "charsPastCap": 167,
+            "charsUnread": 0,
+            "cap": 26,
+            "last": 25
+          },
+          "message": "167 characters after passage #25 are never stored."
+        },
         {
           "code": "dominant_heading",
           "severity": "medium",
@@ -995,14 +3243,7 @@
           }
         ]
       },
-      "render": {
-        "ok": true,
-        "browser": "chrome.exe",
-        "wordCount": 4678,
-        "passages": 24,
-        "charsIndexed": 30146,
-        "headings": 14
-      },
+      "render": null,
       "plan": null,
       "queries": null,
       "facts": null,
@@ -1011,7 +3252,7 @@
     {
       "n": 2,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T17:40:32.065Z",
+      "generatedAt": "2026-10-16T18:38:27.192Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -1061,7 +3302,9 @@
         "charsUnread": 0,
         "capReached": false,
         "duplicateChunks": 0,
-        "groupsMergedByPaletteLimit": null
+        "groupsMergedByPaletteLimit": null,
+        "charsPastCap": 0,
+        "charsInPassagesUnique": 12497
       },
       "textCoverage": {
         "exportedChars": 3415,
@@ -1651,10 +3894,1719 @@
           "textHead": "Cache-Control value\nExplanation\nmax-age=86400\nThe response can be cached by browsers and intermediary caches for up to 1 day (60 seconds x 60 minutes x 24 hours).\nprivate, max-age=600\nThe response can be cached by the browser (but not inter"
         }
       ],
-      "skillVersion": 2,
+      "skillVersion": "2.102",
+      "layers": {
+        "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
+        "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
+      },
+      "measured": {
+        "page": {
+          "url": "https://web.dev/articles/http-cache?hl=en",
+          "requestedUrl": "https://web.dev/articles/http-cache?hl=en",
+          "title": "Prevent unnecessary network requests with the HTTP Cache  |  Articles  |  web.dev",
+          "wordCount": 2060,
+          "headingsFound": 11,
+          "noindex": false
+        },
+        "retrieval": {
+          "chunkCap": 26,
+          "chunksIndexed": 15,
+          "capReached": false,
+          "charsInPassagesTotal": 13308,
+          "charsInPassagesUnique": 12497
+        },
+        "passages": [
+          {
+            "index": 0,
+            "heading": "Prevent unnecessary network requests with the HTTP Cache  |  Articles  |  web.dev",
+            "charCount": 235,
+            "contentRole": "main",
+            "textHead": "Prevent unnecessary network requests with the HTTP Cache  |  Articles  |  web.dev\nPrevent unnecessary network requests with the HTTP Cache\nThe browser&#39;s HTTP Cache is your first line of defense against unnecessary network requests."
+          },
+          {
+            "index": 1,
+            "heading": null,
+            "charCount": 833,
+            "contentRole": "main",
+            "textHead": "Prevent unnecessary network requests with the HTTP Cache\nIlya Grigorik\nJeff Posnick\nFetching resources over the network is both slow and expensive:\nLarge responses require many roundtrips between the browser and the server.\nYour page won't "
+          },
+          {
+            "index": 2,
+            "heading": "Browser compatibility",
+            "charCount": 261,
+            "contentRole": "main",
+            "textHead": "There isn't actually a single API called the HTTP Cache. It's the general name for a collection of web platform APIs. Those APIs are supported in all browsers:\nCache-Control\nBrowser Support\nSource\nETag\nBrowser Support\nSource\nLast-Modified\nB"
+          },
+          {
+            "index": 3,
+            "heading": "How the HTTP Cache works",
+            "charCount": 698,
+            "contentRole": "main",
+            "textHead": "All HTTP requests that the browser makes are first routed to the browser cache to check whether there is a valid cached response that can be used to fulfill the request. If there's a match, the response is read from the cache, which elimina"
+          },
+          {
+            "index": 4,
+            "heading": "Request headers: stick with the defaults (usually)",
+            "charCount": 570,
+            "contentRole": "main",
+            "textHead": "There are a number of important headers that should be included in your web app's outgoing requests, but the browser almost always takes care of setting them on your behalf when it makes requests. Request headers that affect checking for fr"
+          },
+          {
+            "index": 5,
+            "heading": "Response headers: configure your web server",
+            "charCount": 1606,
+            "contentRole": "main",
+            "textHead": "The part of the HTTP caching setup that matters the most is the headers that your web server adds to each outgoing response. The following headers all factor into effective caching behavior:\nCache-Control. The server can return a Cache-Cont"
+          },
+          {
+            "index": 6,
+            "heading": "Which response header values should you use?",
+            "charCount": 1995,
+            "contentRole": "main",
+            "textHead": "There are two important scenarios that you should cover when configuring your web server's response headers. Long-lived caching for versioned URLs How versioned URLs can help your caching strategy Versioned URLs are a good practice because "
+          },
+          {
+            "index": 7,
+            "heading": "Which response header values should you use?",
+            "charCount": 1991,
+            "contentRole": "main",
+            "textHead": "it can immediately use the value in the HTTP Cache, without having to make a network request to your web server at all. That's great—you've immediately gained the reliability and speed that comes from avoiding the network! Build tools like "
+          },
+          {
+            "index": 8,
+            "heading": "Which response header values should you use?",
+            "charCount": 1996,
+            "contentRole": "main",
+            "textHead": "can also accept a comma-separated list of directives. See Appendix: Cache-Control examples. Setting either ETag or Last-Modified can also help. As mentioned in Response headers, ETag and Last-Modified both serve the same purpose: determinin"
+          },
+          {
+            "index": 9,
+            "heading": "Which response header values should you use?",
+            "charCount": 736,
+            "contentRole": "main",
+            "textHead": "there's a match, then the server can respond with a 304 Not Modified HTTP response, which is the equivalent of \"Hey, keep using what you've already got!\" There's very little data to transfer when sending this type of response, so it's usual"
+          },
+          {
+            "index": 10,
+            "heading": "Summary",
+            "charCount": 571,
+            "contentRole": "main",
+            "textHead": "The HTTP Cache is an effective way to improve load performance because it reduces unnecessary network requests. It's supported in all browsers and doesn't take too much work to set up.\nThe following Cache-Control configurations are a good s"
+          },
+          {
+            "index": 11,
+            "heading": "Learn more",
+            "charCount": 243,
+            "contentRole": "main",
+            "textHead": "If you're looking to go beyond the basics of using the Cache-Control header, check out Jake Archibald's Caching best practices and max-age gotchas guide.\nSee Love your cache for guidance on how to optimize your cache usage for return visito"
+          },
+          {
+            "index": 12,
+            "heading": "Appendix: More tips",
+            "charCount": 714,
+            "contentRole": "main",
+            "textHead": "If you have more time, here are further ways that you can optimize your usage of the HTTP Cache:\nUse consistent URLs. If you serve the same content on different URLs, then that content will be fetched and stored multiple times.\nMinimize chu"
+          },
+          {
+            "index": 13,
+            "heading": "Appendix: Cache-Control flowchart",
+            "charCount": 60,
+            "contentRole": "main",
+            "textHead": "The decision process for setting your Cache-Control headers."
+          },
+          {
+            "index": 14,
+            "heading": "Appendix: Cache-Control examples",
+            "charCount": 799,
+            "contentRole": "main",
+            "textHead": "Cache-Control value\nExplanation\nmax-age=86400\nThe response can be cached by browsers and intermediary caches for up to 1 day (60 seconds x 60 minutes x 24 hours).\nprivate, max-age=600\nThe response can be cached by the browser (but not inter"
+          }
+        ],
+        "losses": {
+          "unit": "characters, whitespace runs folded to one space",
+          "consistent": true,
+          "waterfall": {
+            "raw": 25226,
+            "removed": 12426,
+            "kept": 12800,
+            "inPassagesUnique": 12497,
+            "notInPassages": 303,
+            "pastCap": 0
+          },
+          "passages": {
+            "unique": 12497,
+            "total": 13308,
+            "overlap": 576,
+            "intro": 231,
+            "unlocated": 0
+          },
+          "notInPassages": {
+            "headingLines": 254,
+            "whitespace": 49,
+            "other": 0
+          },
+          "removals": {
+            "elementsMatched": 60,
+            "elementsWithText": 40,
+            "chars": 12426,
+            "byReason": [
+              {
+                "reason": "script_style",
+                "elements": 7,
+                "chars": 8481
+              },
+              {
+                "reason": "embedded",
+                "elements": 5,
+                "chars": 24
+              },
+              {
+                "reason": "head_meta",
+                "elements": 1,
+                "chars": 79
+              },
+              {
+                "reason": "hidden",
+                "elements": 18,
+                "chars": 902
+              },
+              {
+                "reason": "banner_role",
+                "elements": 1,
+                "chars": 521
+              },
+              {
+                "reason": "nav",
+                "elements": 4,
+                "chars": 1875
+              },
+              {
+                "reason": "aside",
+                "elements": 3,
+                "chars": 524
+              },
+              {
+                "reason": "outside_main",
+                "elements": 1,
+                "chars": 20
+              }
+            ],
+            "items": [
+              {
+                "reason": "script_style",
+                "tag": "script",
+                "id": null,
+                "classes": [],
+                "element": "script",
+                "path": "script",
+                "chars": 6329,
+                "sample": "(function(d,e,v,s,i,t,E){d['GoogleDevelopersObject']=i; t=e.createElement(v);t.a"
+              },
+              {
+                "reason": "nav",
+                "tag": "nav",
+                "id": null,
+                "classes": [
+                  "devsite-book-nav",
+                  "devsite-nav",
+                  "nocontent"
+                ],
+                "element": "nav.devsite-book-nav.devsite-nav",
+                "path": "section.devsite-wrapper > devsite-book-nav > nav.devsite-book-nav.devsite-nav",
+                "chars": 1171,
+                "sample": "Resources More AI and the web Fast load times Learn Core Web Vitals Identity Pro"
+              },
+              {
+                "reason": "script_style",
+                "tag": "script",
+                "id": null,
+                "classes": [],
+                "element": "script",
+                "path": "devsite-analytics > script",
+                "chars": 807,
+                "sample": "{&#34;at&#34;: &#34;True&#34;, &#34;ga4&#34;: [], &#34;ga4p&#34;: [], &#34;gtm&#"
+              },
+              {
+                "reason": "banner_role",
+                "tag": "devsite-header",
+                "id": null,
+                "classes": [],
+                "element": "devsite-header",
+                "path": "section.devsite-wrapper > devsite-header",
+                "chars": 521,
+                "sample": "Resources Discover Baseline How to use Baseline Blog Case Studies English Deutsc"
+              },
+              {
+                "reason": "hidden",
+                "tag": "div",
+                "id": null,
+                "classes": [
+                  "devsite-tabs-dropdown"
+                ],
+                "element": "div.devsite-tabs-dropdown",
+                "path": "… > devsite-tabs.upper-tabs > nav.devsite-tabs-wrapper > tab.devsite-dropdown > div.devsite-tabs-dropdown",
+                "chars": 473,
+                "sample": "Web Platform Dive into the web platform, at your pace. HTML CSS JavaScript User "
+              },
+              {
+                "reason": "script_style",
+                "tag": "template",
+                "id": null,
+                "classes": [
+                  "devsite-content-data-template"
+                ],
+                "element": "template.devsite-content-data-template",
+                "path": "… > main#main-content > devsite-content > div.devsite-content-data > template.devsite-content-data-template",
+                "chars": 468,
+                "sample": "[[[\"Easy to understand\",\"easyToUnderstand\",\"thumb-up\"],[\"Solved my problem\",\"sol"
+              },
+              {
+                "reason": "nav",
+                "tag": "nav",
+                "id": null,
+                "classes": [
+                  "devsite-footer-linkboxes",
+                  "nocontent"
+                ],
+                "element": "nav.devsite-footer-linkboxes.nocontent",
+                "path": "section.devsite-wrapper > section#gc-wrapper > devsite-footer-linkboxes.devsite-footer > nav.devsite-footer-linkboxes.nocontent",
+                "chars": 460,
+                "sample": "web.dev web.dev We want to help you build beautiful, accessible, fast, and secur"
+              },
+              {
+                "reason": "script_style",
+                "tag": "style",
+                "id": null,
+                "classes": [],
+                "element": "style",
+                "path": "… > article.devsite-article > div.devsite-article-body > p > style",
+                "chars": 383,
+                "sample": ".wd-author__links { display: flex; } /* Name, title and links stacked in a colum"
+              },
+              {
+                "reason": "script_style",
+                "tag": "script",
+                "id": null,
+                "classes": [],
+                "element": "script",
+                "path": "head > script",
+                "chars": 334,
+                "sample": "{ \"@context\": \"https://schema.org\", \"@type\": \"BreadcrumbList\", \"itemListElement\""
+              },
+              {
+                "reason": "hidden",
+                "tag": "ul",
+                "id": null,
+                "classes": [
+                  "devsite-nav-list"
+                ],
+                "element": "ul.devsite-nav-list",
+                "path": "… > nav.devsite-book-nav > div.devsite-book-nav-wrapper > div.devsite-mobile-nav-bottom > ul.devsite-nav-list",
+                "chars": 306,
+                "sample": "Web Platform HTML CSS JavaScript User experience Performance Accessibility Ident"
+              },
+              {
+                "reason": "aside",
+                "tag": "aside",
+                "id": null,
+                "classes": [
+                  "note"
+                ],
+                "element": "aside.note",
+                "path": "… > devsite-content > article.devsite-article > div.devsite-article-body > aside.note",
+                "chars": 276,
+                "sample": "Note: Developers who do need more control over the HTTP Cache in their web appli"
+              },
+              {
+                "reason": "nav",
+                "tag": "nav",
+                "id": null,
+                "classes": [
+                  "devsite-footer-utility-links"
+                ],
+                "element": "nav.devsite-footer-utility-links",
+                "path": "… > section#gc-wrapper > devsite-footer-utility.devsite-footer > div.devsite-footer-utility > nav.devsite-footer-utility-links",
+                "chars": 201,
+                "sample": "Terms Privacy English Deutsch Español – América Latina Français Indonesia Italia"
+              },
+              {
+                "reason": "script_style",
+                "tag": "script",
+                "id": null,
+                "classes": [],
+                "element": "script",
+                "path": "head > script",
+                "chars": 158,
+                "sample": "{ \"@context\": \"https://schema.org\", \"@type\": \"Article\", \"dateModified\": \"2018-11"
+              },
+              {
+                "reason": "aside",
+                "tag": "aside",
+                "id": null,
+                "classes": [
+                  "note"
+                ],
+                "element": "aside.note",
+                "path": "… > devsite-content > article.devsite-article > div.devsite-article-body > aside.note",
+                "chars": 145,
+                "sample": "Note: You can also add the immutable property to your Cache-Control header as a "
+              },
+              {
+                "reason": "aside",
+                "tag": "aside",
+                "id": null,
+                "classes": [
+                  "beta"
+                ],
+                "element": "aside.beta",
+                "path": "… > devsite-content > article.devsite-article > div.devsite-article-body > aside.beta",
+                "chars": 103,
+                "sample": "Try it: Try the HTTP Cache codelab to get first-hand experience with Cache-Contr"
+              },
+              {
+                "reason": "hidden",
+                "tag": "devsite-actions",
+                "id": null,
+                "classes": [],
+                "element": "devsite-actions",
+                "path": "… > devsite-content > article.devsite-article > h1.devsite-page-title > devsite-actions",
+                "chars": 86,
+                "sample": "Stay organized with collections Save and categorize content based on your prefer"
+              },
+              {
+                "reason": "head_meta",
+                "tag": "head",
+                "id": null,
+                "classes": [],
+                "element": "head",
+                "path": "head",
+                "chars": 79,
+                "sample": "Prevent unnecessary network requests with the HTTP Cache | Articles | web.dev"
+              },
+              {
+                "reason": "nav",
+                "tag": "div",
+                "id": null,
+                "classes": [
+                  "devsite-article-meta",
+                  "nocontent"
+                ],
+                "element": "div.devsite-article-meta.nocontent",
+                "path": "… > main#main-content > devsite-content > article.devsite-article > div.devsite-article-meta.nocontent",
+                "chars": 43,
+                "sample": "Home Articles Resources Network reliability"
+              },
+              {
+                "reason": "outside_main",
+                "tag": "a",
+                "id": null,
+                "classes": [
+                  "skip-link",
+                  "button"
+                ],
+                "element": "a.skip-link.button",
+                "path": "a.skip-link.button",
+                "chars": 20,
+                "sample": "Skip to main content"
+              },
+              {
+                "reason": "hidden",
+                "tag": "a",
+                "id": null,
+                "classes": [
+                  "devsite-footer-utility-link",
+                  "gc-analytics-event"
+                ],
+                "element": "a.devsite-footer-utility-link.gc-analytics-event",
+                "path": "… > nav.devsite-footer-utility-links > ul.devsite-footer-utility-list > li.devsite-footer-utility-item > a.devsite-footer-utility-link.gc-analytics-event",
+                "chars": 14,
+                "sample": "Manage cookies"
+              },
+              {
+                "reason": "embedded",
+                "tag": "svg",
+                "id": null,
+                "classes": [],
+                "element": "svg",
+                "path": "… > div > div.wd-author__links > a > svg",
+                "chars": 8,
+                "sample": "Homepage"
+              },
+              {
+                "reason": "embedded",
+                "tag": "svg",
+                "id": null,
+                "classes": [],
+                "element": "svg",
+                "path": "… > div > div.wd-author__links > a > svg",
+                "chars": 8,
+                "sample": "Homepage"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [
+                  "button",
+                  "devsite-top-button"
+                ],
+                "element": "span.button.devsite-top-button",
+                "path": "… > div.devsite-top-logo-row-wrapper > div.devsite-top-logo-row > devsite-user#devsite-user > span.button.devsite-top-button",
+                "chars": 7,
+                "sample": "Sign in"
+              },
+              {
+                "reason": "embedded",
+                "tag": "svg",
+                "id": null,
+                "classes": [],
+                "element": "svg",
+                "path": "… > div > div.wd-author__links > a > svg",
+                "chars": 6,
+                "sample": "GitHub"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 2,
+                "sample": "12"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 2,
+                "sample": "12"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 2,
+                "sample": "12"
+              },
+              {
+                "reason": "script_style",
+                "tag": "script",
+                "id": null,
+                "classes": [],
+                "element": "script",
+                "path": "devsite-analytics > script",
+                "chars": 2,
+                "sample": "[]"
+              },
+              {
+                "reason": "embedded",
+                "tag": "svg",
+                "id": null,
+                "classes": [],
+                "element": "svg",
+                "path": "… > div > div.wd-author__links > a > svg",
+                "chars": 1,
+                "sample": "X"
+              },
+              {
+                "reason": "embedded",
+                "tag": "svg",
+                "id": null,
+                "classes": [],
+                "element": "svg",
+                "path": "… > div > div.wd-author__links > a > svg",
+                "chars": 1,
+                "sample": "X"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 1,
+                "sample": "1"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 1,
+                "sample": "1"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 1,
+                "sample": "1"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 1,
+                "sample": "1"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 1,
+                "sample": "1"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 1,
+                "sample": "1"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 1,
+                "sample": "1"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 1,
+                "sample": "1"
+              },
+              {
+                "reason": "hidden",
+                "tag": "span",
+                "id": null,
+                "classes": [],
+                "element": "span",
+                "path": "… > div.wd-browser-compat > ul > li > span",
+                "chars": 1,
+                "sample": "1"
+              },
+              {
+                "reason": "hidden",
+                "tag": "div",
+                "id": null,
+                "classes": [
+                  "devsite-search-shortcut-icon-container"
+                ],
+                "element": "div.devsite-search-shortcut-icon-container",
+                "path": "… > form.devsite-search-form > div.devsite-search-container > div.devsite-searchbox > div.devsite-search-shortcut-icon-container",
+                "chars": 1,
+                "sample": "/"
+              }
+            ],
+            "omitted": {
+              "elements": 0,
+              "chars": 0
+            }
+          },
+          "sections": {
+            "mode": "h2",
+            "rows": [
+              {
+                "kind": "intro",
+                "heading": null,
+                "chars": 231,
+                "inPassages": 231,
+                "located": true
+              },
+              {
+                "kind": "before_first_h2",
+                "heading": null,
+                "chars": 833,
+                "inPassages": 833,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Browser compatibility",
+                "chars": 261,
+                "inPassages": 261,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "How the HTTP Cache works",
+                "chars": 698,
+                "inPassages": 698,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Request headers: stick with the defaults (usually)",
+                "chars": 570,
+                "inPassages": 570,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Response headers: configure your web server",
+                "chars": 1606,
+                "inPassages": 1606,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Which response header values should you use?",
+                "chars": 6142,
+                "inPassages": 6142,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Summary",
+                "chars": 571,
+                "inPassages": 571,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Learn more",
+                "chars": 243,
+                "inPassages": 243,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Appendix: More tips",
+                "chars": 714,
+                "inPassages": 714,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Appendix: Cache-Control flowchart",
+                "chars": 60,
+                "inPassages": 60,
+                "located": true
+              },
+              {
+                "kind": "h2",
+                "heading": "Appendix: Cache-Control examples",
+                "chars": 799,
+                "inPassages": 799,
+                "located": true
+              }
+            ]
+          },
+          "placement": [
+            {
+              "index": 0,
+              "start": null,
+              "end": null,
+              "intro": 231
+            },
+            {
+              "index": 1,
+              "start": 0,
+              "end": 833,
+              "intro": 0
+            },
+            {
+              "index": 2,
+              "start": 856,
+              "end": 1117,
+              "intro": 0
+            },
+            {
+              "index": 3,
+              "start": 1143,
+              "end": 1841,
+              "intro": 0
+            },
+            {
+              "index": 4,
+              "start": 1893,
+              "end": 2463,
+              "intro": 0
+            },
+            {
+              "index": 5,
+              "start": 2508,
+              "end": 4114,
+              "intro": 0
+            },
+            {
+              "index": 6,
+              "start": 4160,
+              "end": 6155,
+              "intro": 0
+            },
+            {
+              "index": 7,
+              "start": 5960,
+              "end": 7951,
+              "intro": 0
+            },
+            {
+              "index": 8,
+              "start": 7765,
+              "end": 9761,
+              "intro": 0
+            },
+            {
+              "index": 9,
+              "start": 9566,
+              "end": 10302,
+              "intro": 0
+            },
+            {
+              "index": 10,
+              "start": 10311,
+              "end": 10882,
+              "intro": 0
+            },
+            {
+              "index": 11,
+              "start": 10894,
+              "end": 11137,
+              "intro": 0
+            },
+            {
+              "index": 12,
+              "start": 11158,
+              "end": 11872,
+              "intro": 0
+            },
+            {
+              "index": 13,
+              "start": 11907,
+              "end": 11967,
+              "intro": 0
+            },
+            {
+              "index": 14,
+              "start": 12001,
+              "end": 12800,
+              "intro": 0
+            }
+          ]
+        },
+        "robots": {
+          "url": "https://web.dev/robots.txt",
+          "status": "ok",
+          "httpStatus": 200,
+          "bots": [
+            {
+              "token": "OAI-SearchBot",
+              "vendor": "OpenAI",
+              "kind": "search",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "ChatGPT-User",
+              "vendor": "OpenAI",
+              "kind": "user",
+              "honours": false,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "GPTBot",
+              "vendor": "OpenAI",
+              "kind": "training",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Claude-SearchBot",
+              "vendor": "Anthropic",
+              "kind": "search",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Claude-User",
+              "vendor": "Anthropic",
+              "kind": "user",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "ClaudeBot",
+              "vendor": "Anthropic",
+              "kind": "training",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "PerplexityBot",
+              "vendor": "Perplexity",
+              "kind": "search",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Perplexity-User",
+              "vendor": "Perplexity",
+              "kind": "user",
+              "honours": false,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Google-Extended",
+              "vendor": "Google",
+              "kind": "training",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Googlebot",
+              "vendor": "Google",
+              "kind": "index",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "Bingbot",
+              "vendor": "Microsoft",
+              "kind": "index",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            },
+            {
+              "token": "CCBot",
+              "vendor": "Common Crawl",
+              "kind": "training",
+              "honours": true,
+              "allowed": true,
+              "rule": null,
+              "group": "*"
+            }
+          ]
+        },
+        "technical": {
+          "jsonLd": {
+            "blocks": 2,
+            "invalid": 0,
+            "types": [
+              "Article",
+              "BreadcrumbList",
+              "ListItem"
+            ]
+          },
+          "canonical": {
+            "present": true,
+            "count": 1,
+            "href": "https://web.dev/articles/http-cache",
+            "absolute": true,
+            "resolved": "https://web.dev/articles/http-cache",
+            "self": false
+          },
+          "metaDescription": {
+            "present": true,
+            "length": 96
+          },
+          "lang": "en"
+        },
+        "render": null,
+        "derived": {
+          "charsPastCap": 0,
+          "charsUnread": 0,
+          "phrases": [
+            {
+              "term": "cache control",
+              "count": 19,
+              "passages": 10,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "max age",
+              "count": 9,
+              "passages": 5,
+              "groups": 3,
+              "spread": 0.5,
+              "describesWholePage": false
+            },
+            {
+              "term": "network request",
+              "count": 8,
+              "passages": 5,
+              "groups": 3,
+              "spread": 0.5,
+              "describesWholePage": false
+            },
+            {
+              "term": "web server",
+              "count": 9,
+              "passages": 4,
+              "groups": 4,
+              "spread": 0.667,
+              "describesWholePage": true
+            },
+            {
+              "term": "unnecessary network request",
+              "count": 6,
+              "passages": 3,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "none match",
+              "count": 4,
+              "passages": 3,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "cache control value",
+              "count": 3,
+              "passages": 2,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "web app",
+              "count": 3,
+              "passages": 2,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "intermediate caches",
+              "count": 3,
+              "passages": 2,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "following cache control",
+              "count": 2,
+              "passages": 2,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "versioning information",
+              "count": 2,
+              "passages": 2,
+              "groups": 1,
+              "spread": 0.167,
+              "describesWholePage": false
+            },
+            {
+              "term": "re download",
+              "count": 2,
+              "passages": 2,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "web application",
+              "count": 2,
+              "passages": 2,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "caching strategy",
+              "count": 2,
+              "passages": 2,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "css file",
+              "count": 2,
+              "passages": 2,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            }
+          ],
+          "narrativeWords": [
+            {
+              "term": "browser",
+              "count": 35,
+              "passages": 12,
+              "groups": 6,
+              "spread": 1,
+              "describesWholePage": true
+            },
+            {
+              "term": "response",
+              "count": 30,
+              "passages": 8,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "header",
+              "count": 24,
+              "passages": 10,
+              "groups": 6,
+              "spread": 1,
+              "describesWholePage": true
+            },
+            {
+              "term": "file",
+              "count": 18,
+              "passages": 6,
+              "groups": 4,
+              "spread": 0.667,
+              "describesWholePage": true
+            },
+            {
+              "term": "request",
+              "count": 17,
+              "passages": 6,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "url",
+              "count": 17,
+              "passages": 3,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
+              "term": "resource",
+              "count": 16,
+              "passages": 7,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "cached",
+              "count": 15,
+              "passages": 9,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "caching",
+              "count": 12,
+              "passages": 8,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            },
+            {
+              "term": "etag",
+              "count": 11,
+              "passages": 6,
+              "groups": 5,
+              "spread": 0.833,
+              "describesWholePage": true
+            }
+          ],
+          "checks": [
+            {
+              "code": "dominant_heading",
+              "severity": "medium",
+              "passages": [
+                6,
+                7,
+                8,
+                9
+              ],
+              "evidence": {
+                "heading": "Which response header values should you use?",
+                "share": 0.505,
+                "chars": 6718
+              },
+              "message": "“Which response header values should you use?” holds 50.5% of the indexed text."
+            },
+            {
+              "code": "mid_sentence_start",
+              "severity": "medium",
+              "passages": [
+                7,
+                8,
+                9
+              ],
+              "evidence": {
+                "samples": [
+                  {
+                    "passage": 7,
+                    "text": "it can immediately use the value in the HTTP Cache, without having to make a ne…"
+                  },
+                  {
+                    "passage": 8,
+                    "text": "can also accept a comma-separated list of directives. See Appendix: Cache-Contr…"
+                  },
+                  {
+                    "passage": 9,
+                    "text": "there's a match, then the server can respond with a 304 Not Modified HTTP respo…"
+                  }
+                ],
+                "count": 3
+              },
+              "message": "3 passage(s) open on a lowercase word or a punctuation mark."
+            },
+            {
+              "code": "nav_in_content",
+              "severity": "medium",
+              "passages": [
+                2,
+                5
+              ],
+              "evidence": {
+                "runs": 2,
+                "samples": [
+                  {
+                    "passage": 2,
+                    "lines": [
+                      "Cache-Control",
+                      "Browser Support",
+                      "Source",
+                      "ETag",
+                      "Browser Support",
+                      "Source",
+                      "Last-Modified",
+                      "Browser Support"
+                    ],
+                    "count": 9
+                  },
+                  {
+                    "passage": 5,
+                    "lines": [
+                      "Express",
+                      "Apache",
+                      "nginx",
+                      "Firebase Hosting",
+                      "Netlify"
+                    ],
+                    "count": 5
+                  }
+                ]
+              },
+              "message": "2 run(s) of four or more one-or-two-word lines."
+            },
+            {
+              "code": "canonical_other",
+              "severity": "medium",
+              "passages": [],
+              "evidence": {
+                "href": "https://web.dev/articles/http-cache"
+              },
+              "message": "rel=canonical names https://web.dev/articles/http-cache."
+            },
+            {
+              "code": "thin_section",
+              "severity": "low",
+              "passages": [
+                13
+              ],
+              "evidence": {
+                "samples": [
+                  {
+                    "passage": 13,
+                    "heading": "Appendix: Cache-Control flowchart",
+                    "chars": 60
+                  }
+                ],
+                "count": 1
+              },
+              "message": "1 heading(s) with fewer than 150 characters under them."
+            },
+            {
+              "code": "repeated_claim",
+              "severity": "low",
+              "passages": [
+                1,
+                2,
+                10
+              ],
+              "evidence": {
+                "groupCount": 6,
+                "samples": [
+                  {
+                    "phrase": "supported in all browsers",
+                    "groups": 3,
+                    "passages": [
+                      1,
+                      2,
+                      10
+                    ]
+                  }
+                ]
+              },
+              "message": "1 phrase(s) recur across at least half of the 6 groups."
+            }
+          ]
+        }
+      },
       "judgement": {
         "agent": null,
-        "model": null
+        "model": null,
+        "groups": [
+          {
+            "id": 0,
+            "label": "First · Defense",
+            "labelSource": "keywords",
+            "chunkCount": 3,
+            "charCount": 1766,
+            "shareOfIndexedChars": 0.133,
+            "cohesion": null,
+            "agentLabel": "Why the HTTP cache matters and how it works",
+            "note": null,
+            "topic": "what"
+          },
+          {
+            "id": 1,
+            "label": "Automatically · Understanding",
+            "labelSource": "keywords",
+            "chunkCount": 2,
+            "charCount": 831,
+            "shareOfIndexedChars": 0.062,
+            "cohesion": null,
+            "agentLabel": "Browser support and request headers",
+            "note": null,
+            "topic": "browser"
+          },
+          {
+            "id": 2,
+            "label": "Response headers: configure your web server",
+            "labelSource": "heading",
+            "chunkCount": 1,
+            "charCount": 1606,
+            "shareOfIndexedChars": 0.121,
+            "cohesion": null,
+            "agentLabel": "Response headers to configure on the server",
+            "note": null,
+            "topic": "server"
+          },
+          {
+            "id": 3,
+            "label": "Which response header values should you use?",
+            "labelSource": "heading",
+            "chunkCount": 2,
+            "charCount": 3986,
+            "shareOfIndexedChars": 0.3,
+            "cohesion": null,
+            "agentLabel": "Versioned and unversioned URLs",
+            "note": null,
+            "topic": "patterns"
+          },
+          {
+            "id": 4,
+            "label": "Which response header values should you use?",
+            "labelSource": "heading",
+            "chunkCount": 2,
+            "charCount": 2732,
+            "shareOfIndexedChars": 0.205,
+            "cohesion": null,
+            "agentLabel": "ETag revalidation and 304",
+            "note": null,
+            "topic": "validation"
+          },
+          {
+            "id": 5,
+            "label": "Optimize · Usage",
+            "labelSource": "keywords",
+            "chunkCount": 5,
+            "charCount": 2387,
+            "shareOfIndexedChars": 0.179,
+            "cohesion": null,
+            "agentLabel": "Summary and appendix: recommended values",
+            "note": null,
+            "topic": "patterns"
+          }
+        ],
+        "assignment": [
+          {
+            "index": 0,
+            "group": 0,
+            "duplicateOf": null
+          },
+          {
+            "index": 1,
+            "group": 0,
+            "duplicateOf": null
+          },
+          {
+            "index": 2,
+            "group": 1,
+            "duplicateOf": null
+          },
+          {
+            "index": 3,
+            "group": 0,
+            "duplicateOf": null
+          },
+          {
+            "index": 4,
+            "group": 1,
+            "duplicateOf": null
+          },
+          {
+            "index": 5,
+            "group": 2,
+            "duplicateOf": null
+          },
+          {
+            "index": 6,
+            "group": 3,
+            "duplicateOf": null
+          },
+          {
+            "index": 7,
+            "group": 3,
+            "duplicateOf": null
+          },
+          {
+            "index": 8,
+            "group": 4,
+            "duplicateOf": null
+          },
+          {
+            "index": 9,
+            "group": 4,
+            "duplicateOf": null
+          },
+          {
+            "index": 10,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 11,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 12,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 13,
+            "group": 5,
+            "duplicateOf": null
+          },
+          {
+            "index": 14,
+            "group": 5,
+            "duplicateOf": null
+          }
+        ],
+        "duplicates": 0,
+        "plan": null,
+        "queries": null,
+        "facts": null
+      },
+      "metrics": {
+        "words": {
+          "layer": "measured",
+          "label": "Words",
+          "formula": "The extracted body text split on whitespace; every non-empty piece is a word.",
+          "unit": "words",
+          "threshold": null,
+          "limits": "Counted after the cleaner, so menus, footers and hidden text are not in it. A page drawn by JavaScript reads low here; compare with --render."
+        },
+        "headings": {
+          "layer": "measured",
+          "label": "Headings found",
+          "formula": "h1 elements plus h2 elements (the first 40) left after the cleaner, with empty ones dropped.",
+          "unit": "headings",
+          "threshold": null,
+          "limits": "h3 and styled text are not counted: the chunker splits only at h2."
+        },
+        "passages": {
+          "layer": "measured",
+          "label": "Passages read",
+          "formula": "Sections at h2 headings (or paragraph blocks), long ones cut into 2,000-character windows with about 200 characters of overlap, slivers under 40 characters folded into the passage before, then the first 26 kept.",
+          "unit": "passages",
+          "threshold": "At most 26 per page (this tool's cap).",
+          "limits": "Other systems cut and cap differently; this is a working model of a typical retriever."
+        },
+        "slots": {
+          "layer": "measured",
+          "label": "Cap slots used",
+          "formula": "Passages kept, out of the 26-passage cap. \"Every slot filled\" when the chunker produced 26 or more.",
+          "unit": "slots",
+          "threshold": "26: a full cap means text may have been left out (see characters past the cap).",
+          "limits": "A full cap does not by itself mean text was lost: the last passage may end exactly at the end of the page."
+        },
+        "passage_chars": {
+          "layer": "measured",
+          "label": "Passage length",
+          "formula": "The length of one passage's text, as the chunker emitted it.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": "At most about 2,000, unless a sliver was folded in.",
+          "limits": "Neighbouring passages share about 200 characters by design."
+        },
+        "chars_in_passages": {
+          "layer": "measured",
+          "label": "Text in passages, overlap and intro included",
+          "formula": "The sum of every passage's length (page.charsIndexed). Passage #0 repeats the title, h1 and meta description; neighbours repeat about 200 characters.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": null,
+          "limits": "Counts repeated text more than once, so it can exceed the page's own text. For how much of the page reached a passage, read the unique number."
+        },
+        "chars_unique": {
+          "layer": "derived",
+          "label": "Unique text in passages",
+          "formula": "Each passage is located in the kept text (the intro part, title, h1 and description, set aside); the union of the located spans is counted once, so overlap is not counted twice.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "A passage the locator cannot place is reported as unlocated rather than guessed. Heading lines the chunker carries only as a passage's heading are not in it."
+        },
+        "chars_past_cap": {
+          "layer": "derived",
+          "label": "Characters past the cap",
+          "formula": "Only when every one of the 26 slots is filled: the kept text after the end of the last passage. Equivalently, kept text − unique text in passages − text between passages, counted after the last one.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": "Above 0 means a tail no retriever using this cap can return.",
+          "limits": "Replaces the 2.101 estimate, which subtracted the overlapping total and so undercounted, often to 0. That old number is still exported as charsUnread."
+        },
+        "chars_unread_legacy": {
+          "layer": "derived",
+          "label": "charsUnread (2.101 meaning)",
+          "formula": "When the cap is reached: extracted body characters − text in passages including overlap and intro; otherwise 0.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": null,
+          "limits": "Undercounts and can read 0 even when the cap cut a tail. Kept unchanged for compatibility; use characters past the cap."
+        },
+        "text_raw": {
+          "layer": "derived",
+          "label": "Text in the raw HTML",
+          "formula": "Kept text plus every removal in the table below. An estimate of the document's text, defined so the waterfall sums exactly.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Script and style bodies count as text here because the cleaner has to remove them; it is not the text a reader sees."
+        },
+        "text_removed": {
+          "layer": "measured",
+          "label": "Removed by the cleaner",
+          "formula": "For every element the cleaner removed (outermost only, so nothing counts twice): its own text at the moment of removal. Plus, when a main region was chosen, the text of everything outside it.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Observed on a second copy of the extraction, checked to give the same text; the removal itself is the product's rule and is not tuned here."
+        },
+        "text_kept": {
+          "layer": "measured",
+          "label": "Kept text",
+          "formula": "The extractor's body text (the chunker's input), whitespace folded.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Differs slightly from page.bodyChars, which counts line breaks as they are."
+        },
+        "not_in_passages": {
+          "layer": "derived",
+          "label": "Kept, but in no passage text",
+          "formula": "Kept text before the end of the last passage that no passage holds: h2 heading lines (carried as a passage's heading, not its text), the spaces between sections, and anything else (should be 0).",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "A retriever may still see a heading as the passage's metadata; this tool does not assume either way."
+        },
+        "overlap_chars": {
+          "layer": "derived",
+          "label": "Overlap",
+          "formula": "Located passage text − unique text in passages: what neighbouring windows repeat.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "By design, about 200 per cut inside a long section."
+        },
+        "intro_chars": {
+          "layer": "measured",
+          "label": "Intro",
+          "formula": "The title, h1 and meta description the chunker puts at the start of passage #0.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Not part of the body text, so it is outside the waterfall's kept stage."
+        },
+        "removal_chars": {
+          "layer": "measured",
+          "label": "Characters removed by one element",
+          "formula": "The removed element's text, whitespace folded, at the moment the cleaner removed it.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": null,
+          "limits": "Elements with no text are counted but not listed. Beyond the first 200 the rest are summed, never dropped."
+        },
+        "section_reached": {
+          "layer": "derived",
+          "label": "Section text that reached a passage",
+          "formula": "For each section the chunker made (the intro, the text before the first h2, each h2), the part of its text inside some passage, over its length.",
+          "unit": "characters, whitespace runs folded to one space",
+          "threshold": "Under 100% means that section lost text, almost always to the cap.",
+          "limits": "When the page has no usable h2 split, the body is one row."
+        },
+        "robots_verdict": {
+          "layer": "measured",
+          "label": "robots.txt verdict",
+          "formula": "RFC 9309 over the site's /robots.txt: the group naming the token replaces *; the longest matching Allow or Disallow wins; Allow wins a tie.",
+          "unit": "allowed / blocked per crawler",
+          "threshold": null,
+          "limits": "A 4xx robots.txt means no rules; 5xx or no answer means all blocked. Some user-fetch crawlers say they may ignore robots.txt."
+        },
+        "markup": {
+          "layer": "measured",
+          "label": "Technical markup",
+          "formula": "From the raw HTML: every @type in application/ld+json blocks (through @graph), rel=canonical links, the meta description's length.",
+          "unit": "types, links, characters",
+          "threshold": "Meta description: 70–160 characters.",
+          "limits": "Read, not validated against schema.org."
+        },
+        "render_words": {
+          "layer": "measured",
+          "label": "Words with JavaScript",
+          "formula": "The same extraction and chunking over the DOM a local headless Chrome dumped after running the page's scripts.",
+          "unit": "words, passages",
+          "threshold": "50% more words and at least 150 more raises js_dependent.",
+          "limits": "Only with --render. The reading itself stays the plain fetch."
+        },
+        "group_chars": {
+          "layer": "derived",
+          "label": "Group size",
+          "formula": "Passages in the group, and the sum of their lengths.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": null,
+          "limits": "Computed over the agent's groups, so it moves with the grouping."
+        },
+        "group_share": {
+          "layer": "derived",
+          "label": "Share of indexed text",
+          "formula": "The group's characters over the characters of every passage (overlap included).",
+          "unit": "percent",
+          "threshold": null,
+          "limits": "Computed over the agent's groups. Overlap counts in both neighbours."
+        },
+        "vocabulary": {
+          "layer": "derived",
+          "label": "Phrase and word counts",
+          "formula": "Over the passages' text with the overlap removed: ×uses, the passages that use it (p), and how many groups it reaches (g/total).",
+          "unit": "occurrences, passages, groups",
+          "threshold": "A phrase needs 2 uses in 2 passages, or 3 in one.",
+          "limits": "What the page says, not search demand. The group count rests on the agent's groups."
+        },
+        "check_verdicts": {
+          "layer": "derived",
+          "label": "Check verdicts",
+          "formula": "Fixed rules over the measured values, each a named constant in checks.mjs with its reason; every finding names the passages it rests on.",
+          "unit": "findings, by severity",
+          "threshold": "Each check's threshold is in the check table of SKILL.md.",
+          "limits": "repeated_claim uses the agent's groups; every other check does not."
+        },
+        "groups": {
+          "layer": "judgement",
+          "label": "Groups and labels",
+          "formula": "The agent read every passage and grouped them by subject (at most 6); its label is its own. The label source is computed: a heading most members share, else two distinctive words.",
+          "unit": "groups",
+          "threshold": "At most 6 groups.",
+          "limits": "Not an embedding clustering; another model may group a little differently."
+        },
+        "duplicates": {
+          "layer": "judgement",
+          "label": "Repeats",
+          "formula": "Passages the agent marked as repeating an earlier, non-adjacent passage almost word for word.",
+          "unit": "passages",
+          "threshold": null,
+          "limits": "The product judges this from embeddings at cosine 0.94; here it is read."
+        },
+        "query_verdicts": {
+          "layer": "judgement",
+          "label": "Query test",
+          "formula": "For 5 to 10 typical queries, the agent names the best passage and a verdict (complete, partial, missing) and quotes the answer; the quote is checked verbatim.",
+          "unit": "queries",
+          "threshold": null,
+          "limits": "Judged from the passages only; it is not a measurement of what any assistant returns."
+        },
+        "plan": {
+          "layer": "judgement",
+          "label": "Rewrite plan",
+          "formula": "The agent's fixes in priority order; each 'before' is checked verbatim against its passage, each cited check against the checks that fired.",
+          "unit": "items",
+          "threshold": null,
+          "limits": "Advice, not a measurement."
+        },
+        "facts": {
+          "layer": "judgement",
+          "label": "Citable facts",
+          "formula": "The agent's list of concrete facts the passages state, each with the passages that state it.",
+          "unit": "facts",
+          "threshold": null,
+          "limits": "Fact gaps are only as fair as this list is complete."
+        },
+        "topic_cells": {
+          "layer": "derived",
+          "label": "Topic × page cells",
+          "formula": "Passages and characters of the groups the agent assigned to each shared topic.",
+          "unit": "characters, as the passage text holds them",
+          "threshold": null,
+          "limits": "Computed over the agent's groups and topics."
+        },
+        "diff_counts": {
+          "layer": "derived",
+          "label": "Changes since the baseline",
+          "formula": "Passages matched by identical text, then by the same heading in order; the rest are added or removed.",
+          "unit": "passages",
+          "threshold": null,
+          "limits": "A passage that moved and changed heading counts as removed plus added."
+        }
       },
       "checks": [
         {
@@ -1930,20 +5882,297 @@
           }
         ]
       },
-      "render": {
-        "ok": true,
-        "browser": "chrome.exe",
-        "wordCount": 2127,
-        "passages": 17,
-        "charsIndexed": 13635,
-        "headings": 11
-      },
+      "render": null,
       "plan": null,
       "queries": null,
       "facts": null,
       "diff": null
     }
   ],
+  "layers": {
+    "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
+    "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
+  },
+  "measured": {
+    "lossTable": [
+      {
+        "n": 1,
+        "waterfall": {
+          "raw": 93570,
+          "removed": 60964,
+          "kept": 32606,
+          "inPassagesUnique": 32204,
+          "notInPassages": 235,
+          "pastCap": 167
+        },
+        "sectionsCut": 1,
+        "sections": 16
+      },
+      {
+        "n": 2,
+        "waterfall": {
+          "raw": 25226,
+          "removed": 12426,
+          "kept": 12800,
+          "inPassagesUnique": 12497,
+          "notInPassages": 303,
+          "pastCap": 0
+        },
+        "sectionsCut": 0,
+        "sections": 12
+      }
+    ]
+  },
+  "metrics": {
+    "words": {
+      "layer": "measured",
+      "label": "Words",
+      "formula": "The extracted body text split on whitespace; every non-empty piece is a word.",
+      "unit": "words",
+      "threshold": null,
+      "limits": "Counted after the cleaner, so menus, footers and hidden text are not in it. A page drawn by JavaScript reads low here; compare with --render."
+    },
+    "headings": {
+      "layer": "measured",
+      "label": "Headings found",
+      "formula": "h1 elements plus h2 elements (the first 40) left after the cleaner, with empty ones dropped.",
+      "unit": "headings",
+      "threshold": null,
+      "limits": "h3 and styled text are not counted: the chunker splits only at h2."
+    },
+    "passages": {
+      "layer": "measured",
+      "label": "Passages read",
+      "formula": "Sections at h2 headings (or paragraph blocks), long ones cut into 2,000-character windows with about 200 characters of overlap, slivers under 40 characters folded into the passage before, then the first 26 kept.",
+      "unit": "passages",
+      "threshold": "At most 26 per page (this tool's cap).",
+      "limits": "Other systems cut and cap differently; this is a working model of a typical retriever."
+    },
+    "slots": {
+      "layer": "measured",
+      "label": "Cap slots used",
+      "formula": "Passages kept, out of the 26-passage cap. \"Every slot filled\" when the chunker produced 26 or more.",
+      "unit": "slots",
+      "threshold": "26: a full cap means text may have been left out (see characters past the cap).",
+      "limits": "A full cap does not by itself mean text was lost: the last passage may end exactly at the end of the page."
+    },
+    "passage_chars": {
+      "layer": "measured",
+      "label": "Passage length",
+      "formula": "The length of one passage's text, as the chunker emitted it.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": "At most about 2,000, unless a sliver was folded in.",
+      "limits": "Neighbouring passages share about 200 characters by design."
+    },
+    "chars_in_passages": {
+      "layer": "measured",
+      "label": "Text in passages, overlap and intro included",
+      "formula": "The sum of every passage's length (page.charsIndexed). Passage #0 repeats the title, h1 and meta description; neighbours repeat about 200 characters.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Counts repeated text more than once, so it can exceed the page's own text. For how much of the page reached a passage, read the unique number."
+    },
+    "chars_unique": {
+      "layer": "derived",
+      "label": "Unique text in passages",
+      "formula": "Each passage is located in the kept text (the intro part, title, h1 and description, set aside); the union of the located spans is counted once, so overlap is not counted twice.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "A passage the locator cannot place is reported as unlocated rather than guessed. Heading lines the chunker carries only as a passage's heading are not in it."
+    },
+    "chars_past_cap": {
+      "layer": "derived",
+      "label": "Characters past the cap",
+      "formula": "Only when every one of the 26 slots is filled: the kept text after the end of the last passage. Equivalently, kept text − unique text in passages − text between passages, counted after the last one.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": "Above 0 means a tail no retriever using this cap can return.",
+      "limits": "Replaces the 2.101 estimate, which subtracted the overlapping total and so undercounted, often to 0. That old number is still exported as charsUnread."
+    },
+    "chars_unread_legacy": {
+      "layer": "derived",
+      "label": "charsUnread (2.101 meaning)",
+      "formula": "When the cap is reached: extracted body characters − text in passages including overlap and intro; otherwise 0.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Undercounts and can read 0 even when the cap cut a tail. Kept unchanged for compatibility; use characters past the cap."
+    },
+    "text_raw": {
+      "layer": "derived",
+      "label": "Text in the raw HTML",
+      "formula": "Kept text plus every removal in the table below. An estimate of the document's text, defined so the waterfall sums exactly.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Script and style bodies count as text here because the cleaner has to remove them; it is not the text a reader sees."
+    },
+    "text_removed": {
+      "layer": "measured",
+      "label": "Removed by the cleaner",
+      "formula": "For every element the cleaner removed (outermost only, so nothing counts twice): its own text at the moment of removal. Plus, when a main region was chosen, the text of everything outside it.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Observed on a second copy of the extraction, checked to give the same text; the removal itself is the product's rule and is not tuned here."
+    },
+    "text_kept": {
+      "layer": "measured",
+      "label": "Kept text",
+      "formula": "The extractor's body text (the chunker's input), whitespace folded.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Differs slightly from page.bodyChars, which counts line breaks as they are."
+    },
+    "not_in_passages": {
+      "layer": "derived",
+      "label": "Kept, but in no passage text",
+      "formula": "Kept text before the end of the last passage that no passage holds: h2 heading lines (carried as a passage's heading, not its text), the spaces between sections, and anything else (should be 0).",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "A retriever may still see a heading as the passage's metadata; this tool does not assume either way."
+    },
+    "overlap_chars": {
+      "layer": "derived",
+      "label": "Overlap",
+      "formula": "Located passage text − unique text in passages: what neighbouring windows repeat.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "By design, about 200 per cut inside a long section."
+    },
+    "intro_chars": {
+      "layer": "measured",
+      "label": "Intro",
+      "formula": "The title, h1 and meta description the chunker puts at the start of passage #0.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Not part of the body text, so it is outside the waterfall's kept stage."
+    },
+    "removal_chars": {
+      "layer": "measured",
+      "label": "Characters removed by one element",
+      "formula": "The removed element's text, whitespace folded, at the moment the cleaner removed it.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Elements with no text are counted but not listed. Beyond the first 200 the rest are summed, never dropped."
+    },
+    "section_reached": {
+      "layer": "derived",
+      "label": "Section text that reached a passage",
+      "formula": "For each section the chunker made (the intro, the text before the first h2, each h2), the part of its text inside some passage, over its length.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": "Under 100% means that section lost text, almost always to the cap.",
+      "limits": "When the page has no usable h2 split, the body is one row."
+    },
+    "robots_verdict": {
+      "layer": "measured",
+      "label": "robots.txt verdict",
+      "formula": "RFC 9309 over the site's /robots.txt: the group naming the token replaces *; the longest matching Allow or Disallow wins; Allow wins a tie.",
+      "unit": "allowed / blocked per crawler",
+      "threshold": null,
+      "limits": "A 4xx robots.txt means no rules; 5xx or no answer means all blocked. Some user-fetch crawlers say they may ignore robots.txt."
+    },
+    "markup": {
+      "layer": "measured",
+      "label": "Technical markup",
+      "formula": "From the raw HTML: every @type in application/ld+json blocks (through @graph), rel=canonical links, the meta description's length.",
+      "unit": "types, links, characters",
+      "threshold": "Meta description: 70–160 characters.",
+      "limits": "Read, not validated against schema.org."
+    },
+    "render_words": {
+      "layer": "measured",
+      "label": "Words with JavaScript",
+      "formula": "The same extraction and chunking over the DOM a local headless Chrome dumped after running the page's scripts.",
+      "unit": "words, passages",
+      "threshold": "50% more words and at least 150 more raises js_dependent.",
+      "limits": "Only with --render. The reading itself stays the plain fetch."
+    },
+    "group_chars": {
+      "layer": "derived",
+      "label": "Group size",
+      "formula": "Passages in the group, and the sum of their lengths.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Computed over the agent's groups, so it moves with the grouping."
+    },
+    "group_share": {
+      "layer": "derived",
+      "label": "Share of indexed text",
+      "formula": "The group's characters over the characters of every passage (overlap included).",
+      "unit": "percent",
+      "threshold": null,
+      "limits": "Computed over the agent's groups. Overlap counts in both neighbours."
+    },
+    "vocabulary": {
+      "layer": "derived",
+      "label": "Phrase and word counts",
+      "formula": "Over the passages' text with the overlap removed: ×uses, the passages that use it (p), and how many groups it reaches (g/total).",
+      "unit": "occurrences, passages, groups",
+      "threshold": "A phrase needs 2 uses in 2 passages, or 3 in one.",
+      "limits": "What the page says, not search demand. The group count rests on the agent's groups."
+    },
+    "check_verdicts": {
+      "layer": "derived",
+      "label": "Check verdicts",
+      "formula": "Fixed rules over the measured values, each a named constant in checks.mjs with its reason; every finding names the passages it rests on.",
+      "unit": "findings, by severity",
+      "threshold": "Each check's threshold is in the check table of SKILL.md.",
+      "limits": "repeated_claim uses the agent's groups; every other check does not."
+    },
+    "groups": {
+      "layer": "judgement",
+      "label": "Groups and labels",
+      "formula": "The agent read every passage and grouped them by subject (at most 6); its label is its own. The label source is computed: a heading most members share, else two distinctive words.",
+      "unit": "groups",
+      "threshold": "At most 6 groups.",
+      "limits": "Not an embedding clustering; another model may group a little differently."
+    },
+    "duplicates": {
+      "layer": "judgement",
+      "label": "Repeats",
+      "formula": "Passages the agent marked as repeating an earlier, non-adjacent passage almost word for word.",
+      "unit": "passages",
+      "threshold": null,
+      "limits": "The product judges this from embeddings at cosine 0.94; here it is read."
+    },
+    "query_verdicts": {
+      "layer": "judgement",
+      "label": "Query test",
+      "formula": "For 5 to 10 typical queries, the agent names the best passage and a verdict (complete, partial, missing) and quotes the answer; the quote is checked verbatim.",
+      "unit": "queries",
+      "threshold": null,
+      "limits": "Judged from the passages only; it is not a measurement of what any assistant returns."
+    },
+    "plan": {
+      "layer": "judgement",
+      "label": "Rewrite plan",
+      "formula": "The agent's fixes in priority order; each 'before' is checked verbatim against its passage, each cited check against the checks that fired.",
+      "unit": "items",
+      "threshold": null,
+      "limits": "Advice, not a measurement."
+    },
+    "facts": {
+      "layer": "judgement",
+      "label": "Citable facts",
+      "formula": "The agent's list of concrete facts the passages state, each with the passages that state it.",
+      "unit": "facts",
+      "threshold": null,
+      "limits": "Fact gaps are only as fair as this list is complete."
+    },
+    "topic_cells": {
+      "layer": "derived",
+      "label": "Topic × page cells",
+      "formula": "Passages and characters of the groups the agent assigned to each shared topic.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Computed over the agent's groups and topics."
+    },
+    "diff_counts": {
+      "layer": "derived",
+      "label": "Changes since the baseline",
+      "formula": "Passages matched by identical text, then by the same heading in order; the rest are added or removed.",
+      "unit": "passages",
+      "threshold": null,
+      "limits": "A passage that moved and changed heading counts as removed plus added."
+    }
+  },
   "topics": [
     {
       "id": "what",

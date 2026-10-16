@@ -402,12 +402,614 @@
       }
     ]
   },
-  "render": {
-    "ok": true,
-    "browser": "chrome.exe",
-    "wordCount": 4678,
-    "passages": 24,
-    "charsIndexed": 30146,
-    "headings": 14
+  "losses": {
+    "unit": "characters, whitespace runs folded to one space",
+    "consistent": true,
+    "waterfall": {
+      "raw": 93570,
+      "removed": 60964,
+      "kept": 32606,
+      "inPassagesUnique": 32204,
+      "notInPassages": 235,
+      "pastCap": 167
+    },
+    "passages": {
+      "unique": 32204,
+      "total": 34460,
+      "overlap": 2103,
+      "intro": 153,
+      "unlocated": 0
+    },
+    "notInPassages": {
+      "headingLines": 188,
+      "whitespace": 47,
+      "other": 0
+    },
+    "removals": {
+      "elementsMatched": 37,
+      "elementsWithText": 25,
+      "chars": 60964,
+      "byReason": [
+        {
+          "reason": "script_style",
+          "elements": 16,
+          "chars": 51227
+        },
+        {
+          "reason": "embedded",
+          "elements": 3,
+          "chars": 13
+        },
+        {
+          "reason": "head_meta",
+          "elements": 1,
+          "chars": 26
+        },
+        {
+          "reason": "header_chrome",
+          "elements": 1,
+          "chars": 1731
+        },
+        {
+          "reason": "footer",
+          "elements": 1,
+          "chars": 500
+        },
+        {
+          "reason": "aside",
+          "elements": 2,
+          "chars": 7432
+        },
+        {
+          "reason": "outside_main",
+          "elements": 1,
+          "chars": 35
+        }
+      ],
+      "items": [
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > section.content-section > div.article-footer__inner > mdn-content-feedback > template",
+          "chars": 16992,
+          "sample": ".content-feedback{border:none;margin:0 0 .25rem;padding:0}.content-feedback>labe"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "header.page-layout__header > div.breadcrumbs-bar > mdn-language-switcher > template",
+          "chars": 11342,
+          "sample": "*,:after,:before{box-sizing:border-box}button,input,select,textarea{font:inherit"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.left-sidebar > div.left-sidebar__header > mdn-sidebar-filter > template",
+          "chars": 9816,
+          "sample": ".visually-hidden{border:0!important;clip-path:inset(50%)!important;height:1px!im"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "header.page-layout__header > div.breadcrumbs-bar > mdn-toggle-sidebar > template",
+          "chars": 8397,
+          "sample": ":host{border-right:1px solid var(--color-border-primary);display:block;height:10"
+        },
+        {
+          "reason": "aside",
+          "tag": "aside",
+          "id": "main-sidebar",
+          "classes": [
+            "layout__left-sidebar"
+          ],
+          "element": "aside#main-sidebar.layout__left-sidebar",
+          "path": "div.page-layout__main > div.layout__2-sidebars-inline > aside#main-sidebar.layout__left-sidebar",
+          "chars": 7207,
+          "sample": "HTTP Guides Overview of HTTP Evolution of HTTP A typical HTTP session HTTP messa"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "header.page-layout__header > div.breadcrumbs-bar > mdn-color-theme > template",
+          "chars": 2075,
+          "sample": ".color-theme{--color-theme-light-dark:url(/static/ssr/contrast.d86e85c43de8dee8."
+        },
+        {
+          "reason": "header_chrome",
+          "tag": "header",
+          "id": null,
+          "classes": [
+            "page-layout__header"
+          ],
+          "element": "header.page-layout__header",
+          "path": "header.page-layout__header",
+          "chars": 1731,
+          "sample": "HTML HTML: Markup language HTML reference Elements Global attributes Attributes "
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > div#navigation__popup > div.navigation__search > mdn-search-button > template",
+          "chars": 774,
+          "sample": ".mdn-search-button{align-items:center;background-color:var(--color-background-pa"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.navigation > div.navigation__search > mdn-search-button > template",
+          "chars": 774,
+          "sample": ".mdn-search-button{align-items:center;background-color:var(--color-background-pa"
+        },
+        {
+          "reason": "footer",
+          "tag": "footer",
+          "id": null,
+          "classes": [
+            "footer"
+          ],
+          "element": "footer.footer",
+          "path": "div.page-layout__footer > footer.footer",
+          "chars": 500,
+          "sample": "Your blueprint for a better internet. MDN About Blog Mozilla careers Advertise w"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "head > script",
+          "chars": 321,
+          "sample": "try { document.documentElement.dataset.theme = localStorage.getItem(\"theme\") || "
+        },
+        {
+          "reason": "aside",
+          "tag": "aside",
+          "id": null,
+          "classes": [
+            "layout__right-sidebar",
+            "reference-layout__toc"
+          ],
+          "element": "aside.layout__right-sidebar.reference-layout__toc",
+          "path": "div.page-layout__main > div.layout__2-sidebars-inline > main#content > aside.layout__right-sidebar.reference-layout__toc",
+          "chars": 225,
+          "sample": "In this article Types of caches Heuristic caching Fresh and stale based on age E"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+          "chars": 92,
+          "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+          "chars": 92,
+          "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+          "chars": 92,
+          "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+          "chars": 92,
+          "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+          "chars": 92,
+          "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+          "chars": 92,
+          "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+          "chars": 92,
+          "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [],
+          "element": "template",
+          "path": "… > nav.menu > div.menu__tab > mdn-dropdown > template",
+          "chars": 92,
+          "sample": ":host{display:contents}:host(:not([loaded],:focus-within)) slot[name=dropdown]{d"
+        },
+        {
+          "reason": "outside_main",
+          "tag": "ul",
+          "id": null,
+          "classes": [
+            "a11y-menu"
+          ],
+          "element": "ul.a11y-menu",
+          "path": "ul.a11y-menu",
+          "chars": 35,
+          "sample": "Skip to main content Skip to search"
+        },
+        {
+          "reason": "head_meta",
+          "tag": "head",
+          "id": null,
+          "classes": [],
+          "element": "head",
+          "path": "head",
+          "chars": 26,
+          "sample": "HTTP caching - HTTP | MDN"
+        },
+        {
+          "reason": "embedded",
+          "tag": "svg",
+          "id": null,
+          "classes": [],
+          "element": "svg",
+          "path": "… > footer.footer > div.footer__mozilla > a.footer__logo > svg",
+          "chars": 7,
+          "sample": "Mozilla"
+        },
+        {
+          "reason": "embedded",
+          "tag": "svg",
+          "id": null,
+          "classes": [],
+          "element": "svg",
+          "path": "… > div.footer__mdn > div.footer__intro > a.footer__logo > svg",
+          "chars": 3,
+          "sample": "MDN"
+        },
+        {
+          "reason": "embedded",
+          "tag": "svg",
+          "id": null,
+          "classes": [
+            "logo__image"
+          ],
+          "element": "svg.logo__image",
+          "path": "… > nav.navigation > div.navigation__logo > a.logo > svg.logo__image",
+          "chars": 3,
+          "sample": "MDN"
+        }
+      ],
+      "omitted": {
+        "elements": 0,
+        "chars": 0
+      }
+    },
+    "sections": {
+      "mode": "h2",
+      "rows": [
+        {
+          "kind": "intro",
+          "heading": null,
+          "chars": 153,
+          "inPassages": 153,
+          "located": true
+        },
+        {
+          "kind": "before_first_h2",
+          "heading": null,
+          "chars": 761,
+          "inPassages": 761,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Types of caches",
+          "chars": 4666,
+          "inPassages": 4666,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Heuristic caching",
+          "chars": 979,
+          "inPassages": 979,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Fresh and stale based on age",
+          "chars": 1671,
+          "inPassages": 1671,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Expires or max-age",
+          "chars": 665,
+          "inPassages": 665,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Vary",
+          "chars": 1966,
+          "inPassages": 1966,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Validation",
+          "chars": 5945,
+          "inPassages": 5945,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Don't cache",
+          "chars": 2686,
+          "inPassages": 2686,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Reload and force reload",
+          "chars": 2886,
+          "inPassages": 2886,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Deleting stored responses",
+          "chars": 1271,
+          "inPassages": 1271,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Request collapse",
+          "chars": 655,
+          "inPassages": 655,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Common caching patterns",
+          "chars": 4128,
+          "inPassages": 4128,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Validation",
+          "chars": 3807,
+          "inPassages": 3807,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "See also",
+          "chars": 118,
+          "inPassages": 118,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Help improve MDN",
+          "chars": 150,
+          "inPassages": 0,
+          "located": true
+        }
+      ]
+    },
+    "placement": [
+      {
+        "index": 0,
+        "start": null,
+        "end": null,
+        "intro": 153
+      },
+      {
+        "index": 1,
+        "start": 0,
+        "end": 761,
+        "intro": 0
+      },
+      {
+        "index": 2,
+        "start": 778,
+        "end": 2775,
+        "intro": 0
+      },
+      {
+        "index": 3,
+        "start": 2578,
+        "end": 4576,
+        "intro": 0
+      },
+      {
+        "index": 4,
+        "start": 4380,
+        "end": 5444,
+        "intro": 0
+      },
+      {
+        "index": 5,
+        "start": 5463,
+        "end": 6442,
+        "intro": 0
+      },
+      {
+        "index": 6,
+        "start": 6472,
+        "end": 8143,
+        "intro": 0
+      },
+      {
+        "index": 7,
+        "start": 8163,
+        "end": 8828,
+        "intro": 0
+      },
+      {
+        "index": 8,
+        "start": 8834,
+        "end": 10800,
+        "intro": 0
+      },
+      {
+        "index": 9,
+        "start": 10812,
+        "end": 12810,
+        "intro": 0
+      },
+      {
+        "index": 10,
+        "start": 12620,
+        "end": 14616,
+        "intro": 0
+      },
+      {
+        "index": 11,
+        "start": 14425,
+        "end": 16424,
+        "intro": 0
+      },
+      {
+        "index": 12,
+        "start": 16228,
+        "end": 16757,
+        "intro": 0
+      },
+      {
+        "index": 13,
+        "start": 16770,
+        "end": 18759,
+        "intro": 0
+      },
+      {
+        "index": 14,
+        "start": 18570,
+        "end": 19456,
+        "intro": 0
+      },
+      {
+        "index": 15,
+        "start": 19481,
+        "end": 21479,
+        "intro": 0
+      },
+      {
+        "index": 16,
+        "start": 21283,
+        "end": 22367,
+        "intro": 0
+      },
+      {
+        "index": 17,
+        "start": 22394,
+        "end": 23665,
+        "intro": 0
+      },
+      {
+        "index": 18,
+        "start": 23683,
+        "end": 24338,
+        "intro": 0
+      },
+      {
+        "index": 19,
+        "start": 24363,
+        "end": 26341,
+        "intro": 0
+      },
+      {
+        "index": 20,
+        "start": 26165,
+        "end": 28157,
+        "intro": 0
+      },
+      {
+        "index": 21,
+        "start": 27966,
+        "end": 28491,
+        "intro": 0
+      },
+      {
+        "index": 22,
+        "start": 28503,
+        "end": 30500,
+        "intro": 0
+      },
+      {
+        "index": 23,
+        "start": 30305,
+        "end": 32295,
+        "intro": 0
+      },
+      {
+        "index": 24,
+        "start": 32109,
+        "end": 32310,
+        "intro": 0
+      },
+      {
+        "index": 25,
+        "start": 32320,
+        "end": 32438,
+        "intro": 0
+      }
+    ]
   }
 }

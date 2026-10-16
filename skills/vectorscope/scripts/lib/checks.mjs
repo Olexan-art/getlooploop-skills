@@ -4,6 +4,7 @@
 // the reason for its value.
 
 import { isStopword } from "./lens.mjs";
+import { charsPastCap } from "./losses.mjs";
 
 // ── thresholds ───────────────────────────────────────────────────────────────
 
@@ -348,8 +349,11 @@ function pageChecks(reading) {
   const { page } = reading;
   const out = [];
   if (page.noindex) out.push({ code: "noindex", severity: "high", passages: [], evidence: {} });
-  if (page.capReached && page.charsUnread > 0) {
-    out.push({ code: "cap_overflow", severity: "high", passages: [reading.passages.length - 1], evidence: { charsUnread: page.charsUnread, cap: page.chunkCap, last: reading.passages.length - 1 } });
+  // 2.102: the honest count (kept text after the last passage) when the reading measured it; a
+  // reading from 2.101 or earlier falls back to its charsUnread, which can undercount to 0.
+  const pastCap = charsPastCap(reading);
+  if (page.capReached && pastCap > 0) {
+    out.push({ code: "cap_overflow", severity: "high", passages: [reading.passages.length - 1], evidence: { charsPastCap: pastCap, charsUnread: page.charsUnread, cap: page.chunkCap, last: reading.passages.length - 1 } });
   }
   const r = reading.render;
   if (r?.ok && r.wordCount >= page.wordCount * JS_GAIN_RATIO && r.wordCount - page.wordCount >= JS_GAIN_MIN_WORDS) {

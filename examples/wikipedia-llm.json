@@ -1,6 +1,6 @@
 {
   "schema": "getlooploop/vectorscope-reading@1",
-  "generatedAt": "2026-10-16T17:40:31.880Z",
+  "generatedAt": "2026-10-16T18:38:27.009Z",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -50,7 +50,9 @@
     "charsUnread": 52973,
     "capReached": true,
     "duplicateChunks": 0,
-    "groupsMergedByPaletteLimit": null
+    "groupsMergedByPaletteLimit": null,
+    "charsPastCap": 55001,
+    "charsInPassagesUnique": 39111
   },
   "textCoverage": {
     "exportedChars": 6053,
@@ -728,10 +730,2162 @@
       "textHead": "to 43% of its size, beating PNG with 58%.[116] Benchmarks [ edit ] Main article: Language model benchmark Benchmarks are used to evaluate LLM performance on specific tasks. Tests evaluate capabilities such as general knowledge, bias, common"
     }
   ],
-  "skillVersion": 2,
+  "skillVersion": "2.102",
+  "layers": {
+    "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
+    "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
+  },
+  "measured": {
+    "page": {
+      "url": "https://en.wikipedia.org/wiki/Large_language_model",
+      "requestedUrl": "https://en.wikipedia.org/wiki/Large_language_model",
+      "title": "Large language model - Wikipedia",
+      "wordCount": 13718,
+      "headingsFound": 17,
+      "noindex": false
+    },
+    "retrieval": {
+      "chunkCap": 26,
+      "chunksIndexed": 26,
+      "capReached": true,
+      "charsInPassagesTotal": 41850,
+      "charsInPassagesUnique": 39111
+    },
+    "passages": [
+      {
+        "index": 0,
+        "heading": "Large language model - Wikipedia",
+        "charCount": 53,
+        "contentRole": "main",
+        "textHead": "Large language model - Wikipedia\nLarge language model"
+      },
+      {
+        "index": 1,
+        "heading": null,
+        "charCount": 1157,
+        "contentRole": "main",
+        "textHead": "Large language model\nFrom Wikipedia, the free encyclopedia\nType of machine learning model\n\"LLM\" redirects here. For other uses, see LLM (disambiguation).\nThe number of publications about large language models by year grouped by publication "
+      },
+      {
+        "index": 2,
+        "heading": "History",
+        "charCount": 1998,
+        "contentRole": "main",
+        "textHead": "[ edit ] The training compute of notable large models in FLOPs vs publication date over the period 2010–2024. For overall notable models (top left), frontier models (top right), top language models (bottom left) and top models within leadin"
+      },
+      {
+        "index": 3,
+        "heading": "History",
+        "charCount": 1994,
+        "contentRole": "main",
+        "textHead": "used LSTM-based encoder-decoder architectures, as they preceded the invention of transformers. An illustration of the main components of the transformer model from the original paper, where layers were normalized after (instead of before) m"
+      },
+      {
+        "index": 4,
+        "heading": "History",
+        "charCount": 1180,
+        "contentRole": "main",
+        "textHead": "impact work.[15] In 2024, OpenAI released the reasoning model OpenAI o1, which generates long chains of thought before returning a final answer.[19] Many LLMs with parameter counts comparable to those of OpenAI's GPT series have been develo"
+      },
+      {
+        "index": 5,
+        "heading": "Dataset preprocessing",
+        "charCount": 1989,
+        "contentRole": "related",
+        "textHead": "[ edit ] See also: List of datasets for machine-learning research § Internet Tokenization [ edit ] As machine learning algorithms process numbers rather than text, the text must be converted to numbers. In the first step, a vocabulary is de"
+      },
+      {
+        "index": 6,
+        "heading": "Dataset preprocessing",
+        "charCount": 1127,
+        "contentRole": "main",
+        "textHead": "a vocabulary of prescribed size is obtained. After a tokenizer is trained, any text can be tokenized by it, as long as it does not contain characters not appearing in the initial-set of uni-grams.[24] Dataset cleaning [ edit ] Main article:"
+      },
+      {
+        "index": 7,
+        "heading": "Training",
+        "charCount": 1535,
+        "contentRole": "related",
+        "textHead": "[ edit ]\nSee also: Fine-tuning (machine learning) and Post-training of large language models\nAn LLM is a type of foundation model (large X model) trained on language. LLMs can be trained in different ways. In particular, GPT models are firs"
+      },
+      {
+        "index": 8,
+        "heading": "Inference",
+        "charCount": 561,
+        "contentRole": "related",
+        "textHead": "[ edit ]\nSee also: Inference § Inference engines\nInference is the process of providing input to a trained large language model and receiving generated output, such as text, images, code, or other files.\nHosted inference runs a language mode"
+      },
+      {
+        "index": 9,
+        "heading": "Architecture",
+        "charCount": 1998,
+        "contentRole": "related",
+        "textHead": "[ edit ] LLMs are generally based on the transformer architecture, which leverages an attention mechanism that enables the model to process relationships between all elements in a sequence simultaneously, regardless of their distance from e"
+      },
+      {
+        "index": 10,
+        "heading": "Architecture",
+        "charCount": 1995,
+        "contentRole": "related",
+        "textHead": "edit ] Main article: Mixture of experts A mixture of experts (MoE) is a machine learning architecture in which multiple specialized neural networks (\"experts\") work together, with a gating mechanism that routes each input to the most approp"
+      },
+      {
+        "index": 11,
+        "heading": "Architecture",
+        "charCount": 509,
+        "contentRole": "main",
+        "textHead": "simply truncates all the parameters to a given number of bits: this is applicable to static as well as dynamic quantization, but loses much precision. Dynamic quantization allows for the use of a different quantization codebook per layer, e"
+      },
+      {
+        "index": 12,
+        "heading": "Extensibility",
+        "charCount": 1997,
+        "contentRole": "main",
+        "textHead": "[ edit ] Beyond basic text generation, various techniques have been developed to extend LLM capabilities, including the use of external tools and data sources, improved reasoning on complex problems, and enhanced instruction-following or au"
+      },
+      {
+        "index": 13,
+        "heading": "Extensibility",
+        "charCount": 1992,
+        "contentRole": "related",
+        "textHead": "authority than the user's input. This is called a \"system prompt\". [ citation needed ] Retrieval-augmented generation [ edit ] Retrieval-augmented generation (RAG) is an approach that integrates LLMs with document retrieval systems. Given a"
+      },
+      {
+        "index": 14,
+        "heading": "Extensibility",
+        "charCount": 1995,
+        "contentRole": "main",
+        "textHead": "input patterns are used to make the LLM plan actions and tool use is used to potentially carry out these actions.[54] In the DEPS (\"describe, explain, plan and select\") method, an LLM is first connected to the visual world via image descrip"
+      },
+      {
+        "index": 15,
+        "heading": "Extensibility",
+        "charCount": 1766,
+        "contentRole": "main",
+        "textHead": "an answer. The LLM mimics these examples and also tries to spend some time generating intermediate steps before providing the final answer. This additional step elicited by prompting improves the correctness of the LLM on relatively complex"
+      },
+      {
+        "index": 16,
+        "heading": "Forms of input and output",
+        "charCount": 1999,
+        "contentRole": "related",
+        "textHead": "[ edit ] Multimodality [ edit ] See also: Multimodal learning Multimodality means having multiple modalities, where a \"modality\" refers to a type of input or output, such as video, image, audio, text, proprioception, etc.[69] For example, G"
+      },
+      {
+        "index": 17,
+        "heading": "Forms of input and output",
+        "charCount": 1831,
+        "contentRole": "main",
+        "textHead": "visual information into its pre-trained language model.[76] Non-natural languages [ edit ] LLMs can handle programming languages similarly to how they handle natural languages. No special change in token handling is needed as code, like hum"
+      },
+      {
+        "index": 18,
+        "heading": "Properties",
+        "charCount": 1993,
+        "contentRole": "main",
+        "textHead": "[ edit ] Scaling laws [ edit ] Main article: Neural scaling law The performance of an LLM after pretraining largely depends on the: C {\\displaystyle C} : cost of pretraining (the total amount of compute used), N {\\displaystyle N} : size of "
+      },
+      {
+        "index": 19,
+        "heading": "Properties",
+        "charCount": 1997,
+        "contentRole": "main",
+        "textHead": "arcs. Performance of bigger models on various tasks, when plotted on a log–log scale, appears as a linear extrapolation of performance achieved by smaller models. However, this linearity may be punctuated by \"break(s)\"[86] in the scaling la"
+      },
+      {
+        "index": 20,
+        "heading": "Properties",
+        "charCount": 654,
+        "contentRole": "main",
+        "textHead": "token}})} , then ( log ⁡ x , y ) {\\displaystyle (\\log x,y)} is an exponential curve (before it hits the plateau at one), which looks like emergence. When y = average log ⁡ ( Pr ( correct token ) ) {\\displaystyle y={\\text{average }}\\log(\\Pr("
+      },
+      {
+        "index": 21,
+        "heading": "Interpretation",
+        "charCount": 1997,
+        "contentRole": "related",
+        "textHead": "[ edit ] Mechanistic interpretability [ edit ] Main article: Mechanistic interpretability Large language models are typically regarded as black boxes, and it is not clear how they perform linguistic tasks. Similarly, it is unclear if or how"
+      },
+      {
+        "index": 22,
+        "heading": "Interpretation",
+        "charCount": 1994,
+        "contentRole": "main",
+        "textHead": "say that a system that passes exams for software engineering candidates is not really intelligent?\"[98] [99] Ilya Sutskever argues that predicting the next word sometimes involves reasoning and deep insights, for example if the LLM has to p"
+      },
+      {
+        "index": 23,
+        "heading": "Interpretation",
+        "charCount": 1551,
+        "contentRole": "main",
+        "textHead": "on the intelligence of LLMs suggests that our old ideas based on natural intelligence are inadequate\".[97] Efforts to reduce or compensate for hallucinations have employed automated reasoning, retrieval-augmented generation (RAG), fine-tuni"
+      },
+      {
+        "index": 24,
+        "heading": "Evaluation",
+        "charCount": 1991,
+        "contentRole": "related",
+        "textHead": "[ edit ] See also: LLM-as-a-Judge Perplexity [ edit ] The canonical measure of the performance of any language model is its perplexity on a given text corpus. Perplexity measures how well a model predicts the contents of a dataset; the high"
+      },
+      {
+        "index": 25,
+        "heading": "Evaluation",
+        "charCount": 1997,
+        "contentRole": "main",
+        "textHead": "to 43% of its size, beating PNG with 58%.[116] Benchmarks [ edit ] Main article: Language model benchmark Benchmarks are used to evaluate LLM performance on specific tasks. Tests evaluate capabilities such as general knowledge, bias, common"
+      }
+    ],
+    "losses": {
+      "unit": "characters, whitespace runs folded to one space",
+      "consistent": true,
+      "waterfall": {
+        "raw": 139071,
+        "removed": 44809,
+        "kept": 94262,
+        "inPassagesUnique": 39111,
+        "notInPassages": 150,
+        "pastCap": 55001
+      },
+      "passages": {
+        "unique": 39111,
+        "total": 41850,
+        "overlap": 2686,
+        "intro": 53,
+        "unlocated": 0
+      },
+      "notInPassages": {
+        "headingLines": 124,
+        "whitespace": 26,
+        "other": 0
+      },
+      "removals": {
+        "elementsMatched": 340,
+        "elementsWithText": 41,
+        "chars": 44809,
+        "byReason": [
+          {
+            "reason": "script_style",
+            "elements": 14,
+            "chars": 28933
+          },
+          {
+            "reason": "head_meta",
+            "elements": 1,
+            "chars": 34
+          },
+          {
+            "reason": "hidden",
+            "elements": 11,
+            "chars": 161
+          },
+          {
+            "reason": "header_chrome",
+            "elements": 1,
+            "chars": 277
+          },
+          {
+            "reason": "header_controls",
+            "elements": 1,
+            "chars": 652
+          },
+          {
+            "reason": "nav",
+            "elements": 10,
+            "chars": 14208
+          },
+          {
+            "reason": "footer",
+            "elements": 1,
+            "chars": 523
+          },
+          {
+            "reason": "form_control",
+            "elements": 1,
+            "chars": 6
+          },
+          {
+            "reason": "outside_main",
+            "elements": 1,
+            "chars": 15
+          }
+        ],
+        "items": [
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 8187,
+            "sample": "(RLQ=window.RLQ||[]).push(function(){mw.config.set({\"wgHostname\":\"mw-web.eqiad.c"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "head > script",
+            "chars": 6252,
+            "sample": "(function(){var className=\"client-js vector-feature-language-in-header-enabled v"
+          },
+          {
+            "reason": "nav",
+            "tag": "div",
+            "id": "mwDmY",
+            "classes": [
+              "navbox"
+            ],
+            "element": "div#mwDmY.navbox",
+            "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmY.navbox",
+            "chars": 4118,
+            "sample": "v t e Artificial intelligence (AI) History timeline Glossary Lists Algorithms Co"
+          },
+          {
+            "reason": "script_style",
+            "tag": "style",
+            "id": null,
+            "classes": [],
+            "element": "style",
+            "path": "… > div.mw-content-ltr > section#mwAQ > span#mwDQ > style",
+            "chars": 3237,
+            "sample": ".mw-parser-output .sidebar{width:22em;float:right;clear:right;margin:0.5em 0 1em"
+          },
+          {
+            "reason": "nav",
+            "tag": "div",
+            "id": "mwDmI",
+            "classes": [
+              "navbox"
+            ],
+            "element": "div#mwDmI.navbox",
+            "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmI.navbox",
+            "chars": 3042,
+            "sample": "v t e Large language models (LLMs) List of LLMs AI Companies Benchmarks List of "
+          },
+          {
+            "reason": "nav",
+            "tag": "table",
+            "id": "mwDg",
+            "classes": [
+              "sidebar",
+              "sidebar-collapse",
+              "nomobile",
+              "nowraplinks"
+            ],
+            "element": "table#mwDg.sidebar.sidebar-collapse",
+            "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwAQ > table#mwDg.sidebar.sidebar-collapse",
+            "chars": 2515,
+            "sample": "Part of a series on Machine learning and data mining Paradigms Supervised learni"
+          },
+          {
+            "reason": "nav",
+            "tag": "div",
+            "id": "mwDmQ",
+            "classes": [
+              "navbox"
+            ],
+            "element": "div#mwDmQ.navbox",
+            "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmQ.navbox",
+            "chars": 2444,
+            "sample": "v t e Natural language processing General terms AI-complete Bag-of-words n-gram "
+          },
+          {
+            "reason": "script_style",
+            "tag": "style",
+            "id": null,
+            "classes": [],
+            "element": "style",
+            "path": "… > div.mw-content-ltr > section#mwAQ > span#mwDQ > style",
+            "chars": 2340,
+            "sample": ".mw-parser-output .hlist dl,.mw-parser-output .hlist ol,.mw-parser-output .hlist"
+          },
+          {
+            "reason": "script_style",
+            "tag": "style",
+            "id": null,
+            "classes": [],
+            "element": "style",
+            "path": "… > section#mwDlI > div#mwDmE > span.mw-empty-elt > style",
+            "chars": 2158,
+            "sample": ".mw-parser-output .navbox{box-sizing:border-box;border:1px solid #a2a9b1;width:1"
+          },
+          {
+            "reason": "script_style",
+            "tag": "style",
+            "id": "mwBdQ",
+            "classes": [],
+            "element": "style#mwBdQ",
+            "path": "… > ol#mwBcw > li#cite_note-few-shot-learners2-1 > span#mw-reference-text-cite_note-few-shot-learners2-1 > style#mwBdQ",
+            "chars": 2100,
+            "sample": ".mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-pars"
+          },
+          {
+            "reason": "nav",
+            "tag": "nav",
+            "id": "mw-panel-toc",
+            "classes": [
+              "mw-table-of-contents-container",
+              "vector-toc-landmark"
+            ],
+            "element": "nav#mw-panel-toc.mw-table-of-contents-container.vector-toc-landmark",
+            "path": "… > div.mw-page-container-inner > div.vector-column-start > div.vector-sticky-pinned-container > nav#mw-panel-toc.mw-table-of-contents-container.vector-toc-land",
+            "chars": 1627,
+            "sample": "Contents move to sidebar hide (Top) 1 History 2 Dataset preprocessing Toggle Dat"
+          },
+          {
+            "reason": "script_style",
+            "tag": "style",
+            "id": null,
+            "classes": [],
+            "element": "style",
+            "path": "… > div.mw-content-ltr > section#mwBcg > span#mwBck > style",
+            "chars": 1151,
+            "sample": ".mw-parser-output .reflist-columns-2{column-width:30em}.mw-parser-output .reflis"
+          },
+          {
+            "reason": "script_style",
+            "tag": "style",
+            "id": null,
+            "classes": [],
+            "element": "style",
+            "path": "… > tr > td.sidebar-navbar > span.mw-empty-elt > style",
+            "chars": 1109,
+            "sample": ".mw-parser-output .navbar{display:inline;font-size:88%;font-weight:normal}.mw-pa"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 867,
+            "sample": "{\"@context\":\"https:\\/\\/schema.org\",\"@type\":\"Article\",\"name\":\"Large language mode"
+          },
+          {
+            "reason": "script_style",
+            "tag": "style",
+            "id": "mwBaE",
+            "classes": [],
+            "element": "style#mwBaE",
+            "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwBaA > style#mwBaE",
+            "chars": 783,
+            "sample": ".mw-parser-output .portalbox{padding:0;margin:0.5em 0;display:table;box-sizing:b"
+          },
+          {
+            "reason": "header_controls",
+            "tag": "header",
+            "id": null,
+            "classes": [
+              "mw-body-header",
+              "vector-page-titlebar",
+              "no-font-mode-scale"
+            ],
+            "element": "header.mw-body-header.vector-page-titlebar",
+            "path": "… > div.mw-page-container-inner > div.mw-content-container > main#content > header.mw-body-header.vector-page-titlebar",
+            "chars": 652,
+            "sample": "Afrikaans Aragonés العربية Azərbaycanca Boarisch Беларуская भोजपुरी বাংলা Bosans"
+          },
+          {
+            "reason": "footer",
+            "tag": "footer",
+            "id": "footer",
+            "classes": [
+              "mw-footer"
+            ],
+            "element": "footer#footer.mw-footer",
+            "path": "div.mw-page-container > div.mw-page-container-inner > div.mw-footer-container > footer#footer.mw-footer",
+            "chars": 523,
+            "sample": "This page was last edited on 15 October 2026, at 18:18 (UTC). Page was rendered "
+          },
+          {
+            "reason": "nav",
+            "tag": "nav",
+            "id": null,
+            "classes": [
+              "vector-page-tools-landmark"
+            ],
+            "element": "nav.vector-page-tools-landmark",
+            "path": "… > div.vector-page-toolbar > div.vector-page-toolbar-container > div#right-navigation > nav.vector-page-tools-landmark",
+            "chars": 314,
+            "sample": "Tools move to sidebar hide Actions Read Edit View history General What links her"
+          },
+          {
+            "reason": "script_style",
+            "tag": "style",
+            "id": null,
+            "classes": [],
+            "element": "style",
+            "path": "… > div.mw-content-ltr > section#mwAQ > span#mwAw > style",
+            "chars": 303,
+            "sample": ".mw-parser-output .hatnote{font-style:italic}.mw-parser-output div.hatnote{paddi"
+          },
+          {
+            "reason": "header_chrome",
+            "tag": "header",
+            "id": null,
+            "classes": [
+              "vector-header",
+              "mw-header",
+              "no-font-mode-scale"
+            ],
+            "element": "header.vector-header.mw-header",
+            "path": "div.vector-header-container > header.vector-header.mw-header",
+            "chars": 277,
+            "sample": "Main menu move to sidebar hide Navigation Main page Contents Current events Rand"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "head > script",
+            "chars": 214,
+            "sample": "(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return[\"user.opti"
+          },
+          {
+            "reason": "script_style",
+            "tag": "noscript",
+            "id": null,
+            "classes": [],
+            "element": "noscript",
+            "path": "… > main#content > div#bodyContent > div#mw-content-text > noscript",
+            "chars": 187,
+            "sample": "<img src=\"https://en.wikipedia.org/wiki/Special:CentralAutoLogin/start?useformat"
+          },
+          {
+            "reason": "nav",
+            "tag": "ul",
+            "id": "mwBaI",
+            "classes": [
+              "noprint",
+              "portalbox",
+              "portalborder",
+              "portalright"
+            ],
+            "element": "ul#mwBaI.noprint.portalbox",
+            "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwBaA > ul#mwBaI.noprint.portalbox",
+            "chars": 83,
+            "sample": "Computer programming portal Linguistics portal Mathematics portal Philosophy por"
+          },
+          {
+            "reason": "script_style",
+            "tag": "style",
+            "id": null,
+            "classes": [],
+            "element": "style",
+            "path": "… > div.mw-content-ltr > section#mwAQ > span#mwDQ > style",
+            "chars": 45,
+            "sample": ".mw-parser-output .nobold{font-weight:normal}"
+          },
+          {
+            "reason": "head_meta",
+            "tag": "head",
+            "id": null,
+            "classes": [],
+            "element": "head",
+            "path": "head",
+            "chars": 34,
+            "sample": "Large language model - Wikipedia"
+          },
+          {
+            "reason": "nav",
+            "tag": "nav",
+            "id": null,
+            "classes": [
+              "vector-appearance-landmark"
+            ],
+            "element": "nav.vector-appearance-landmark",
+            "path": "… > main#content > div.vector-column-end > div.vector-sticky-pinned-container > nav.vector-appearance-landmark",
+            "chars": 31,
+            "sample": "Appearance move to sidebar hide"
+          },
+          {
+            "reason": "hidden",
+            "tag": "label",
+            "id": "vector-sticky-header-toc-label",
+            "classes": [
+              "vector-dropdown-label",
+              "cdx-button",
+              "cdx-button--fake-button",
+              "cdx-button--fake-button--enabled"
+            ],
+            "element": "label#vector-sticky-header-toc-label.vector-dropdown-label.cdx-button",
+            "path": "… > div.vector-sticky-header-context-bar > nav.vector-toc-landmark > div#vector-sticky-header-toc > label#vector-sticky-header-toc-label.vector-dropdown-label.c",
+            "chars": 28,
+            "sample": "Toggle the table of contents"
+          },
+          {
+            "reason": "hidden",
+            "tag": "label",
+            "id": "vector-page-titlebar-toc-label",
+            "classes": [
+              "vector-dropdown-label",
+              "cdx-button",
+              "cdx-button--fake-button",
+              "cdx-button--fake-button--enabled"
+            ],
+            "element": "label#vector-page-titlebar-toc-label.vector-dropdown-label.cdx-button",
+            "path": "… > header.mw-body-header > nav.vector-toc-landmark > div#vector-page-titlebar-toc > label#vector-page-titlebar-toc-label.vector-dropdown-label.cdx-button",
+            "chars": 28,
+            "sample": "Toggle the table of contents"
+          },
+          {
+            "reason": "nav",
+            "tag": "nav",
+            "id": null,
+            "classes": [],
+            "element": "nav",
+            "path": "… > div.vector-page-toolbar > div.vector-page-toolbar-container > div#right-navigation > nav",
+            "chars": 22,
+            "sample": "Read Edit View history"
+          },
+          {
+            "reason": "hidden",
+            "tag": "div",
+            "id": null,
+            "classes": [
+              "vector-sticky-header-end"
+            ],
+            "element": "div.vector-sticky-header-end",
+            "path": "div.vector-header-container > div#vector-sticky-header > div.vector-sticky-header-end",
+            "chars": 22,
+            "sample": "72 languages Add topic"
+          },
+          {
+            "reason": "hidden",
+            "tag": "div",
+            "id": null,
+            "classes": [
+              "vector-sticky-header-context-bar-primary"
+            ],
+            "element": "div.vector-sticky-header-context-bar-primary",
+            "path": "… > div#vector-sticky-header > div.vector-sticky-header-start > div.vector-sticky-header-context-bar > div.vector-sticky-header-context-bar-primary",
+            "chars": 20,
+            "sample": "Large language model"
+          },
+          {
+            "reason": "outside_main",
+            "tag": "a",
+            "id": null,
+            "classes": [
+              "mw-jump-link"
+            ],
+            "element": "a.mw-jump-link",
+            "path": "a.mw-jump-link",
+            "chars": 15,
+            "sample": "Jump to content"
+          },
+          {
+            "reason": "hidden",
+            "tag": "label",
+            "id": "vector-user-links-dropdown-label",
+            "classes": [
+              "vector-dropdown-label",
+              "cdx-button",
+              "cdx-button--fake-button",
+              "cdx-button--fake-button--enabled"
+            ],
+            "element": "label#vector-user-links-dropdown-label.vector-dropdown-label.cdx-button",
+            "path": "… > div.vector-header-end > nav.vector-user-links > div#vector-user-links-dropdown > label#vector-user-links-dropdown-label.vector-dropdown-label.cdx-button",
+            "chars": 14,
+            "sample": "Personal tools"
+          },
+          {
+            "reason": "nav",
+            "tag": "nav",
+            "id": null,
+            "classes": [],
+            "element": "nav",
+            "path": "… > div.vector-page-toolbar > div.vector-page-toolbar-container > div#left-navigation > nav",
+            "chars": 12,
+            "sample": "Article Talk"
+          },
+          {
+            "reason": "hidden",
+            "tag": "label",
+            "id": "p-lang-btn-label",
+            "classes": [
+              "vector-dropdown-label",
+              "cdx-button",
+              "cdx-button--fake-button",
+              "cdx-button--fake-button--enabled"
+            ],
+            "element": "label#p-lang-btn-label.vector-dropdown-label.cdx-button",
+            "path": "… > main#content > header.mw-body-header > div#p-lang-btn > label#p-lang-btn-label.vector-dropdown-label.cdx-button",
+            "chars": 12,
+            "sample": "72 languages"
+          },
+          {
+            "reason": "hidden",
+            "tag": "label",
+            "id": "vector-appearance-dropdown-label",
+            "classes": [
+              "vector-dropdown-label",
+              "cdx-button",
+              "cdx-button--fake-button",
+              "cdx-button--fake-button--enabled"
+            ],
+            "element": "label#vector-appearance-dropdown-label.vector-dropdown-label.cdx-button",
+            "path": "… > div.vector-user-links-main > nav.vector-appearance-landmark > div#vector-appearance-dropdown > label#vector-appearance-dropdown-label.vector-dropdown-label.",
+            "chars": 10,
+            "sample": "Appearance"
+          },
+          {
+            "reason": "hidden",
+            "tag": "label",
+            "id": "vector-main-menu-dropdown-label",
+            "classes": [
+              "vector-dropdown-label",
+              "cdx-button",
+              "cdx-button--fake-button",
+              "cdx-button--fake-button--enabled"
+            ],
+            "element": "label#vector-main-menu-dropdown-label.vector-dropdown-label.cdx-button",
+            "path": "… > div.vector-header-start > nav.vector-main-menu-landmark > div#vector-main-menu-dropdown > label#vector-main-menu-dropdown-label.vector-dropdown-label.cdx-bu",
+            "chars": 9,
+            "sample": "Main menu"
+          },
+          {
+            "reason": "hidden",
+            "tag": "label",
+            "id": "vector-variants-dropdown-label",
+            "classes": [
+              "vector-dropdown-label",
+              "cdx-button",
+              "cdx-button--fake-button",
+              "cdx-button--fake-button--enabled"
+            ],
+            "element": "label#vector-variants-dropdown-label.vector-dropdown-label.cdx-button",
+            "path": "… > div#left-navigation > nav > div#vector-variants-dropdown > label#vector-variants-dropdown-label.vector-dropdown-label.cdx-button",
+            "chars": 7,
+            "sample": "English"
+          },
+          {
+            "reason": "form_control",
+            "tag": "form",
+            "id": "vector-sticky-search-form",
+            "classes": [
+              "cdx-search-input",
+              "cdx-search-input--has-end-button"
+            ],
+            "element": "form#vector-sticky-search-form.cdx-search-input.cdx-search-input--has-end-button",
+            "path": "… > div.vector-search-box-vue > div.vector-typeahead-search-container > div.cdx-typeahead-search > form#vector-sticky-search-form.cdx-search-input.cdx-search-in",
+            "chars": 6,
+            "sample": "Search"
+          },
+          {
+            "reason": "hidden",
+            "tag": "div",
+            "id": null,
+            "classes": [
+              "vector-sticky-header-icon-start",
+              "vector-button-flush-left"
+            ],
+            "element": "div.vector-sticky-header-icon-start.vector-button-flush-left",
+            "path": "div.vector-header-container > div#vector-sticky-header > div.vector-sticky-header-start > div.vector-sticky-header-icon-start.vector-button-flush-left",
+            "chars": 6,
+            "sample": "Search"
+          },
+          {
+            "reason": "hidden",
+            "tag": "label",
+            "id": "vector-page-tools-dropdown-label",
+            "classes": [
+              "vector-dropdown-label",
+              "cdx-button",
+              "cdx-button--fake-button",
+              "cdx-button--fake-button--enabled"
+            ],
+            "element": "label#vector-page-tools-dropdown-label.vector-dropdown-label.cdx-button",
+            "path": "… > div#right-navigation > nav.vector-page-tools-landmark > div#vector-page-tools-dropdown > label#vector-page-tools-dropdown-label.vector-dropdown-label.cdx-bu",
+            "chars": 5,
+            "sample": "Tools"
+          }
+        ],
+        "omitted": {
+          "elements": 0,
+          "chars": 0
+        }
+      },
+      "sections": {
+        "mode": "h2",
+        "rows": [
+          {
+            "kind": "intro",
+            "heading": null,
+            "chars": 53,
+            "inPassages": 53,
+            "located": true
+          },
+          {
+            "kind": "before_first_h2",
+            "heading": null,
+            "chars": 1157,
+            "inPassages": 1157,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "History",
+            "chars": 4782,
+            "inPassages": 4782,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Dataset preprocessing",
+            "chars": 2931,
+            "inPassages": 2931,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Training",
+            "chars": 1535,
+            "inPassages": 1535,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Inference",
+            "chars": 561,
+            "inPassages": 561,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Architecture",
+            "chars": 4109,
+            "inPassages": 4109,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Extensibility",
+            "chars": 7169,
+            "inPassages": 7169,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Forms of input and output",
+            "chars": 3636,
+            "inPassages": 3636,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Properties",
+            "chars": 4273,
+            "inPassages": 4273,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Interpretation",
+            "chars": 5157,
+            "inPassages": 5157,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Evaluation",
+            "chars": 4952,
+            "inPassages": 3801,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Limitations and challenges",
+            "chars": 3747,
+            "inPassages": 0,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Safety",
+            "chars": 3579,
+            "inPassages": 0,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Societal concerns",
+            "chars": 6122,
+            "inPassages": 0,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "See also",
+            "chars": 1007,
+            "inPassages": 0,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "References",
+            "chars": 37385,
+            "inPassages": 0,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Further reading",
+            "chars": 1917,
+            "inPassages": 0,
+            "located": true
+          }
+        ]
+      },
+      "placement": [
+        {
+          "index": 0,
+          "start": null,
+          "end": null,
+          "intro": 53
+        },
+        {
+          "index": 1,
+          "start": 0,
+          "end": 1157,
+          "intro": 0
+        },
+        {
+          "index": 2,
+          "start": 1166,
+          "end": 3164,
+          "intro": 0
+        },
+        {
+          "index": 3,
+          "start": 2968,
+          "end": 4962,
+          "intro": 0
+        },
+        {
+          "index": 4,
+          "start": 4768,
+          "end": 5948,
+          "intro": 0
+        },
+        {
+          "index": 5,
+          "start": 5971,
+          "end": 7960,
+          "intro": 0
+        },
+        {
+          "index": 6,
+          "start": 7775,
+          "end": 8902,
+          "intro": 0
+        },
+        {
+          "index": 7,
+          "start": 8912,
+          "end": 10447,
+          "intro": 0
+        },
+        {
+          "index": 8,
+          "start": 10458,
+          "end": 11019,
+          "intro": 0
+        },
+        {
+          "index": 9,
+          "start": 11033,
+          "end": 13031,
+          "intro": 0
+        },
+        {
+          "index": 10,
+          "start": 12833,
+          "end": 14828,
+          "intro": 0
+        },
+        {
+          "index": 11,
+          "start": 14633,
+          "end": 15142,
+          "intro": 0
+        },
+        {
+          "index": 12,
+          "start": 15157,
+          "end": 17154,
+          "intro": 0
+        },
+        {
+          "index": 13,
+          "start": 16960,
+          "end": 18952,
+          "intro": 0
+        },
+        {
+          "index": 14,
+          "start": 18760,
+          "end": 20755,
+          "intro": 0
+        },
+        {
+          "index": 15,
+          "start": 20560,
+          "end": 22326,
+          "intro": 0
+        },
+        {
+          "index": 16,
+          "start": 22353,
+          "end": 24352,
+          "intro": 0
+        },
+        {
+          "index": 17,
+          "start": 24158,
+          "end": 25989,
+          "intro": 0
+        },
+        {
+          "index": 18,
+          "start": 26001,
+          "end": 27994,
+          "intro": 0
+        },
+        {
+          "index": 19,
+          "start": 27801,
+          "end": 29798,
+          "intro": 0
+        },
+        {
+          "index": 20,
+          "start": 29620,
+          "end": 30274,
+          "intro": 0
+        },
+        {
+          "index": 21,
+          "start": 30290,
+          "end": 32287,
+          "intro": 0
+        },
+        {
+          "index": 22,
+          "start": 32094,
+          "end": 34088,
+          "intro": 0
+        },
+        {
+          "index": 23,
+          "start": 33896,
+          "end": 35447,
+          "intro": 0
+        },
+        {
+          "index": 24,
+          "start": 35459,
+          "end": 37450,
+          "intro": 0
+        },
+        {
+          "index": 25,
+          "start": 37263,
+          "end": 39260,
+          "intro": 0
+        }
+      ]
+    },
+    "robots": {
+      "url": "https://en.wikipedia.org/robots.txt",
+      "status": "ok",
+      "httpStatus": 200,
+      "bots": [
+        {
+          "token": "OAI-SearchBot",
+          "vendor": "OpenAI",
+          "kind": "search",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "ChatGPT-User",
+          "vendor": "OpenAI",
+          "kind": "user",
+          "honours": false,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "GPTBot",
+          "vendor": "OpenAI",
+          "kind": "training",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "Claude-SearchBot",
+          "vendor": "Anthropic",
+          "kind": "search",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "Claude-User",
+          "vendor": "Anthropic",
+          "kind": "user",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "ClaudeBot",
+          "vendor": "Anthropic",
+          "kind": "training",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "PerplexityBot",
+          "vendor": "Perplexity",
+          "kind": "search",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "Perplexity-User",
+          "vendor": "Perplexity",
+          "kind": "user",
+          "honours": false,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "Google-Extended",
+          "vendor": "Google",
+          "kind": "training",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "Googlebot",
+          "vendor": "Google",
+          "kind": "index",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "Bingbot",
+          "vendor": "Microsoft",
+          "kind": "index",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        },
+        {
+          "token": "CCBot",
+          "vendor": "Common Crawl",
+          "kind": "training",
+          "honours": true,
+          "allowed": true,
+          "rule": null,
+          "group": "*"
+        }
+      ]
+    },
+    "technical": {
+      "jsonLd": {
+        "blocks": 1,
+        "invalid": 0,
+        "types": [
+          "Article",
+          "ImageObject",
+          "Organization"
+        ]
+      },
+      "canonical": {
+        "present": true,
+        "count": 1,
+        "href": "https://en.wikipedia.org/wiki/Large_language_model",
+        "absolute": true,
+        "resolved": "https://en.wikipedia.org/wiki/Large_language_model",
+        "self": true
+      },
+      "metaDescription": {
+        "present": false,
+        "length": 0
+      },
+      "lang": "en"
+    },
+    "render": null,
+    "derived": {
+      "charsPastCap": 55001,
+      "charsUnread": 52973,
+      "phrases": [
+        {
+          "term": "language model",
+          "count": 23,
+          "passages": 10,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "fine tuned",
+          "count": 11,
+          "passages": 7,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "large language model",
+          "count": 10,
+          "passages": 6,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "neural network",
+          "count": 8,
+          "passages": 5,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "natural language",
+          "count": 7,
+          "passages": 5,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "open weight",
+          "count": 8,
+          "passages": 4,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "fine tuning",
+          "count": 7,
+          "passages": 4,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "machine learning",
+          "count": 6,
+          "passages": 4,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "billion parameter",
+          "count": 6,
+          "passages": 4,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "larger models",
+          "count": 4,
+          "passages": 4,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "final answer",
+          "count": 4,
+          "passages": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "openai o1",
+          "count": 3,
+          "passages": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "follow instructions",
+          "count": 3,
+          "passages": 3,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "next word",
+          "count": 3,
+          "passages": 3,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "parameter count",
+          "count": 3,
+          "passages": 3,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        }
+      ],
+      "narrativeWords": [
+        {
+          "term": "model",
+          "count": 100,
+          "passages": 21,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "llm",
+          "count": 98,
+          "passages": 21,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "token",
+          "count": 38,
+          "passages": 11,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "text",
+          "count": 29,
+          "passages": 13,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "gpt",
+          "count": 28,
+          "passages": 12,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "trained",
+          "count": 27,
+          "passages": 15,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "input",
+          "count": 22,
+          "passages": 9,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "training",
+          "count": 22,
+          "passages": 11,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "data",
+          "count": 20,
+          "passages": 11,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "dataset",
+          "count": 19,
+          "passages": 9,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        }
+      ],
+      "checks": [
+        {
+          "code": "cap_overflow",
+          "severity": "high",
+          "passages": [
+            25
+          ],
+          "evidence": {
+            "charsPastCap": 55001,
+            "charsUnread": 52973,
+            "cap": 26,
+            "last": 25
+          },
+          "message": "55,001 characters after passage #25 are never stored."
+        },
+        {
+          "code": "mid_sentence_start",
+          "severity": "medium",
+          "passages": [
+            3,
+            4,
+            6,
+            10,
+            11,
+            13,
+            14,
+            15,
+            17,
+            19,
+            20,
+            22,
+            23,
+            25
+          ],
+          "evidence": {
+            "samples": [
+              {
+                "passage": 3,
+                "text": "used LSTM-based encoder-decoder architectures, as they preceded the invention o…"
+              },
+              {
+                "passage": 4,
+                "text": "impact work.[15] In 2024, OpenAI released the reasoning model OpenAI o1, which …"
+              },
+              {
+                "passage": 6,
+                "text": "a vocabulary of prescribed size is obtained. After a tokenizer is trained, any …"
+              },
+              {
+                "passage": 10,
+                "text": "edit ] Main article: Mixture of experts A mixture of experts (MoE) is a machine…"
+              },
+              {
+                "passage": 11,
+                "text": "simply truncates all the parameters to a given number of bits: this is applicab…"
+              },
+              {
+                "passage": 13,
+                "text": "authority than the user's input. This is called a \"system prompt\". [ citation n…"
+              }
+            ],
+            "count": 14
+          },
+          "message": "14 passage(s) open on a lowercase word or a punctuation mark."
+        },
+        {
+          "code": "repeated_claim",
+          "severity": "low",
+          "passages": [
+            3,
+            7,
+            18
+          ],
+          "evidence": {
+            "groupCount": 6,
+            "samples": [
+              {
+                "phrase": "the number of parameters",
+                "groups": 3,
+                "passages": [
+                  3,
+                  7,
+                  18
+                ]
+              }
+            ]
+          },
+          "message": "1 phrase(s) recur across at least half of the 6 groups."
+        },
+        {
+          "code": "meta_description_missing",
+          "severity": "low",
+          "passages": [
+            0
+          ],
+          "evidence": {},
+          "message": "The intro passage (#0) has only the title and h1."
+        }
+      ]
+    }
+  },
   "judgement": {
     "agent": null,
-    "model": null
+    "model": null,
+    "groups": [
+      {
+        "id": 0,
+        "label": "History",
+        "labelSource": "heading",
+        "chunkCount": 5,
+        "charCount": 6382,
+        "shareOfIndexedChars": 0.152,
+        "cohesion": null,
+        "agentLabel": "Definition and history of LLMs",
+        "note": "The lede, then the timeline from early language models to open-weight reasoning models.",
+        "topic": null
+      },
+      {
+        "id": 1,
+        "label": "Dataset preprocessing",
+        "labelSource": "heading",
+        "chunkCount": 3,
+        "charCount": 4651,
+        "shareOfIndexedChars": 0.111,
+        "cohesion": null,
+        "agentLabel": "Tokenization, data cleaning and training",
+        "note": null,
+        "topic": null
+      },
+      {
+        "id": 2,
+        "label": "Architecture",
+        "labelSource": "heading",
+        "chunkCount": 4,
+        "charCount": 5063,
+        "shareOfIndexedChars": 0.121,
+        "cohesion": null,
+        "agentLabel": "Inference and architecture: attention, MoE, quantization",
+        "note": null,
+        "topic": null
+      },
+      {
+        "id": 3,
+        "label": "Extensibility",
+        "labelSource": "heading",
+        "chunkCount": 6,
+        "charCount": 11580,
+        "shareOfIndexedChars": 0.277,
+        "cohesion": null,
+        "agentLabel": "Prompting, RAG, tools, agents and modalities",
+        "note": null,
+        "topic": null
+      },
+      {
+        "id": 4,
+        "label": "Properties",
+        "labelSource": "heading",
+        "chunkCount": 5,
+        "charCount": 8632,
+        "shareOfIndexedChars": 0.206,
+        "cohesion": null,
+        "agentLabel": "Scaling laws, emergence and evaluation",
+        "note": "Measurement: what predicts performance and how it is scored.",
+        "topic": null
+      },
+      {
+        "id": 5,
+        "label": "Interpretation",
+        "labelSource": "heading",
+        "chunkCount": 3,
+        "charCount": 5542,
+        "shareOfIndexedChars": 0.132,
+        "cohesion": null,
+        "agentLabel": "Interpretability and whether LLMs understand",
+        "note": null,
+        "topic": null
+      }
+    ],
+    "assignment": [
+      {
+        "index": 0,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 1,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 2,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 3,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 4,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 5,
+        "group": 1,
+        "duplicateOf": null
+      },
+      {
+        "index": 6,
+        "group": 1,
+        "duplicateOf": null
+      },
+      {
+        "index": 7,
+        "group": 1,
+        "duplicateOf": null
+      },
+      {
+        "index": 8,
+        "group": 2,
+        "duplicateOf": null
+      },
+      {
+        "index": 9,
+        "group": 2,
+        "duplicateOf": null
+      },
+      {
+        "index": 10,
+        "group": 2,
+        "duplicateOf": null
+      },
+      {
+        "index": 11,
+        "group": 2,
+        "duplicateOf": null
+      },
+      {
+        "index": 12,
+        "group": 3,
+        "duplicateOf": null
+      },
+      {
+        "index": 13,
+        "group": 3,
+        "duplicateOf": null
+      },
+      {
+        "index": 14,
+        "group": 3,
+        "duplicateOf": null
+      },
+      {
+        "index": 15,
+        "group": 3,
+        "duplicateOf": null
+      },
+      {
+        "index": 16,
+        "group": 3,
+        "duplicateOf": null
+      },
+      {
+        "index": 17,
+        "group": 3,
+        "duplicateOf": null
+      },
+      {
+        "index": 18,
+        "group": 4,
+        "duplicateOf": null
+      },
+      {
+        "index": 19,
+        "group": 4,
+        "duplicateOf": null
+      },
+      {
+        "index": 20,
+        "group": 4,
+        "duplicateOf": null
+      },
+      {
+        "index": 21,
+        "group": 5,
+        "duplicateOf": null
+      },
+      {
+        "index": 22,
+        "group": 5,
+        "duplicateOf": null
+      },
+      {
+        "index": 23,
+        "group": 5,
+        "duplicateOf": null
+      },
+      {
+        "index": 24,
+        "group": 4,
+        "duplicateOf": null
+      },
+      {
+        "index": 25,
+        "group": 4,
+        "duplicateOf": null
+      }
+    ],
+    "duplicates": 0,
+    "plan": [
+      {
+        "priority": 1,
+        "page": 1,
+        "passages": [
+          25
+        ],
+        "check": "cap_overflow",
+        "problem": "The article fills all 26 slots by the middle of \"Evaluation\"; about 53,000 characters, including Limitations and challenges, Safety and Societal concerns (copyright, energy demands), are never stored.",
+        "fix": "For a page this long the fix is structural: move the detail of the long middle sections into their \"Main article\" pages and keep a two-paragraph summary here, so the later sections fall inside the cap.",
+        "before": null,
+        "after": null
+      },
+      {
+        "priority": 2,
+        "page": 1,
+        "passages": [
+          2,
+          5,
+          9,
+          12,
+          18
+        ],
+        "check": null,
+        "problem": "Every section's text carries the \"[ edit ]\" link labels; they cost characters in every passage and make \"edit\" one of the page's top keywords.",
+        "fix": "Keep edit links out of the readable text (render them as icons with an aria-label, or outside the heading's text node), so the passage starts with the heading's subject.",
+        "before": "[ edit ] Scaling laws [ edit ] Main article: Neural scaling law",
+        "after": "Scaling laws. Main article: Neural scaling law"
+      },
+      {
+        "priority": 3,
+        "page": 1,
+        "passages": [
+          18,
+          20,
+          24
+        ],
+        "check": null,
+        "problem": "Formulas are extracted twice, as the rendered symbols and as their LaTeX source (\"{\\displaystyle C}\"), so the passages on scaling and perplexity read as noise.",
+        "fix": "Expose one text form of each formula (the alt text or the MathML, not both), and state the formula's meaning in a sentence next to it.",
+        "before": "C {\\displaystyle C} : cost of pretraining (the total amount of compute used)",
+        "after": "C: the cost of pretraining a large language model, as the total amount of compute used"
+      },
+      {
+        "priority": 4,
+        "page": 1,
+        "passages": [
+          3,
+          4,
+          6
+        ],
+        "check": "mid_sentence_start",
+        "problem": "Sections such as History run over 2,000 characters under one h2 and are cut by the window, so passages open mid-sentence and lose their subject.",
+        "fix": "Promote the long sections' subsections to h2, or open each subsection with a sentence that names its subject, so a retriever never receives a passage that starts with a verb.",
+        "before": "used LSTM-based encoder-decoder architectures, as they preceded the invention of transformers.",
+        "after": "Early neural machine translation used LSTM-based encoder-decoder architectures, because they preceded the invention of transformers."
+      },
+      {
+        "priority": 5,
+        "page": 1,
+        "passages": [
+          0
+        ],
+        "check": "meta_description_missing",
+        "problem": "Passage #0 is the title twice and nothing else: the page has no meta description for the intro passage to carry.",
+        "fix": "Add a one-sentence description; the chunker puts it into passage #0.",
+        "before": "Large language model - Wikipedia Large language model",
+        "after": "Large language model - Wikipedia. A large language model (LLM) is a neural network trained on a vast amount of text to generate, summarise, translate and analyse language."
+      }
+    ],
+    "queries": [
+      {
+        "id": "q1",
+        "query": "what is a large language model",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 1,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "A large language model (LLM) is an AI model (typically a neural network) trained on a vast amount of text for natural language processing tasks, especially language generation."
+          }
+        }
+      },
+      {
+        "id": "q2",
+        "query": "who introduced the transformer architecture",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 3,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper \"Attention Is All You Need\"."
+          }
+        }
+      },
+      {
+        "id": "q3",
+        "query": "what is retrieval-augmented generation",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 13,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "Retrieval-augmented generation (RAG) is an approach that integrates LLMs with document retrieval systems."
+          }
+        }
+      },
+      {
+        "id": "q4",
+        "query": "how much does it cost to train an LLM",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 7,
+            "verdict": "partial",
+            "citable": true,
+            "quote": "the training of GPT-2 (i.e. a 1.5-billion-parameter model) in 2019 cost $50,000, while training of the PaLM (i.e. a 540-billion-parameter model) in 2022 cost $8 million"
+          }
+        }
+      },
+      {
+        "id": "q5",
+        "query": "what is chain-of-thought prompting",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 14,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "A 2022 paper demonstrated a separate technique called chain-of-thought prompting, which makes the LLM break the question down autonomously."
+          }
+        }
+      },
+      {
+        "id": "q6",
+        "query": "how is a language model's performance measured",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 24,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "The canonical measure of the performance of any language model is its perplexity on a given text corpus."
+          }
+        }
+      },
+      {
+        "id": "q7",
+        "query": "how much energy do LLMs use",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": null,
+            "verdict": "missing",
+            "citable": false,
+            "quote": null
+          }
+        }
+      },
+      {
+        "id": "q8",
+        "query": "can LLMs reproduce copyrighted text",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": null,
+            "verdict": "missing",
+            "citable": false,
+            "quote": null
+          }
+        }
+      }
+    ],
+    "facts": null
+  },
+  "metrics": {
+    "words": {
+      "layer": "measured",
+      "label": "Words",
+      "formula": "The extracted body text split on whitespace; every non-empty piece is a word.",
+      "unit": "words",
+      "threshold": null,
+      "limits": "Counted after the cleaner, so menus, footers and hidden text are not in it. A page drawn by JavaScript reads low here; compare with --render."
+    },
+    "headings": {
+      "layer": "measured",
+      "label": "Headings found",
+      "formula": "h1 elements plus h2 elements (the first 40) left after the cleaner, with empty ones dropped.",
+      "unit": "headings",
+      "threshold": null,
+      "limits": "h3 and styled text are not counted: the chunker splits only at h2."
+    },
+    "passages": {
+      "layer": "measured",
+      "label": "Passages read",
+      "formula": "Sections at h2 headings (or paragraph blocks), long ones cut into 2,000-character windows with about 200 characters of overlap, slivers under 40 characters folded into the passage before, then the first 26 kept.",
+      "unit": "passages",
+      "threshold": "At most 26 per page (this tool's cap).",
+      "limits": "Other systems cut and cap differently; this is a working model of a typical retriever."
+    },
+    "slots": {
+      "layer": "measured",
+      "label": "Cap slots used",
+      "formula": "Passages kept, out of the 26-passage cap. \"Every slot filled\" when the chunker produced 26 or more.",
+      "unit": "slots",
+      "threshold": "26: a full cap means text may have been left out (see characters past the cap).",
+      "limits": "A full cap does not by itself mean text was lost: the last passage may end exactly at the end of the page."
+    },
+    "passage_chars": {
+      "layer": "measured",
+      "label": "Passage length",
+      "formula": "The length of one passage's text, as the chunker emitted it.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": "At most about 2,000, unless a sliver was folded in.",
+      "limits": "Neighbouring passages share about 200 characters by design."
+    },
+    "chars_in_passages": {
+      "layer": "measured",
+      "label": "Text in passages, overlap and intro included",
+      "formula": "The sum of every passage's length (page.charsIndexed). Passage #0 repeats the title, h1 and meta description; neighbours repeat about 200 characters.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Counts repeated text more than once, so it can exceed the page's own text. For how much of the page reached a passage, read the unique number."
+    },
+    "chars_unique": {
+      "layer": "derived",
+      "label": "Unique text in passages",
+      "formula": "Each passage is located in the kept text (the intro part, title, h1 and description, set aside); the union of the located spans is counted once, so overlap is not counted twice.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "A passage the locator cannot place is reported as unlocated rather than guessed. Heading lines the chunker carries only as a passage's heading are not in it."
+    },
+    "chars_past_cap": {
+      "layer": "derived",
+      "label": "Characters past the cap",
+      "formula": "Only when every one of the 26 slots is filled: the kept text after the end of the last passage. Equivalently, kept text − unique text in passages − text between passages, counted after the last one.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": "Above 0 means a tail no retriever using this cap can return.",
+      "limits": "Replaces the 2.101 estimate, which subtracted the overlapping total and so undercounted, often to 0. That old number is still exported as charsUnread."
+    },
+    "chars_unread_legacy": {
+      "layer": "derived",
+      "label": "charsUnread (2.101 meaning)",
+      "formula": "When the cap is reached: extracted body characters − text in passages including overlap and intro; otherwise 0.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Undercounts and can read 0 even when the cap cut a tail. Kept unchanged for compatibility; use characters past the cap."
+    },
+    "text_raw": {
+      "layer": "derived",
+      "label": "Text in the raw HTML",
+      "formula": "Kept text plus every removal in the table below. An estimate of the document's text, defined so the waterfall sums exactly.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Script and style bodies count as text here because the cleaner has to remove them; it is not the text a reader sees."
+    },
+    "text_removed": {
+      "layer": "measured",
+      "label": "Removed by the cleaner",
+      "formula": "For every element the cleaner removed (outermost only, so nothing counts twice): its own text at the moment of removal. Plus, when a main region was chosen, the text of everything outside it.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Observed on a second copy of the extraction, checked to give the same text; the removal itself is the product's rule and is not tuned here."
+    },
+    "text_kept": {
+      "layer": "measured",
+      "label": "Kept text",
+      "formula": "The extractor's body text (the chunker's input), whitespace folded.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Differs slightly from page.bodyChars, which counts line breaks as they are."
+    },
+    "not_in_passages": {
+      "layer": "derived",
+      "label": "Kept, but in no passage text",
+      "formula": "Kept text before the end of the last passage that no passage holds: h2 heading lines (carried as a passage's heading, not its text), the spaces between sections, and anything else (should be 0).",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "A retriever may still see a heading as the passage's metadata; this tool does not assume either way."
+    },
+    "overlap_chars": {
+      "layer": "derived",
+      "label": "Overlap",
+      "formula": "Located passage text − unique text in passages: what neighbouring windows repeat.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "By design, about 200 per cut inside a long section."
+    },
+    "intro_chars": {
+      "layer": "measured",
+      "label": "Intro",
+      "formula": "The title, h1 and meta description the chunker puts at the start of passage #0.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Not part of the body text, so it is outside the waterfall's kept stage."
+    },
+    "removal_chars": {
+      "layer": "measured",
+      "label": "Characters removed by one element",
+      "formula": "The removed element's text, whitespace folded, at the moment the cleaner removed it.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Elements with no text are counted but not listed. Beyond the first 200 the rest are summed, never dropped."
+    },
+    "section_reached": {
+      "layer": "derived",
+      "label": "Section text that reached a passage",
+      "formula": "For each section the chunker made (the intro, the text before the first h2, each h2), the part of its text inside some passage, over its length.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": "Under 100% means that section lost text, almost always to the cap.",
+      "limits": "When the page has no usable h2 split, the body is one row."
+    },
+    "robots_verdict": {
+      "layer": "measured",
+      "label": "robots.txt verdict",
+      "formula": "RFC 9309 over the site's /robots.txt: the group naming the token replaces *; the longest matching Allow or Disallow wins; Allow wins a tie.",
+      "unit": "allowed / blocked per crawler",
+      "threshold": null,
+      "limits": "A 4xx robots.txt means no rules; 5xx or no answer means all blocked. Some user-fetch crawlers say they may ignore robots.txt."
+    },
+    "markup": {
+      "layer": "measured",
+      "label": "Technical markup",
+      "formula": "From the raw HTML: every @type in application/ld+json blocks (through @graph), rel=canonical links, the meta description's length.",
+      "unit": "types, links, characters",
+      "threshold": "Meta description: 70–160 characters.",
+      "limits": "Read, not validated against schema.org."
+    },
+    "render_words": {
+      "layer": "measured",
+      "label": "Words with JavaScript",
+      "formula": "The same extraction and chunking over the DOM a local headless Chrome dumped after running the page's scripts.",
+      "unit": "words, passages",
+      "threshold": "50% more words and at least 150 more raises js_dependent.",
+      "limits": "Only with --render. The reading itself stays the plain fetch."
+    },
+    "group_chars": {
+      "layer": "derived",
+      "label": "Group size",
+      "formula": "Passages in the group, and the sum of their lengths.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Computed over the agent's groups, so it moves with the grouping."
+    },
+    "group_share": {
+      "layer": "derived",
+      "label": "Share of indexed text",
+      "formula": "The group's characters over the characters of every passage (overlap included).",
+      "unit": "percent",
+      "threshold": null,
+      "limits": "Computed over the agent's groups. Overlap counts in both neighbours."
+    },
+    "vocabulary": {
+      "layer": "derived",
+      "label": "Phrase and word counts",
+      "formula": "Over the passages' text with the overlap removed: ×uses, the passages that use it (p), and how many groups it reaches (g/total).",
+      "unit": "occurrences, passages, groups",
+      "threshold": "A phrase needs 2 uses in 2 passages, or 3 in one.",
+      "limits": "What the page says, not search demand. The group count rests on the agent's groups."
+    },
+    "check_verdicts": {
+      "layer": "derived",
+      "label": "Check verdicts",
+      "formula": "Fixed rules over the measured values, each a named constant in checks.mjs with its reason; every finding names the passages it rests on.",
+      "unit": "findings, by severity",
+      "threshold": "Each check's threshold is in the check table of SKILL.md.",
+      "limits": "repeated_claim uses the agent's groups; every other check does not."
+    },
+    "groups": {
+      "layer": "judgement",
+      "label": "Groups and labels",
+      "formula": "The agent read every passage and grouped them by subject (at most 6); its label is its own. The label source is computed: a heading most members share, else two distinctive words.",
+      "unit": "groups",
+      "threshold": "At most 6 groups.",
+      "limits": "Not an embedding clustering; another model may group a little differently."
+    },
+    "duplicates": {
+      "layer": "judgement",
+      "label": "Repeats",
+      "formula": "Passages the agent marked as repeating an earlier, non-adjacent passage almost word for word.",
+      "unit": "passages",
+      "threshold": null,
+      "limits": "The product judges this from embeddings at cosine 0.94; here it is read."
+    },
+    "query_verdicts": {
+      "layer": "judgement",
+      "label": "Query test",
+      "formula": "For 5 to 10 typical queries, the agent names the best passage and a verdict (complete, partial, missing) and quotes the answer; the quote is checked verbatim.",
+      "unit": "queries",
+      "threshold": null,
+      "limits": "Judged from the passages only; it is not a measurement of what any assistant returns."
+    },
+    "plan": {
+      "layer": "judgement",
+      "label": "Rewrite plan",
+      "formula": "The agent's fixes in priority order; each 'before' is checked verbatim against its passage, each cited check against the checks that fired.",
+      "unit": "items",
+      "threshold": null,
+      "limits": "Advice, not a measurement."
+    },
+    "facts": {
+      "layer": "judgement",
+      "label": "Citable facts",
+      "formula": "The agent's list of concrete facts the passages state, each with the passages that state it.",
+      "unit": "facts",
+      "threshold": null,
+      "limits": "Fact gaps are only as fair as this list is complete."
+    },
+    "topic_cells": {
+      "layer": "derived",
+      "label": "Topic × page cells",
+      "formula": "Passages and characters of the groups the agent assigned to each shared topic.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Computed over the agent's groups and topics."
+    },
+    "diff_counts": {
+      "layer": "derived",
+      "label": "Changes since the baseline",
+      "formula": "Passages matched by identical text, then by the same heading in order; the rest are added or removed.",
+      "unit": "passages",
+      "threshold": null,
+      "limits": "A passage that moved and changed heading counts as removed plus added."
+    }
   },
   "checks": [
     {
@@ -741,11 +2895,12 @@
         25
       ],
       "evidence": {
+        "charsPastCap": 55001,
         "charsUnread": 52973,
         "cap": 26,
         "last": 25
       },
-      "message": "52,973 characters after passage #25 are never stored."
+      "message": "55,001 characters after passage #25 are never stored."
     },
     {
       "code": "mid_sentence_start",
@@ -970,14 +3125,7 @@
       }
     ]
   },
-  "render": {
-    "ok": true,
-    "browser": "chrome.exe",
-    "wordCount": 13769,
-    "passages": 26,
-    "charsIndexed": 41850,
-    "headings": 17
-  },
+  "render": null,
   "plan": [
     {
       "priority": 1,

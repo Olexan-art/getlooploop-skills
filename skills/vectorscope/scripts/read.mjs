@@ -64,7 +64,16 @@ function summarise(reading, file, prefix = "") {
   console.log(`${prefix}title     ${page.title || "(none)"}`);
   console.log(`${prefix}extracted ${fmt(page.wordCount)} words · ${page.headings} headings${page.noindex ? " · NOINDEX" : ""}`);
   console.log(`${prefix}chunked   ${passages.length} passages · ${fmt(page.charsIndexed)} chars · ${passages.length}/${page.chunkCap} cap slots${page.capReached ? " (cap reached)" : ""}`);
-  console.log(`${prefix}past cap  ${fmt(page.charsUnread)} chars`);
+  const losses = reading.losses;
+  if (losses) {
+    const w = losses.waterfall;
+    console.log(`${prefix}past cap  ${fmt(w.pastCap)} chars${w.pastCap !== page.charsUnread ? ` (the 2.101 estimate said ${fmt(page.charsUnread)})` : ""}`);
+    console.log(`${prefix}losses    raw ${fmt(w.raw)} → removed ${fmt(w.removed)} → kept ${fmt(w.kept)} → in passages ${fmt(w.inPassagesUnique)} unique (${fmt(losses.passages.total)} with overlap and intro) · ${fmt(w.notInPassages)} in no passage · ${fmt(w.pastCap)} past the cap`);
+    const top = losses.removals.byReason.slice().sort((a, b) => b.chars - a.chars).slice(0, 3);
+    if (top.length) console.log(`${prefix}removed   ${top.map((r) => `${r.reason} ${fmt(r.chars)}`).join(", ")}${losses.removals.byReason.length > 3 ? `, ${losses.removals.byReason.length - 3} more reasons` : ""}`);
+  } else {
+    console.log(`${prefix}past cap  ${fmt(page.charsUnread)} chars`);
+  }
   console.log(`${prefix}side-path ${roles.length ? roles.map((p) => `#${p.index} ${p.contentRole}`).join(", ") : "none"}`);
   if (robots) {
     const blocked = robots.bots.filter((b) => !b.allowed).map((b) => b.token);

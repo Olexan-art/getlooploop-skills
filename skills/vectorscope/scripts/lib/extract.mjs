@@ -103,12 +103,15 @@ function gluedBoundary(left, right, elementText) {
  * matches body lines against h2 text: the h1 after hidden elements are gone, the h2 after
  * the furniture is gone too.
  */
-export function extractVisiblePageText($) {
+export function extractVisiblePageText($, observer = null) {
   const htmlSource = $.root().html() || "";
   const htmlBytes = Buffer.byteLength(htmlSource, "utf-8");
 
   const $clone = cheerio.load(htmlSource);
 
+  // v2.102: an observer (losses.mjs) may look at what each pass removes. It only reads, and every
+  // call is guarded, so without one this function does exactly what it did before.
+  if (observer) observer.removing($clone, $clone(NON_RENDERED.join(", ")), "non_rendered");
   $clone(NON_RENDERED.join(", ")).replaceWith(BOUNDARY);
 
   // A block boundary is a word boundary: a newline after each block element.
@@ -150,6 +153,7 @@ export function extractVisiblePageText($) {
     const titleBlock = header.find("h1").length > 0 && header.find("nav, [role='navigation']").length === 0;
     const banner = (header.attr("role") || "").trim().toLowerCase() === "banner";
     if (banner || (!scoped && !titleBlock)) {
+      if (observer) observer.removing($clone, header, banner ? "banner_role" : "header_chrome");
       header.replaceWith(BOUNDARY);
       return;
     }
@@ -163,9 +167,11 @@ export function extractVisiblePageText($) {
       .toArray()
       .map((node) => `${$clone.html(node)}\n`)
       .join("");
+    if (observer) observer.headerTrimmed($clone, header, kept);
     header.replaceWith(`${BOUNDARY}${kept}${BOUNDARY}`);
   });
 
+  if (observer) observer.removing($clone, $clone(CHROME.join(", ")), "chrome");
   $clone(CHROME.join(", ")).replaceWith(BOUNDARY);
 
   const h2 = $clone("h2")
@@ -181,12 +187,19 @@ export function extractVisiblePageText($) {
   const regions = $clone(mainSel).toArray();
   if (regions.length) {
     let best = "";
+    let bestElement = null;
     for (const element of regions) {
       const text = $clone(element).text() || "";
-      if (text.length > best.length) best = text;
+      if (text.length > best.length) {
+        best = text;
+        bestElement = element;
+      }
     }
     // A quarter: high enough to reject a teaser card, low enough to keep a real article.
-    if (best.length >= bodyRaw.length * 0.25) rawText = best;
+    if (best.length >= bodyRaw.length * 0.25) {
+      rawText = best;
+      if (observer) observer.mainRegion($clone, bestElement);
+    }
   }
 
   const bodyText = resolveBoundaries(rawText)

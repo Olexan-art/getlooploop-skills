@@ -5,17 +5,26 @@
 > **Your model's judgement.** The groups, their names, the rewrite plan, the query test and the facts are the reading of the model that ran this skill (model not stated by the agent). Another model may group a little differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.
 >
 > **Not any assistant's pipeline.** ChatGPT, Gemini, Perplexity, Copilot and others use their own crawlers, cuts and embeddings, and do not publish them. The principle is the same (fetch → text → passages → retrieval); the details differ. This reading is a working model of a typical retriever, not a copy of any one of them; the 26-passage cap is this tool's.
+>
+> **Three kinds of number.** Every section and number carries a marker: `measured` is what the parser saw, `derived` is computed from it by a fixed formula, `judgement` is the agent's reading. *How each number is computed*, at the end, gives every formula.
 
 > The agent grouped every page against one shared topic dictionary, so the topics line up across pages.
 
-## The pages
+## The pages `measured` `derived`
 
 | Page | URL | Words | Passages | Past cap | AI crawlers blocked | Findings (high/medium/low) |
 |---|---|---|---|---|---|---|
-| 1 | https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching | 5,153 | 26/26 | 0 | none | 0/3/1 |
+| 1 | https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching | 5,153 | 26/26 | 167 | none | 1/3/1 |
 | 2 | https://web.dev/articles/http-cache?hl=en | 2,060 | 15/26 | 0 | none | 0/4/2 |
 
-## Topics × pages
+## Losses by page `measured` `derived`
+
+| Page | Raw (est.) | Removed | Kept | In passages, unique | Past cap | Sections cut |
+|---|---|---|---|---|---|---|
+| 1 | 93,570 | 60,964 | 32,606 | 32,204 | 167 | 1 / 16 |
+| 2 | 25,226 | 12,426 | 12,800 | 12,497 | 0 | 0 / 12 |
+
+## Topics × pages `judgement` `derived`
 
 Passages and characters each page spends on each shared topic.
 
@@ -73,7 +82,7 @@ Which page states a fact the others lack.
 - Page 1: 7 fact(s) only it states, 3 it lacks.
 - Page 2: 3 fact(s) only it states, 7 it lacks.
 
-## Rewrite plan
+## Rewrite plan `judgement`
 
 The agent's judgement, in priority order. Every passage must stand on its own, because a retriever sees it alone.
 
@@ -128,8 +137,10 @@ The agent's judgement, in priority order. Every passage must stand on its own, b
 - **JSON-LD:** none
 - **Canonical:** https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching (this page)
 - **Meta description:** 114 characters
-- **With JavaScript:** 4,678 words, 24 passages (plain fetch: 5,153 words, 26 passages)
 
+- **[high] Text fell past the 26-passage cap** `cap_overflow` · passages #25  
+  167 characters after passage #25 are never stored.  
+  *What to do:* Move what matters earlier, cut repetition, or split the page so each part has its own 26 slots.
 - **[medium] One heading carries too much of the page** `dominant_heading` · passages #9 #10 #11 #12 #22 #23 #24  
   “Validation” holds 31.1% of the indexed text.  
   *What to do:* The chunker splits only at h2. If this part has subtopics, they are h3s or styled text; make them real h2 headings so each becomes its own passage.
@@ -171,7 +182,6 @@ The agent's judgement, in priority order. Every passage must stand on its own, b
 - **JSON-LD:** Article, BreadcrumbList, ListItem
 - **Canonical:** https://web.dev/articles/http-cache (another URL)
 - **Meta description:** 96 characters
-- **With JavaScript:** 2,127 words, 17 passages (plain fetch: 2,060 words, 15 passages)
 
 - **[medium] One heading carries too much of the page** `dominant_heading` · passages #6 #7 #8 #9  
   “Which response header values should you use?” holds 50.5% of the indexed text.  
@@ -199,7 +209,7 @@ The agent's judgement, in priority order. Every passage must stand on its own, b
   - “supported in all browsers (3 groups)”
   *What to do:* Repetition spends passages on what was already said and blurs the groups. Say it once, where it belongs.
 
-## Each page's groups
+## Each page's groups and losses `judgement` `measured`
 
 ### Page 1
 
@@ -212,7 +222,59 @@ The agent's judgement, in priority order. Every passage must stand on its own, b
 | 4 | no-cache, no-store, reloads, deletion and request collapse | Preventing reuse: no-cache, no-store, reloads | keywords: Force · Right | 6 | 7,883 | 22.9% |
 | 5 | Common caching patterns and cache busting | Recommended settings and cache busting | keywords: Resources · Bundle | 7 | 8,801 | 25.5% |
 
-A page contributes at most 26 passages, and this one filled every slot. The character count shows nothing past the cap, but because passages overlap, a short tail at the end of the page may still have gone unread.
+A page contributes at most 26 passages, and this one filled every slot: 167 characters at the end of it are not indexed and cannot be retrieved to answer anything.
+
+#### Where the text goes `measured` `derived`
+
+Characters, whitespace runs folded to one space. "Text in the raw HTML" is the kept text plus every removal, so the stages sum exactly.
+
+| Stage | Characters | Share | Layer |
+|---|---|---|---|
+| Text in the raw HTML (estimate) | 93,570 | 100% of raw | `derived` |
+| Removed by the cleaner | 60,964 | 65.2% of raw | `measured` |
+| Kept: the chunker's input | 32,606 | 34.8% of raw | `measured` |
+| In passages, unique | 32,204 | 98.8% of kept | `derived` |
+| Kept, in no passage text | 235 | 0.7% of kept | `derived` |
+| Past the cap | 167 | 0.5% of kept | `derived` |
+
+The passages hold 34,460 characters in all: 32,204 unique, plus 2,103 of overlap between neighbours and 153 of intro (title, h1, description) in passage #0. Of the kept text in no passage: 188 in h2 heading lines, 47 spaces between sections.
+
+##### What the cleaner removed `measured`
+
+25 elements with text, 60,964 characters. By reason: script, style, noscript, template 51,227 (16) · svg, canvas, iframe, embed 13 (3) · head (title, meta) 26 (1) · page header (site banner) 1,731 (1) · footer 500 (1) · aside, role=complementary 7,432 (2) · outside the chosen main region 35 (1).
+
+| Reason | Element | Path | Chars | Its text begins |
+|---|---|---|---|---|
+| script, style, noscript, template | `template` | … > section.content-section > div.article-footer__inner > mdn-content-feedback > template | 16,992 | “.content-feedback{border:none;margin:0 0 .25rem;padding:0}.content-feedback>labe…” |
+| script, style, noscript, template | `template` | header.page-layout__header > div.breadcrumbs-bar > mdn-language-switcher > template | 11,342 | “*,:after,:before{box-sizing:border-box}button,input,select,textarea{font:inherit…” |
+| script, style, noscript, template | `template` | … > nav.left-sidebar > div.left-sidebar__header > mdn-sidebar-filter > template | 9,816 | “.visually-hidden{border:0!important;clip-path:inset(50%)!important;height:1px!im…” |
+| script, style, noscript, template | `template` | header.page-layout__header > div.breadcrumbs-bar > mdn-toggle-sidebar > template | 8,397 | “:host{border-right:1px solid var(--color-border-primary);display:block;height:10…” |
+| aside, role=complementary | `aside#main-sidebar.layout__left-sidebar` | div.page-layout__main > div.layout__2-sidebars-inline > aside#main-sidebar.layout__left-sidebar | 7,207 | “HTTP Guides Overview of HTTP Evolution of HTTP A typical HTTP session HTTP messa…” |
+
+20 more elements, 7,210 characters, not listed here (export.json lists up to 200 and sums the rest).
+
+12 more matched elements held no text.
+
+##### How much of each section reached a passage `derived`
+
+| Section | Reached a passage | Of | Share |
+|---|---|---|---|
+| *Intro: title, h1, description* | 153 | 153 | 100% |
+| *Before the first h2* | 761 | 761 | 100% |
+| Types of caches | 4,666 | 4,666 | 100% |
+| Heuristic caching | 979 | 979 | 100% |
+| Fresh and stale based on age | 1,671 | 1,671 | 100% |
+| Expires or max-age | 665 | 665 | 100% |
+| Vary | 1,966 | 1,966 | 100% |
+| Validation | 5,945 | 5,945 | 100% |
+| Don't cache | 2,686 | 2,686 | 100% |
+| Reload and force reload | 2,886 | 2,886 | 100% |
+| Deleting stored responses | 1,271 | 1,271 | 100% |
+| Request collapse | 655 | 655 | 100% |
+| Common caching patterns | 4,128 | 4,128 | 100% |
+| Validation | 3,807 | 3,807 | 100% |
+| See also | 118 | 118 | 100% |
+| Help improve MDN | **0** | 150 | 0% |
 
 ### Page 2
 
@@ -227,6 +289,92 @@ A page contributes at most 26 passages, and this one filled every slot. The char
 
 A page contributes at most 26 passages; this one needed 15, so none of its extracted text fell past the cap.
 
+#### Where the text goes `measured` `derived`
+
+Characters, whitespace runs folded to one space. "Text in the raw HTML" is the kept text plus every removal, so the stages sum exactly.
+
+| Stage | Characters | Share | Layer |
+|---|---|---|---|
+| Text in the raw HTML (estimate) | 25,226 | 100% of raw | `derived` |
+| Removed by the cleaner | 12,426 | 49.3% of raw | `measured` |
+| Kept: the chunker's input | 12,800 | 50.7% of raw | `measured` |
+| In passages, unique | 12,497 | 97.6% of kept | `derived` |
+| Kept, in no passage text | 303 | 2.4% of kept | `derived` |
+| Past the cap | 0 | 0% of kept | `derived` |
+
+The passages hold 13,308 characters in all: 12,497 unique, plus 576 of overlap between neighbours and 231 of intro (title, h1, description) in passage #0. Of the kept text in no passage: 254 in h2 heading lines, 49 spaces between sections.
+
+##### What the cleaner removed `measured`
+
+40 elements with text, 12,426 characters. By reason: script, style, noscript, template 8,481 (7) · svg, canvas, iframe, embed 24 (5) · head (title, meta) 79 (1) · [hidden] or aria-hidden 902 (18) · role=banner 521 (1) · navigation (nav, role=navigation) 1,875 (4) · aside, role=complementary 524 (3) · outside the chosen main region 20 (1).
+
+| Reason | Element | Path | Chars | Its text begins |
+|---|---|---|---|---|
+| script, style, noscript, template | `script` | script | 6,329 | “(function(d,e,v,s,i,t,E){d['GoogleDevelopersObject']=i; t=e.createElement(v);t.a…” |
+| navigation (nav, role=navigation) | `nav.devsite-book-nav.devsite-nav` | section.devsite-wrapper > devsite-book-nav > nav.devsite-book-nav.devsite-nav | 1,171 | “Resources More AI and the web Fast load times Learn Core Web Vitals Identity Pro…” |
+| script, style, noscript, template | `script` | devsite-analytics > script | 807 | “{&#34;at&#34;: &#34;True&#34;, &#34;ga4&#34;: [], &#34;ga4p&#34;: [], &#34;gtm&#…” |
+| role=banner | `devsite-header` | section.devsite-wrapper > devsite-header | 521 | “Resources Discover Baseline How to use Baseline Blog Case Studies English Deutsc…” |
+| [hidden] or aria-hidden | `div.devsite-tabs-dropdown` | … > devsite-tabs.upper-tabs > nav.devsite-tabs-wrapper > tab.devsite-dropdown > div.devsite-tabs-dropdown | 473 | “Web Platform Dive into the web platform, at your pace. HTML CSS JavaScript User…” |
+
+35 more elements, 3,125 characters, not listed here (export.json lists up to 200 and sums the rest).
+
+20 more matched elements held no text.
+
+##### How much of each section reached a passage `derived`
+
+| Section | Reached a passage | Of | Share |
+|---|---|---|---|
+| *Intro: title, h1, description* | 231 | 231 | 100% |
+| *Before the first h2* | 833 | 833 | 100% |
+| Browser compatibility | 261 | 261 | 100% |
+| How the HTTP Cache works | 698 | 698 | 100% |
+| Request headers: stick with the defaults (usually) | 570 | 570 | 100% |
+| Response headers: configure your web server | 1,606 | 1,606 | 100% |
+| Which response header values should you use? | 6,142 | 6,142 | 100% |
+| Summary | 571 | 571 | 100% |
+| Learn more | 243 | 243 | 100% |
+| Appendix: More tips | 714 | 714 | 100% |
+| Appendix: Cache-Control flowchart | 60 | 60 | 100% |
+| Appendix: Cache-Control examples | 799 | 799 | 100% |
+
 ---
 
 This is a preview of the machine's view, not a guarantee of what any assistant does with it.
+
+## How each number is computed
+
+- `measured` **Measured:** What the parser saw: words, passages, characters, robots.txt, markup. A script counted it; any model running the skill gets the same number.
+- `derived` **Derived:** Computed from measured values by a fixed formula: shares, characters past the cap, check verdicts. Deterministic; where it rests on the agent's groups, the metric says so.
+- `judgement` **Agent's judgement:** The agent's reading of the passages: groups, labels, the rewrite plan, the query test, the facts. The scripts validate its shape and quotes; another model may judge differently.
+
+- **Words** `measured` (`words`). The extracted body text split on whitespace; every non-empty piece is a word. *Unit:* words. *Limits:* Counted after the cleaner, so menus, footers and hidden text are not in it. A page drawn by JavaScript reads low here; compare with --render.
+- **Headings found** `measured` (`headings`). h1 elements plus h2 elements (the first 40) left after the cleaner, with empty ones dropped. *Unit:* headings. *Limits:* h3 and styled text are not counted: the chunker splits only at h2.
+- **Passages read** `measured` (`passages`). Sections at h2 headings (or paragraph blocks), long ones cut into 2,000-character windows with about 200 characters of overlap, slivers under 40 characters folded into the passage before, then the first 26 kept. *Unit:* passages. *Threshold:* At most 26 per page (this tool's cap). *Limits:* Other systems cut and cap differently; this is a working model of a typical retriever.
+- **Cap slots used** `measured` (`slots`). Passages kept, out of the 26-passage cap. "Every slot filled" when the chunker produced 26 or more. *Unit:* slots. *Threshold:* 26: a full cap means text may have been left out (see characters past the cap). *Limits:* A full cap does not by itself mean text was lost: the last passage may end exactly at the end of the page.
+- **Passage length** `measured` (`passage_chars`). The length of one passage's text, as the chunker emitted it. *Unit:* characters, as the passage text holds them. *Threshold:* At most about 2,000, unless a sliver was folded in. *Limits:* Neighbouring passages share about 200 characters by design.
+- **Text in passages, overlap and intro included** `measured` (`chars_in_passages`). The sum of every passage's length (page.charsIndexed). Passage #0 repeats the title, h1 and meta description; neighbours repeat about 200 characters. *Unit:* characters, as the passage text holds them. *Limits:* Counts repeated text more than once, so it can exceed the page's own text. For how much of the page reached a passage, read the unique number.
+- **Unique text in passages** `derived` (`chars_unique`). Each passage is located in the kept text (the intro part, title, h1 and description, set aside); the union of the located spans is counted once, so overlap is not counted twice. *Unit:* characters, whitespace runs folded to one space. *Limits:* A passage the locator cannot place is reported as unlocated rather than guessed. Heading lines the chunker carries only as a passage's heading are not in it.
+- **Characters past the cap** `derived` (`chars_past_cap`). Only when every one of the 26 slots is filled: the kept text after the end of the last passage. Equivalently, kept text − unique text in passages − text between passages, counted after the last one. *Unit:* characters, whitespace runs folded to one space. *Threshold:* Above 0 means a tail no retriever using this cap can return. *Limits:* Replaces the 2.101 estimate, which subtracted the overlapping total and so undercounted, often to 0. That old number is still exported as charsUnread.
+- **charsUnread (2.101 meaning)** `derived` (`chars_unread_legacy`). When the cap is reached: extracted body characters − text in passages including overlap and intro; otherwise 0. *Unit:* characters, as the passage text holds them. *Limits:* Undercounts and can read 0 even when the cap cut a tail. Kept unchanged for compatibility; use characters past the cap.
+- **Text in the raw HTML** `derived` (`text_raw`). Kept text plus every removal in the table below. An estimate of the document's text, defined so the waterfall sums exactly. *Unit:* characters, whitespace runs folded to one space. *Limits:* Script and style bodies count as text here because the cleaner has to remove them; it is not the text a reader sees.
+- **Removed by the cleaner** `measured` (`text_removed`). For every element the cleaner removed (outermost only, so nothing counts twice): its own text at the moment of removal. Plus, when a main region was chosen, the text of everything outside it. *Unit:* characters, whitespace runs folded to one space. *Limits:* Observed on a second copy of the extraction, checked to give the same text; the removal itself is the product's rule and is not tuned here.
+- **Kept text** `measured` (`text_kept`). The extractor's body text (the chunker's input), whitespace folded. *Unit:* characters, whitespace runs folded to one space. *Limits:* Differs slightly from page.bodyChars, which counts line breaks as they are.
+- **Kept, but in no passage text** `derived` (`not_in_passages`). Kept text before the end of the last passage that no passage holds: h2 heading lines (carried as a passage's heading, not its text), the spaces between sections, and anything else (should be 0). *Unit:* characters, whitespace runs folded to one space. *Limits:* A retriever may still see a heading as the passage's metadata; this tool does not assume either way.
+- **Overlap** `derived` (`overlap_chars`). Located passage text − unique text in passages: what neighbouring windows repeat. *Unit:* characters, whitespace runs folded to one space. *Limits:* By design, about 200 per cut inside a long section.
+- **Intro** `measured` (`intro_chars`). The title, h1 and meta description the chunker puts at the start of passage #0. *Unit:* characters, whitespace runs folded to one space. *Limits:* Not part of the body text, so it is outside the waterfall's kept stage.
+- **Characters removed by one element** `measured` (`removal_chars`). The removed element's text, whitespace folded, at the moment the cleaner removed it. *Unit:* characters, whitespace runs folded to one space. *Limits:* Elements with no text are counted but not listed. Beyond the first 200 the rest are summed, never dropped.
+- **Section text that reached a passage** `derived` (`section_reached`). For each section the chunker made (the intro, the text before the first h2, each h2), the part of its text inside some passage, over its length. *Unit:* characters, whitespace runs folded to one space. *Threshold:* Under 100% means that section lost text, almost always to the cap. *Limits:* When the page has no usable h2 split, the body is one row.
+- **robots.txt verdict** `measured` (`robots_verdict`). RFC 9309 over the site's /robots.txt: the group naming the token replaces *; the longest matching Allow or Disallow wins; Allow wins a tie. *Unit:* allowed / blocked per crawler. *Limits:* A 4xx robots.txt means no rules; 5xx or no answer means all blocked. Some user-fetch crawlers say they may ignore robots.txt.
+- **Technical markup** `measured` (`markup`). From the raw HTML: every @type in application/ld+json blocks (through @graph), rel=canonical links, the meta description's length. *Unit:* types, links, characters. *Threshold:* Meta description: 70–160 characters. *Limits:* Read, not validated against schema.org.
+- **Words with JavaScript** `measured` (`render_words`). The same extraction and chunking over the DOM a local headless Chrome dumped after running the page's scripts. *Unit:* words, passages. *Threshold:* 50% more words and at least 150 more raises js_dependent. *Limits:* Only with --render. The reading itself stays the plain fetch.
+- **Group size** `derived` (`group_chars`). Passages in the group, and the sum of their lengths. *Unit:* characters, as the passage text holds them. *Limits:* Computed over the agent's groups, so it moves with the grouping.
+- **Share of indexed text** `derived` (`group_share`). The group's characters over the characters of every passage (overlap included). *Unit:* percent. *Limits:* Computed over the agent's groups. Overlap counts in both neighbours.
+- **Phrase and word counts** `derived` (`vocabulary`). Over the passages' text with the overlap removed: ×uses, the passages that use it (p), and how many groups it reaches (g/total). *Unit:* occurrences, passages, groups. *Threshold:* A phrase needs 2 uses in 2 passages, or 3 in one. *Limits:* What the page says, not search demand. The group count rests on the agent's groups.
+- **Check verdicts** `derived` (`check_verdicts`). Fixed rules over the measured values, each a named constant in checks.mjs with its reason; every finding names the passages it rests on. *Unit:* findings, by severity. *Threshold:* Each check's threshold is in the check table of SKILL.md. *Limits:* repeated_claim uses the agent's groups; every other check does not.
+- **Groups and labels** `judgement` (`groups`). The agent read every passage and grouped them by subject (at most 6); its label is its own. The label source is computed: a heading most members share, else two distinctive words. *Unit:* groups. *Threshold:* At most 6 groups. *Limits:* Not an embedding clustering; another model may group a little differently.
+- **Repeats** `judgement` (`duplicates`). Passages the agent marked as repeating an earlier, non-adjacent passage almost word for word. *Unit:* passages. *Limits:* The product judges this from embeddings at cosine 0.94; here it is read.
+- **Query test** `judgement` (`query_verdicts`). For 5 to 10 typical queries, the agent names the best passage and a verdict (complete, partial, missing) and quotes the answer; the quote is checked verbatim. *Unit:* queries. *Limits:* Judged from the passages only; it is not a measurement of what any assistant returns.
+- **Rewrite plan** `judgement` (`plan`). The agent's fixes in priority order; each 'before' is checked verbatim against its passage, each cited check against the checks that fired. *Unit:* items. *Limits:* Advice, not a measurement.
+- **Citable facts** `judgement` (`facts`). The agent's list of concrete facts the passages state, each with the passages that state it. *Unit:* facts. *Limits:* Fact gaps are only as fair as this list is complete.
+- **Topic × page cells** `derived` (`topic_cells`). Passages and characters of the groups the agent assigned to each shared topic. *Unit:* characters, as the passage text holds them. *Limits:* Computed over the agent's groups and topics.
+- **Changes since the baseline** `derived` (`diff_counts`). Passages matched by identical text, then by the same heading in order; the rest are added or removed. *Unit:* passages. *Limits:* A passage that moved and changed heading counts as removed plus added.

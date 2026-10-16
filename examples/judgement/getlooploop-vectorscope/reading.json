@@ -7,15 +7,15 @@
     "url": "https://www.getlooploop.com/vectorscope",
     "requestedUrl": "https://www.getlooploop.com/vectorscope",
     "title": "Semantic Chunking Visualizer for Any URL — Vectorscope",
-    "wordCount": 2447,
+    "wordCount": 2463,
     "chunksIndexed": 17,
-    "charsIndexed": 14109,
+    "charsIndexed": 14211,
     "charsUnread": 0,
     "capReached": false,
     "noindex": false,
     "headings": 14,
     "chunkCap": 26,
-    "bodyChars": 13862,
+    "bodyChars": 13964,
     "h1": [
       "Semantic chunking, made visible: see what survives the trip into vector space."
     ],
@@ -123,8 +123,8 @@
       "heading": "Keep reading",
       "rawHeading": "Keep reading",
       "contentRole": "main",
-      "charCount": 335,
-      "text": "Longer answers to the questions this page can only summarise.\nWhat semantic chunking is, and what it trades away The three strategies, side by side, on the same page. How to optimise content for AI search What actually changes a passage's chances of being retrieved. Methodology Every formula behind the readings above, stated in full."
+      "charCount": 437,
+      "text": "Longer answers to the questions this page can only summarise.\nWhat semantic chunking is, and what it trades away The three strategies, side by side, on the same page. How to optimise content for AI search What actually changes a passage's chances of being retrieved. Methodology Every formula behind the readings above, stated in full. The Vectorscope skill for Claude Code The same reading, run locally inside Claude Code, with sources."
     },
     {
       "index": 13,
@@ -329,12 +329,808 @@
       }
     ]
   },
-  "render": {
-    "ok": true,
-    "browser": "chrome.exe",
-    "wordCount": 2463,
-    "passages": 17,
-    "charsIndexed": 14178,
-    "headings": 14
+  "losses": {
+    "unit": "characters, whitespace runs folded to one space",
+    "consistent": true,
+    "waterfall": {
+      "raw": 48098,
+      "removed": 34177,
+      "kept": 13921,
+      "inPassagesUnique": 13547,
+      "notInPassages": 374,
+      "pastCap": 0
+    },
+    "passages": {
+      "unique": 13547,
+      "total": 14211,
+      "overlap": 378,
+      "intro": 286,
+      "unlocated": 0
+    },
+    "notInPassages": {
+      "headingLines": 298,
+      "whitespace": 76,
+      "other": 0
+    },
+    "removals": {
+      "elementsMatched": 130,
+      "elementsWithText": 45,
+      "chars": 34177,
+      "byReason": [
+        {
+          "reason": "script_style",
+          "elements": 27,
+          "chars": 32534
+        },
+        {
+          "reason": "embedded",
+          "elements": 1,
+          "chars": 33
+        },
+        {
+          "reason": "head_meta",
+          "elements": 1,
+          "chars": 54
+        },
+        {
+          "reason": "hidden",
+          "elements": 7,
+          "chars": 284
+        },
+        {
+          "reason": "header_chrome",
+          "elements": 1,
+          "chars": 68
+        },
+        {
+          "reason": "nav",
+          "elements": 1,
+          "chars": 16
+        },
+        {
+          "reason": "footer",
+          "elements": 1,
+          "chars": 749
+        },
+        {
+          "reason": "aside",
+          "elements": 1,
+          "chars": 339
+        },
+        {
+          "reason": "form_control",
+          "elements": 5,
+          "chars": 100
+        }
+      ],
+      "items": [
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 3689,
+          "sample": "self.__next_f.push([1,\"17:[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"Semantic Chunk"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 2939,
+          "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"FAQPage\\"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 2769,
+          "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"@id\":\"https://www.getlooploo"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 2396,
+          "sample": "self.__next_f.push([1,\"2:[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"en\\\",\\\"suppressHydrati"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 2292,
+          "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"DefinedT"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 2148,
+          "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"DefinedTermSet\",\"@id\":\"https://www.get"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1849,
+          "sample": "self.__next_f.push([1,\"11:I[24431,[],\\\"OutletBoundary\\\"]\\n14:I[24431,[],\\\"Viewpo"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1653,
+          "sample": "self.__next_f.push([1,\"0:{\\\"P\\\":null,\\\"b\\\":\\\"L-uh39B74nD4XsnIRp5Gc\\\",\\\"p\\\":\\\"\\\","
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1269,
+          "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"HowTo\\\","
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1255,
+          "sample": "self.__next_f.push([1,\"7:[\\\"$\\\",\\\"script\\\",\\\"5\\\",{\\\"type\\\":\\\"application/ld+json"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1251,
+          "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Software"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1226,
+          "sample": "self.__next_f.push([1,\"10:I[78297,[\\\"2619\\\",\\\"static/chunks/2619-3285f830dd579a0"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1184,
+          "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@graph\\\":[{\\\"@type"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1153,
+          "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"HowTo\",\"@id\":\"https://www.getlooploop."
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1143,
+          "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareApplication\",\"@id\":\"https://ww"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1136,
+          "sample": "self.__next_f.push([1,\"8:[\\\"$\\\",\\\"$Ld\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\""
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 1070,
+          "sample": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https:"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 856,
+          "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebPage\",\"@id\":\"https://www.getlooploo"
+        },
+        {
+          "reason": "footer",
+          "tag": "footer",
+          "id": null,
+          "classes": [
+            "border-t",
+            "border-white/10",
+            "px-4",
+            "py-14"
+          ],
+          "element": "footer.border-t.border-white/10",
+          "path": "div.marketing-root > footer.border-t.border-white/10",
+          "chars": 749,
+          "sample": "GetLoopLoop Find where a brand loses AI-search conversations. Close the gap. Pro"
+        },
+        {
+          "reason": "aside",
+          "tag": "div",
+          "id": null,
+          "classes": [
+            "pt-card",
+            "pt-card--active",
+            "mt-8",
+            "flex"
+          ],
+          "element": "div.pt-card.pt-card--active",
+          "path": "… > div.pt-16 > div.pt > div.mx-auto > div.pt-card.pt-card--active",
+          "chars": 339,
+          "sample": "New · free · open source Run Vectorscope inside your coding agent The Vectorscop"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 326,
+          "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"@id\":\"https://www.get"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 312,
+          "sample": "(function(){try{var t=localStorage.getItem(\"gll_theme\");if(t===\"dark\"||t===\"atla"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 196,
+          "sample": "self.__next_f.push([1,\"15:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"charSet\\\":\\\"utf-8\\\"}],[\\\"$\\\""
+        },
+        {
+          "reason": "hidden",
+          "tag": "ol",
+          "id": null,
+          "classes": [
+            "mt-3",
+            "grid",
+            "gap-3",
+            "sm:grid-cols-3"
+          ],
+          "element": "ol.mt-3.grid",
+          "path": "… > div.mx-auto > section.mt-12 > div.[&>div]:mt-0 > ol.mt-3.grid",
+          "chars": 163,
+          "sample": "1. ScanningThe page is fetched and split into passages.2. EmbeddingEach passage "
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 143,
+          "sample": "self.__next_f.push([1,\"1:\\\"$Sreact.fragment\\\"\\nb:I[57150,[],\\\"\\\"]\\nd:I[9766,[],\\"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 137,
+          "sample": "self.__next_f.push([1,\"6:[\\\"$\\\",\\\"script\\\",\\\"4\\\",{\\\"type\\\":\\\"application/ld+json"
+        },
+        {
+          "reason": "hidden",
+          "tag": "div",
+          "id": null,
+          "classes": [
+            "flex",
+            "min-w-0",
+            "flex-1",
+            "flex-wrap"
+          ],
+          "element": "div.flex.min-w-0",
+          "path": "… > section.mt-12 > div.[&>div]:mt-0 > div.mt-6 > div.flex.min-w-0",
+          "chars": 96,
+          "sample": "The page flows into its groups·A pulsing step is still running·The map grows in "
+        },
+        {
+          "reason": "header_chrome",
+          "tag": "header",
+          "id": null,
+          "classes": [
+            "fixed",
+            "inset-x-0",
+            "top-0",
+            "z-50"
+          ],
+          "element": "header.fixed.inset-x-0",
+          "path": "div.marketing-root > header.fixed.inset-x-0",
+          "chars": 68,
+          "sample": "GetLoopLoop Free tools Glossary Skills News Notes Dark Light Console"
+        },
+        {
+          "reason": "head_meta",
+          "tag": "head",
+          "id": null,
+          "classes": [],
+          "element": "head",
+          "path": "head",
+          "chars": 54,
+          "sample": "Semantic Chunking Visualizer for Any URL — Vectorscope"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 43,
+          "sample": "(self.__next_f=self.__next_f||[]).push([0])"
+        },
+        {
+          "reason": "form_control",
+          "tag": "button",
+          "id": null,
+          "classes": [
+            "hover:text-[var(--pt-accent)]",
+            "disabled:opacity-40"
+          ],
+          "element": "button.hover:text-[var(--pt-accent)].disabled:opacity-40",
+          "path": "… > div.flex > span.flex > span.flex > button.hover:text-[var(--pt-accent)].disabled:opacity-40",
+          "chars": 34,
+          "sample": "signnow.com / electronic-signature"
+        },
+        {
+          "reason": "embedded",
+          "tag": "svg",
+          "id": null,
+          "classes": [
+            "h-auto",
+            "w-full",
+            "max-w-[420px]",
+            "text-gll-cyan"
+          ],
+          "element": "svg.h-auto.w-full",
+          "path": "… > div.mt-4 > div.flex > span.w-full > svg.h-auto.w-full",
+          "chars": 33,
+          "sample": "inside the cappast it, never read"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 33,
+          "sample": "self.__next_f.push([1,\"4:T481,\"])"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 33,
+          "sample": "self.__next_f.push([1,\"5:Tad7,\"])"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 33,
+          "sample": "self.__next_f.push([1,\"c:T864,\"])"
+        },
+        {
+          "reason": "form_control",
+          "tag": "form",
+          "id": "run",
+          "classes": [
+            "flex",
+            "scroll-mt-20",
+            "flex-col",
+            "gap-3"
+          ],
+          "element": "form#run.flex.scroll-mt-20",
+          "path": "… > div.mx-auto > section.grid > div.flex > form#run.flex.scroll-mt-20",
+          "chars": 22,
+          "sample": "Page URL Read the page"
+        },
+        {
+          "reason": "form_control",
+          "tag": "button",
+          "id": null,
+          "classes": [
+            "hover:text-[var(--pt-accent)]",
+            "disabled:opacity-40"
+          ],
+          "element": "button.hover:text-[var(--pt-accent)].disabled:opacity-40",
+          "path": "… > div.flex > span.flex > span.flex > button.hover:text-[var(--pt-accent)].disabled:opacity-40",
+          "chars": 21,
+          "sample": "tipalti.com / w9-form"
+        },
+        {
+          "reason": "hidden",
+          "tag": "div",
+          "id": null,
+          "classes": [
+            "pt-art",
+            "min-w-0"
+          ],
+          "element": "div.pt-art.min-w-0",
+          "path": "… > div.pt > div.mx-auto > section.grid > div.pt-art.min-w-0",
+          "chars": 21,
+          "sample": "ProductPricingSupport"
+        },
+        {
+          "reason": "nav",
+          "tag": "nav",
+          "id": null,
+          "classes": [
+            "mb-6"
+          ],
+          "element": "nav.mb-6",
+          "path": "… > div.pt-16 > div.pt > div.mx-auto > nav.mb-6",
+          "chars": 16,
+          "sample": "Home Vectorscope"
+        },
+        {
+          "reason": "form_control",
+          "tag": "button",
+          "id": null,
+          "classes": [
+            "pt-btn",
+            "pt-btn--ghost",
+            "pt-btn--sm",
+            "shrink-0"
+          ],
+          "element": "button.pt-btn.pt-btn--ghost",
+          "path": "… > section.mt-12 > div.[&>div]:mt-0 > div.mt-6 > button.pt-btn.pt-btn--ghost",
+          "chars": 12,
+          "sample": "Pause motion"
+        },
+        {
+          "reason": "form_control",
+          "tag": "button",
+          "id": null,
+          "classes": [
+            "pt-btn",
+            "pt-btn--ghost",
+            "disabled:cursor-not-allowed",
+            "disabled:opacity-50"
+          ],
+          "element": "button.pt-btn.pt-btn--ghost",
+          "path": "… > section.grid > div.flex > div.flex > button.pt-btn.pt-btn--ghost",
+          "chars": 11,
+          "sample": "Try example"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.flex > div.pt-eyebrow > span.flex > span",
+          "chars": 1,
+          "sample": "·"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [
+            "text-[var(--pt-faint)]"
+          ],
+          "element": "span.text-[var(--pt-faint)]",
+          "path": "… > div.flex > span.flex > span.flex > span.text-[var(--pt-faint)]",
+          "chars": 1,
+          "sample": "/"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > nav.mb-6 > ol.flex > li.flex > span",
+          "chars": 1,
+          "sample": "/"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > section.grid > div.flex > div.pt-eyebrow > span",
+          "chars": 1,
+          "sample": "·"
+        }
+      ],
+      "omitted": {
+        "elements": 0,
+        "chars": 0
+      }
+    },
+    "sections": {
+      "mode": "h2",
+      "rows": [
+        {
+          "kind": "intro",
+          "heading": null,
+          "chars": 286,
+          "inPassages": 286,
+          "located": true
+        },
+        {
+          "kind": "before_first_h2",
+          "heading": null,
+          "chars": 804,
+          "inPassages": 804,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "What does this mean?",
+          "chars": 259,
+          "inPassages": 259,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Important passage outside the cap?",
+          "chars": 139,
+          "inPassages": 139,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Models and retrieval caps vary.",
+          "chars": 246,
+          "inPassages": 246,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "How to read your result",
+          "chars": 2257,
+          "inPassages": 2257,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "What is semantic chunking?",
+          "chars": 1994,
+          "inPassages": 1994,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Is my content ready for AI search?",
+          "chars": 1126,
+          "inPassages": 1126,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Using Vectorscope to test a RAG pipeline",
+          "chars": 863,
+          "inPassages": 863,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Who is Vectorscope for?",
+          "chars": 890,
+          "inPassages": 890,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Words used on this page",
+          "chars": 1400,
+          "inPassages": 1400,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Keep reading",
+          "chars": 437,
+          "inPassages": 437,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Questions people ask about this",
+          "chars": 2107,
+          "inPassages": 2107,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Other free AI search tools",
+          "chars": 746,
+          "inPassages": 746,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "What this cannot show you",
+          "chars": 279,
+          "inPassages": 279,
+          "located": true
+        }
+      ]
+    },
+    "placement": [
+      {
+        "index": 0,
+        "start": null,
+        "end": null,
+        "intro": 286
+      },
+      {
+        "index": 1,
+        "start": 0,
+        "end": 804,
+        "intro": 0
+      },
+      {
+        "index": 2,
+        "start": 826,
+        "end": 1085,
+        "intro": 0
+      },
+      {
+        "index": 3,
+        "start": 1121,
+        "end": 1260,
+        "intro": 0
+      },
+      {
+        "index": 4,
+        "start": 1293,
+        "end": 1539,
+        "intro": 0
+      },
+      {
+        "index": 5,
+        "start": 1564,
+        "end": 3559,
+        "intro": 0
+      },
+      {
+        "index": 6,
+        "start": 3366,
+        "end": 3821,
+        "intro": 0
+      },
+      {
+        "index": 7,
+        "start": 3849,
+        "end": 5843,
+        "intro": 0
+      },
+      {
+        "index": 8,
+        "start": 5879,
+        "end": 7005,
+        "intro": 0
+      },
+      {
+        "index": 9,
+        "start": 7047,
+        "end": 7910,
+        "intro": 0
+      },
+      {
+        "index": 10,
+        "start": 7935,
+        "end": 8825,
+        "intro": 0
+      },
+      {
+        "index": 11,
+        "start": 8850,
+        "end": 10250,
+        "intro": 0
+      },
+      {
+        "index": 12,
+        "start": 10264,
+        "end": 10701,
+        "intro": 0
+      },
+      {
+        "index": 13,
+        "start": 10734,
+        "end": 12726,
+        "intro": 0
+      },
+      {
+        "index": 14,
+        "start": 12541,
+        "end": 12841,
+        "intro": 0
+      },
+      {
+        "index": 15,
+        "start": 12869,
+        "end": 13615,
+        "intro": 0
+      },
+      {
+        "index": 16,
+        "start": 13642,
+        "end": 13921,
+        "intro": 0
+      }
+    ]
   }
 }

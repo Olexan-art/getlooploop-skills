@@ -10,6 +10,8 @@ import { displayLabel } from "./analysis.mjs";
 import { queryWinner } from "./judgement.mjs";
 import { pathOf } from "./robots.mjs";
 import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS } from "./refusal.mjs";
+import { LAYER_COPY, METRICS } from "./metrics.mjs";
+import { charsPastCap, hasLosses } from "./losses.mjs";
 
 const VECTORSCOPE_URL = "https://www.getlooploop.com/vectorscope";
 
@@ -107,6 +109,7 @@ const CSS = `
   --amber:#f5a524;--amber-soft:rgba(245,165,36,.14);
   --red:#f87171;--red-soft:rgba(248,113,113,.13);--green:#34d399;--green-soft:rgba(52,211,153,.12);
   --empty:#0f1d33;--shadow:0 1px 0 rgba(255,255,255,.03) inset;
+  --lm:#22d3ee;--lm-soft:rgba(34,211,238,.10);--ld:#a78bfa;--ld-soft:rgba(167,139,250,.12);--lj:#f472b6;--lj-soft:rgba(244,114,182,.12);--gone:#4a5d78;
   color-scheme:dark;
 }
 @media (prefers-color-scheme: light){
@@ -117,6 +120,7 @@ const CSS = `
     --amber:#b45309;--amber-soft:rgba(180,83,9,.10);
     --red:#b91c1c;--red-soft:rgba(185,28,28,.08);--green:#047857;--green-soft:rgba(4,120,87,.09);
     --empty:#eef3f8;--shadow:none;
+    --lm:#0e7490;--lm-soft:rgba(14,116,144,.08);--ld:#6d28d9;--ld-soft:rgba(109,40,217,.07);--lj:#be185d;--lj-soft:rgba(190,24,93,.07);--gone:#a3b1c2;
     color-scheme:light;
   }
 }
@@ -127,6 +131,7 @@ const CSS = `
   --amber:#b45309;--amber-soft:rgba(180,83,9,.10);
   --red:#b91c1c;--red-soft:rgba(185,28,28,.08);--green:#047857;--green-soft:rgba(4,120,87,.09);
   --empty:#eef3f8;--shadow:none;
+    --lm:#0e7490;--lm-soft:rgba(14,116,144,.08);--ld:#6d28d9;--ld-soft:rgba(109,40,217,.07);--lj:#be185d;--lj-soft:rgba(190,24,93,.07);--gone:#a3b1c2;
   color-scheme:light;
 }
 .l-uk{display:none}
@@ -157,7 +162,7 @@ h3{font-size:16px;margin:0}
 .tag.warn b{color:var(--amber)}
 .note{margin:0;color:var(--muted);max-width:820px;font-size:14px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:22px;box-shadow:var(--glow)}
-.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px 12px;flex-wrap:wrap;margin-bottom:14px}
+.panel-head{display:flex;justify-content:flex-start;align-items:baseline;gap:6px 12px;flex-wrap:wrap;margin-bottom:14px}
 .panel-head .sub{color:var(--muted);font-size:13px}
 .info{display:flex;gap:12px;align-items:flex-start;margin-top:18px;border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--panel);border-radius:12px;padding:14px 18px}
 .info>svg{width:20px;height:20px;color:var(--accent);flex:none;margin-top:1px}
@@ -195,7 +200,7 @@ h3{font-size:16px;margin:0}
 .ok{width:15px;height:15px;color:var(--accent);flex:none}
 .arrow{color:var(--faint)}
 .pipeline-note{color:var(--muted);font-size:12.5px;margin:10px 0 0}
-.counters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+.counters{display:grid;grid-template-columns:repeat(auto-fit,minmax(176px,1fr));gap:12px;margin-top:16px}
 .counter{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--panel-2)}
 .counter .n{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums}
 .counter .n small{font-size:16px;color:var(--muted);font-weight:600}
@@ -336,7 +341,7 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .pagesec{border-top:1px solid var(--line);margin-top:18px;padding-top:16px}
 .pagesec:first-of-type{border-top:0;margin-top:0;padding-top:0}
 .pagesec h3{font-size:15px;margin-bottom:6px}
-@media (max-width:540px){.counters{grid-template-columns:1fr}}
+@media (max-width:540px){.counters{grid-template-columns:repeat(2,minmax(0,1fr))}.counter{padding:12px}}
 @media (max-width:720px){
   .counter .n{font-size:24px}
   .pipeline{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -354,6 +359,69 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
   .ba .to{justify-self:center;transform:rotate(90deg)}
   .item dl{grid-template-columns:1fr}
   .facts-grid{grid-template-columns:1fr}
+}
+/* 2.102: layer badges, the "?" beside each number, the loss panels */
+.lyrs{display:inline-flex;flex-wrap:wrap;gap:4px;vertical-align:middle;margin-left:6px}
+.panel-head .sub{margin-left:auto}
+.panel-head h2+.lyrs{margin-left:2px}
+.lyr{display:inline-flex;align-items:center;gap:4px;font:600 10px/1.5 ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:0 7px;border:1px solid var(--c);color:var(--c);background:var(--cs);white-space:nowrap;vertical-align:middle}
+.lyr::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c)}
+.lyr.measured{--c:var(--lm);--cs:var(--lm-soft)}
+.lyr.derived{--c:var(--ld);--cs:var(--ld-soft)}
+.lyr.judgement{--c:var(--lj);--cs:var(--lj-soft)}
+.mh{display:inline-block;position:relative;margin-left:3px;vertical-align:middle}
+.mh>summary{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;border:1px solid var(--line-2);color:var(--muted);font:700 10.5px/1 ui-sans-serif,system-ui,sans-serif;vertical-align:middle;cursor:pointer;list-style:none;user-select:none;background:var(--panel)}
+.mh>summary::-webkit-details-marker{display:none}
+.mhx{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;border:1px solid var(--line-2);color:var(--muted);font:700 10.5px/1 ui-sans-serif,system-ui,sans-serif;vertical-align:middle;background:var(--panel)}
+.info h2 .lyrs{margin-left:6px}
+.mh>summary:hover,.mh[open]>summary{color:var(--accent);border-color:var(--accent)}
+.mh-body{display:block;position:absolute;z-index:30;left:0;top:23px;width:340px;max-width:calc(100vw - 32px);box-shadow:0 10px 30px rgba(0,0,0,.35);padding:10px 12px;border:1px solid var(--line-2);border-left:3px solid var(--accent);border-radius:10px;background:var(--panel);color:var(--text);font-size:13px;line-height:1.5;text-align:left;font-weight:400;letter-spacing:0;text-transform:none;white-space:normal;max-width:560px}
+.mh-body .mh-t{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-weight:700;margin-bottom:6px}
+.mh-body dl{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:3px 10px}
+.mh-body dt{color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding-top:2px}
+.mh-body dd{margin:0}
+
+.helpline{margin:8px 0 0;font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+.wf{display:block;width:100%;overflow:visible}
+.wf .lab{fill:var(--text);font-size:13px;font-weight:600}
+.wf .val{fill:var(--text);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.wf .sub{fill:var(--muted);font-size:11.5px;font-weight:500}
+.wf .track{fill:var(--empty)}
+.wf .b-raw{fill:var(--line-2)}
+.wf .b-kept{fill:var(--accent)}
+.wf .b-gone{fill:var(--gone)}
+.wf .b-cap{fill:var(--amber)}
+.wf .guide{stroke:var(--line-2);stroke-width:1;stroke-dasharray:3 3}
+.wf-legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--muted)}
+.wf-legend li{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.wf-legend b{white-space:nowrap;font-variant-numeric:tabular-nums}
+table.rm{min-width:720px}
+table.rm td:first-child{min-width:140px;overflow-wrap:normal}
+.wf-legend .sw{border-radius:2px}
+.lossnote{margin:10px 0 0;font-size:13px;color:var(--muted);max-width:860px}
+.lossnote.warn{color:var(--amber)}
+.reasons{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;padding:0;list-style:none}
+.reasons li{border:1px solid var(--line-2);border-radius:999px;padding:2px 10px;font-size:12.5px;background:var(--panel-2)}
+.reasons b{font-variant-numeric:tabular-nums}
+td .path{display:block;color:var(--faint);font-size:11.5px;margin-top:2px;word-break:break-all}
+td.sample{color:var(--muted);font-size:12.5px;min-width:180px}
+.secmap{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.secmap li{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,38%) max-content;gap:4px 12px;align-items:center;font-size:13px}
+.secmap .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.secmap .nm.kind{color:var(--muted);font-style:italic}
+.secmap .sbar{position:relative;height:10px;border-radius:999px;background:var(--amber-soft);border:1px solid var(--line);overflow:hidden}
+.secmap .sbar span{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:999px}
+.secmap li.full .sbar{background:var(--empty)}
+.secmap li.zero .sbar{border-color:var(--amber)}
+.secmap .sn{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12.5px;white-space:nowrap}
+.secmap li.lost .sn{color:var(--amber);font-weight:600}
+.secsum{margin:0 0 10px;font-size:13.5px}
+.secsum.lost{color:var(--amber)}
+.diffpos{color:var(--green)}
+.diffneg{color:var(--amber)}
+@media (max-width:540px){
+  .secmap li{grid-template-columns:minmax(0,1fr) max-content}
+  .secmap .sbar{grid-column:1/-1;grid-row:2}
 }
 @media (prefers-reduced-motion:reduce){.cell{transition:none}}
 `;
@@ -382,6 +450,14 @@ const JS = `
     for(var i=0;i<b.length;i++)b[i].addEventListener("click",function(){var t=this.getAttribute("data-set-theme");root.setAttribute("data-theme",t);put(KEY,t);paint()});
     var c=document.querySelectorAll("[data-set-lang]");
     for(var j=0;j<c.length;j++)c[j].addEventListener("click",function(){var l=this.getAttribute("data-set-lang");applyLang(l);put(LKEY,l);paint()});
+    // 2.102: one "?" open at a time; #help=<metric id> opens that metric's first one.
+    var hs=document.querySelectorAll("details.mh");
+    function fit(d){var b=d.querySelector(".mh-body");if(!b)return;b.style.left="0px";var r=b.getBoundingClientRect(),w=document.documentElement.clientWidth;if(r.right>w-12)b.style.left=Math.round(w-12-r.right)+"px";r=b.getBoundingClientRect();if(r.left<12)b.style.left=Math.round(parseFloat(b.style.left)+12-r.left)+"px"}
+    for(var h=0;h<hs.length;h++)hs[h].addEventListener("toggle",function(){if(!this.open)return;fit(this);for(var k=0;k<hs.length;k++)if(hs[k]!==this)hs[k].open=false});
+    function closeAll(except){for(var k=0;k<hs.length;k++)if(hs[k]!==except&&hs[k].open)hs[k].open=false}
+    document.addEventListener("click",function(e){var t=e.target;while(t&&t!==document&&!(t.tagName==="DETAILS"&&t.classList.contains("mh")))t=t.parentNode;closeAll(t&&t!==document?t:null)});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape")closeAll(null)});
+    var hm=/[#&]help=([a-z_]+)/.exec(location.hash);if(hm){var d=document.querySelector('details.mh[data-metric="'+hm[1]+'"]');if(d){d.open=true;fit(d);try{d.scrollIntoView({block:"center"})}catch(e){}}}
     var outs=document.querySelectorAll(".readout");
     for(var o=0;o<outs.length;o++)(function(out){
       var scope=out.parentNode,cells=scope.querySelectorAll(".cell"),idle=null;
@@ -543,13 +619,184 @@ function byLine(judgements, lang) {
 function infoPanel(cap, judgements) {
   const link = `<a href="${VECTORSCOPE_URL}" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>`;
   const judge = pair(tr("infoJudgeBody", "en", { by: byLine(judgements, "en"), link }), tr("infoJudgeBody", "uk", { by: byLine(judgements, "uk"), link }));
+  const badgeOf = (lang, layer) => `<span class="lyr ${layer}">${esc(LAYER_COPY[layer].label[lang])}</span>`;
+  const help = '<span class="mhx" aria-hidden="true">?</span>';
+  const layersBody = (lang) => tr("infoLayersBody", lang, { measured: badgeOf(lang, "measured"), derived: badgeOf(lang, "derived"), judgement: badgeOf(lang, "judgement"), help });
   return [
     `<section class="info" ${attr("aria-label", "infoAria")}>${INFO}<div class="info-items">`,
-    `<div><h2>${L("infoSameTitle")}</h2><p>${L("infoSameBody", { cap })}</p></div>`,
-    `<div><h2>${L("infoJudgeTitle")}</h2><p>${judge}</p></div>`,
+    `<div><h2>${L("infoSameTitle")} ${layerBadges("measured", "derived")}</h2><p>${L("infoSameBody", { cap })}</p></div>`,
+    `<div><h2>${L("infoJudgeTitle")} ${layerBadges("judgement")}</h2><p>${judge}</p></div>`,
     `<div><h2>${L("infoNotTitle")}</h2><p>${L("infoNotBody", { cap })}</p></div>`,
+    `<div><h2>${L("infoLayersTitle")}</h2><p>${pair(layersBody("en"), layersBody("uk"))}</p></div>`,
     "</div></section>",
   ];
+}
+
+// ── 2.102: layers and the "?" beside each number ─────────────────────────────
+
+/** Small tags naming the layer(s) a section or number belongs to. */
+export function layerBadges(...layers) {
+  return `<span class="lyrs">${layers
+    .map((layer) => `<span class="lyr ${layer}" ${attrPair("title", LAYER_COPY[layer].what.en, LAYER_COPY[layer].what.uk)}>${pair(esc(LAYER_COPY[layer].label.en), esc(LAYER_COPY[layer].label.uk))}</span>`)
+    .join("")}</span>`;
+}
+
+/** An attribute in both languages from two plain strings. */
+function attrPair(name, en, uk) {
+  return `${name}="${esc(en)}" data-en-${name}="${esc(en)}" data-uk-${name}="${esc(uk)}" data-i18n`;
+}
+
+/** The "?" toggle for one metric: formula, unit, threshold, known limits, from metrics.mjs. */
+export function metricHelp(id) {
+  const m = METRICS[id];
+  if (!m) throw new Error(`no metric ${id}`);
+  const row = (key, text) => (text ? `<dt>${L(key)}</dt><dd>${pair(esc(text.en), esc(text.uk))}</dd>` : "");
+  return (
+    `<details class="mh" data-metric="${esc(id)}"><summary ${attr("aria-label", "helpAria")} ${attr("title", "helpAria")}>?</summary>` +
+    `<span class="mh-body"><span class="mh-t">${pair(esc(m.label.en), esc(m.label.uk))} ${layerBadges(m.layer)}</span>` +
+    `<dl>${row("helpFormula", m.formula)}${row("helpUnit", m.unit)}${row("helpThreshold", m.threshold)}${row("helpLimits", m.limits)}</dl></span></details>`
+  );
+}
+
+/** Badge and "?" for a metric, side by side. */
+const tagged = (id) => `${layerBadges(METRICS[id].layer)}${metricHelp(id)}`;
+
+/** A line under a table: each column's name with its badge and "?". */
+function helpLine(entries) {
+  return `<div class="helpline"><span>${L("helpColumns")}</span>${entries.map(([key, id]) => `<span>${L(key)} ${tagged(id)}</span>`).join("")}</div>`;
+}
+
+// ── 2.102: where the text goes ───────────────────────────────────────────────
+
+const WF_ROW = 46;
+
+/** The character waterfall as one inline SVG, with a key under it that carries the badges and "?". */
+function waterfallBlock(losses) {
+  const w = losses.waterfall;
+  const raw = Math.max(1, w.raw);
+  const x = (v) => `${((v / raw) * 100).toFixed(3)}%`;
+  const rows = [
+    { key: "wfRaw", value: w.raw, start: 0, cls: "b-raw", metric: "text_raw" },
+    { key: "wfRemoved", value: w.removed, start: w.kept, cls: "b-gone", metric: "text_removed" },
+    { key: "wfKept", value: w.kept, start: 0, cls: "b-kept", metric: "text_kept" },
+    { key: "wfUnique", value: w.inPassagesUnique, start: 0, cls: "b-kept", metric: "chars_unique" },
+    { key: "wfNotIn", value: w.notInPassages, start: w.inPassagesUnique, cls: "b-gone", metric: "not_in_passages" },
+    { key: "wfPastCap", value: w.pastCap, start: w.inPassagesUnique + w.notInPassages, cls: "b-cap", metric: "chars_past_cap" },
+  ];
+  const height = rows.length * WF_ROW;
+  const ariaEn = tr("wfAria", "en", { raw: fmt(w.raw), removed: fmt(w.removed), kept: fmt(w.kept), unique: fmt(w.inPassagesUnique), notIn: fmt(w.notInPassages), pastCap: fmt(w.pastCap) });
+  const ariaUk = tr("wfAria", "uk", { raw: fmt(w.raw), removed: fmt(w.removed), kept: fmt(w.kept), unique: fmt(w.inPassagesUnique), notIn: fmt(w.notInPassages), pastCap: fmt(w.pastCap) });
+  const svg = [`<svg class="wf" width="100%" height="${height}" role="img" ${attrPair("aria-label", ariaEn, ariaUk)}>`];
+  // Guides: where "kept" ends in the raw text, and where the passages end in the kept text.
+  svg.push(`<line class="guide" x1="${x(w.kept)}" x2="${x(w.kept)}" y1="22" y2="${2 * WF_ROW + 38}"/>`);
+  if (w.inPassagesUnique + w.notInPassages > 0) {
+    const end = w.inPassagesUnique + w.notInPassages;
+    svg.push(`<line class="guide" x1="${x(end)}" x2="${x(end)}" y1="${3 * WF_ROW + 22}" y2="${5 * WF_ROW + 38}"/>`);
+  }
+  rows.forEach((r, i) => {
+    const top = i * WF_ROW;
+    const share = i <= 2 ? pct(r.value / raw) : pct(w.kept ? r.value / w.kept : 0);
+    const titleEn = `${tr(r.key, "en")}: ${fmt(r.value)} · ${tr(i <= 2 ? "wfOfRaw" : "wfOfKept", "en", { p: share })}`;
+    const titleUk = `${tr(r.key, "uk")}: ${fmt(r.value)} · ${tr(i <= 2 ? "wfOfRaw" : "wfOfKept", "uk", { p: share })}`;
+    svg.push(`<g>`);
+    svg.push(`<title>${esc(titleEn)} / ${esc(titleUk)}</title>`);
+    svg.push(`<text class="lab l-en" x="0" y="${top + 15}">${esc(tr(r.key, "en"))}</text><text class="lab l-uk" x="0" y="${top + 15}">${esc(tr(r.key, "uk"))}</text>`);
+    svg.push(`<text class="val" x="100%" y="${top + 15}" text-anchor="end">${fmt(r.value)}</text>`);
+    svg.push(`<rect class="track" x="0" y="${top + 22}" width="100%" height="16" rx="4"/>`);
+    // A zero stage is a line at its position, never an empty space.
+    if (r.value > 0) svg.push(`<rect class="${r.cls}" x="${x(r.start)}" y="${top + 22}" width="${x(r.value)}" height="16" rx="4"/>`);
+    else svg.push(`<rect class="${r.cls}" x="${x(r.start)}" y="${top + 20}" width="2" height="20"/>`);
+    svg.push(`</g>`);
+  });
+  svg.push("</svg>");
+  const key = rows
+    .map((r) => `<li><span class="sw" style="background:var(${r.cls === "b-kept" ? "--accent" : r.cls === "b-cap" ? "--amber" : r.cls === "b-gone" ? "--gone" : "--line-2"})"></span>${L(r.key)} <b>${fmt(r.value)}</b>${tagged(r.metric)}</li>`)
+    .join("");
+  return [svg.join(""), `<ul class="wf-legend">${key}</ul>`];
+}
+
+function lossNotes(losses) {
+  const out = [];
+  const p = losses.passages;
+  const n = losses.notInPassages;
+  out.push(`<div class="lossnote">${L("wfNote", { total: p.total, unique: p.unique, overlap: p.overlap, intro: p.intro, headings: n.headingLines, spaces: n.whitespace, other: n.other })}</div>`);
+  out.push(helpLine([["totalInPassages", "chars_in_passages"], ["kOverlap", "overlap_chars"], ["kIntro", "intro_chars"]]));
+  if (p.unlocated) out.push(`<p class="lossnote warn">${L("wfUnlocated", { n: p.unlocated })}</p>`);
+  if (!losses.consistent) out.push(`<p class="lossnote warn">${L("wfInconsistent")}</p>`);
+  return out;
+}
+
+const REASON_KEY = (reason) => `rs_${reason}`;
+
+function removalsBlock(losses, limit) {
+  const r = losses.removals;
+  const out = [];
+  out.push(`<h3 class="subhead">${L("removalsTitle")} ${layerBadges("measured")}</h3>`);
+  if (!r.elementsWithText) {
+    out.push(`<p class="note">${L("removalsNone")}</p>`);
+    return out;
+  }
+  out.push(`<p class="small" style="margin:0 0 8px">${L("removalsSub", { n: r.elementsWithText, chars: r.chars })}</p>`);
+  out.push(`<ul class="reasons" ${attr("aria-label", "removalsByReason")}>${r.byReason.map((b) => `<li>${L(REASON_KEY(b.reason))} · <b>${fmt(b.chars)}</b> <span class="small">(${b.elements})</span></li>`).join("")}</ul>`);
+  const shown = r.items.slice(0, limit);
+  out.push('<div class="tablewrap"><table class="rm">');
+  out.push(`<thead><tr><th>${L("colReason")}</th><th>${L("colElement")}</th><th>${L("colChars")}</th><th>${L("colSample")}</th></tr></thead><tbody>`);
+  for (const item of shown) {
+    out.push(`<tr><td>${L(REASON_KEY(item.reason))}</td><td class="code">${esc(item.element)}<span class="path">${esc(item.path)}</span></td><td class="num">${fmt(item.chars)}</td><td class="sample"><q>${esc(item.sample)}</q>${item.sample.length < item.chars ? "…" : ""}</td></tr>`);
+  }
+  out.push("</tbody></table></div>");
+  const moreElements = r.elementsWithText - shown.length;
+  const moreChars = r.chars - shown.reduce((s, x) => s + x.chars, 0);
+  if (moreElements > 0) out.push(`<p class="lossnote">${L("removalsMore", { n: moreElements, chars: moreChars })}</p>`);
+  const empty = r.elementsMatched - r.elementsWithText;
+  if (empty > 0) out.push(`<p class="lossnote">${L("removalsEmpty", { n: empty })}</p>`);
+  out.push(helpLine([["colChars", "removal_chars"]]));
+  return out;
+}
+
+function sectionName(row) {
+  if (row.kind === "intro") return `<span class="nm kind">${L("secIntro")}</span>`;
+  if (row.kind === "before_first_h2") return `<span class="nm kind">${L("secBefore")}</span>`;
+  if (!row.heading) return `<span class="nm kind">${L("secBody")}</span>`;
+  return `<span class="nm" title="${esc(oneLine(row.heading))}">${esc(oneLine(row.heading))}</span>`;
+}
+
+function sectionsBlock(losses) {
+  const rows = losses.sections.rows;
+  const out = [];
+  out.push(`<h3 class="subhead">${L("sectionsTitle")} ${layerBadges("derived")}${metricHelp("section_reached")}</h3>`);
+  if (!rows.length) return out;
+  const cut = rows.filter((r) => r.inPassages !== null && r.inPassages < r.chars);
+  const zero = cut.filter((r) => r.inPassages === 0);
+  out.push(cut.length ? `<p class="secsum lost">${L("secCutSummary", { n: cut.length, zero: zero.length })}</p>` : `<p class="secsum">${L("secAllIn")}</p>`);
+  out.push('<ul class="secmap">');
+  for (const row of rows) {
+    const share = row.inPassages === null || !row.chars ? 0 : row.inPassages / row.chars;
+    const cls = row.inPassages === null ? "" : row.inPassages >= row.chars ? "full" : row.inPassages === 0 ? "lost zero" : "lost";
+    const n = row.inPassages === null ? L("secUnlocated") : L("secReached", { n: row.inPassages, of: row.chars });
+    out.push(`<li class="${cls}">${sectionName(row)}<span class="sbar" role="img" aria-label="${pct(share)}"><span style="width:${(share * 100).toFixed(1)}%"></span></span><span class="sn">${n}</span></li>`);
+  }
+  out.push("</ul>");
+  return out;
+}
+
+/** The whole "where the text goes" panel; compact (compare mode) keeps the waterfall and the section map. */
+function lossesPanel(reading, { compact = false } = {}) {
+  const out = [];
+  if (!compact) {
+    out.push('<section class="panel" id="losses" aria-labelledby="h-losses">');
+    out.push(`<div class="panel-head"><h2 id="h-losses">${L("lossesTitle")}</h2>${layerBadges("measured", "derived")}<span class="sub">${L("lossesSub")}</span></div>`);
+  }
+  if (!hasLosses(reading)) {
+    out.push(`<p class="note">${L("noLosses")}</p>`);
+  } else {
+    out.push(...waterfallBlock(reading.losses));
+    out.push(...lossNotes(reading.losses));
+    out.push(...removalsBlock(reading.losses, compact ? 5 : 12));
+    out.push(...sectionsBlock(reading.losses));
+  }
+  if (!compact) out.push("</section>");
+  return out;
 }
 
 /** Links to passages: #3 #4 … (anchors are p-3 in single mode, p2-3 for page 2 in compare). */
@@ -588,7 +835,7 @@ function technicalGrid(reading) {
   const t = reading.technical;
   if (!t) return [];
   const out = [];
-  out.push(`<h3 class="subhead">${L("technical")}</h3>`);
+  out.push(`<h3 class="subhead">${L("technical")} ${layerBadges("measured")}${metricHelp("markup")}</h3>`);
   out.push('<div class="facts-grid">');
   const types = t.jsonLd.types.length ? t.jsonLd.types.map((x) => `<span class="code">${esc(x)}</span>`).join(", ") : L("jsonLdNone");
   const invalid = t.jsonLd.invalid ? ` · ${L("jsonLdInvalid", { n: t.jsonLd.invalid })}` : "";
@@ -611,7 +858,7 @@ function technicalGrid(reading) {
       : r.reason === "no_browser"
         ? L("renderNoBrowser")
         : L("renderFailed", { reason: esc(r.reason) });
-    out.push(`<div class="kv" style="margin-top:10px"><div class="k">${L("render")}</div><div class="v">${text}</div></div>`);
+    out.push(`<div class="kv" style="margin-top:10px"><div class="k">${L("render")} ${tagged("render_words")}</div><div class="v">${text}</div></div>`);
   }
   return out;
 }
@@ -648,11 +895,11 @@ function findingCard(finding, anchor) {
 function checksPanel(reading, checks, anchor) {
   const out = [];
   out.push('<section class="panel" id="checks" aria-labelledby="h-checks">');
-  out.push(`<div class="panel-head"><h2 id="h-checks">${L("checks")}</h2><span class="sub">${L("checksSub")}</span></div>`);
-  out.push(`<h3 class="subhead" style="margin-top:0">${L("aiCrawlers")}</h3>`);
+  out.push(`<div class="panel-head"><h2 id="h-checks">${L("checks")}</h2>${layerBadges("measured", "derived")}${metricHelp("check_verdicts")}<span class="sub">${L("checksSub")}</span></div>`);
+  out.push(`<h3 class="subhead" style="margin-top:0">${L("aiCrawlers")} ${layerBadges("measured")}${metricHelp("robots_verdict")}</h3>`);
   out.push(...robotsTable(reading.robots, reading.page.url));
   out.push(...technicalGrid(reading));
-  out.push(`<h3 class="subhead">${L("findings")}</h3>`);
+  out.push(`<h3 class="subhead">${L("findings")} ${layerBadges("derived")}${metricHelp("check_verdicts")}</h3>`);
   const shown = checks.filter((f) => f.code !== "robots_not_checked");
   if (shown.length) {
     out.push('<ol class="findings">');
@@ -669,7 +916,7 @@ function planPanel(plan, anchorFor, multi) {
   if (!plan?.items?.length) return [];
   const out = [];
   out.push('<section class="panel" id="plan" aria-labelledby="h-plan">');
-  out.push(`<div class="panel-head"><h2 id="h-plan">${L("plan")}</h2><span class="sub">${L("planSub")}</span></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-plan">${L("plan")}</h2>${layerBadges("judgement")}${metricHelp("plan")}<span class="sub">${L("planSub")}</span></div>`);
   out.push('<ol class="plan">');
   for (const item of plan.items) {
     const anchor = anchorFor(item.page);
@@ -708,7 +955,7 @@ function queriesPanelSingle(queries, n, anchor) {
   if (!queries?.length) return [];
   const out = [];
   out.push('<section class="panel" id="queries" aria-labelledby="h-queries">');
-  out.push(`<div class="panel-head"><h2 id="h-queries">${L("queries")}</h2><span class="sub">${L("queriesSub")}</span></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-queries">${L("queries")}</h2>${layerBadges("judgement")}${metricHelp("query_verdicts")}<span class="sub">${L("queriesSub")}</span></div>`);
   out.push(`<p class="note" style="margin-bottom:12px">${querySummary(queries, n)}</p>`);
   out.push('<div class="tablewrap"><table>');
   out.push(`<thead><tr><th>${L("colQuery")}</th><th>${L("colBest")}</th><th>${L("colAnswer")}</th><th>${L("colCitable")}</th><th>${L("colQuote")}</th></tr></thead><tbody>`);
@@ -727,7 +974,7 @@ function factsPanelSingle(facts, n, anchor) {
   if (!facts?.length) return [];
   const out = [];
   out.push('<section class="panel" id="facts" aria-labelledby="h-facts">');
-  out.push(`<div class="panel-head"><h2 id="h-facts">${L("facts")}</h2><span class="sub">${L("factsSub")}</span></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-facts">${L("facts")}</h2>${layerBadges("judgement")}${metricHelp("facts")}<span class="sub">${L("factsSub")}</span></div>`);
   out.push('<div class="tablewrap"><table>');
   out.push(`<thead><tr><th>${L("colFact")}</th><th>${L("passagesLabel")}</th></tr></thead><tbody>`);
   for (const f of facts) {
@@ -738,11 +985,43 @@ function factsPanelSingle(facts, n, anchor) {
   return out;
 }
 
+/** 2.102: the waterfall before and now, stage by stage. */
+function waterfallDiff(before, after) {
+  if (!after) return [];
+  const out = [`<h3 class="subhead">${L("wfDiff")} ${layerBadges("measured", "derived")}</h3>`];
+  if (!before) {
+    out.push(`<p class="note">${L("wfDiffNone")}</p>`);
+    return out;
+  }
+  const stages = [
+    ["wfRaw", "raw", "text_raw"],
+    ["wfRemoved", "removed", "text_removed"],
+    ["wfKept", "kept", "text_kept"],
+    ["wfUnique", "inPassagesUnique", "chars_unique"],
+    ["wfNotIn", "notInPassages", "not_in_passages"],
+    ["wfPastCap", "pastCap", "chars_past_cap"],
+  ];
+  out.push('<div class="tablewrap"><table>');
+  out.push(`<thead><tr><th>${L("colMeasure")}</th><th>${L("colBefore")}</th><th>${L("colAfter")}</th><th>${L("colChange")}</th></tr></thead><tbody>`);
+  for (const [key, field, id] of stages) {
+    const d = after[field] - before[field];
+    // Fewer characters lost is good; more kept or more in passages is good.
+    // The raw text and the removals are neither good nor bad in themselves, so they are not coloured.
+    const neutral = field === "raw" || field === "removed";
+    const good = field === "notInPassages" || field === "pastCap" ? d < 0 : d > 0;
+    const change = d === 0 ? "0" : `<span class="${neutral ? "" : good ? "diffpos" : "diffneg"}">${d > 0 ? "+" : "−"}${fmt(Math.abs(d))}</span>`;
+    out.push(`<tr><td>${L(key)}</td><td class="num">${fmt(before[field])}</td><td class="num">${fmt(after[field])}</td><td class="num">${change}</td></tr>`);
+  }
+  out.push("</tbody></table></div>");
+  out.push(helpLine(stages.map(([key, , id]) => [key, id])));
+  return out;
+}
+
 function diffPanel(diff) {
   if (!diff) return [];
   const out = [];
   out.push('<section class="panel" id="diff" aria-labelledby="h-diff">');
-  out.push(`<div class="panel-head"><h2 id="h-diff">${L("diff")}</h2><span class="sub">${L("diffSub", { url: `<span class="mono">${esc(diff.baselineUrl)}</span>` })}</span></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-diff">${L("diff")}</h2>${layerBadges("derived")}${metricHelp("diff_counts")}<span class="sub">${L("diffSub", { url: `<span class="mono">${esc(diff.baselineUrl)}</span>` })}</span></div>`);
   out.push(`<p class="note" style="margin-bottom:12px">${L("diffCounts", diff.counts)}</p>`);
   const b = diff.before;
   const a = diff.after;
@@ -752,8 +1031,10 @@ function diffPanel(diff) {
   out.push(`<tr><td>${L("mPassages")}</td><td class="num">${b.passages}</td><td class="num">${a.passages}</td></tr>`);
   out.push(`<tr><td>${L("mWords")}</td><td class="num">${fmt(b.words)}</td><td class="num">${fmt(a.words)}</td></tr>`);
   out.push(`<tr><td>${L("mCap")}</td><td>${yn(b.capReached)}</td><td>${yn(a.capReached)}</td></tr>`);
-  out.push(`<tr><td>${L("mUnread")}</td><td class="num">${fmt(b.charsUnread)}</td><td class="num">${fmt(a.charsUnread)}</td></tr>`);
+  out.push(`<tr><td>${L("mUnread")}</td><td class="num">${fmt(b.charsPastCap ?? b.charsUnread)}</td><td class="num">${fmt(a.charsPastCap ?? a.charsUnread)}</td></tr>`);
   out.push("</tbody></table></div>");
+  out.push(helpLine([["mPassages", "passages"], ["mWords", "words"], ["mUnread", "chars_past_cap"]]));
+  out.push(...waterfallDiff(b.waterfall, a.waterfall));
   const changes = diff.passages.filter((p) => p.status !== "same");
   if (changes.length || diff.removed.length) {
     out.push('<ul class="samples" style="margin-top:12px">');
@@ -782,18 +1063,20 @@ function diffPanel(diff) {
   return out;
 }
 
-function closingSentence(page) {
+function closingSentence(reading) {
+  const { page } = reading;
   const cap = page.chunkCap;
-  const capCut = page.capReached && page.charsUnread > 0;
-  if (capCut) return L("closingCut", { cap, n: page.charsUnread });
-  if (page.capReached) return L("closingFull", { cap });
+  const past = charsPastCap(reading);
+  if (page.capReached && past > 0) return L("closingCut", { cap, n: past });
+  if (page.capReached) return L(hasLosses(reading) ? "closingFullExact" : "closingFull", { cap });
   return L("closingFits", { cap, n: page.chunksIndexed });
 }
 
 function stripBlock(reading, lens, anchor, compact = false) {
   const { page } = reading;
   const cap = page.chunkCap;
-  const capCut = page.capReached && page.charsUnread > 0;
+  const past = charsPastCap(reading);
+  const capCut = page.capReached && past > 0;
   const colour = (id) => `--c:${GROUP_COLOURS[id] ?? GROUP_COLOURS[GROUP_COLOURS.length - 1]}`;
   const out = [];
   out.push(`<div class="strip${compact ? " compact" : ""}">`);
@@ -814,7 +1097,7 @@ function stripBlock(reading, lens, anchor, compact = false) {
   }
   for (let i = lens.chunks.length; i < cap; i++) out.push('<span class="slot" aria-hidden="true"></span>');
   out.push("</div>");
-  if (capCut) out.push(`<div class="tail" role="note"><b>${fmt(page.charsUnread)}</b>${L("pastCapShort")}</div>`);
+  if (capCut) out.push(`<div class="tail" role="note"><b>${fmt(past)}</b>${L("pastCapShort")}</div>`);
   out.push("</div>");
   out.push('<div class="scale mono" aria-hidden="true">');
   out.push(`<div class="in"><span>#0</span><span class="cap${page.capReached ? " full" : ""}">${L("cap")} · ${cap} ▲</span></div>`);
@@ -859,7 +1142,7 @@ function vocabularyPanel(lens, groupCount) {
     `<li class="chip${k.scope ? " scope" : ""}" ${attr("title", "kwTitleAttr", { count: k.count, passages: k.passages ?? "?", groups: k.groups, total: groupCount })}>${esc(k.term)} <span class="chip-n">×${fmt(k.count)}${k.passages !== undefined ? ` · ${k.passages}p` : ""} · ${k.groups}/${groupCount}</span></li>`;
   const out = [];
   out.push('<section class="panel" id="vocabulary" aria-labelledby="h-kw">');
-  out.push(`<div class="panel-head"><h2 id="h-kw">${L("kwTitle")}</h2></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-kw">${L("kwTitle")}</h2>${layerBadges("derived")}${metricHelp("vocabulary")}</div>`);
   out.push(`<p class="note honest" style="margin-bottom:14px">${L("kwHonest", { link: `<a href="https://www.getlooploop.com/voicescope" rel="noopener noreferrer" target="_blank">getlooploop.com/voicescope</a>` })}</p>`);
   out.push(`<h3 class="subhead" style="margin-top:0">${L("phrasesTitle")}</h3>`);
   out.push(`<p class="small" style="margin:0 0 8px">${L("phrasesNote")}</p>`);
@@ -877,11 +1160,30 @@ function vocabularyPanel(lens, groupCount) {
  * Render one reading. `extras` (all optional): { checks, plan, queries, facts, diff, topicsById }.
  * Called with only (reading, lens) it renders the v1 sections plus an empty checks panel.
  */
+/** The counters under the pipeline: passages, slots, past the cap, and the two text-in-passages numbers. */
+function countersBlock(reading) {
+  const { page } = reading;
+  const cap = page.chunkCap;
+  const measured = hasLosses(reading);
+  const past = charsPastCap(reading);
+  const capCut = page.capReached && past > 0;
+  const out = ['<div class="counters">'];
+  out.push(`<div class="counter"><div class="n">${fmt(page.chunksIndexed)}</div><div class="l">${L("passagesRead")} ${tagged("passages")}</div></div>`);
+  out.push(`<div class="counter${page.capReached ? " full" : ""}"><div class="n">${fmt(page.chunksIndexed)}<small>/${cap}</small></div><div class="l">${L("slotsUsed", { cap, full: page.capReached })} ${tagged("slots")}</div></div>`);
+  out.push(`<div class="counter${capCut ? " full" : ""}"><div class="n">${fmt(past)}</div><div class="l">${L(measured ? "pastCap" : "pastCapLegacy")} ${tagged(measured ? "chars_past_cap" : "chars_unread_legacy")}</div></div>`);
+  if (measured) {
+    out.push(`<div class="counter"><div class="n">${fmt(reading.losses.passages.unique)}</div><div class="l">${L("uniqueInPassages")} ${tagged("chars_unique")}</div></div>`);
+  }
+  out.push(`<div class="counter"><div class="n">${fmt(page.charsIndexed)}</div><div class="l">${L("totalInPassages")} ${tagged("chars_in_passages")}</div></div>`);
+  out.push("</div>");
+  return out;
+}
+
 export function renderHtml(reading, lens, extras = {}) {
   const { page } = reading;
   const cap = page.chunkCap;
   const groupCount = lens.groups.length;
-  const capCut = page.capReached && page.charsUnread > 0;
+  const capCut = page.capReached && charsPastCap(reading) > 0;
   const colour = (id) => `--c:${GROUP_COLOURS[id] ?? GROUP_COLOURS[GROUP_COLOURS.length - 1]}`;
   const anchor = (i) => `p-${i}`;
   const checks = extras.checks ?? [];
@@ -904,9 +1206,9 @@ export function renderHtml(reading, lens, extras = {}) {
   );
   if (page.url !== page.requestedUrl) out.push(`<p class="note">${L("askedFor", { url: `<span class="mono">${esc(page.requestedUrl)}</span>` })}</p>`);
   out.push('<ul class="meta">');
-  out.push(`<li class="tag">${L("words", { n: page.wordCount })}</li>`);
-  out.push(`<li class="tag">${L("headingsFound", { n: page.headings })}</li>`);
-  out.push(page.noindex ? `<li class="tag warn">${L("noindexYes")}</li>` : `<li class="tag">${L("noindexNo")}</li>`);
+  out.push(`<li class="tag">${L("words", { n: page.wordCount })}${tagged("words")}</li>`);
+  out.push(`<li class="tag">${L("headingsFound", { n: page.headings })}${tagged("headings")}</li>`);
+  out.push(`${page.noindex ? `<li class="tag warn">${L("noindexYes")}` : `<li class="tag">${L("noindexNo")}`}${layerBadges("measured")}</li>`);
   out.push("</ul>");
   out.push("</header>");
   out.push(...infoPanel(cap, [{ n: 1, j: lens.judgement }]));
@@ -915,7 +1217,7 @@ export function renderHtml(reading, lens, extras = {}) {
 
   // ── pipeline + counters
   out.push('<section class="panel" aria-labelledby="h-result">');
-  out.push(`<div class="panel-head"><h2 id="h-result" class="eyebrow">${L("result")}</h2><span class="sub">${L("whatMachineReads")}</span></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-result" class="eyebrow">${L("result")}</h2>${layerBadges("measured", "derived")}<span class="sub">${L("whatMachineReads")}</span></div>`);
   out.push('<ol class="pipeline">');
   const steps = [
     ["fetched", ""],
@@ -928,18 +1230,17 @@ export function renderHtml(reading, lens, extras = {}) {
   });
   out.push("</ol>");
   out.push(`<p class="pipeline-note">${L("pipelineNote", { headings: page.headings, chars: page.charsIndexed, repeats: lens.duplicates })}</p>`);
-  out.push('<div class="counters">');
-  out.push(`<div class="counter"><div class="n">${fmt(page.chunksIndexed)}</div><div class="l">${L("passagesRead")}</div></div>`);
-  out.push(`<div class="counter${page.capReached ? " full" : ""}"><div class="n">${fmt(page.chunksIndexed)}<small>/${cap}</small></div><div class="l">${L("slotsUsed", { cap, full: page.capReached })}</div></div>`);
-  out.push(`<div class="counter${capCut ? " full" : ""}"><div class="n">${fmt(page.charsUnread)}</div><div class="l">${L("pastCap")}</div></div>`);
-  out.push("</div>");
+  out.push(...countersBlock(reading));
   out.push("</section>");
 
   // ── reading strip
   out.push('<section class="panel" aria-labelledby="h-strip">');
-  out.push(`<div class="panel-head"><h2 id="h-strip">${L("strip")}</h2><span class="sub">${L("stripSub", { cap })}</span></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-strip">${L("strip")}</h2>${layerBadges("measured", "judgement")}<span class="sub">${L("stripSub", { cap })}</span></div>`);
   out.push(...stripBlock(reading, lens, anchor));
   out.push("</section>");
+
+  // ── 2.102: where the text goes
+  out.push(...lossesPanel(reading));
 
   out.push(...diffPanel(extras.diff));
   out.push(...checksPanel(reading, checks, anchor));
@@ -948,14 +1249,15 @@ export function renderHtml(reading, lens, extras = {}) {
 
   // ── groups
   out.push('<section class="panel" aria-labelledby="h-groups">');
-  out.push(`<div class="panel-head"><h2 id="h-groups">${L("groupsTitle")}</h2><span class="sub">${L("groupsSub", { n: groupCount })}</span></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-groups">${L("groupsTitle")}</h2>${layerBadges("judgement")}${metricHelp("groups")}<span class="sub">${L("groupsSub", { n: groupCount })}</span></div>`);
   out.push(...groupCards(lens, extras.topicsById ?? null));
   out.push(`<p class="explain">${L("groupsExplain")}</p>`);
+  out.push(helpLine([["chars", "group_chars"], ["ofIndexed", "group_share"]]));
   out.push("</section>");
 
   // ── passages by group
   out.push('<section class="panel" aria-labelledby="h-passages">');
-  out.push(`<div class="panel-head"><h2 id="h-passages">${L("passagesTitle")}</h2><span class="sub">${L("passagesSub", { n: PREVIEW_CHARS })}</span></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-passages">${L("passagesTitle")}</h2>${layerBadges("measured")}${metricHelp("passage_chars")}<span class="sub">${L("passagesSub", { n: PREVIEW_CHARS })}</span></div>`);
   for (const g of lens.groups) {
     out.push(`<div class="pgroup" style="${colour(g.id)}">`);
     out.push(`<div class="pgroup-head"><span class="sw"></span><h3>${g.id} · ${esc(oneLine(displayLabel(g)))}</h3><small>${L("nPassages", { n: g.chunkCount })}</small></div>`);
@@ -981,13 +1283,13 @@ export function renderHtml(reading, lens, extras = {}) {
     out.push("</ol>");
     out.push("</div>");
   }
-  if (capCut) out.push(`<p class="cut">${L("outsideCap", { n: page.charsUnread })}</p>`);
+  if (capCut) out.push(`<p class="cut">${L("outsideCap", { n: charsPastCap(reading) })}</p>`);
   out.push("</section>");
 
   // ── side-path content
   const side = lens.chunks.filter((c) => c.contentRole !== "main");
   out.push('<section class="panel" aria-labelledby="h-side">');
-  out.push(`<div class="panel-head"><h2 id="h-side">${L("sideTitle")}</h2></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-side">${L("sideTitle")}</h2>${layerBadges("derived")}</div>`);
   if (side.length) {
     out.push(`<p class="note">${L("sideSome", { n: side.length })}</p>`);
     out.push('<ul class="sides">');
@@ -1006,7 +1308,7 @@ export function renderHtml(reading, lens, extras = {}) {
 
   // ── closing
   out.push('<section class="panel" aria-label="Closing">');
-  out.push(`<p class="closing${capCut ? " full" : ""}">${closingSentence(page)}</p>`);
+  out.push(`<p class="closing${capCut ? " full" : ""}">${closingSentence(reading)}</p>`);
   out.push(`<p class="fine">${L("fine")}</p>`);
   out.push("</section>");
   out.push(...footer());
@@ -1015,6 +1317,33 @@ export function renderHtml(reading, lens, extras = {}) {
 }
 
 // ── compare ──────────────────────────────────────────────────────────────────
+
+/** Compare mode: one row per page, the waterfall's stages as columns. */
+function lossTablePanel(pages, short) {
+  const out = [];
+  out.push('<section class="panel" id="losses" aria-labelledby="h-losses">');
+  out.push(`<div class="panel-head"><h2 id="h-losses">${L("lossTable")}</h2>${layerBadges("measured", "derived")}<span class="sub">${L("lossTableSub")}</span></div>`);
+  out.push('<div class="tablewrap"><table>');
+  out.push(`<thead><tr><th>${L("colPage")}</th><th>${L("colRaw")}</th><th>${L("colRemoved")}</th><th>${L("colKept")}</th><th>${L("colUnique")}</th><th>${L("colPastCap")}</th><th>${L("colSectionsCut")}</th></tr></thead><tbody>`);
+  for (const p of pages) {
+    if (!hasLosses(p.reading)) {
+      out.push(`<tr><td>${short(p)}</td><td colspan="6" class="small">${L("noLosses")}</td></tr>`);
+      continue;
+    }
+    const w = p.reading.losses.waterfall;
+    const rows = p.reading.losses.sections.rows;
+    const cut = rows.filter((r) => r.inPassages !== null && r.inPassages < r.chars).length;
+    const keptShare = w.raw ? ` <span class="small">${pct(w.kept / w.raw)}</span>` : "";
+    const uniqueShare = w.kept ? ` <span class="small">${pct(w.inPassagesUnique / w.kept)}</span>` : "";
+    out.push(
+      `<tr><td>${short(p)}</td><td class="num">${fmt(w.raw)}</td><td class="num">${fmt(w.removed)}</td><td class="num">${fmt(w.kept)}${keptShare}</td><td class="num">${fmt(w.inPassagesUnique)}${uniqueShare}</td><td class="num">${w.pastCap ? `<b class="diffneg">${fmt(w.pastCap)}</b>` : "0"}</td><td class="num">${cut ? `<b class="diffneg">${cut}</b> / ${rows.length}` : `0 / ${rows.length}`}</td></tr>`
+    );
+  }
+  out.push("</tbody></table></div>");
+  out.push(helpLine([["colRaw", "text_raw"], ["colRemoved", "text_removed"], ["colKept", "text_kept"], ["colUnique", "chars_unique"], ["colPastCap", "chars_past_cap"], ["colSectionsCut", "section_reached"]]));
+  out.push("</section>");
+  return out;
+}
 
 function hostOf(url) {
   try {
@@ -1053,7 +1382,7 @@ export function renderCompareHtml(data) {
 
   // ── pages overview
   out.push('<section class="panel" aria-labelledby="h-pages">');
-  out.push(`<div class="panel-head"><h2 id="h-pages">${L("pagesTitle")}</h2></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-pages">${L("pagesTitle")}</h2>${layerBadges("measured", "derived")}</div>`);
   out.push('<div class="tablewrap"><table>');
   out.push(`<thead><tr><th>${L("colPage")}</th><th>${L("colWords")}</th><th>${L("colPassages")}</th><th>${L("colPastCap")}</th><th>${L("colBlocked")}</th><th>${L("colFindings")}</th></tr></thead><tbody>`);
   for (const p of pages) {
@@ -1068,15 +1397,18 @@ export function renderCompareHtml(data) {
       low ? `<span class="pill sev-low">${low} ${L("sevLow")}</span>` : "",
     ].filter(Boolean).join(" ");
     out.push(
-      `<tr><td>${short(p)}<div class="small">${esc(clip(pg.title, 70))}</div></td><td class="num">${fmt(pg.wordCount)}</td><td class="num">${pg.chunksIndexed}/${pg.chunkCap}</td><td class="num">${fmt(pg.charsUnread)}</td><td>${blocked.length ? `<span class="code">${esc(blocked.join(", "))}</span>` : "—"}</td><td>${sev || "—"}</td></tr>`
+      `<tr><td>${short(p)}<div class="small">${esc(clip(pg.title, 70))}</div></td><td class="num">${fmt(pg.wordCount)}</td><td class="num">${pg.chunksIndexed}/${pg.chunkCap}</td><td class="num">${fmt(charsPastCap(p.reading))}</td><td>${blocked.length ? `<span class="code">${esc(blocked.join(", "))}</span>` : "—"}</td><td>${sev || "—"}</td></tr>`
     );
   }
   out.push("</tbody></table></div>");
   out.push("</section>");
 
+  // ── 2.102: the same waterfall for every page, side by side
+  out.push(...lossTablePanel(pages, short));
+
   // ── topic table
   out.push('<section class="panel" id="topics" aria-labelledby="h-topics">');
-  out.push(`<div class="panel-head"><h2 id="h-topics">${L("topicTable")}</h2><span class="sub">${L("topicTableSub")}</span></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-topics">${L("topicTable")}</h2>${layerBadges("judgement", "derived")}${metricHelp("topic_cells")}<span class="sub">${L("topicTableSub")}</span></div>`);
   out.push('<div class="tablewrap"><table>');
   out.push(`<thead><tr><th>${L("colTopic")}</th>${pages.map((p) => `<th>${L("pageN", { n: p.n })}</th>`).join("")}</tr></thead><tbody>`);
   for (const row of topicCmp.table) {
@@ -1103,7 +1435,7 @@ export function renderCompareHtml(data) {
   // ── queries
   if (queries?.length) {
     out.push('<section class="panel" id="queries" aria-labelledby="h-queries">');
-    out.push(`<div class="panel-head"><h2 id="h-queries">${L("winners")}</h2><span class="sub">${L("queriesSub")}</span></div>`);
+    out.push(`<div class="panel-head"><h2 id="h-queries">${L("winners")}</h2>${layerBadges("judgement")}${metricHelp("query_verdicts")}<span class="sub">${L("queriesSub")}</span></div>`);
     out.push('<ul class="samples" style="margin:0 0 12px">');
     for (const p of pages) out.push(`<li>${short(p)}: ${querySummary(queries, p.n)}</li>`);
     out.push("</ul>");
@@ -1130,7 +1462,7 @@ export function renderCompareHtml(data) {
   // ── facts
   if (facts?.length) {
     out.push('<section class="panel" id="facts" aria-labelledby="h-facts">');
-    out.push(`<div class="panel-head"><h2 id="h-facts">${L("factGaps")}</h2><span class="sub">${L("factGapsSub")}</span></div>`);
+    out.push(`<div class="panel-head"><h2 id="h-facts">${L("factGaps")}</h2>${layerBadges("judgement")}${metricHelp("facts")}<span class="sub">${L("factGapsSub")}</span></div>`);
     out.push('<div class="tablewrap"><table>');
     out.push(`<thead><tr><th>${L("colFact")}</th>${pages.map((p) => `<th>${L("pageN", { n: p.n })}</th>`).join("")}</tr></thead><tbody>`);
     for (const f of facts) {
@@ -1157,7 +1489,7 @@ export function renderCompareHtml(data) {
 
   // ── robots by page, then findings by page
   out.push('<section class="panel" id="checks" aria-labelledby="h-crawlers">');
-  out.push(`<div class="panel-head"><h2 id="h-crawlers">${L("crawlersByPage")}</h2></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-crawlers">${L("crawlersByPage")}</h2>${layerBadges("measured")}${metricHelp("robots_verdict")}</div>`);
   const bots = pages.find((p) => p.reading.robots?.bots?.length)?.reading.robots.bots ?? [];
   if (bots.length) {
     out.push('<div class="tablewrap"><table>');
@@ -1191,12 +1523,14 @@ export function renderCompareHtml(data) {
 
   // ── each page's reading, compact
   out.push('<section class="panel" aria-labelledby="h-each">');
-  out.push(`<div class="panel-head"><h2 id="h-each">${L("readingByPage")}</h2></div>`);
+  out.push(`<div class="panel-head"><h2 id="h-each">${L("readingByPage")}</h2>${layerBadges("measured", "judgement")}</div>`);
   for (const p of pages) {
     const anchor = anchorFor(p.n);
     out.push(`<div class="pagesec"><h3>${short(p)}</h3>`);
-    out.push(`<p class="small" style="margin:0 0 6px">${closingSentence(p.reading.page)}</p>`);
+    out.push(`<p class="small" style="margin:0 0 6px">${closingSentence(p.reading)}</p>`);
     out.push(...stripBlock(p.reading, p.lens, anchor, true));
+    out.push(`<h3 class="subhead">${L("lossesTitle")} ${layerBadges("measured", "derived")}</h3>`);
+    out.push(...lossesPanel(p.reading, { compact: true }));
     out.push('<div style="margin-top:12px"></div>');
     out.push(...groupCards(p.lens, topicsById));
     out.push(`<details><summary>${L("passagesTitle")}</summary><ol class="plist" style="margin-top:8px">`);

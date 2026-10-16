@@ -2,7 +2,7 @@ English · [Українська](README.uk.md)
 
 # GetLoopLoop skills
 
-Vectorscope skill **2.101**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
+Vectorscope skill **2.102**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
 
 Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
@@ -21,6 +21,10 @@ It does not rank your page, give it a score, detect AI-written text, or predict 
 ## Features
 
 - **The machine's reading:** the exact fetch, extraction, chunking and 26-passage cap of the live tool; how many words survive, how many passages they become, what falls past the cap.
+- **Measured, derived, judgement:** every section and number carries a tag saying whether the parser measured it, a fixed formula derived it, or the agent judged it; the export splits into `measured` and `judgement` the same way.
+- **Where the text goes:** a character waterfall from the raw HTML to the passages (removed by the cleaner, kept, in passages without double-counting the overlap, past the cap), a table of what the cleaner removed and why (the element, its CSS path, its characters, how its text begins), and a map of how much of each section reached a passage.
+- **Every number explained:** a "?" beside each number opens its formula, unit, threshold and known limits, in English or Ukrainian; the Markdown ends with the same list and the export carries it as a `metrics` dictionary.
+- **An honest past-the-cap count:** characters past the cap are counted from the unique text in passages, so a page whose cap cut a tail no longer reads 0; the 2.101 number stays in the export as `charsUnread`.
 - **AI crawlers first:** robots.txt checked for GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, Google-Extended, Googlebot, Bingbot and CCBot, with RFC 9309 matching. If the crawlers that answer people are blocked, the report says so before anything else.
 - **Automatic checks**, each with a code, the passages it rests on and the evidence: FAQ answers that lost their questions, one heading carrying too much of the page, passages cut mid-sentence, navigation inside the content, thin sections, truncated teasers, the same claim in every section, canonical, JSON-LD and meta description.
 - **The page's vocabulary, phrases first:** the two-to-four-word phrases the page owns, ranked by how many passages use them, then its narrative words. What the page says, not search demand.
@@ -36,7 +40,25 @@ Why the groups are "the agent's reading": the live tool groups passages by compa
 
 ## What you get
 
-The top of the report, dark and light:
+The top of the report, dark and light: the tags beside every section and number, and the info panel that explains them:
+
+![Info panel and the measured, derived and judgement tags](docs/report-layers.png)
+
+Where the text goes, from the raw HTML to the passages:
+
+![Character waterfall](docs/report-waterfall.png)
+
+What the cleaner removed, largest first, and how much of each section reached a passage:
+
+![Removals table](docs/report-removals.png)
+
+![Section map](docs/report-sections.png)
+
+The "?" beside a number: its formula, unit, threshold and limits:
+
+![A metric's explanation, open](docs/report-metric-help.png)
+
+The rest of the top of the report, dark and light:
 
 ![Report header, dark theme: pipeline, counters with the cap reached, reading strip](docs/report-dark.png)
 
@@ -74,9 +96,9 @@ The footer, and the report on a phone:
 
 Three real runs are in [`examples/`](examples), each with the files the agent wrote in [`examples/judgement/`](examples/judgement):
 
-- the Vectorscope page itself, which needs 17 passages and loses nothing ([HTML](examples/getlooploop-vectorscope.html), [Markdown](examples/getlooploop-vectorscope.md), [JSON](examples/getlooploop-vectorscope.json));
-- the Wikipedia article on large language models, which fills every slot and leaves about 53,000 characters unread ([HTML](examples/wikipedia-llm.html), [Markdown](examples/wikipedia-llm.md), [JSON](examples/wikipedia-llm.json));
-- MDN's HTTP caching guide against web.dev's HTTP cache article ([HTML](examples/http-caching-compare.html), [Markdown](examples/http-caching-compare.md), [JSON](examples/http-caching-compare.json)).
+- the Vectorscope page itself, which needs 17 passages and loses nothing to the cap ([HTML](examples/getlooploop-vectorscope.html), [Markdown](examples/getlooploop-vectorscope.md), [JSON](examples/getlooploop-vectorscope.json));
+- the Wikipedia article on large language models, which fills every slot and leaves 55,001 characters past the cap, six sections reaching no passage at all ([HTML](examples/wikipedia-llm.html), [Markdown](examples/wikipedia-llm.md), [JSON](examples/wikipedia-llm.json));
+- MDN's HTTP caching guide against web.dev's HTTP cache article; MDN fills every slot and loses its last 167 characters, which 2.101 counted as 0 ([HTML](examples/http-caching-compare.html), [Markdown](examples/http-caching-compare.md), [JSON](examples/http-caching-compare.json)).
 
 ## Install
 
@@ -162,11 +184,6 @@ node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 
 The scripts make no model or embedding calls and send nothing anywhere except the GETs for the page and its robots.txt (and, with `--render`, the local browser loading the page). Fields that would need vectors (cohesion, self-similarity, the projection) are reported as `null` instead of being estimated. The HTML report escapes every piece of page text and carries a content security policy that blocks all network requests from it, because the passages are third-party content.
 
-## Pages in Russian are not analysed
-
-Vectorscope does not analyse pages written in Russian. This is the publisher's decision, made because of Russia's war against Ukraine. A page in Russian gets a report with the reason and the findings it rests on, and nothing of the page: [United Nations General Assembly](https://news.un.org/en/story/2022/03/1113152) ([and](https://news.un.org/en/story/2022/10/1129492)), [European Parliament](https://www.europarl.europa.eu/news/en/press-room/20221118IPR55707/european-parliament-declares-russia-to-be-a-state-sponsor-of-terrorism), [International Criminal Court](https://www.icc-cpi.int/news/situation-ukraine-icc-judges-issue-arrest-warrants-against-vladimir-vladimirovich-putin-and), [UN Commission of Inquiry on Ukraine](https://news.un.org/en/story/2025/03/1161281), [Office of the Prosecutor General of Ukraine](https://gp.gov.ua/en/posts/ponad-190-tisyac-vojennix-zlociniv-ofis-genprokurora-predstaviv-komisiyi-oon-masstabi-zlociniv-rf-proti-ukrayini).
-
-![The report a page in Russian gets](docs/report-refused.png)
 
 ## Working on the skill
 

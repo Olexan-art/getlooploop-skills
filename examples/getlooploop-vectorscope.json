@@ -1,6 +1,6 @@
 {
   "schema": "getlooploop/vectorscope-reading@1",
-  "generatedAt": "2026-10-16T17:40:31.734Z",
+  "generatedAt": "2026-10-16T18:38:26.846Z",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -9,7 +9,7 @@
   "howToRead": {
     "grouping": "Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
     "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
-    "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 3979 of 14109 indexed characters, about 28%, and always the opening of each passage rather than a sample spread through it.",
+    "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 3979 of 14211 indexed characters, about 28%, and always the opening of each passage rather than a sample spread through it.",
     "phrases": "Counted over the page's whole text, not the excerpts below. A phrase is two to four content words the page writes side by side — never across a stopword, punctuation or a number — at least twice and in at least two passages (or three times in one), and cohesive enough that the words are not merely neighbours. A shorter phrase nearly always inside a longer one is folded into it. Ranked by `passages` (how many distinct passages use it), then `count`. `groups` is how many of the page's groups it reaches and `describesWholePage` is true when it reaches most of them. These are what the page says, not search demand: nothing here measures how often anybody searches or asks for them. The group counts rest on the grouping above, which is a judgement.",
     "narrativeWords": "Single words, counted only where none of the listed phrases already used them, so the occurrences still add up. Reporting verbs, connectives and markup residue ([edit] links, TeX) are left out. They say what the page talks about; they are rarely what anybody types or asks.",
     "keywords": "`phrases` followed by `narrativeWords` as one list, in the shape earlier exports had. Prefer the two lists above.",
@@ -37,7 +37,7 @@
     "url": "https://www.getlooploop.com/vectorscope",
     "requestedUrl": "https://www.getlooploop.com/vectorscope",
     "title": "Semantic Chunking Visualizer for Any URL — Vectorscope",
-    "wordCount": 2447,
+    "wordCount": 2463,
     "headingsFound": 14,
     "noindex": false
   },
@@ -46,16 +46,18 @@
     "dimensions": null,
     "chunkCap": 26,
     "chunksIndexed": 17,
-    "charsIndexed": 14109,
+    "charsIndexed": 14211,
     "charsUnread": 0,
     "capReached": false,
     "duplicateChunks": 0,
-    "groupsMergedByPaletteLimit": null
+    "groupsMergedByPaletteLimit": null,
+    "charsPastCap": 0,
+    "charsInPassagesUnique": 13547
   },
   "textCoverage": {
     "exportedChars": 3979,
-    "indexedChars": 14109,
-    "share": 0.282
+    "indexedChars": 14211,
+    "share": 0.28
   },
   "geometry": {
     "selfSimilarity": null,
@@ -260,10 +262,10 @@
     },
     {
       "term": "vectorscope",
-      "count": 12,
-      "passages": 6,
-      "groups": 5,
-      "spread": 0.833,
+      "count": 13,
+      "passages": 7,
+      "groups": 6,
+      "spread": 1,
       "describesWholePage": true
     }
   ],
@@ -438,9 +440,9 @@
     },
     {
       "term": "vectorscope",
-      "count": 12,
-      "groups": 5,
-      "spread": 0.833,
+      "count": 13,
+      "groups": 6,
+      "spread": 1,
       "describesWholePage": true
     }
   ],
@@ -451,7 +453,7 @@
       "labelSource": "keywords",
       "chunkCount": 5,
       "charCount": 1734,
-      "shareOfIndexedChars": 0.123,
+      "shareOfIndexedChars": 0.122,
       "cohesion": null,
       "agentLabel": "What Vectorscope is, and what its reading does not prove",
       "note": "The intro, the empty result widget, and three short caveats.",
@@ -463,7 +465,7 @@
       "labelSource": "heading",
       "chunkCount": 2,
       "charCount": 2450,
-      "shareOfIndexedChars": 0.174,
+      "shareOfIndexedChars": 0.172,
       "cohesion": null,
       "agentLabel": "How to read the four results",
       "note": "Cap, extraction ratio, groups, and the passage a question retrieves; one long section the window cuts in two.",
@@ -475,7 +477,7 @@
       "labelSource": "keywords",
       "chunkCount": 2,
       "charCount": 3394,
-      "shareOfIndexedChars": 0.241,
+      "shareOfIndexedChars": 0.239,
       "cohesion": null,
       "agentLabel": "Chunking strategies and the terms behind them",
       "note": null,
@@ -487,7 +489,7 @@
       "labelSource": "keywords",
       "chunkCount": 4,
       "charCount": 3158,
-      "shareOfIndexedChars": 0.224,
+      "shareOfIndexedChars": 0.222,
       "cohesion": null,
       "agentLabel": "What the tool can and cannot tell you, and who it is for",
       "note": null,
@@ -498,8 +500,8 @@
       "label": "Three · Questions",
       "labelSource": "keywords",
       "chunkCount": 2,
-      "charCount": 1081,
-      "shareOfIndexedChars": 0.077,
+      "charCount": 1183,
+      "shareOfIndexedChars": 0.083,
       "cohesion": null,
       "agentLabel": "Links to further reading and other tools",
       "note": null,
@@ -511,7 +513,7 @@
       "labelSource": "heading",
       "chunkCount": 2,
       "charCount": 2292,
-      "shareOfIndexedChars": 0.162,
+      "shareOfIndexedChars": 0.161,
       "cohesion": null,
       "agentLabel": "FAQ: AI citations and how Vectorscope works",
       "note": "The questions survive as text, so each answer keeps its question.",
@@ -619,7 +621,7 @@
       "index": 12,
       "group": 4,
       "heading": "Keep reading",
-      "charCount": 335,
+      "charCount": 437,
       "duplicateOf": null,
       "textHead": "Longer answers to the questions this page can only summarise.\nWhat semantic chunking is, and what it trades away The three strategies, side by side, on the same page. How to optimise content for AI search What actually changes a passage's c"
     },
@@ -656,10 +658,2058 @@
       "textHead": "One page on its own. Whether that page answers the questions people actually ask an assistant, how it stands against a rival page on the same subject, and which topics your site has no page for at all — those need a corpus of the whole site"
     }
   ],
-  "skillVersion": 2,
+  "skillVersion": "2.102",
+  "layers": {
+    "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
+    "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
+  },
+  "measured": {
+    "page": {
+      "url": "https://www.getlooploop.com/vectorscope",
+      "requestedUrl": "https://www.getlooploop.com/vectorscope",
+      "title": "Semantic Chunking Visualizer for Any URL — Vectorscope",
+      "wordCount": 2463,
+      "headingsFound": 14,
+      "noindex": false
+    },
+    "retrieval": {
+      "chunkCap": 26,
+      "chunksIndexed": 17,
+      "capReached": false,
+      "charsInPassagesTotal": 14211,
+      "charsInPassagesUnique": 13547
+    },
+    "passages": [
+      {
+        "index": 0,
+        "heading": "Semantic Chunking Visualizer for Any URL — Vectorscope",
+        "charCount": 286,
+        "contentRole": "main",
+        "textHead": "Semantic Chunking Visualizer for Any URL — Vectorscope\nSemantic chunking, made visible: see what survives the trip into vector space.\nFree semantic chunking visualizer: paste a URL and see the passages a retriever cuts, how they group by me"
+      },
+      {
+        "index": 1,
+        "heading": null,
+        "charCount": 804,
+        "contentRole": "main",
+        "textHead": "Free tool No account Experimental\nVectorscope\nSemantic chunking, made visible: see what survives the trip into vector space.\nVectorscope is a free semantic chunking visualizer: it cuts one URL into the passages a retrieval system would stor"
+      },
+      {
+        "index": 2,
+        "heading": "What does this mean?",
+        "charCount": 259,
+        "contentRole": "main",
+        "textHead": "The reading shows which passages of your page a retriever can receive, and how they group by meaning — the question semantic chunking asks, put to passages already cut. It is a preview of the machine's view, not a guarantee of what any assi"
+      },
+      {
+        "index": 3,
+        "heading": "Important passage outside the cap?",
+        "charCount": 139,
+        "contentRole": "main",
+        "textHead": "Move it earlier on the page, or split the page so that passage has a budget of its own. This reading takes at most 26 passages from a page."
+      },
+      {
+        "index": 4,
+        "heading": "Models and retrieval caps vary.",
+        "charCount": 246,
+        "contentRole": "main",
+        "textHead": "This does not establish that any assistant has indexed the page. Each system does its own chunking — fixed windows, headings or semantic chunking — and embeds and caps in its own way; this is the pipeline the product runs. Sources and metho"
+      },
+      {
+        "index": 5,
+        "heading": "How to read your result",
+        "charCount": 1995,
+        "contentRole": "main",
+        "textHead": "Four readings decide whether a page is legible to a retrieval system. Here is what each one means when it is bad. Chunks that never reach the index A retrieval system reads a fixed number of passages from a page and ignores the rest, so any"
+      },
+      {
+        "index": 6,
+        "heading": "How to read your result",
+        "charCount": 455,
+        "contentRole": "main",
+        "textHead": "to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page — which is the closest thing to watching a model decide what your page is for. If the returned "
+      },
+      {
+        "index": 7,
+        "heading": "What is semantic chunking?",
+        "charCount": 1994,
+        "contentRole": "main",
+        "textHead": "Semantic chunking is splitting a page into passages where its meaning changes, instead of every fixed number of characters or at every heading. Vectorscope does not cut that way: it cuts at each h2 and then in fixed windows, and its semanti"
+      },
+      {
+        "index": 8,
+        "heading": "Is my content ready for AI search?",
+        "charCount": 1126,
+        "contentRole": "main",
+        "textHead": "This page answers that question for one URL at a time, honestly, which means naming what it cannot see as clearly as what it can.\nWhat this tool can tell you\nHow much of your page becomes readable text at all, as a ratio and not an adjectiv"
+      },
+      {
+        "index": 9,
+        "heading": "Using Vectorscope to test a RAG pipeline",
+        "charCount": 863,
+        "contentRole": "main",
+        "textHead": "If you build retrieval rather than content, this page is a reference implementation you can point at any URL in about twenty seconds.\n1 Run a page you already index, and compare the passage boundaries with your own chunker's — fixed windows"
+      },
+      {
+        "index": 10,
+        "heading": "Who is Vectorscope for?",
+        "charCount": 890,
+        "contentRole": "main",
+        "textHead": "Vectorscope is for anyone whose page has to be read in passages: the people who write it, and the people who build the retrieval that reads it. Both get the same reading — the cut, the cap, and the semantic chunking question of which passag"
+      },
+      {
+        "index": 11,
+        "heading": "Words used on this page",
+        "charCount": 1400,
+        "contentRole": "main",
+        "textHead": "The terms this page relies on, each defined once, because a page that uses them without defining them is a page an assistant cannot explain to anybody.\nSemantic chunking\nCutting text into passages where its meaning changes, rather than at a"
+      },
+      {
+        "index": 12,
+        "heading": "Keep reading",
+        "charCount": 437,
+        "contentRole": "main",
+        "textHead": "Longer answers to the questions this page can only summarise.\nWhat semantic chunking is, and what it trades away The three strategies, side by side, on the same page. How to optimise content for AI search What actually changes a passage's c"
+      },
+      {
+        "index": 13,
+        "heading": "Questions people ask about this",
+        "charCount": 1992,
+        "contentRole": "main",
+        "textHead": "How does AI Mode choose which sources to cite? Nobody outside Google can state the mechanism, and this page will not pretend to. What is observable is that cited pages tend to contain a passage that answers the query completely on its own, "
+      },
+      {
+        "index": 14,
+        "heading": "Questions people ask about this",
+        "charCount": 300,
+        "contentRole": "main",
+        "textHead": "after the reading is produced. No account is needed, so there is nothing to attach it to. Is it really free? Yes, with a rate limit rather than a paywall. The limit exists because every reading spends an embedding call, and it resets on a f"
+      },
+      {
+        "index": 15,
+        "heading": "Other free AI search tools",
+        "charCount": 746,
+        "contentRole": "main",
+        "textHead": "Voicescope Start with one keyword and explore the questions a person may ask an AI assistant across real-life contexts.\nBrandscope Ask three AI assistants the buyer questions around a brand, then compare their answers with the brand's own p"
+      },
+      {
+        "index": 16,
+        "heading": "What this cannot show you",
+        "charCount": 279,
+        "contentRole": "main",
+        "textHead": "One page on its own. Whether that page answers the questions people actually ask an assistant, how it stands against a rival page on the same subject, and which topics your site has no page for at all — those need a corpus of the whole site"
+      }
+    ],
+    "losses": {
+      "unit": "characters, whitespace runs folded to one space",
+      "consistent": true,
+      "waterfall": {
+        "raw": 48098,
+        "removed": 34177,
+        "kept": 13921,
+        "inPassagesUnique": 13547,
+        "notInPassages": 374,
+        "pastCap": 0
+      },
+      "passages": {
+        "unique": 13547,
+        "total": 14211,
+        "overlap": 378,
+        "intro": 286,
+        "unlocated": 0
+      },
+      "notInPassages": {
+        "headingLines": 298,
+        "whitespace": 76,
+        "other": 0
+      },
+      "removals": {
+        "elementsMatched": 130,
+        "elementsWithText": 45,
+        "chars": 34177,
+        "byReason": [
+          {
+            "reason": "script_style",
+            "elements": 27,
+            "chars": 32534
+          },
+          {
+            "reason": "embedded",
+            "elements": 1,
+            "chars": 33
+          },
+          {
+            "reason": "head_meta",
+            "elements": 1,
+            "chars": 54
+          },
+          {
+            "reason": "hidden",
+            "elements": 7,
+            "chars": 284
+          },
+          {
+            "reason": "header_chrome",
+            "elements": 1,
+            "chars": 68
+          },
+          {
+            "reason": "nav",
+            "elements": 1,
+            "chars": 16
+          },
+          {
+            "reason": "footer",
+            "elements": 1,
+            "chars": 749
+          },
+          {
+            "reason": "aside",
+            "elements": 1,
+            "chars": 339
+          },
+          {
+            "reason": "form_control",
+            "elements": 5,
+            "chars": 100
+          }
+        ],
+        "items": [
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 3689,
+            "sample": "self.__next_f.push([1,\"17:[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"Semantic Chunk"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 2939,
+            "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"FAQPage\\"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 2769,
+            "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\",\"@id\":\"https://www.getlooploo"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 2396,
+            "sample": "self.__next_f.push([1,\"2:[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"en\\\",\\\"suppressHydrati"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 2292,
+            "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"DefinedT"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 2148,
+            "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"DefinedTermSet\",\"@id\":\"https://www.get"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1849,
+            "sample": "self.__next_f.push([1,\"11:I[24431,[],\\\"OutletBoundary\\\"]\\n14:I[24431,[],\\\"Viewpo"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1653,
+            "sample": "self.__next_f.push([1,\"0:{\\\"P\\\":null,\\\"b\\\":\\\"L-uh39B74nD4XsnIRp5Gc\\\",\\\"p\\\":\\\"\\\","
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1269,
+            "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"HowTo\\\","
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1255,
+            "sample": "self.__next_f.push([1,\"7:[\\\"$\\\",\\\"script\\\",\\\"5\\\",{\\\"type\\\":\\\"application/ld+json"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1251,
+            "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Software"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1226,
+            "sample": "self.__next_f.push([1,\"10:I[78297,[\\\"2619\\\",\\\"static/chunks/2619-3285f830dd579a0"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1184,
+            "sample": "self.__next_f.push([1,\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@graph\\\":[{\\\"@type"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1153,
+            "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"HowTo\",\"@id\":\"https://www.getlooploop."
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1143,
+            "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareApplication\",\"@id\":\"https://ww"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1136,
+            "sample": "self.__next_f.push([1,\"8:[\\\"$\\\",\\\"$Ld\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\""
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 1070,
+            "sample": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"@id\":\"https:"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 856,
+            "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"WebPage\",\"@id\":\"https://www.getlooploo"
+          },
+          {
+            "reason": "footer",
+            "tag": "footer",
+            "id": null,
+            "classes": [
+              "border-t",
+              "border-white/10",
+              "px-4",
+              "py-14"
+            ],
+            "element": "footer.border-t.border-white/10",
+            "path": "div.marketing-root > footer.border-t.border-white/10",
+            "chars": 749,
+            "sample": "GetLoopLoop Find where a brand loses AI-search conversations. Close the gap. Pro"
+          },
+          {
+            "reason": "aside",
+            "tag": "div",
+            "id": null,
+            "classes": [
+              "pt-card",
+              "pt-card--active",
+              "mt-8",
+              "flex"
+            ],
+            "element": "div.pt-card.pt-card--active",
+            "path": "… > div.pt-16 > div.pt > div.mx-auto > div.pt-card.pt-card--active",
+            "chars": 339,
+            "sample": "New · free · open source Run Vectorscope inside your coding agent The Vectorscop"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 326,
+            "sample": "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"@id\":\"https://www.get"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 312,
+            "sample": "(function(){try{var t=localStorage.getItem(\"gll_theme\");if(t===\"dark\"||t===\"atla"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 196,
+            "sample": "self.__next_f.push([1,\"15:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"charSet\\\":\\\"utf-8\\\"}],[\\\"$\\\""
+          },
+          {
+            "reason": "hidden",
+            "tag": "ol",
+            "id": null,
+            "classes": [
+              "mt-3",
+              "grid",
+              "gap-3",
+              "sm:grid-cols-3"
+            ],
+            "element": "ol.mt-3.grid",
+            "path": "… > div.mx-auto > section.mt-12 > div.[&>div]:mt-0 > ol.mt-3.grid",
+            "chars": 163,
+            "sample": "1. ScanningThe page is fetched and split into passages.2. EmbeddingEach passage "
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 143,
+            "sample": "self.__next_f.push([1,\"1:\\\"$Sreact.fragment\\\"\\nb:I[57150,[],\\\"\\\"]\\nd:I[9766,[],\\"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 137,
+            "sample": "self.__next_f.push([1,\"6:[\\\"$\\\",\\\"script\\\",\\\"4\\\",{\\\"type\\\":\\\"application/ld+json"
+          },
+          {
+            "reason": "hidden",
+            "tag": "div",
+            "id": null,
+            "classes": [
+              "flex",
+              "min-w-0",
+              "flex-1",
+              "flex-wrap"
+            ],
+            "element": "div.flex.min-w-0",
+            "path": "… > section.mt-12 > div.[&>div]:mt-0 > div.mt-6 > div.flex.min-w-0",
+            "chars": 96,
+            "sample": "The page flows into its groups·A pulsing step is still running·The map grows in "
+          },
+          {
+            "reason": "header_chrome",
+            "tag": "header",
+            "id": null,
+            "classes": [
+              "fixed",
+              "inset-x-0",
+              "top-0",
+              "z-50"
+            ],
+            "element": "header.fixed.inset-x-0",
+            "path": "div.marketing-root > header.fixed.inset-x-0",
+            "chars": 68,
+            "sample": "GetLoopLoop Free tools Glossary Skills News Notes Dark Light Console"
+          },
+          {
+            "reason": "head_meta",
+            "tag": "head",
+            "id": null,
+            "classes": [],
+            "element": "head",
+            "path": "head",
+            "chars": 54,
+            "sample": "Semantic Chunking Visualizer for Any URL — Vectorscope"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 43,
+            "sample": "(self.__next_f=self.__next_f||[]).push([0])"
+          },
+          {
+            "reason": "form_control",
+            "tag": "button",
+            "id": null,
+            "classes": [
+              "hover:text-[var(--pt-accent)]",
+              "disabled:opacity-40"
+            ],
+            "element": "button.hover:text-[var(--pt-accent)].disabled:opacity-40",
+            "path": "… > div.flex > span.flex > span.flex > button.hover:text-[var(--pt-accent)].disabled:opacity-40",
+            "chars": 34,
+            "sample": "signnow.com / electronic-signature"
+          },
+          {
+            "reason": "embedded",
+            "tag": "svg",
+            "id": null,
+            "classes": [
+              "h-auto",
+              "w-full",
+              "max-w-[420px]",
+              "text-gll-cyan"
+            ],
+            "element": "svg.h-auto.w-full",
+            "path": "… > div.mt-4 > div.flex > span.w-full > svg.h-auto.w-full",
+            "chars": 33,
+            "sample": "inside the cappast it, never read"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 33,
+            "sample": "self.__next_f.push([1,\"4:T481,\"])"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 33,
+            "sample": "self.__next_f.push([1,\"5:Tad7,\"])"
+          },
+          {
+            "reason": "script_style",
+            "tag": "script",
+            "id": null,
+            "classes": [],
+            "element": "script",
+            "path": "script",
+            "chars": 33,
+            "sample": "self.__next_f.push([1,\"c:T864,\"])"
+          },
+          {
+            "reason": "form_control",
+            "tag": "form",
+            "id": "run",
+            "classes": [
+              "flex",
+              "scroll-mt-20",
+              "flex-col",
+              "gap-3"
+            ],
+            "element": "form#run.flex.scroll-mt-20",
+            "path": "… > div.mx-auto > section.grid > div.flex > form#run.flex.scroll-mt-20",
+            "chars": 22,
+            "sample": "Page URL Read the page"
+          },
+          {
+            "reason": "form_control",
+            "tag": "button",
+            "id": null,
+            "classes": [
+              "hover:text-[var(--pt-accent)]",
+              "disabled:opacity-40"
+            ],
+            "element": "button.hover:text-[var(--pt-accent)].disabled:opacity-40",
+            "path": "… > div.flex > span.flex > span.flex > button.hover:text-[var(--pt-accent)].disabled:opacity-40",
+            "chars": 21,
+            "sample": "tipalti.com / w9-form"
+          },
+          {
+            "reason": "hidden",
+            "tag": "div",
+            "id": null,
+            "classes": [
+              "pt-art",
+              "min-w-0"
+            ],
+            "element": "div.pt-art.min-w-0",
+            "path": "… > div.pt > div.mx-auto > section.grid > div.pt-art.min-w-0",
+            "chars": 21,
+            "sample": "ProductPricingSupport"
+          },
+          {
+            "reason": "nav",
+            "tag": "nav",
+            "id": null,
+            "classes": [
+              "mb-6"
+            ],
+            "element": "nav.mb-6",
+            "path": "… > div.pt-16 > div.pt > div.mx-auto > nav.mb-6",
+            "chars": 16,
+            "sample": "Home Vectorscope"
+          },
+          {
+            "reason": "form_control",
+            "tag": "button",
+            "id": null,
+            "classes": [
+              "pt-btn",
+              "pt-btn--ghost",
+              "pt-btn--sm",
+              "shrink-0"
+            ],
+            "element": "button.pt-btn.pt-btn--ghost",
+            "path": "… > section.mt-12 > div.[&>div]:mt-0 > div.mt-6 > button.pt-btn.pt-btn--ghost",
+            "chars": 12,
+            "sample": "Pause motion"
+          },
+          {
+            "reason": "form_control",
+            "tag": "button",
+            "id": null,
+            "classes": [
+              "pt-btn",
+              "pt-btn--ghost",
+              "disabled:cursor-not-allowed",
+              "disabled:opacity-50"
+            ],
+            "element": "button.pt-btn.pt-btn--ghost",
+            "path": "… > section.grid > div.flex > div.flex > button.pt-btn.pt-btn--ghost",
+            "chars": 11,
+            "sample": "Try example"
+          },
+          {
+            "reason": "hidden",
+            "tag": "span",
+            "id": null,
+            "classes": [],
+            "element": "span",
+            "path": "… > div.flex > div.pt-eyebrow > span.flex > span",
+            "chars": 1,
+            "sample": "·"
+          },
+          {
+            "reason": "hidden",
+            "tag": "span",
+            "id": null,
+            "classes": [
+              "text-[var(--pt-faint)]"
+            ],
+            "element": "span.text-[var(--pt-faint)]",
+            "path": "… > div.flex > span.flex > span.flex > span.text-[var(--pt-faint)]",
+            "chars": 1,
+            "sample": "/"
+          },
+          {
+            "reason": "hidden",
+            "tag": "span",
+            "id": null,
+            "classes": [],
+            "element": "span",
+            "path": "… > nav.mb-6 > ol.flex > li.flex > span",
+            "chars": 1,
+            "sample": "/"
+          },
+          {
+            "reason": "hidden",
+            "tag": "span",
+            "id": null,
+            "classes": [],
+            "element": "span",
+            "path": "… > section.grid > div.flex > div.pt-eyebrow > span",
+            "chars": 1,
+            "sample": "·"
+          }
+        ],
+        "omitted": {
+          "elements": 0,
+          "chars": 0
+        }
+      },
+      "sections": {
+        "mode": "h2",
+        "rows": [
+          {
+            "kind": "intro",
+            "heading": null,
+            "chars": 286,
+            "inPassages": 286,
+            "located": true
+          },
+          {
+            "kind": "before_first_h2",
+            "heading": null,
+            "chars": 804,
+            "inPassages": 804,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "What does this mean?",
+            "chars": 259,
+            "inPassages": 259,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Important passage outside the cap?",
+            "chars": 139,
+            "inPassages": 139,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Models and retrieval caps vary.",
+            "chars": 246,
+            "inPassages": 246,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "How to read your result",
+            "chars": 2257,
+            "inPassages": 2257,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "What is semantic chunking?",
+            "chars": 1994,
+            "inPassages": 1994,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Is my content ready for AI search?",
+            "chars": 1126,
+            "inPassages": 1126,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Using Vectorscope to test a RAG pipeline",
+            "chars": 863,
+            "inPassages": 863,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Who is Vectorscope for?",
+            "chars": 890,
+            "inPassages": 890,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Words used on this page",
+            "chars": 1400,
+            "inPassages": 1400,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Keep reading",
+            "chars": 437,
+            "inPassages": 437,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Questions people ask about this",
+            "chars": 2107,
+            "inPassages": 2107,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "Other free AI search tools",
+            "chars": 746,
+            "inPassages": 746,
+            "located": true
+          },
+          {
+            "kind": "h2",
+            "heading": "What this cannot show you",
+            "chars": 279,
+            "inPassages": 279,
+            "located": true
+          }
+        ]
+      },
+      "placement": [
+        {
+          "index": 0,
+          "start": null,
+          "end": null,
+          "intro": 286
+        },
+        {
+          "index": 1,
+          "start": 0,
+          "end": 804,
+          "intro": 0
+        },
+        {
+          "index": 2,
+          "start": 826,
+          "end": 1085,
+          "intro": 0
+        },
+        {
+          "index": 3,
+          "start": 1121,
+          "end": 1260,
+          "intro": 0
+        },
+        {
+          "index": 4,
+          "start": 1293,
+          "end": 1539,
+          "intro": 0
+        },
+        {
+          "index": 5,
+          "start": 1564,
+          "end": 3559,
+          "intro": 0
+        },
+        {
+          "index": 6,
+          "start": 3366,
+          "end": 3821,
+          "intro": 0
+        },
+        {
+          "index": 7,
+          "start": 3849,
+          "end": 5843,
+          "intro": 0
+        },
+        {
+          "index": 8,
+          "start": 5879,
+          "end": 7005,
+          "intro": 0
+        },
+        {
+          "index": 9,
+          "start": 7047,
+          "end": 7910,
+          "intro": 0
+        },
+        {
+          "index": 10,
+          "start": 7935,
+          "end": 8825,
+          "intro": 0
+        },
+        {
+          "index": 11,
+          "start": 8850,
+          "end": 10250,
+          "intro": 0
+        },
+        {
+          "index": 12,
+          "start": 10264,
+          "end": 10701,
+          "intro": 0
+        },
+        {
+          "index": 13,
+          "start": 10734,
+          "end": 12726,
+          "intro": 0
+        },
+        {
+          "index": 14,
+          "start": 12541,
+          "end": 12841,
+          "intro": 0
+        },
+        {
+          "index": 15,
+          "start": 12869,
+          "end": 13615,
+          "intro": 0
+        },
+        {
+          "index": 16,
+          "start": 13642,
+          "end": 13921,
+          "intro": 0
+        }
+      ]
+    },
+    "robots": {
+      "url": "https://www.getlooploop.com/robots.txt",
+      "status": "ok",
+      "httpStatus": 200,
+      "bots": [
+        {
+          "token": "OAI-SearchBot",
+          "vendor": "OpenAI",
+          "kind": "search",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "ChatGPT-User",
+          "vendor": "OpenAI",
+          "kind": "user",
+          "honours": false,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "GPTBot",
+          "vendor": "OpenAI",
+          "kind": "training",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "Claude-SearchBot",
+          "vendor": "Anthropic",
+          "kind": "search",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "Claude-User",
+          "vendor": "Anthropic",
+          "kind": "user",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "ClaudeBot",
+          "vendor": "Anthropic",
+          "kind": "training",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "PerplexityBot",
+          "vendor": "Perplexity",
+          "kind": "search",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "Perplexity-User",
+          "vendor": "Perplexity",
+          "kind": "user",
+          "honours": false,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "Google-Extended",
+          "vendor": "Google",
+          "kind": "training",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "Googlebot",
+          "vendor": "Google",
+          "kind": "index",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "Bingbot",
+          "vendor": "Microsoft",
+          "kind": "index",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        },
+        {
+          "token": "CCBot",
+          "vendor": "Common Crawl",
+          "kind": "training",
+          "honours": true,
+          "allowed": true,
+          "rule": "Allow: /vectorscope",
+          "group": "*"
+        }
+      ]
+    },
+    "technical": {
+      "jsonLd": {
+        "blocks": 7,
+        "invalid": 0,
+        "types": [
+          "Answer",
+          "BreadcrumbList",
+          "DefinedTerm",
+          "DefinedTermSet",
+          "FAQPage",
+          "HowTo",
+          "HowToStep",
+          "ListItem",
+          "Offer",
+          "Organization",
+          "Person",
+          "Question",
+          "SoftwareApplication",
+          "Thing",
+          "WebPage",
+          "WebSite"
+        ]
+      },
+      "canonical": {
+        "present": true,
+        "count": 1,
+        "href": "https://www.getlooploop.com/vectorscope",
+        "absolute": true,
+        "resolved": "https://www.getlooploop.com/vectorscope",
+        "self": true
+      },
+      "metaDescription": {
+        "present": true,
+        "length": 152
+      },
+      "lang": "en"
+    },
+    "render": null,
+    "derived": {
+      "charsPastCap": 0,
+      "charsUnread": 0,
+      "phrases": [
+        {
+          "term": "semantic chunking",
+          "count": 23,
+          "passages": 12,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "fixed window",
+          "count": 5,
+          "passages": 5,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "retrieval system",
+          "count": 4,
+          "passages": 3,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "stand alone",
+          "count": 3,
+          "passages": 3,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "readable text",
+          "count": 3,
+          "passages": 3,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "meaning changes",
+          "count": 3,
+          "passages": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "heading aware",
+          "count": 4,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "heading aware chunking",
+          "count": 3,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "semantic chunking visualizer",
+          "count": 3,
+          "passages": 2,
+          "groups": 1,
+          "spread": 0.167,
+          "describesWholePage": false
+        },
+        {
+          "term": "extraction ratio",
+          "count": 3,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "fixed length",
+          "count": 3,
+          "passages": 2,
+          "groups": 1,
+          "spread": 0.167,
+          "describesWholePage": false
+        },
+        {
+          "term": "long section",
+          "count": 3,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "free semantic chunking visualizer",
+          "count": 2,
+          "passages": 2,
+          "groups": 1,
+          "spread": 0.167,
+          "describesWholePage": false
+        },
+        {
+          "term": "repeated sentence shapes",
+          "count": 2,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "reader reacts",
+          "count": 2,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        }
+      ],
+      "narrativeWords": [
+        {
+          "term": "page",
+          "count": 71,
+          "passages": 16,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "passage",
+          "count": 60,
+          "passages": 13,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "cut",
+          "count": 30,
+          "passages": 9,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "heading",
+          "count": 22,
+          "passages": 9,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "question",
+          "count": 18,
+          "passages": 12,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "answer",
+          "count": 16,
+          "passages": 10,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "cap",
+          "count": 14,
+          "passages": 8,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "group",
+          "count": 13,
+          "passages": 7,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "meaning",
+          "count": 13,
+          "passages": 8,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "vectorscope",
+          "count": 13,
+          "passages": 7,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        }
+      ],
+      "checks": [
+        {
+          "code": "mid_sentence_start",
+          "severity": "medium",
+          "passages": [
+            6,
+            14
+          ],
+          "evidence": {
+            "samples": [
+              {
+                "passage": 6,
+                "text": "to quote. The passage a question actually retrieves Asking the page a question …"
+              },
+              {
+                "passage": 14,
+                "text": "after the reading is produced. No account is needed, so there is nothing to att…"
+              }
+            ],
+            "count": 2
+          },
+          "message": "2 passage(s) open on a lowercase word or a punctuation mark."
+        },
+        {
+          "code": "nav_in_content",
+          "severity": "medium",
+          "passages": [
+            1
+          ],
+          "evidence": {
+            "runs": 1,
+            "samples": [
+              {
+                "passage": 1,
+                "lines": [
+                  "1. Fetched",
+                  "2. Extracted",
+                  "3. Chunked",
+                  "4. Embedded",
+                  "5. Grouped",
+                  "passages read"
+                ],
+                "count": 6
+              }
+            ]
+          },
+          "message": "1 run(s) of four or more one-or-two-word lines."
+        },
+        {
+          "code": "thin_section",
+          "severity": "low",
+          "passages": [
+            3
+          ],
+          "evidence": {
+            "samples": [
+              {
+                "passage": 3,
+                "heading": "Important passage outside the cap?",
+                "chars": 139
+              }
+            ],
+            "count": 1
+          },
+          "message": "1 heading(s) with fewer than 150 characters under them."
+        },
+        {
+          "code": "repeated_claim",
+          "severity": "low",
+          "passages": [
+            2,
+            7,
+            8
+          ],
+          "evidence": {
+            "groupCount": 6,
+            "samples": [
+              {
+                "phrase": "the question semantic chunking",
+                "groups": 3,
+                "passages": [
+                  2,
+                  7,
+                  8
+                ]
+              }
+            ]
+          },
+          "message": "1 phrase(s) recur across at least half of the 6 groups."
+        }
+      ]
+    }
+  },
   "judgement": {
     "agent": null,
-    "model": null
+    "model": null,
+    "groups": [
+      {
+        "id": 0,
+        "label": "Visualizer · Machine",
+        "labelSource": "keywords",
+        "chunkCount": 5,
+        "charCount": 1734,
+        "shareOfIndexedChars": 0.122,
+        "cohesion": null,
+        "agentLabel": "What Vectorscope is, and what its reading does not prove",
+        "note": "The intro, the empty result widget, and three short caveats.",
+        "topic": null
+      },
+      {
+        "id": 1,
+        "label": "How to read your result",
+        "labelSource": "heading",
+        "chunkCount": 2,
+        "charCount": 2450,
+        "shareOfIndexedChars": 0.172,
+        "cohesion": null,
+        "agentLabel": "How to read the four results",
+        "note": "Cap, extraction ratio, groups, and the passage a question retrieves; one long section the window cuts in two.",
+        "topic": null
+      },
+      {
+        "id": 2,
+        "label": "Grouping · Length",
+        "labelSource": "keywords",
+        "chunkCount": 2,
+        "charCount": 3394,
+        "shareOfIndexedChars": 0.239,
+        "cohesion": null,
+        "agentLabel": "Chunking strategies and the terms behind them",
+        "note": null,
+        "topic": null
+      },
+      {
+        "id": 3,
+        "label": "Whether · Against",
+        "labelSource": "keywords",
+        "chunkCount": 4,
+        "charCount": 3158,
+        "shareOfIndexedChars": 0.222,
+        "cohesion": null,
+        "agentLabel": "What the tool can and cannot tell you, and who it is for",
+        "note": null,
+        "topic": null
+      },
+      {
+        "id": 4,
+        "label": "Three · Questions",
+        "labelSource": "keywords",
+        "chunkCount": 2,
+        "charCount": 1183,
+        "shareOfIndexedChars": 0.083,
+        "cohesion": null,
+        "agentLabel": "Links to further reading and other tools",
+        "note": null,
+        "topic": null
+      },
+      {
+        "id": 5,
+        "label": "Questions people ask about this",
+        "labelSource": "heading",
+        "chunkCount": 2,
+        "charCount": 2292,
+        "shareOfIndexedChars": 0.161,
+        "cohesion": null,
+        "agentLabel": "FAQ: AI citations and how Vectorscope works",
+        "note": "The questions survive as text, so each answer keeps its question.",
+        "topic": null
+      }
+    ],
+    "assignment": [
+      {
+        "index": 0,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 1,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 2,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 3,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 4,
+        "group": 0,
+        "duplicateOf": null
+      },
+      {
+        "index": 5,
+        "group": 1,
+        "duplicateOf": null
+      },
+      {
+        "index": 6,
+        "group": 1,
+        "duplicateOf": null
+      },
+      {
+        "index": 7,
+        "group": 2,
+        "duplicateOf": null
+      },
+      {
+        "index": 8,
+        "group": 3,
+        "duplicateOf": null
+      },
+      {
+        "index": 9,
+        "group": 3,
+        "duplicateOf": null
+      },
+      {
+        "index": 10,
+        "group": 3,
+        "duplicateOf": null
+      },
+      {
+        "index": 11,
+        "group": 2,
+        "duplicateOf": null
+      },
+      {
+        "index": 12,
+        "group": 4,
+        "duplicateOf": null
+      },
+      {
+        "index": 13,
+        "group": 5,
+        "duplicateOf": null
+      },
+      {
+        "index": 14,
+        "group": 5,
+        "duplicateOf": null
+      },
+      {
+        "index": 15,
+        "group": 4,
+        "duplicateOf": null
+      },
+      {
+        "index": 16,
+        "group": 3,
+        "duplicateOf": null
+      }
+    ],
+    "duplicates": 0,
+    "plan": [
+      {
+        "priority": 1,
+        "page": 1,
+        "passages": [
+          1
+        ],
+        "check": "nav_in_content",
+        "problem": "The empty result widget is inside main, so its step labels and counter captions become passage #1: a retriever stores \"1. Fetched 2. Extracted …\" as content.",
+        "fix": "Render the result widget only after a run, or mark the placeholder aria-hidden and move it out of main. If the counts should stay readable, say them in one sentence.",
+        "before": "passages read\nslots used of the 26-passage cap\ncharacters the cap cut off (0 when the page fits)",
+        "after": "For each page, Vectorscope reports three counts: the passages it read, the slots used of its 26-passage cap, and the characters the cap cut off."
+      },
+      {
+        "priority": 2,
+        "page": 1,
+        "passages": [
+          5,
+          6
+        ],
+        "check": "mid_sentence_start",
+        "problem": "\"How to read your result\" is 2,450 characters under one h2, so the 2,000-character window cuts it and passage #6 opens with \"to quote.\" mid-sentence.",
+        "fix": "Make each of the four readings its own h2 (\"Chunks that never reach the index\", \"The extraction ratio\", …), so every passage starts where its topic starts and carries the heading that names it.",
+        "before": "to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page",
+        "after": "Which passage does a question retrieve? Asking Vectorscope a question returns the passages of the page that answer it, ranked, using only that page."
+      },
+      {
+        "priority": 3,
+        "page": 1,
+        "passages": [
+          13,
+          14
+        ],
+        "check": "mid_sentence_start",
+        "problem": "The FAQ is one h2 of 2,292 characters; the window splits the answer to \"Is it really free?\" across two passages, and #14 opens with \"after the reading is produced\".",
+        "fix": "Split the FAQ into two h2 sections (AI citations; using Vectorscope), each under 2,000 characters, so no answer is cut away from its question.",
+        "before": "after the reading is produced. No account is needed, so there is nothing to attach it to.",
+        "after": "Vectorscope does not keep the fetched page once the reading is produced, and it needs no account, so nothing is attached to you."
+      },
+      {
+        "priority": 4,
+        "page": 1,
+        "passages": [
+          3
+        ],
+        "check": "thin_section",
+        "problem": "\"Important passage outside the cap?\" has 139 characters under it, and the answer leans on the heading: \"Move it earlier\" says nothing to a retriever that sees the passage alone.",
+        "fix": "Repeat the subject in the answer and name the cap, so the passage stands on its own.",
+        "before": "Move it earlier on the page, or split the page so that passage has a budget of its own.",
+        "after": "If an important passage falls outside Vectorscope's 26-passage cap, move it earlier on the page, or split the page so that passage has a budget of its own."
+      },
+      {
+        "priority": 5,
+        "page": 1,
+        "passages": [
+          16
+        ],
+        "check": null,
+        "problem": "\"One page on its own.\" opens the passage with no subject; read alone it does not say what is limited.",
+        "fix": "Name the product and the limit in the first sentence.",
+        "before": "One page on its own.",
+        "after": "Vectorscope reads one page on its own."
+      }
+    ],
+    "queries": [
+      {
+        "id": "q1",
+        "query": "what is semantic chunking",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 7,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "Semantic chunking is splitting a page into passages where its meaning changes, instead of every fixed number of characters or at every heading."
+          }
+        }
+      },
+      {
+        "id": "q2",
+        "query": "does Vectorscope use semantic chunking",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 13,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "Does Vectorscope use semantic chunking? Not to cut the page. Vectorscope cuts at every h2"
+          }
+        }
+      },
+      {
+        "id": "q3",
+        "query": "how many passages of a page does a retriever read",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 3,
+            "verdict": "partial",
+            "citable": false,
+            "quote": "This reading takes at most 26 passages from a page."
+          }
+        }
+      },
+      {
+        "id": "q4",
+        "query": "how do I get cited in AI Overviews",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 13,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "Give the answer its own passage, under a heading that names the question, high enough on the page to survive the retrieval cap."
+          }
+        }
+      },
+      {
+        "id": "q5",
+        "query": "what is the extraction ratio",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 5,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "The extraction ratio is how much of the page turned into readable text"
+          }
+        }
+      },
+      {
+        "id": "q6",
+        "query": "how to compare my RAG chunker against a reference",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 9,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "Run a page you already index, and compare the passage boundaries with your own chunker's"
+          }
+        }
+      },
+      {
+        "id": "q7",
+        "query": "is Vectorscope free",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 14,
+            "verdict": "complete",
+            "citable": true,
+            "quote": "Is it really free? Yes, with a rate limit rather than a paywall."
+          }
+        }
+      },
+      {
+        "id": "q8",
+        "query": "which chunking strategy is best for RAG",
+        "source": "generated",
+        "results": {
+          "1": {
+            "passage": 7,
+            "verdict": "partial",
+            "citable": false,
+            "quote": "Fixed-length chunking cuts every N characters and is the default in most pipelines because it is trivial to implement."
+          }
+        }
+      }
+    ],
+    "facts": [
+      {
+        "id": "f1",
+        "fact": "A page contributes at most 26 passages; the rest is never read.",
+        "topic": null,
+        "pages": {
+          "1": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "id": "f2",
+        "fact": "Long sections are cut into 2,000-character windows with 200 characters of overlap.",
+        "topic": null,
+        "pages": {
+          "1": [
+            7,
+            9,
+            13
+          ]
+        }
+      },
+      {
+        "id": "f3",
+        "fact": "Only an h2 starts a passage; an h3 stays inside the passage of the h2 above it.",
+        "topic": null,
+        "pages": {
+          "1": [
+            7,
+            13
+          ]
+        }
+      },
+      {
+        "id": "f4",
+        "fact": "The grouping embeds each passage after the cut; the cut itself is not semantic.",
+        "topic": null,
+        "pages": {
+          "1": [
+            7,
+            13
+          ]
+        }
+      },
+      {
+        "id": "f5",
+        "fact": "A test of one URL takes about twenty seconds.",
+        "topic": null,
+        "pages": {
+          "1": [
+            9
+          ]
+        }
+      },
+      {
+        "id": "f6",
+        "fact": "Free with a rate limit, no account; the fetched page is not retained.",
+        "topic": null,
+        "pages": {
+          "1": [
+            13,
+            14
+          ]
+        }
+      }
+    ]
+  },
+  "metrics": {
+    "words": {
+      "layer": "measured",
+      "label": "Words",
+      "formula": "The extracted body text split on whitespace; every non-empty piece is a word.",
+      "unit": "words",
+      "threshold": null,
+      "limits": "Counted after the cleaner, so menus, footers and hidden text are not in it. A page drawn by JavaScript reads low here; compare with --render."
+    },
+    "headings": {
+      "layer": "measured",
+      "label": "Headings found",
+      "formula": "h1 elements plus h2 elements (the first 40) left after the cleaner, with empty ones dropped.",
+      "unit": "headings",
+      "threshold": null,
+      "limits": "h3 and styled text are not counted: the chunker splits only at h2."
+    },
+    "passages": {
+      "layer": "measured",
+      "label": "Passages read",
+      "formula": "Sections at h2 headings (or paragraph blocks), long ones cut into 2,000-character windows with about 200 characters of overlap, slivers under 40 characters folded into the passage before, then the first 26 kept.",
+      "unit": "passages",
+      "threshold": "At most 26 per page (this tool's cap).",
+      "limits": "Other systems cut and cap differently; this is a working model of a typical retriever."
+    },
+    "slots": {
+      "layer": "measured",
+      "label": "Cap slots used",
+      "formula": "Passages kept, out of the 26-passage cap. \"Every slot filled\" when the chunker produced 26 or more.",
+      "unit": "slots",
+      "threshold": "26: a full cap means text may have been left out (see characters past the cap).",
+      "limits": "A full cap does not by itself mean text was lost: the last passage may end exactly at the end of the page."
+    },
+    "passage_chars": {
+      "layer": "measured",
+      "label": "Passage length",
+      "formula": "The length of one passage's text, as the chunker emitted it.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": "At most about 2,000, unless a sliver was folded in.",
+      "limits": "Neighbouring passages share about 200 characters by design."
+    },
+    "chars_in_passages": {
+      "layer": "measured",
+      "label": "Text in passages, overlap and intro included",
+      "formula": "The sum of every passage's length (page.charsIndexed). Passage #0 repeats the title, h1 and meta description; neighbours repeat about 200 characters.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Counts repeated text more than once, so it can exceed the page's own text. For how much of the page reached a passage, read the unique number."
+    },
+    "chars_unique": {
+      "layer": "derived",
+      "label": "Unique text in passages",
+      "formula": "Each passage is located in the kept text (the intro part, title, h1 and description, set aside); the union of the located spans is counted once, so overlap is not counted twice.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "A passage the locator cannot place is reported as unlocated rather than guessed. Heading lines the chunker carries only as a passage's heading are not in it."
+    },
+    "chars_past_cap": {
+      "layer": "derived",
+      "label": "Characters past the cap",
+      "formula": "Only when every one of the 26 slots is filled: the kept text after the end of the last passage. Equivalently, kept text − unique text in passages − text between passages, counted after the last one.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": "Above 0 means a tail no retriever using this cap can return.",
+      "limits": "Replaces the 2.101 estimate, which subtracted the overlapping total and so undercounted, often to 0. That old number is still exported as charsUnread."
+    },
+    "chars_unread_legacy": {
+      "layer": "derived",
+      "label": "charsUnread (2.101 meaning)",
+      "formula": "When the cap is reached: extracted body characters − text in passages including overlap and intro; otherwise 0.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Undercounts and can read 0 even when the cap cut a tail. Kept unchanged for compatibility; use characters past the cap."
+    },
+    "text_raw": {
+      "layer": "derived",
+      "label": "Text in the raw HTML",
+      "formula": "Kept text plus every removal in the table below. An estimate of the document's text, defined so the waterfall sums exactly.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Script and style bodies count as text here because the cleaner has to remove them; it is not the text a reader sees."
+    },
+    "text_removed": {
+      "layer": "measured",
+      "label": "Removed by the cleaner",
+      "formula": "For every element the cleaner removed (outermost only, so nothing counts twice): its own text at the moment of removal. Plus, when a main region was chosen, the text of everything outside it.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Observed on a second copy of the extraction, checked to give the same text; the removal itself is the product's rule and is not tuned here."
+    },
+    "text_kept": {
+      "layer": "measured",
+      "label": "Kept text",
+      "formula": "The extractor's body text (the chunker's input), whitespace folded.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Differs slightly from page.bodyChars, which counts line breaks as they are."
+    },
+    "not_in_passages": {
+      "layer": "derived",
+      "label": "Kept, but in no passage text",
+      "formula": "Kept text before the end of the last passage that no passage holds: h2 heading lines (carried as a passage's heading, not its text), the spaces between sections, and anything else (should be 0).",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "A retriever may still see a heading as the passage's metadata; this tool does not assume either way."
+    },
+    "overlap_chars": {
+      "layer": "derived",
+      "label": "Overlap",
+      "formula": "Located passage text − unique text in passages: what neighbouring windows repeat.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "By design, about 200 per cut inside a long section."
+    },
+    "intro_chars": {
+      "layer": "measured",
+      "label": "Intro",
+      "formula": "The title, h1 and meta description the chunker puts at the start of passage #0.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Not part of the body text, so it is outside the waterfall's kept stage."
+    },
+    "removal_chars": {
+      "layer": "measured",
+      "label": "Characters removed by one element",
+      "formula": "The removed element's text, whitespace folded, at the moment the cleaner removed it.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": null,
+      "limits": "Elements with no text are counted but not listed. Beyond the first 200 the rest are summed, never dropped."
+    },
+    "section_reached": {
+      "layer": "derived",
+      "label": "Section text that reached a passage",
+      "formula": "For each section the chunker made (the intro, the text before the first h2, each h2), the part of its text inside some passage, over its length.",
+      "unit": "characters, whitespace runs folded to one space",
+      "threshold": "Under 100% means that section lost text, almost always to the cap.",
+      "limits": "When the page has no usable h2 split, the body is one row."
+    },
+    "robots_verdict": {
+      "layer": "measured",
+      "label": "robots.txt verdict",
+      "formula": "RFC 9309 over the site's /robots.txt: the group naming the token replaces *; the longest matching Allow or Disallow wins; Allow wins a tie.",
+      "unit": "allowed / blocked per crawler",
+      "threshold": null,
+      "limits": "A 4xx robots.txt means no rules; 5xx or no answer means all blocked. Some user-fetch crawlers say they may ignore robots.txt."
+    },
+    "markup": {
+      "layer": "measured",
+      "label": "Technical markup",
+      "formula": "From the raw HTML: every @type in application/ld+json blocks (through @graph), rel=canonical links, the meta description's length.",
+      "unit": "types, links, characters",
+      "threshold": "Meta description: 70–160 characters.",
+      "limits": "Read, not validated against schema.org."
+    },
+    "render_words": {
+      "layer": "measured",
+      "label": "Words with JavaScript",
+      "formula": "The same extraction and chunking over the DOM a local headless Chrome dumped after running the page's scripts.",
+      "unit": "words, passages",
+      "threshold": "50% more words and at least 150 more raises js_dependent.",
+      "limits": "Only with --render. The reading itself stays the plain fetch."
+    },
+    "group_chars": {
+      "layer": "derived",
+      "label": "Group size",
+      "formula": "Passages in the group, and the sum of their lengths.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Computed over the agent's groups, so it moves with the grouping."
+    },
+    "group_share": {
+      "layer": "derived",
+      "label": "Share of indexed text",
+      "formula": "The group's characters over the characters of every passage (overlap included).",
+      "unit": "percent",
+      "threshold": null,
+      "limits": "Computed over the agent's groups. Overlap counts in both neighbours."
+    },
+    "vocabulary": {
+      "layer": "derived",
+      "label": "Phrase and word counts",
+      "formula": "Over the passages' text with the overlap removed: ×uses, the passages that use it (p), and how many groups it reaches (g/total).",
+      "unit": "occurrences, passages, groups",
+      "threshold": "A phrase needs 2 uses in 2 passages, or 3 in one.",
+      "limits": "What the page says, not search demand. The group count rests on the agent's groups."
+    },
+    "check_verdicts": {
+      "layer": "derived",
+      "label": "Check verdicts",
+      "formula": "Fixed rules over the measured values, each a named constant in checks.mjs with its reason; every finding names the passages it rests on.",
+      "unit": "findings, by severity",
+      "threshold": "Each check's threshold is in the check table of SKILL.md.",
+      "limits": "repeated_claim uses the agent's groups; every other check does not."
+    },
+    "groups": {
+      "layer": "judgement",
+      "label": "Groups and labels",
+      "formula": "The agent read every passage and grouped them by subject (at most 6); its label is its own. The label source is computed: a heading most members share, else two distinctive words.",
+      "unit": "groups",
+      "threshold": "At most 6 groups.",
+      "limits": "Not an embedding clustering; another model may group a little differently."
+    },
+    "duplicates": {
+      "layer": "judgement",
+      "label": "Repeats",
+      "formula": "Passages the agent marked as repeating an earlier, non-adjacent passage almost word for word.",
+      "unit": "passages",
+      "threshold": null,
+      "limits": "The product judges this from embeddings at cosine 0.94; here it is read."
+    },
+    "query_verdicts": {
+      "layer": "judgement",
+      "label": "Query test",
+      "formula": "For 5 to 10 typical queries, the agent names the best passage and a verdict (complete, partial, missing) and quotes the answer; the quote is checked verbatim.",
+      "unit": "queries",
+      "threshold": null,
+      "limits": "Judged from the passages only; it is not a measurement of what any assistant returns."
+    },
+    "plan": {
+      "layer": "judgement",
+      "label": "Rewrite plan",
+      "formula": "The agent's fixes in priority order; each 'before' is checked verbatim against its passage, each cited check against the checks that fired.",
+      "unit": "items",
+      "threshold": null,
+      "limits": "Advice, not a measurement."
+    },
+    "facts": {
+      "layer": "judgement",
+      "label": "Citable facts",
+      "formula": "The agent's list of concrete facts the passages state, each with the passages that state it.",
+      "unit": "facts",
+      "threshold": null,
+      "limits": "Fact gaps are only as fair as this list is complete."
+    },
+    "topic_cells": {
+      "layer": "derived",
+      "label": "Topic × page cells",
+      "formula": "Passages and characters of the groups the agent assigned to each shared topic.",
+      "unit": "characters, as the passage text holds them",
+      "threshold": null,
+      "limits": "Computed over the agent's groups and topics."
+    },
+    "diff_counts": {
+      "layer": "derived",
+      "label": "Changes since the baseline",
+      "formula": "Passages matched by identical text, then by the same heading in order; the rest are added or removed.",
+      "unit": "passages",
+      "threshold": null,
+      "limits": "A passage that moved and changed heading counts as removed plus added."
+    }
   },
   "checks": [
     {
@@ -904,14 +2954,7 @@
       }
     ]
   },
-  "render": {
-    "ok": true,
-    "browser": "chrome.exe",
-    "wordCount": 2463,
-    "passages": 17,
-    "charsIndexed": 14178,
-    "headings": 14
-  },
+  "render": null,
   "plan": [
     {
       "priority": 1,

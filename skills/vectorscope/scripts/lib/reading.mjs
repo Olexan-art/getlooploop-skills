@@ -15,6 +15,7 @@ import { shortLineRuns } from "./checks.mjs";
 import { renderPage } from "./render.mjs";
 import { basename } from "node:path";
 import { declaredLanguagesFromHtml, judgeLanguage } from "./language.mjs";
+import { measureLosses } from "./losses.mjs";
 
 export const REFUSED_LANGUAGE_RU = "refused_language_ru";
 
@@ -32,7 +33,7 @@ function analyse(html, finalUrl, urlKey) {
 
 /** Extract and chunk one HTML document exactly as the product does. */
 function chunkHtml(html, finalUrl, urlKey, host, analysed = analyse(html, finalUrl, urlKey)) {
-  const chunks = chunkPage({
+  const chunkerPage = {
     id: "public",
     url: analysed.url,
     domain: host,
@@ -42,8 +43,9 @@ function chunkHtml(html, finalUrl, urlKey, host, analysed = analyse(html, finalU
     metaDescription: analysed.metaDescription || null,
     bodyText: analysed.bodyText || null,
     isCompetitor: false,
-  });
-  return { analysed, chunks };
+  };
+  const chunks = chunkPage(chunkerPage);
+  return { analysed, chunks, chunkerPage };
 }
 
 /**
@@ -97,7 +99,7 @@ export async function readPage({ url, html, finalUrl, robots, render = false, on
       },
     };
   }
-  const { chunks } = chunkHtml(fetched.html, fetched.url, urlKey, host, analysed);
+  const { chunks, chunkerPage } = chunkHtml(fetched.html, fetched.url, urlKey, host, analysed);
 
   if (!chunks.length) return { ...base, ok: false, reasonCode: "empty" };
 
@@ -136,6 +138,8 @@ export async function readPage({ url, html, finalUrl, robots, render = false, on
   }));
 
   // ── layers (v2) ──
+  // 2.102: where the text went, stage by stage. Observed on a copy; the passages above are final.
+  const losses = measureLosses({ html: fetched.html, chunkerPage, passages, capReached });
   const technical = readTechnical(fetched.html, analysed.url);
   const layout = { shortLineRuns: shortLineRuns(analysed.bodyText || "", passages) };
 
@@ -176,6 +180,7 @@ export async function readPage({ url, html, finalUrl, robots, render = false, on
     technical,
     robots: robotsReport(robotsFetched, analysed.url),
     layout,
+    losses,
     ...(rendered ? { render: rendered } : {}),
   };
 }

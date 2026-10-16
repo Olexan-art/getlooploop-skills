@@ -373,12 +373,870 @@
   "layout": {
     "shortLineRuns": []
   },
-  "render": {
-    "ok": true,
-    "browser": "chrome.exe",
-    "wordCount": 13769,
-    "passages": 26,
-    "charsIndexed": 41850,
-    "headings": 17
+  "losses": {
+    "unit": "characters, whitespace runs folded to one space",
+    "consistent": true,
+    "waterfall": {
+      "raw": 139071,
+      "removed": 44809,
+      "kept": 94262,
+      "inPassagesUnique": 39111,
+      "notInPassages": 150,
+      "pastCap": 55001
+    },
+    "passages": {
+      "unique": 39111,
+      "total": 41850,
+      "overlap": 2686,
+      "intro": 53,
+      "unlocated": 0
+    },
+    "notInPassages": {
+      "headingLines": 124,
+      "whitespace": 26,
+      "other": 0
+    },
+    "removals": {
+      "elementsMatched": 340,
+      "elementsWithText": 41,
+      "chars": 44809,
+      "byReason": [
+        {
+          "reason": "script_style",
+          "elements": 14,
+          "chars": 28933
+        },
+        {
+          "reason": "head_meta",
+          "elements": 1,
+          "chars": 34
+        },
+        {
+          "reason": "hidden",
+          "elements": 11,
+          "chars": 161
+        },
+        {
+          "reason": "header_chrome",
+          "elements": 1,
+          "chars": 277
+        },
+        {
+          "reason": "header_controls",
+          "elements": 1,
+          "chars": 652
+        },
+        {
+          "reason": "nav",
+          "elements": 10,
+          "chars": 14208
+        },
+        {
+          "reason": "footer",
+          "elements": 1,
+          "chars": 523
+        },
+        {
+          "reason": "form_control",
+          "elements": 1,
+          "chars": 6
+        },
+        {
+          "reason": "outside_main",
+          "elements": 1,
+          "chars": 15
+        }
+      ],
+      "items": [
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 8187,
+          "sample": "(RLQ=window.RLQ||[]).push(function(){mw.config.set({\"wgHostname\":\"mw-web.eqiad.c"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "head > script",
+          "chars": 6252,
+          "sample": "(function(){var className=\"client-js vector-feature-language-in-header-enabled v"
+        },
+        {
+          "reason": "nav",
+          "tag": "div",
+          "id": "mwDmY",
+          "classes": [
+            "navbox"
+          ],
+          "element": "div#mwDmY.navbox",
+          "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmY.navbox",
+          "chars": 4118,
+          "sample": "v t e Artificial intelligence (AI) History timeline Glossary Lists Algorithms Co"
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": null,
+          "classes": [],
+          "element": "style",
+          "path": "… > div.mw-content-ltr > section#mwAQ > span#mwDQ > style",
+          "chars": 3237,
+          "sample": ".mw-parser-output .sidebar{width:22em;float:right;clear:right;margin:0.5em 0 1em"
+        },
+        {
+          "reason": "nav",
+          "tag": "div",
+          "id": "mwDmI",
+          "classes": [
+            "navbox"
+          ],
+          "element": "div#mwDmI.navbox",
+          "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmI.navbox",
+          "chars": 3042,
+          "sample": "v t e Large language models (LLMs) List of LLMs AI Companies Benchmarks List of "
+        },
+        {
+          "reason": "nav",
+          "tag": "table",
+          "id": "mwDg",
+          "classes": [
+            "sidebar",
+            "sidebar-collapse",
+            "nomobile",
+            "nowraplinks"
+          ],
+          "element": "table#mwDg.sidebar.sidebar-collapse",
+          "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwAQ > table#mwDg.sidebar.sidebar-collapse",
+          "chars": 2515,
+          "sample": "Part of a series on Machine learning and data mining Paradigms Supervised learni"
+        },
+        {
+          "reason": "nav",
+          "tag": "div",
+          "id": "mwDmQ",
+          "classes": [
+            "navbox"
+          ],
+          "element": "div#mwDmQ.navbox",
+          "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmQ.navbox",
+          "chars": 2444,
+          "sample": "v t e Natural language processing General terms AI-complete Bag-of-words n-gram "
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": null,
+          "classes": [],
+          "element": "style",
+          "path": "… > div.mw-content-ltr > section#mwAQ > span#mwDQ > style",
+          "chars": 2340,
+          "sample": ".mw-parser-output .hlist dl,.mw-parser-output .hlist ol,.mw-parser-output .hlist"
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": null,
+          "classes": [],
+          "element": "style",
+          "path": "… > section#mwDlI > div#mwDmE > span.mw-empty-elt > style",
+          "chars": 2158,
+          "sample": ".mw-parser-output .navbox{box-sizing:border-box;border:1px solid #a2a9b1;width:1"
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": "mwBdQ",
+          "classes": [],
+          "element": "style#mwBdQ",
+          "path": "… > ol#mwBcw > li#cite_note-few-shot-learners2-1 > span#mw-reference-text-cite_note-few-shot-learners2-1 > style#mwBdQ",
+          "chars": 2100,
+          "sample": ".mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-pars"
+        },
+        {
+          "reason": "nav",
+          "tag": "nav",
+          "id": "mw-panel-toc",
+          "classes": [
+            "mw-table-of-contents-container",
+            "vector-toc-landmark"
+          ],
+          "element": "nav#mw-panel-toc.mw-table-of-contents-container.vector-toc-landmark",
+          "path": "… > div.mw-page-container-inner > div.vector-column-start > div.vector-sticky-pinned-container > nav#mw-panel-toc.mw-table-of-contents-container.vector-toc-land",
+          "chars": 1627,
+          "sample": "Contents move to sidebar hide (Top) 1 History 2 Dataset preprocessing Toggle Dat"
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": null,
+          "classes": [],
+          "element": "style",
+          "path": "… > div.mw-content-ltr > section#mwBcg > span#mwBck > style",
+          "chars": 1151,
+          "sample": ".mw-parser-output .reflist-columns-2{column-width:30em}.mw-parser-output .reflis"
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": null,
+          "classes": [],
+          "element": "style",
+          "path": "… > tr > td.sidebar-navbar > span.mw-empty-elt > style",
+          "chars": 1109,
+          "sample": ".mw-parser-output .navbar{display:inline;font-size:88%;font-weight:normal}.mw-pa"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 867,
+          "sample": "{\"@context\":\"https:\\/\\/schema.org\",\"@type\":\"Article\",\"name\":\"Large language mode"
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": "mwBaE",
+          "classes": [],
+          "element": "style#mwBaE",
+          "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwBaA > style#mwBaE",
+          "chars": 783,
+          "sample": ".mw-parser-output .portalbox{padding:0;margin:0.5em 0;display:table;box-sizing:b"
+        },
+        {
+          "reason": "header_controls",
+          "tag": "header",
+          "id": null,
+          "classes": [
+            "mw-body-header",
+            "vector-page-titlebar",
+            "no-font-mode-scale"
+          ],
+          "element": "header.mw-body-header.vector-page-titlebar",
+          "path": "… > div.mw-page-container-inner > div.mw-content-container > main#content > header.mw-body-header.vector-page-titlebar",
+          "chars": 652,
+          "sample": "Afrikaans Aragonés العربية Azərbaycanca Boarisch Беларуская भोजपुरी বাংলা Bosans"
+        },
+        {
+          "reason": "footer",
+          "tag": "footer",
+          "id": "footer",
+          "classes": [
+            "mw-footer"
+          ],
+          "element": "footer#footer.mw-footer",
+          "path": "div.mw-page-container > div.mw-page-container-inner > div.mw-footer-container > footer#footer.mw-footer",
+          "chars": 523,
+          "sample": "This page was last edited on 15 October 2026, at 18:18 (UTC). Page was rendered "
+        },
+        {
+          "reason": "nav",
+          "tag": "nav",
+          "id": null,
+          "classes": [
+            "vector-page-tools-landmark"
+          ],
+          "element": "nav.vector-page-tools-landmark",
+          "path": "… > div.vector-page-toolbar > div.vector-page-toolbar-container > div#right-navigation > nav.vector-page-tools-landmark",
+          "chars": 314,
+          "sample": "Tools move to sidebar hide Actions Read Edit View history General What links her"
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": null,
+          "classes": [],
+          "element": "style",
+          "path": "… > div.mw-content-ltr > section#mwAQ > span#mwAw > style",
+          "chars": 303,
+          "sample": ".mw-parser-output .hatnote{font-style:italic}.mw-parser-output div.hatnote{paddi"
+        },
+        {
+          "reason": "header_chrome",
+          "tag": "header",
+          "id": null,
+          "classes": [
+            "vector-header",
+            "mw-header",
+            "no-font-mode-scale"
+          ],
+          "element": "header.vector-header.mw-header",
+          "path": "div.vector-header-container > header.vector-header.mw-header",
+          "chars": 277,
+          "sample": "Main menu move to sidebar hide Navigation Main page Contents Current events Rand"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "head > script",
+          "chars": 214,
+          "sample": "(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return[\"user.opti"
+        },
+        {
+          "reason": "script_style",
+          "tag": "noscript",
+          "id": null,
+          "classes": [],
+          "element": "noscript",
+          "path": "… > main#content > div#bodyContent > div#mw-content-text > noscript",
+          "chars": 187,
+          "sample": "<img src=\"https://en.wikipedia.org/wiki/Special:CentralAutoLogin/start?useformat"
+        },
+        {
+          "reason": "nav",
+          "tag": "ul",
+          "id": "mwBaI",
+          "classes": [
+            "noprint",
+            "portalbox",
+            "portalborder",
+            "portalright"
+          ],
+          "element": "ul#mwBaI.noprint.portalbox",
+          "path": "… > div#mw-content-text > div.mw-content-ltr > section#mwBaA > ul#mwBaI.noprint.portalbox",
+          "chars": 83,
+          "sample": "Computer programming portal Linguistics portal Mathematics portal Philosophy por"
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": null,
+          "classes": [],
+          "element": "style",
+          "path": "… > div.mw-content-ltr > section#mwAQ > span#mwDQ > style",
+          "chars": 45,
+          "sample": ".mw-parser-output .nobold{font-weight:normal}"
+        },
+        {
+          "reason": "head_meta",
+          "tag": "head",
+          "id": null,
+          "classes": [],
+          "element": "head",
+          "path": "head",
+          "chars": 34,
+          "sample": "Large language model - Wikipedia"
+        },
+        {
+          "reason": "nav",
+          "tag": "nav",
+          "id": null,
+          "classes": [
+            "vector-appearance-landmark"
+          ],
+          "element": "nav.vector-appearance-landmark",
+          "path": "… > main#content > div.vector-column-end > div.vector-sticky-pinned-container > nav.vector-appearance-landmark",
+          "chars": 31,
+          "sample": "Appearance move to sidebar hide"
+        },
+        {
+          "reason": "hidden",
+          "tag": "label",
+          "id": "vector-sticky-header-toc-label",
+          "classes": [
+            "vector-dropdown-label",
+            "cdx-button",
+            "cdx-button--fake-button",
+            "cdx-button--fake-button--enabled"
+          ],
+          "element": "label#vector-sticky-header-toc-label.vector-dropdown-label.cdx-button",
+          "path": "… > div.vector-sticky-header-context-bar > nav.vector-toc-landmark > div#vector-sticky-header-toc > label#vector-sticky-header-toc-label.vector-dropdown-label.c",
+          "chars": 28,
+          "sample": "Toggle the table of contents"
+        },
+        {
+          "reason": "hidden",
+          "tag": "label",
+          "id": "vector-page-titlebar-toc-label",
+          "classes": [
+            "vector-dropdown-label",
+            "cdx-button",
+            "cdx-button--fake-button",
+            "cdx-button--fake-button--enabled"
+          ],
+          "element": "label#vector-page-titlebar-toc-label.vector-dropdown-label.cdx-button",
+          "path": "… > header.mw-body-header > nav.vector-toc-landmark > div#vector-page-titlebar-toc > label#vector-page-titlebar-toc-label.vector-dropdown-label.cdx-button",
+          "chars": 28,
+          "sample": "Toggle the table of contents"
+        },
+        {
+          "reason": "nav",
+          "tag": "nav",
+          "id": null,
+          "classes": [],
+          "element": "nav",
+          "path": "… > div.vector-page-toolbar > div.vector-page-toolbar-container > div#right-navigation > nav",
+          "chars": 22,
+          "sample": "Read Edit View history"
+        },
+        {
+          "reason": "hidden",
+          "tag": "div",
+          "id": null,
+          "classes": [
+            "vector-sticky-header-end"
+          ],
+          "element": "div.vector-sticky-header-end",
+          "path": "div.vector-header-container > div#vector-sticky-header > div.vector-sticky-header-end",
+          "chars": 22,
+          "sample": "72 languages Add topic"
+        },
+        {
+          "reason": "hidden",
+          "tag": "div",
+          "id": null,
+          "classes": [
+            "vector-sticky-header-context-bar-primary"
+          ],
+          "element": "div.vector-sticky-header-context-bar-primary",
+          "path": "… > div#vector-sticky-header > div.vector-sticky-header-start > div.vector-sticky-header-context-bar > div.vector-sticky-header-context-bar-primary",
+          "chars": 20,
+          "sample": "Large language model"
+        },
+        {
+          "reason": "outside_main",
+          "tag": "a",
+          "id": null,
+          "classes": [
+            "mw-jump-link"
+          ],
+          "element": "a.mw-jump-link",
+          "path": "a.mw-jump-link",
+          "chars": 15,
+          "sample": "Jump to content"
+        },
+        {
+          "reason": "hidden",
+          "tag": "label",
+          "id": "vector-user-links-dropdown-label",
+          "classes": [
+            "vector-dropdown-label",
+            "cdx-button",
+            "cdx-button--fake-button",
+            "cdx-button--fake-button--enabled"
+          ],
+          "element": "label#vector-user-links-dropdown-label.vector-dropdown-label.cdx-button",
+          "path": "… > div.vector-header-end > nav.vector-user-links > div#vector-user-links-dropdown > label#vector-user-links-dropdown-label.vector-dropdown-label.cdx-button",
+          "chars": 14,
+          "sample": "Personal tools"
+        },
+        {
+          "reason": "nav",
+          "tag": "nav",
+          "id": null,
+          "classes": [],
+          "element": "nav",
+          "path": "… > div.vector-page-toolbar > div.vector-page-toolbar-container > div#left-navigation > nav",
+          "chars": 12,
+          "sample": "Article Talk"
+        },
+        {
+          "reason": "hidden",
+          "tag": "label",
+          "id": "p-lang-btn-label",
+          "classes": [
+            "vector-dropdown-label",
+            "cdx-button",
+            "cdx-button--fake-button",
+            "cdx-button--fake-button--enabled"
+          ],
+          "element": "label#p-lang-btn-label.vector-dropdown-label.cdx-button",
+          "path": "… > main#content > header.mw-body-header > div#p-lang-btn > label#p-lang-btn-label.vector-dropdown-label.cdx-button",
+          "chars": 12,
+          "sample": "72 languages"
+        },
+        {
+          "reason": "hidden",
+          "tag": "label",
+          "id": "vector-appearance-dropdown-label",
+          "classes": [
+            "vector-dropdown-label",
+            "cdx-button",
+            "cdx-button--fake-button",
+            "cdx-button--fake-button--enabled"
+          ],
+          "element": "label#vector-appearance-dropdown-label.vector-dropdown-label.cdx-button",
+          "path": "… > div.vector-user-links-main > nav.vector-appearance-landmark > div#vector-appearance-dropdown > label#vector-appearance-dropdown-label.vector-dropdown-label.",
+          "chars": 10,
+          "sample": "Appearance"
+        },
+        {
+          "reason": "hidden",
+          "tag": "label",
+          "id": "vector-main-menu-dropdown-label",
+          "classes": [
+            "vector-dropdown-label",
+            "cdx-button",
+            "cdx-button--fake-button",
+            "cdx-button--fake-button--enabled"
+          ],
+          "element": "label#vector-main-menu-dropdown-label.vector-dropdown-label.cdx-button",
+          "path": "… > div.vector-header-start > nav.vector-main-menu-landmark > div#vector-main-menu-dropdown > label#vector-main-menu-dropdown-label.vector-dropdown-label.cdx-bu",
+          "chars": 9,
+          "sample": "Main menu"
+        },
+        {
+          "reason": "hidden",
+          "tag": "label",
+          "id": "vector-variants-dropdown-label",
+          "classes": [
+            "vector-dropdown-label",
+            "cdx-button",
+            "cdx-button--fake-button",
+            "cdx-button--fake-button--enabled"
+          ],
+          "element": "label#vector-variants-dropdown-label.vector-dropdown-label.cdx-button",
+          "path": "… > div#left-navigation > nav > div#vector-variants-dropdown > label#vector-variants-dropdown-label.vector-dropdown-label.cdx-button",
+          "chars": 7,
+          "sample": "English"
+        },
+        {
+          "reason": "form_control",
+          "tag": "form",
+          "id": "vector-sticky-search-form",
+          "classes": [
+            "cdx-search-input",
+            "cdx-search-input--has-end-button"
+          ],
+          "element": "form#vector-sticky-search-form.cdx-search-input.cdx-search-input--has-end-button",
+          "path": "… > div.vector-search-box-vue > div.vector-typeahead-search-container > div.cdx-typeahead-search > form#vector-sticky-search-form.cdx-search-input.cdx-search-in",
+          "chars": 6,
+          "sample": "Search"
+        },
+        {
+          "reason": "hidden",
+          "tag": "div",
+          "id": null,
+          "classes": [
+            "vector-sticky-header-icon-start",
+            "vector-button-flush-left"
+          ],
+          "element": "div.vector-sticky-header-icon-start.vector-button-flush-left",
+          "path": "div.vector-header-container > div#vector-sticky-header > div.vector-sticky-header-start > div.vector-sticky-header-icon-start.vector-button-flush-left",
+          "chars": 6,
+          "sample": "Search"
+        },
+        {
+          "reason": "hidden",
+          "tag": "label",
+          "id": "vector-page-tools-dropdown-label",
+          "classes": [
+            "vector-dropdown-label",
+            "cdx-button",
+            "cdx-button--fake-button",
+            "cdx-button--fake-button--enabled"
+          ],
+          "element": "label#vector-page-tools-dropdown-label.vector-dropdown-label.cdx-button",
+          "path": "… > div#right-navigation > nav.vector-page-tools-landmark > div#vector-page-tools-dropdown > label#vector-page-tools-dropdown-label.vector-dropdown-label.cdx-bu",
+          "chars": 5,
+          "sample": "Tools"
+        }
+      ],
+      "omitted": {
+        "elements": 0,
+        "chars": 0
+      }
+    },
+    "sections": {
+      "mode": "h2",
+      "rows": [
+        {
+          "kind": "intro",
+          "heading": null,
+          "chars": 53,
+          "inPassages": 53,
+          "located": true
+        },
+        {
+          "kind": "before_first_h2",
+          "heading": null,
+          "chars": 1157,
+          "inPassages": 1157,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "History",
+          "chars": 4782,
+          "inPassages": 4782,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Dataset preprocessing",
+          "chars": 2931,
+          "inPassages": 2931,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Training",
+          "chars": 1535,
+          "inPassages": 1535,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Inference",
+          "chars": 561,
+          "inPassages": 561,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Architecture",
+          "chars": 4109,
+          "inPassages": 4109,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Extensibility",
+          "chars": 7169,
+          "inPassages": 7169,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Forms of input and output",
+          "chars": 3636,
+          "inPassages": 3636,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Properties",
+          "chars": 4273,
+          "inPassages": 4273,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Interpretation",
+          "chars": 5157,
+          "inPassages": 5157,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Evaluation",
+          "chars": 4952,
+          "inPassages": 3801,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Limitations and challenges",
+          "chars": 3747,
+          "inPassages": 0,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Safety",
+          "chars": 3579,
+          "inPassages": 0,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Societal concerns",
+          "chars": 6122,
+          "inPassages": 0,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "See also",
+          "chars": 1007,
+          "inPassages": 0,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "References",
+          "chars": 37385,
+          "inPassages": 0,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Further reading",
+          "chars": 1917,
+          "inPassages": 0,
+          "located": true
+        }
+      ]
+    },
+    "placement": [
+      {
+        "index": 0,
+        "start": null,
+        "end": null,
+        "intro": 53
+      },
+      {
+        "index": 1,
+        "start": 0,
+        "end": 1157,
+        "intro": 0
+      },
+      {
+        "index": 2,
+        "start": 1166,
+        "end": 3164,
+        "intro": 0
+      },
+      {
+        "index": 3,
+        "start": 2968,
+        "end": 4962,
+        "intro": 0
+      },
+      {
+        "index": 4,
+        "start": 4768,
+        "end": 5948,
+        "intro": 0
+      },
+      {
+        "index": 5,
+        "start": 5971,
+        "end": 7960,
+        "intro": 0
+      },
+      {
+        "index": 6,
+        "start": 7775,
+        "end": 8902,
+        "intro": 0
+      },
+      {
+        "index": 7,
+        "start": 8912,
+        "end": 10447,
+        "intro": 0
+      },
+      {
+        "index": 8,
+        "start": 10458,
+        "end": 11019,
+        "intro": 0
+      },
+      {
+        "index": 9,
+        "start": 11033,
+        "end": 13031,
+        "intro": 0
+      },
+      {
+        "index": 10,
+        "start": 12833,
+        "end": 14828,
+        "intro": 0
+      },
+      {
+        "index": 11,
+        "start": 14633,
+        "end": 15142,
+        "intro": 0
+      },
+      {
+        "index": 12,
+        "start": 15157,
+        "end": 17154,
+        "intro": 0
+      },
+      {
+        "index": 13,
+        "start": 16960,
+        "end": 18952,
+        "intro": 0
+      },
+      {
+        "index": 14,
+        "start": 18760,
+        "end": 20755,
+        "intro": 0
+      },
+      {
+        "index": 15,
+        "start": 20560,
+        "end": 22326,
+        "intro": 0
+      },
+      {
+        "index": 16,
+        "start": 22353,
+        "end": 24352,
+        "intro": 0
+      },
+      {
+        "index": 17,
+        "start": 24158,
+        "end": 25989,
+        "intro": 0
+      },
+      {
+        "index": 18,
+        "start": 26001,
+        "end": 27994,
+        "intro": 0
+      },
+      {
+        "index": 19,
+        "start": 27801,
+        "end": 29798,
+        "intro": 0
+      },
+      {
+        "index": 20,
+        "start": 29620,
+        "end": 30274,
+        "intro": 0
+      },
+      {
+        "index": 21,
+        "start": 30290,
+        "end": 32287,
+        "intro": 0
+      },
+      {
+        "index": 22,
+        "start": 32094,
+        "end": 34088,
+        "intro": 0
+      },
+      {
+        "index": 23,
+        "start": 33896,
+        "end": 35447,
+        "intro": 0
+      },
+      {
+        "index": 24,
+        "start": 35459,
+        "end": 37450,
+        "intro": 0
+      },
+      {
+        "index": 25,
+        "start": 37263,
+        "end": 39260,
+        "intro": 0
+      }
+    ]
   }
 }

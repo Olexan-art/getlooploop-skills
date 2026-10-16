@@ -147,7 +147,8 @@ function mergeSlivers(chunks, maxChars) {
   return out.map((chunk, index) => ({ ...chunk, chunkIndex: index }));
 }
 
-function extractSections(page) {
+// Exported in 2.102 so the loss measurement reads the chunker's own sections; the body is unchanged.
+export function extractSections(page) {
   const sections = [];
   const h1 = toStringArray(page.h1);
   const h2 = toStringArray(page.h2);

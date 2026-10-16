@@ -4,6 +4,7 @@
 import { dominantHeading, labelGroup, labelSourceOf, pageStopLanguage, PREVIEW_CHARS } from "./lens.mjs";
 import { flattenVocabulary, pageVocabulary } from "./vocabulary.mjs";
 import { runChecks } from "./checks.mjs";
+import { charsPastCap } from "./losses.mjs";
 
 /** The read-out over a judged grouping. */
 export function buildJudgedLens(reading, grouping) {
@@ -121,7 +122,16 @@ export function diffReadings(oldReading, newReading, oldLens = null, newLens = n
     .map((p, i) => ({ index: p.index, heading: p.heading, chars: p.charCount }))
     .filter((_, i) => matchOld[i] === null);
 
-  const capOf = (r) => ({ passages: r.page.chunksIndexed, capReached: r.page.capReached, charsUnread: r.page.charsUnread, words: r.page.wordCount, chars: r.page.charsIndexed });
+  // charsUnread keeps its 2.101 meaning; charsPastCap (2.102) is the honest count, and the waterfall is null for a reading made before 2.102.
+  const capOf = (r) => ({
+    passages: r.page.chunksIndexed,
+    capReached: r.page.capReached,
+    charsUnread: r.page.charsUnread,
+    charsPastCap: charsPastCap(r),
+    words: r.page.wordCount,
+    chars: r.page.charsIndexed,
+    waterfall: r.losses?.waterfall ?? null,
+  });
 
   let groups = null;
   if (oldLens && newLens) {

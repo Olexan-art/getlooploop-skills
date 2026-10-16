@@ -20195,10 +20195,11 @@ function gluedBoundary(left, right, elementText) {
   return phrase && new RegExp("\\p{L}", "u").test(l) && new RegExp("\\p{Lu}", "u").test(r);
 }
 __name(gluedBoundary, "gluedBoundary");
-function extractVisiblePageText($2) {
+function extractVisiblePageText($2, observer = null) {
   const htmlSource = $2.root().html() || "";
   const htmlBytes = Buffer.byteLength(htmlSource, "utf-8");
   const $clone = load(htmlSource);
+  if (observer) observer.removing($clone, $clone(NON_RENDERED.join(", ")), "non_rendered");
   $clone(NON_RENDERED.join(", ")).replaceWith(BOUNDARY);
   const BLOCKS = "h1, h2, h3, h4, h5, h6, p, li, tr, td, th, div, section, article, blockquote, pre, figcaption, dd, dt, summary, details, br, hr";
   $clone(BLOCKS).after(String.fromCharCode(10));
@@ -20224,6 +20225,7 @@ function extractVisiblePageText($2) {
     const titleBlock = header.find("h1").length > 0 && header.find("nav, [role='navigation']").length === 0;
     const banner = (header.attr("role") || "").trim().toLowerCase() === "banner";
     if (banner || !scoped && !titleBlock) {
+      if (observer) observer.removing($clone, header, banner ? "banner_role" : "header_chrome");
       header.replaceWith(BOUNDARY);
       return;
     }
@@ -20233,8 +20235,10 @@ function extractVisiblePageText($2) {
       return between.filter(PROSE).length === 0 && between.filter(CHROME.join(", ")).length === 0;
     }).toArray().map((node) => `${$clone.html(node)}
 `).join("");
+    if (observer) observer.headerTrimmed($clone, header, kept);
     header.replaceWith(`${BOUNDARY}${kept}${BOUNDARY}`);
   });
+  if (observer) observer.removing($clone, $clone(CHROME.join(", ")), "chrome");
   $clone(CHROME.join(", ")).replaceWith(BOUNDARY);
   const h2 = $clone("h2").map((_, el) => headingText($clone(el).text())).get().filter(Boolean);
   const mainSel = "main, article, [role='main'], .content, .post, .entry-content, .article-body, #content, #main";
@@ -20243,11 +20247,18 @@ function extractVisiblePageText($2) {
   const regions = $clone(mainSel).toArray();
   if (regions.length) {
     let best = "";
+    let bestElement = null;
     for (const element of regions) {
       const text3 = $clone(element).text() || "";
-      if (text3.length > best.length) best = text3;
+      if (text3.length > best.length) {
+        best = text3;
+        bestElement = element;
+      }
     }
-    if (best.length >= bodyRaw.length * 0.25) rawText = best;
+    if (best.length >= bodyRaw.length * 0.25) {
+      rawText = best;
+      if (observer) observer.mainRegion($clone, bestElement);
+    }
   }
   const bodyText = resolveBoundaries(rawText).replace(/\u00a0/g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n[ \t]+/g, "\n").replace(/\n{3,}/g, "\n\n").replace(/[ \t]{2,}/g, " ").trim();
   const textBytes = Buffer.byteLength(bodyText, "utf-8");
@@ -21241,6 +21252,341 @@ function robotsReport(fetched, pageUrl) {
 }
 __name(robotsReport, "robotsReport");
 
+// scripts/lib/losses.mjs
+var REMOVAL_REASONS = [
+  "script_style",
+  "embedded",
+  "head_meta",
+  "hidden",
+  "header_chrome",
+  "banner_role",
+  "header_controls",
+  "nav",
+  "footer",
+  "aside",
+  "contentinfo_role",
+  "form_control",
+  "overlay_class",
+  "outside_main"
+];
+var MAX_REMOVAL_ITEMS = 200;
+var SAMPLE_CHARS = 80;
+var LOCATE_BACK_CHARS = 600;
+function foldText(text3) {
+  return String(text3 ?? "").replace(//g, " ").replace(/\s+/g, " ").trim();
+}
+__name(foldText, "foldText");
+var isElement = /* @__PURE__ */ __name((node) => node && (node.type === "tag" || node.type === "script" || node.type === "style"), "isElement");
+function nonRenderedReason(node) {
+  const tag = (node.name || "").toLowerCase();
+  if (["script", "style", "noscript", "template"].includes(tag)) return "script_style";
+  if (["svg", "canvas", "iframe", "object", "embed"].includes(tag)) return "embedded";
+  if (["head", "link", "meta"].includes(tag)) return "head_meta";
+  return "hidden";
+}
+__name(nonRenderedReason, "nonRenderedReason");
+function chromeReason($2, node) {
+  const tag = (node.name || "").toLowerCase();
+  const el = $2(node);
+  if (tag === "nav") return "nav";
+  if (tag === "footer") return "footer";
+  if (tag === "aside") return "aside";
+  if (["form", "button", "select", "textarea", "input"].includes(tag)) return "form_control";
+  const role = (el.attr("role") || "").trim().toLowerCase();
+  if (role === "navigation") return "nav";
+  if (role === "banner") return "banner_role";
+  if (role === "contentinfo") return "contentinfo_role";
+  if (role === "complementary") return "aside";
+  return "overlay_class";
+}
+__name(chromeReason, "chromeReason");
+function nameOf(node) {
+  const tag = (node.name || "?").toLowerCase();
+  const id = node.attribs?.id ? `#${String(node.attribs.id).trim().split(/\s+/)[0]}` : "";
+  const classes = String(node.attribs?.class || "").trim().split(/\s+/).filter(Boolean).slice(0, 2).map((c) => `.${c}`).join("");
+  return `${tag}${id}${classes}`.slice(0, 80);
+}
+__name(nameOf, "nameOf");
+function pathOf2(node) {
+  const parts = [];
+  let current = node.parent;
+  while (isElement(current) && !["body", "html"].includes(current.name) && parts.length < 3) {
+    const id = current.attribs?.id ? `#${String(current.attribs.id).trim().split(/\s+/)[0]}` : "";
+    const cls = String(current.attribs?.class || "").trim().split(/\s+/).filter(Boolean)[0];
+    parts.unshift(`${current.name}${id || (cls ? `.${cls}` : "")}`);
+    current = current.parent;
+  }
+  const more = isElement(current) && !["body", "html"].includes(current.name) ? "… > " : "";
+  return `${more}${[...parts, nameOf(node)].join(" > ")}`.slice(0, 160);
+}
+__name(pathOf2, "pathOf");
+function row($2, node, reason, chars, text3) {
+  return {
+    reason,
+    tag: (node.name || "#text").toLowerCase(),
+    id: node.attribs?.id ? String(node.attribs.id).slice(0, 60) : null,
+    classes: String(node.attribs?.class || "").trim().split(/\s+/).filter(Boolean).slice(0, 4),
+    element: isElement(node) ? nameOf(node) : "#text",
+    path: isElement(node) ? pathOf2(node) : `${pathOf2(node.parent)} > #text`,
+    chars,
+    sample: text3.slice(0, SAMPLE_CHARS)
+  };
+}
+__name(row, "row");
+function makeObserver() {
+  const rows = [];
+  let elements = 0;
+  const outermost = /* @__PURE__ */ __name((selection) => {
+    const nodes = selection.toArray();
+    const set = new Set(nodes);
+    return nodes.filter((node) => {
+      for (let p = node.parent; p; p = p.parent) if (set.has(p)) return false;
+      return true;
+    });
+  }, "outermost");
+  const record = /* @__PURE__ */ __name(($2, node, reason) => {
+    elements += 1;
+    const text3 = foldText($2(node).text());
+    if (text3.length) rows.push(row($2, node, reason, text3.length, text3));
+  }, "record");
+  return {
+    rows,
+    get elements() {
+      return elements;
+    },
+    removing($2, selection, step) {
+      for (const node of outermost(selection)) {
+        const reason = step === "non_rendered" ? nonRenderedReason(node) : step === "chrome" ? chromeReason($2, node) : step;
+        if (reason === "head_meta" && (node.name || "").toLowerCase() === "head") {
+          let code = 0;
+          for (const inner of outermost($2(node).find("script, style, noscript, template"))) {
+            const before2 = rows.length;
+            record($2, inner, "script_style");
+            if (rows.length > before2) code += rows[rows.length - 1].chars;
+          }
+          elements += 1;
+          const text3 = foldText($2(node).text());
+          const chars = Math.max(0, text3.length - code);
+          if (chars) rows.push(row($2, node, "head_meta", chars, foldText($2(node).find("title").first().text()) || text3));
+          continue;
+        }
+        record($2, node, reason);
+      }
+    },
+    headerTrimmed($2, header, keptHtml) {
+      elements += 1;
+      const full = foldText(header.text());
+      const kept = foldText(load(`<div>${keptHtml}</div>`, null, false).text());
+      const chars = Math.max(0, full.length - kept.length);
+      if (chars) {
+        const sample = full.startsWith(kept) ? full.slice(kept.length).trim() : full;
+        rows.push(row($2, header[0], "header_controls", chars, sample));
+      }
+    },
+    mainRegion($2, best) {
+      for (let node = best; node && node.parent && !(isElement(node) && node.name === "body"); node = node.parent) {
+        const parent2 = node.parent;
+        if (parent2.type === "root") break;
+        let loose = "";
+        for (const sibling of parent2.children || []) {
+          if (sibling === node) continue;
+          if (isElement(sibling)) {
+            elements += 1;
+            const text4 = foldText($2(sibling).text());
+            if (text4.length) rows.push(row($2, sibling, "outside_main", text4.length, text4));
+          } else if (sibling.type === "text") {
+            loose += ` ${sibling.data || ""}`;
+          }
+        }
+        const text3 = foldText(loose);
+        if (text3.length) rows.push(row($2, { type: "text", name: "#text", parent: parent2 }, "outside_main", text3.length, text3));
+        if (isElement(parent2) && parent2.name === "body") break;
+      }
+    }
+  };
+}
+__name(makeObserver, "makeObserver");
+function unionLength(intervals) {
+  const sorted = intervals.filter(([a, b]) => b > a).sort((x, y) => x[0] - y[0]);
+  let total = 0;
+  let cs = -1;
+  let ce = -1;
+  for (const [a, b] of sorted) {
+    if (a > ce) {
+      if (ce > cs) total += ce - cs;
+      cs = a;
+      ce = b;
+    } else if (b > ce) ce = b;
+  }
+  if (ce > cs) total += ce - cs;
+  return total;
+}
+__name(unionLength, "unionLength");
+function locate(hay, needle, from) {
+  if (!needle) return -1;
+  const near = hay.indexOf(needle, Math.max(0, from - LOCATE_BACK_CHARS));
+  return near !== -1 ? near : hay.indexOf(needle);
+}
+__name(locate, "locate");
+function measureLosses({ html: html3, chunkerPage, passages, capReached }) {
+  const observer = makeObserver();
+  const observed = extractVisiblePageText(load(html3), observer);
+  const consistent = observed.bodyText === (chunkerPage.bodyText || "");
+  const body = foldText(chunkerPage.bodyText || "");
+  const kept = body.length;
+  const h1 = Array.isArray(chunkerPage.h1) ? chunkerPage.h1 : chunkerPage.h1 ? [chunkerPage.h1] : [];
+  const intros = [
+    foldText([chunkerPage.title, h1.join(" "), chunkerPage.metaDescription].filter(Boolean).join("\n")),
+    foldText([chunkerPage.title, typeof chunkerPage.h1 === "string" ? chunkerPage.h1 : "", chunkerPage.metaDescription].filter(Boolean).join("\n\n"))
+  ].filter(Boolean);
+  const intervals = [];
+  const placed = [];
+  let lastEnd = 0;
+  let introChars = 0;
+  let unlocated = 0;
+  let located = 0;
+  for (const passage of passages) {
+    const text3 = foldText(passage.text);
+    let rest = text3;
+    let intro = 0;
+    let at = locate(body, rest, lastEnd);
+    if (at === -1) {
+      for (const candidate of intros) {
+        if (rest === candidate) {
+          intro = candidate.length;
+          rest = "";
+          break;
+        }
+        if (rest.startsWith(`${candidate} `)) {
+          const tail = rest.slice(candidate.length + 1);
+          const found = locate(body, tail, lastEnd);
+          if (found !== -1) {
+            intro = candidate.length;
+            rest = tail;
+            at = found;
+            break;
+          }
+        }
+      }
+    }
+    introChars += intro;
+    if (rest && at !== -1) {
+      intervals.push([at, at + rest.length]);
+      located += rest.length;
+      lastEnd = Math.max(lastEnd, at + rest.length);
+      placed.push({ index: passage.index, start: at, end: at + rest.length, intro });
+    } else {
+      if (rest) unlocated += rest.length;
+      placed.push({ index: passage.index, start: null, end: null, intro });
+    }
+  }
+  const covered = new Uint8Array(kept);
+  for (const [a, b] of intervals) covered.fill(1, a, b);
+  const unique = unionLength(intervals);
+  let tailStart = kept;
+  if (capReached) {
+    tailStart = lastEnd;
+    while (tailStart < kept && body[tailStart] === " ") tailStart++;
+  }
+  const pastCap = kept - tailStart;
+  const sections = extractSections(chunkerPage);
+  const hasIntro = Boolean(sections.length && intros.length && foldText(sections[0].text) === intros[0]);
+  const bodySections = hasIntro ? sections.slice(1) : sections;
+  const ranges = [];
+  let cursor = 0;
+  for (const section of bodySections) {
+    const text3 = foldText(section.text);
+    const at = text3 ? body.indexOf(text3, cursor) : -1;
+    if (at === -1) ranges.push({ heading: section.heading ?? null, start: null, end: null, chars: text3.length });
+    else {
+      ranges.push({ heading: section.heading ?? null, start: at, end: at + text3.length, chars: text3.length });
+      cursor = at + text3.length;
+    }
+  }
+  const inSection = new Uint8Array(kept);
+  for (const r of ranges) if (r.start !== null) inSection.fill(1, r.start, r.end);
+  let headingLines = 0;
+  let whitespace2 = 0;
+  let other = 0;
+  for (let i = 0; i < tailStart; i++) {
+    if (covered[i]) continue;
+    if (body[i] === " ") whitespace2++;
+    else if (inSection[i]) other++;
+    else headingLines++;
+  }
+  const notInPassages = headingLines + whitespace2 + other;
+  const h2Mode = bodySections.some((s) => s.heading);
+  const rows = [];
+  if (hasIntro) rows.push({ kind: "intro", heading: null, chars: intros[0].length, inPassages: Math.min(intros[0].length, introChars), located: true });
+  const coveredIn = /* @__PURE__ */ __name((start, end2) => {
+    let n = 0;
+    for (let i = start; i < end2; i++) n += covered[i];
+    return n;
+  }, "coveredIn");
+  if (h2Mode) {
+    ranges.forEach((r, i) => {
+      rows.push({
+        kind: r.heading ? "h2" : i === 0 ? "before_first_h2" : "body",
+        heading: r.heading,
+        chars: r.chars,
+        inPassages: r.start === null ? null : coveredIn(r.start, r.end),
+        located: r.start !== null
+      });
+    });
+  } else if (ranges.length) {
+    const ok = ranges.every((r) => r.start !== null);
+    const chars = ranges.reduce((s, r) => s + r.chars, 0);
+    rows.push({ kind: "body", heading: null, chars, inPassages: ok ? ranges.reduce((s, r) => s + coveredIn(r.start, r.end), 0) : null, located: ok });
+  }
+  const all = observer.rows.slice().sort((a, b) => b.chars - a.chars || a.path.localeCompare(b.path));
+  const removedChars = all.reduce((s, r) => s + r.chars, 0);
+  const byReason = REMOVAL_REASONS.map((reason) => {
+    const list = all.filter((r) => r.reason === reason);
+    return { reason, elements: list.length, chars: list.reduce((s, r) => s + r.chars, 0) };
+  }).filter((r) => r.elements > 0);
+  const items = all.slice(0, MAX_REMOVAL_ITEMS);
+  const left = all.slice(MAX_REMOVAL_ITEMS);
+  const total = passages.reduce((s, p) => s + p.charCount, 0);
+  return {
+    unit: "characters, whitespace runs folded to one space",
+    consistent,
+    waterfall: {
+      raw: kept + removedChars,
+      removed: removedChars,
+      kept,
+      inPassagesUnique: unique,
+      notInPassages,
+      pastCap
+    },
+    passages: {
+      unique,
+      // The passages' own lengths, as page.charsIndexed counts them: overlap and the intro included.
+      total,
+      overlap: located - unique,
+      intro: introChars,
+      unlocated
+    },
+    notInPassages: { headingLines, whitespace: whitespace2, other },
+    removals: {
+      elementsMatched: observer.elements,
+      elementsWithText: all.length,
+      chars: removedChars,
+      byReason,
+      items,
+      omitted: { elements: left.length, chars: left.reduce((s, r) => s + r.chars, 0) }
+    },
+    sections: { mode: h2Mode ? "h2" : sections.length > 1 || hasIntro ? "paragraphs" : "window", rows },
+    placement: placed
+  };
+}
+__name(measureLosses, "measureLosses");
+var hasLosses = /* @__PURE__ */ __name((reading) => Boolean(reading?.losses?.waterfall), "hasLosses");
+function charsPastCap(reading) {
+  if (hasLosses(reading)) return reading.losses.waterfall.pastCap;
+  return reading?.page?.charsUnread ?? 0;
+}
+__name(charsPastCap, "charsPastCap");
+
 // scripts/lib/checks.mjs
 var FAQ_MIN_ANSWER_OPENERS = 3;
 var FAQ_MAX_QUESTION_RATIO = 0.5;
@@ -21533,8 +21879,9 @@ function pageChecks(reading) {
   const { page } = reading;
   const out = [];
   if (page.noindex) out.push({ code: "noindex", severity: "high", passages: [], evidence: {} });
-  if (page.capReached && page.charsUnread > 0) {
-    out.push({ code: "cap_overflow", severity: "high", passages: [reading.passages.length - 1], evidence: { charsUnread: page.charsUnread, cap: page.chunkCap, last: reading.passages.length - 1 } });
+  const pastCap = charsPastCap(reading);
+  if (page.capReached && pastCap > 0) {
+    out.push({ code: "cap_overflow", severity: "high", passages: [reading.passages.length - 1], evidence: { charsPastCap: pastCap, charsUnread: page.charsUnread, cap: page.chunkCap, last: reading.passages.length - 1 } });
   }
   const r = reading.render;
   if (r?.ok && r.wordCount >= page.wordCount * JS_GAIN_RATIO && r.wordCount - page.wordCount >= JS_GAIN_MIN_WORDS) {
@@ -21721,7 +22068,7 @@ function analyse(html3, finalUrl, urlKey) {
 }
 __name(analyse, "analyse");
 function chunkHtml(html3, finalUrl, urlKey, host, analysed = analyse(html3, finalUrl, urlKey)) {
-  const chunks = chunkPage({
+  const chunkerPage = {
     id: "public",
     url: analysed.url,
     domain: host,
@@ -21731,8 +22078,9 @@ function chunkHtml(html3, finalUrl, urlKey, host, analysed = analyse(html3, fina
     metaDescription: analysed.metaDescription || null,
     bodyText: analysed.bodyText || null,
     isCompetitor: false
-  });
-  return { analysed, chunks };
+  };
+  const chunks = chunkPage(chunkerPage);
+  return { analysed, chunks, chunkerPage };
 }
 __name(chunkHtml, "chunkHtml");
 async function readPage({ url, html: html3, finalUrl, robots, render: render3 = false, onHtml }) {
@@ -21773,7 +22121,7 @@ async function readPage({ url, html: html3, finalUrl, robots, render: render3 = 
       }
     };
   }
-  const { chunks } = chunkHtml(fetched.html, fetched.url, urlKey, host, analysed);
+  const { chunks, chunkerPage } = chunkHtml(fetched.html, fetched.url, urlKey, host, analysed);
   if (!chunks.length) return { ...base, ok: false, reasonCode: "empty" };
   const charsIndexed = chunks.reduce((sum, chunk) => sum + chunk.charCount, 0);
   const bodyChars = (analysed.bodyText || "").trim().length;
@@ -21805,6 +22153,7 @@ async function readPage({ url, html: html3, finalUrl, robots, render: render3 = 
     charCount: chunk.charCount,
     text: chunk.chunkText
   }));
+  const losses = measureLosses({ html: fetched.html, chunkerPage, passages, capReached });
   const technical = readTechnical(fetched.html, analysed.url);
   const layout = { shortLineRuns: shortLineRuns(analysed.bodyText || "", passages) };
   let robotsFetched;
@@ -21842,6 +22191,7 @@ async function readPage({ url, html: html3, finalUrl, robots, render: render3 = 
     technical,
     robots: robotsReport(robotsFetched, analysed.url),
     layout,
+    losses,
     ...rendered ? { render: rendered } : {}
   };
 }
@@ -21893,7 +22243,16 @@ function summarise(reading, file, prefix = "") {
   console.log(`${prefix}title     ${page.title || "(none)"}`);
   console.log(`${prefix}extracted ${fmt(page.wordCount)} words · ${page.headings} headings${page.noindex ? " · NOINDEX" : ""}`);
   console.log(`${prefix}chunked   ${passages.length} passages · ${fmt(page.charsIndexed)} chars · ${passages.length}/${page.chunkCap} cap slots${page.capReached ? " (cap reached)" : ""}`);
-  console.log(`${prefix}past cap  ${fmt(page.charsUnread)} chars`);
+  const losses = reading.losses;
+  if (losses) {
+    const w = losses.waterfall;
+    console.log(`${prefix}past cap  ${fmt(w.pastCap)} chars${w.pastCap !== page.charsUnread ? ` (the 2.101 estimate said ${fmt(page.charsUnread)})` : ""}`);
+    console.log(`${prefix}losses    raw ${fmt(w.raw)} → removed ${fmt(w.removed)} → kept ${fmt(w.kept)} → in passages ${fmt(w.inPassagesUnique)} unique (${fmt(losses.passages.total)} with overlap and intro) · ${fmt(w.notInPassages)} in no passage · ${fmt(w.pastCap)} past the cap`);
+    const top = losses.removals.byReason.slice().sort((a, b) => b.chars - a.chars).slice(0, 3);
+    if (top.length) console.log(`${prefix}removed   ${top.map((r) => `${r.reason} ${fmt(r.chars)}`).join(", ")}${losses.removals.byReason.length > 3 ? `, ${losses.removals.byReason.length - 3} more reasons` : ""}`);
+  } else {
+    console.log(`${prefix}past cap  ${fmt(page.charsUnread)} chars`);
+  }
   console.log(`${prefix}side-path ${roles.length ? roles.map((p) => `#${p.index} ${p.contentRole}`).join(", ") : "none"}`);
   if (robots) {
     const blocked = robots.bots.filter((b) => !b.allowed).map((b) => b.token);

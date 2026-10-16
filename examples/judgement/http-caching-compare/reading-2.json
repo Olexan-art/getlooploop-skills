@@ -316,12 +316,697 @@
       }
     ]
   },
-  "render": {
-    "ok": true,
-    "browser": "chrome.exe",
-    "wordCount": 2127,
-    "passages": 17,
-    "charsIndexed": 13635,
-    "headings": 11
+  "losses": {
+    "unit": "characters, whitespace runs folded to one space",
+    "consistent": true,
+    "waterfall": {
+      "raw": 25226,
+      "removed": 12426,
+      "kept": 12800,
+      "inPassagesUnique": 12497,
+      "notInPassages": 303,
+      "pastCap": 0
+    },
+    "passages": {
+      "unique": 12497,
+      "total": 13308,
+      "overlap": 576,
+      "intro": 231,
+      "unlocated": 0
+    },
+    "notInPassages": {
+      "headingLines": 254,
+      "whitespace": 49,
+      "other": 0
+    },
+    "removals": {
+      "elementsMatched": 60,
+      "elementsWithText": 40,
+      "chars": 12426,
+      "byReason": [
+        {
+          "reason": "script_style",
+          "elements": 7,
+          "chars": 8481
+        },
+        {
+          "reason": "embedded",
+          "elements": 5,
+          "chars": 24
+        },
+        {
+          "reason": "head_meta",
+          "elements": 1,
+          "chars": 79
+        },
+        {
+          "reason": "hidden",
+          "elements": 18,
+          "chars": 902
+        },
+        {
+          "reason": "banner_role",
+          "elements": 1,
+          "chars": 521
+        },
+        {
+          "reason": "nav",
+          "elements": 4,
+          "chars": 1875
+        },
+        {
+          "reason": "aside",
+          "elements": 3,
+          "chars": 524
+        },
+        {
+          "reason": "outside_main",
+          "elements": 1,
+          "chars": 20
+        }
+      ],
+      "items": [
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "script",
+          "chars": 6329,
+          "sample": "(function(d,e,v,s,i,t,E){d['GoogleDevelopersObject']=i; t=e.createElement(v);t.a"
+        },
+        {
+          "reason": "nav",
+          "tag": "nav",
+          "id": null,
+          "classes": [
+            "devsite-book-nav",
+            "devsite-nav",
+            "nocontent"
+          ],
+          "element": "nav.devsite-book-nav.devsite-nav",
+          "path": "section.devsite-wrapper > devsite-book-nav > nav.devsite-book-nav.devsite-nav",
+          "chars": 1171,
+          "sample": "Resources More AI and the web Fast load times Learn Core Web Vitals Identity Pro"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "devsite-analytics > script",
+          "chars": 807,
+          "sample": "{&#34;at&#34;: &#34;True&#34;, &#34;ga4&#34;: [], &#34;ga4p&#34;: [], &#34;gtm&#"
+        },
+        {
+          "reason": "banner_role",
+          "tag": "devsite-header",
+          "id": null,
+          "classes": [],
+          "element": "devsite-header",
+          "path": "section.devsite-wrapper > devsite-header",
+          "chars": 521,
+          "sample": "Resources Discover Baseline How to use Baseline Blog Case Studies English Deutsc"
+        },
+        {
+          "reason": "hidden",
+          "tag": "div",
+          "id": null,
+          "classes": [
+            "devsite-tabs-dropdown"
+          ],
+          "element": "div.devsite-tabs-dropdown",
+          "path": "… > devsite-tabs.upper-tabs > nav.devsite-tabs-wrapper > tab.devsite-dropdown > div.devsite-tabs-dropdown",
+          "chars": 473,
+          "sample": "Web Platform Dive into the web platform, at your pace. HTML CSS JavaScript User "
+        },
+        {
+          "reason": "script_style",
+          "tag": "template",
+          "id": null,
+          "classes": [
+            "devsite-content-data-template"
+          ],
+          "element": "template.devsite-content-data-template",
+          "path": "… > main#main-content > devsite-content > div.devsite-content-data > template.devsite-content-data-template",
+          "chars": 468,
+          "sample": "[[[\"Easy to understand\",\"easyToUnderstand\",\"thumb-up\"],[\"Solved my problem\",\"sol"
+        },
+        {
+          "reason": "nav",
+          "tag": "nav",
+          "id": null,
+          "classes": [
+            "devsite-footer-linkboxes",
+            "nocontent"
+          ],
+          "element": "nav.devsite-footer-linkboxes.nocontent",
+          "path": "section.devsite-wrapper > section#gc-wrapper > devsite-footer-linkboxes.devsite-footer > nav.devsite-footer-linkboxes.nocontent",
+          "chars": 460,
+          "sample": "web.dev web.dev We want to help you build beautiful, accessible, fast, and secur"
+        },
+        {
+          "reason": "script_style",
+          "tag": "style",
+          "id": null,
+          "classes": [],
+          "element": "style",
+          "path": "… > article.devsite-article > div.devsite-article-body > p > style",
+          "chars": 383,
+          "sample": ".wd-author__links { display: flex; } /* Name, title and links stacked in a colum"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "head > script",
+          "chars": 334,
+          "sample": "{ \"@context\": \"https://schema.org\", \"@type\": \"BreadcrumbList\", \"itemListElement\""
+        },
+        {
+          "reason": "hidden",
+          "tag": "ul",
+          "id": null,
+          "classes": [
+            "devsite-nav-list"
+          ],
+          "element": "ul.devsite-nav-list",
+          "path": "… > nav.devsite-book-nav > div.devsite-book-nav-wrapper > div.devsite-mobile-nav-bottom > ul.devsite-nav-list",
+          "chars": 306,
+          "sample": "Web Platform HTML CSS JavaScript User experience Performance Accessibility Ident"
+        },
+        {
+          "reason": "aside",
+          "tag": "aside",
+          "id": null,
+          "classes": [
+            "note"
+          ],
+          "element": "aside.note",
+          "path": "… > devsite-content > article.devsite-article > div.devsite-article-body > aside.note",
+          "chars": 276,
+          "sample": "Note: Developers who do need more control over the HTTP Cache in their web appli"
+        },
+        {
+          "reason": "nav",
+          "tag": "nav",
+          "id": null,
+          "classes": [
+            "devsite-footer-utility-links"
+          ],
+          "element": "nav.devsite-footer-utility-links",
+          "path": "… > section#gc-wrapper > devsite-footer-utility.devsite-footer > div.devsite-footer-utility > nav.devsite-footer-utility-links",
+          "chars": 201,
+          "sample": "Terms Privacy English Deutsch Español – América Latina Français Indonesia Italia"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "head > script",
+          "chars": 158,
+          "sample": "{ \"@context\": \"https://schema.org\", \"@type\": \"Article\", \"dateModified\": \"2018-11"
+        },
+        {
+          "reason": "aside",
+          "tag": "aside",
+          "id": null,
+          "classes": [
+            "note"
+          ],
+          "element": "aside.note",
+          "path": "… > devsite-content > article.devsite-article > div.devsite-article-body > aside.note",
+          "chars": 145,
+          "sample": "Note: You can also add the immutable property to your Cache-Control header as a "
+        },
+        {
+          "reason": "aside",
+          "tag": "aside",
+          "id": null,
+          "classes": [
+            "beta"
+          ],
+          "element": "aside.beta",
+          "path": "… > devsite-content > article.devsite-article > div.devsite-article-body > aside.beta",
+          "chars": 103,
+          "sample": "Try it: Try the HTTP Cache codelab to get first-hand experience with Cache-Contr"
+        },
+        {
+          "reason": "hidden",
+          "tag": "devsite-actions",
+          "id": null,
+          "classes": [],
+          "element": "devsite-actions",
+          "path": "… > devsite-content > article.devsite-article > h1.devsite-page-title > devsite-actions",
+          "chars": 86,
+          "sample": "Stay organized with collections Save and categorize content based on your prefer"
+        },
+        {
+          "reason": "head_meta",
+          "tag": "head",
+          "id": null,
+          "classes": [],
+          "element": "head",
+          "path": "head",
+          "chars": 79,
+          "sample": "Prevent unnecessary network requests with the HTTP Cache | Articles | web.dev"
+        },
+        {
+          "reason": "nav",
+          "tag": "div",
+          "id": null,
+          "classes": [
+            "devsite-article-meta",
+            "nocontent"
+          ],
+          "element": "div.devsite-article-meta.nocontent",
+          "path": "… > main#main-content > devsite-content > article.devsite-article > div.devsite-article-meta.nocontent",
+          "chars": 43,
+          "sample": "Home Articles Resources Network reliability"
+        },
+        {
+          "reason": "outside_main",
+          "tag": "a",
+          "id": null,
+          "classes": [
+            "skip-link",
+            "button"
+          ],
+          "element": "a.skip-link.button",
+          "path": "a.skip-link.button",
+          "chars": 20,
+          "sample": "Skip to main content"
+        },
+        {
+          "reason": "hidden",
+          "tag": "a",
+          "id": null,
+          "classes": [
+            "devsite-footer-utility-link",
+            "gc-analytics-event"
+          ],
+          "element": "a.devsite-footer-utility-link.gc-analytics-event",
+          "path": "… > nav.devsite-footer-utility-links > ul.devsite-footer-utility-list > li.devsite-footer-utility-item > a.devsite-footer-utility-link.gc-analytics-event",
+          "chars": 14,
+          "sample": "Manage cookies"
+        },
+        {
+          "reason": "embedded",
+          "tag": "svg",
+          "id": null,
+          "classes": [],
+          "element": "svg",
+          "path": "… > div > div.wd-author__links > a > svg",
+          "chars": 8,
+          "sample": "Homepage"
+        },
+        {
+          "reason": "embedded",
+          "tag": "svg",
+          "id": null,
+          "classes": [],
+          "element": "svg",
+          "path": "… > div > div.wd-author__links > a > svg",
+          "chars": 8,
+          "sample": "Homepage"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [
+            "button",
+            "devsite-top-button"
+          ],
+          "element": "span.button.devsite-top-button",
+          "path": "… > div.devsite-top-logo-row-wrapper > div.devsite-top-logo-row > devsite-user#devsite-user > span.button.devsite-top-button",
+          "chars": 7,
+          "sample": "Sign in"
+        },
+        {
+          "reason": "embedded",
+          "tag": "svg",
+          "id": null,
+          "classes": [],
+          "element": "svg",
+          "path": "… > div > div.wd-author__links > a > svg",
+          "chars": 6,
+          "sample": "GitHub"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 2,
+          "sample": "12"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 2,
+          "sample": "12"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 2,
+          "sample": "12"
+        },
+        {
+          "reason": "script_style",
+          "tag": "script",
+          "id": null,
+          "classes": [],
+          "element": "script",
+          "path": "devsite-analytics > script",
+          "chars": 2,
+          "sample": "[]"
+        },
+        {
+          "reason": "embedded",
+          "tag": "svg",
+          "id": null,
+          "classes": [],
+          "element": "svg",
+          "path": "… > div > div.wd-author__links > a > svg",
+          "chars": 1,
+          "sample": "X"
+        },
+        {
+          "reason": "embedded",
+          "tag": "svg",
+          "id": null,
+          "classes": [],
+          "element": "svg",
+          "path": "… > div > div.wd-author__links > a > svg",
+          "chars": 1,
+          "sample": "X"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 1,
+          "sample": "1"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 1,
+          "sample": "1"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 1,
+          "sample": "1"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 1,
+          "sample": "1"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 1,
+          "sample": "1"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 1,
+          "sample": "1"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 1,
+          "sample": "1"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 1,
+          "sample": "1"
+        },
+        {
+          "reason": "hidden",
+          "tag": "span",
+          "id": null,
+          "classes": [],
+          "element": "span",
+          "path": "… > div.wd-browser-compat > ul > li > span",
+          "chars": 1,
+          "sample": "1"
+        },
+        {
+          "reason": "hidden",
+          "tag": "div",
+          "id": null,
+          "classes": [
+            "devsite-search-shortcut-icon-container"
+          ],
+          "element": "div.devsite-search-shortcut-icon-container",
+          "path": "… > form.devsite-search-form > div.devsite-search-container > div.devsite-searchbox > div.devsite-search-shortcut-icon-container",
+          "chars": 1,
+          "sample": "/"
+        }
+      ],
+      "omitted": {
+        "elements": 0,
+        "chars": 0
+      }
+    },
+    "sections": {
+      "mode": "h2",
+      "rows": [
+        {
+          "kind": "intro",
+          "heading": null,
+          "chars": 231,
+          "inPassages": 231,
+          "located": true
+        },
+        {
+          "kind": "before_first_h2",
+          "heading": null,
+          "chars": 833,
+          "inPassages": 833,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Browser compatibility",
+          "chars": 261,
+          "inPassages": 261,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "How the HTTP Cache works",
+          "chars": 698,
+          "inPassages": 698,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Request headers: stick with the defaults (usually)",
+          "chars": 570,
+          "inPassages": 570,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Response headers: configure your web server",
+          "chars": 1606,
+          "inPassages": 1606,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Which response header values should you use?",
+          "chars": 6142,
+          "inPassages": 6142,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Summary",
+          "chars": 571,
+          "inPassages": 571,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Learn more",
+          "chars": 243,
+          "inPassages": 243,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Appendix: More tips",
+          "chars": 714,
+          "inPassages": 714,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Appendix: Cache-Control flowchart",
+          "chars": 60,
+          "inPassages": 60,
+          "located": true
+        },
+        {
+          "kind": "h2",
+          "heading": "Appendix: Cache-Control examples",
+          "chars": 799,
+          "inPassages": 799,
+          "located": true
+        }
+      ]
+    },
+    "placement": [
+      {
+        "index": 0,
+        "start": null,
+        "end": null,
+        "intro": 231
+      },
+      {
+        "index": 1,
+        "start": 0,
+        "end": 833,
+        "intro": 0
+      },
+      {
+        "index": 2,
+        "start": 856,
+        "end": 1117,
+        "intro": 0
+      },
+      {
+        "index": 3,
+        "start": 1143,
+        "end": 1841,
+        "intro": 0
+      },
+      {
+        "index": 4,
+        "start": 1893,
+        "end": 2463,
+        "intro": 0
+      },
+      {
+        "index": 5,
+        "start": 2508,
+        "end": 4114,
+        "intro": 0
+      },
+      {
+        "index": 6,
+        "start": 4160,
+        "end": 6155,
+        "intro": 0
+      },
+      {
+        "index": 7,
+        "start": 5960,
+        "end": 7951,
+        "intro": 0
+      },
+      {
+        "index": 8,
+        "start": 7765,
+        "end": 9761,
+        "intro": 0
+      },
+      {
+        "index": 9,
+        "start": 9566,
+        "end": 10302,
+        "intro": 0
+      },
+      {
+        "index": 10,
+        "start": 10311,
+        "end": 10882,
+        "intro": 0
+      },
+      {
+        "index": 11,
+        "start": 10894,
+        "end": 11137,
+        "intro": 0
+      },
+      {
+        "index": 12,
+        "start": 11158,
+        "end": 11872,
+        "intro": 0
+      },
+      {
+        "index": 13,
+        "start": 11907,
+        "end": 11967,
+        "intro": 0
+      },
+      {
+        "index": 14,
+        "start": 12001,
+        "end": 12800,
+        "intro": 0
+      }
+    ]
   }
 }

@@ -3,7 +3,7 @@ name: vectorscope
 description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для ШІ-ботів». No embeddings.
 ---
 
-Version 2.101. Versions count in thousandths (2.101, 2.102, …): the first number moves only on a breaking change.
+Version 2.102. Versions count in thousandths (2.101, 2.102, …): the first number moves only on a breaking change.
 
 # Vectorscope (local, no embeddings)
 
@@ -31,6 +31,7 @@ Steps marked *script* run the product's exact rules and are deterministic. Steps
 2. *judgement* Read the `text` of **every** passage in `reading.json`, in full, and write `groups.json` (rules below).
 3. *script* `node "$SKILL/dist/lens.mjs" reading.json groups.json --html report.html --md report.md --json export.json`
    This validates the grouping, computes labels, the page vocabulary (phrases, then narrative words) and all checks, and prints the findings with their passage ids.
+   read.mjs has already printed where the text went: a `losses` line (raw HTML text → removed by the cleaner → kept → in passages, unique → past the cap) and the three largest removal reasons. The report draws it in full (see *Measured, derived, judgement* below).
 4. *judgement* Write `queries.json` (5 to 10 typical queries, each answered from the passages) and `plan.json` (the rewrite plan). Write `facts.json` too if the user wants the citable facts listed.
 5. *script* Run lens again with everything:
    `node "$SKILL/dist/lens.mjs" reading.json groups.json --plan plan.json --queries queries.json [--facts facts.json] --html report.html --md report.md --json export.json`
@@ -50,6 +51,22 @@ Steps marked *script* run the product's exact rules and are deterministic. Steps
 The comparison report shows each page's counts and blocked crawlers, the topic × page table (passages and characters per topic), topic gaps (topics the others cover and a page does not), fact gaps (facts only one page states), who wins each query, the plan, the crawler table by page, every page's findings, and each page's strip and groups.
 
 Compare the pages the user names. Do not volunteer a comparison against a named company's page unless the user asks for it.
+
+## Measured, derived, judgement
+
+Every section and every number in the report carries one of three tags, and the export splits the same way. Keep them apart when you present the result:
+
+- **Measured** — what the parser saw: words, headings, passages and their lengths, the characters at each stage of the extraction, which element removed what, robots.txt rules, markup. Scripts counted it; any model gets the same number.
+- **Derived** — computed from measured values by a fixed formula: unique text in passages, characters past the cap, group shares, vocabulary counts, check verdicts. Deterministic. Where one rests on your groups (group shares, a phrase's group count, `repeated_claim`), the metric says so.
+- **Agent's judgement** — your reading: groups and labels, repeats, the plan, the query test, the facts.
+
+When you summarise, **say which kind each claim is.** "The cap cut 55,001 characters" is measured and derived, and you can state it flatly. "The page has six subjects" or "query 3 is not answered" is your judgement; say it as yours. Never present a judgement as a measurement, and never round a measurement into a judgement ("about half the page is lost" when the report says 41%). When a number is questioned, quote its formula from the report's "?" (or the Markdown's *How each number is computed*); do not explain it from memory.
+
+**Where the text goes.** The report shows a character waterfall: text in the raw HTML (an estimate: the kept text plus every removal, so it sums exactly), removed by the cleaner, kept (the chunker's input), in passages without double-counting the overlap, kept but in no passage text (h2 heading lines and the spaces between sections), and past the cap. Under it, the removals (reason, the element with a short CSS path, characters, how its text begins; largest first, every element beyond the listed ones counted) and a section map (how much of each h2 section, the intro and the text before the first h2 reached a passage). All of it is observed on a second run of the same extraction, checked to give the same text; nothing here changes a passage.
+
+**Two text-in-passages numbers.** *Unique text in passages* counts each kept character once; *text in passages, overlap and intro included* is the passages' own lengths summed (the old `charsIndexed`). **Characters past the cap** is now the kept text after the last passage, counted only when all 26 slots are filled; 2.101 subtracted the overlapping total and could read 0 when the cap had cut a tail. The old value stays in the export as `charsUnread` with its old meaning. If the two differ, use the new one and, if the user compares with an older report, say why it changed.
+
+Say what fell to the cleaner when it matters: a large `outside_main` or `nav` removal that held real content, or a section the map shows at 0% (it reached no passage at all), is worth a sentence and often a plan item.
 
 ## The files you write
 
@@ -211,23 +228,24 @@ The report has an EN | UK switch (`#lang=uk` opens it in Ukrainian) and a light 
 Short, alongside the report and never instead of it:
 
 - **If an answering crawler is blocked (`ai_search_blocked`, `robots_unreachable`) or the page is noindex, say that before anything else.**
-- Then the pipeline line and the counters: passages read, slots used of 26, characters past the cap.
+- Then the pipeline line and the counters: passages read, slots used of 26, characters past the cap; and where the text went (the waterfall in one line: kept, in passages, past the cap) with the largest removal if it held content. These are measured or derived; say so.
 - The findings, high first, each with its passage ids and what to do.
 - The plan's top three items, with one before → after.
 - The query test: how many queries were answered completely, and which found nothing. In compare mode: the topic gaps, the facts only one page has, and who wins each query.
 - The groups, briefly. Your label first; quote the computed label as the section's name only when its source is `heading`.
 - The page vocabulary: the **phrases this page owns** first (two to four words it writes together, ranked by how many passages use them), then the **narrative words** (single words not already inside a listed phrase). Say, with it, that these are what the page says, not search demand; for how people actually ask, point to the query test or https://www.getlooploop.com/voicescope.
-- Say, once, that the groups, the queries and the plan are the agent's reading of the passages, not an embedding clustering; the chunking, the cap and the checks are deterministic. For the embedding-based reading with the map, point to https://www.getlooploop.com/vectorscope.
+- Say, once, that the groups, the queries and the plan are the agent's reading of the passages (judgement), not an embedding clustering; the chunking, the cap, the losses and the checks are deterministic (measured and derived). For the embedding-based reading with the map, point to https://www.getlooploop.com/vectorscope.
 - Do not claim that any assistant has indexed the page, ranks it or will cite it.
 - A very low word count on a page that looks rich in a browser usually means its content is drawn by JavaScript. Suggest `--render` to measure it.
 
 ## Outputs
 
-- `report.html`: one self-contained page (no external fonts, scripts or images; a content security policy blocks all network requests; every piece of page text is escaped), in the look of the live tool, safe down to 375 px.
-- `report.md`: the same reading in Markdown, in English.
+- `report.html`: one self-contained page (no external fonts, scripts or images; a content security policy blocks all network requests; every piece of page text is escaped), in the look of the live tool, safe down to 375 px. A tag beside every section and number says Measured, Derived or Agent's judgement, and a "?" beside each number opens its formula, unit, threshold and known limits; `#help=<metric id>` (for example `#help=chars_past_cap`) opens one when the report loads.
+- `report.md`: the same reading in Markdown, in English. Every heading and number carries a `measured`, `derived` or `judgement` marker; *Where the text goes* holds the waterfall, the removals (top 20) and the section map; the last section, *How each number is computed*, gives every metric's formula, unit, threshold and limits.
 - `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. `phrases` and `narrativeWords` (each entry: `term`, `count`, `passages`, `groups`, `spread`, `describesWholePage`) are the page vocabulary exactly as the product computes it; `keywords` is the two as one list, phrases first, in the shape earlier exports had. v2 only **adds** fields, so the schema id is unchanged: `skillVersion`, `judgement` (`agent` and `model` from groups.json, `null` when not stated), `checks` (each with an English `message`), `technical`, `robots`, `render`, `plan`, `queries`, `facts`, `diff`, and on each group `agentLabel`, `note` and `topic`. `label` and `labelSource` keep their v1 meaning (the computed label). Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
-- Compare mode writes `compare.json` (`getlooploop/vectorscope-compare@1`): every page's export under `pages[]`, plus `topics`, `topicTable`, `topicGaps`, `facts`, `factGaps`, `queries` (each with its `winner`) and `plan`.
-- `reading.json` (`getlooploop/vectorscope-skill-reading@1`) gains `technical`, `robots`, `layout` and, with `--render`, `render`. Its passages are unchanged from v1, and lens still accepts a v1 reading (as a baseline, for example); the checks that need the new fields are then skipped.
+- **2.102 export, schema id unchanged.** `export.json` gains two top-level sections, `measured` (`page`, `retrieval` with `charsInPassagesTotal` and `charsInPassagesUnique`, `passages` without their group, `losses`, `robots`, `technical`, `render`, and under `derived`: `charsPastCap`, the legacy `charsUnread`, `phrases`, `narrativeWords`, `checks`) and `judgement` (`agent`, `model`, `groups`, `assignment`, `duplicates`, `plan`, `queries`, `facts`), plus `layers` (what each section holds) and `metrics` (id → `layer`, `label`, `formula`, `unit`, `threshold`, `limits`: the same text as the report's "?"). Every v1 and v2 field also stays at its old path with its old meaning (`judgement.agent` and `judgement.model` are where v2 put them; `retrieval` only gains `charsPastCap` and `charsInPassagesUnique`), so the schema id stays `getlooploop/vectorscope-reading@1`: nothing a v1 or v2 consumer reads moved or changed. The cost is that some values appear twice; moving them would have broken every saved prompt that reads `phrases` or `labelSource`.
+- Compare mode writes `compare.json` (`getlooploop/vectorscope-compare@1`): every page's export under `pages[]`, plus `topics`, `topicTable`, `topicGaps`, `facts`, `factGaps`, `queries` (each with its `winner`) and `plan`. 2.102 adds `layers`, `metrics`, `measured.lossTable` (each page's waterfall and how many sections were cut) and, inside `judgement` beside `agent` and `model`, the shared `topics`, `facts`, `queries` and `plan`. The compare report shows a *Losses by page* table and each page's waterfall and section map.
+- `reading.json` (`getlooploop/vectorscope-skill-reading@1`) gains `technical`, `robots`, `layout`, `losses` (2.102: the waterfall, the passages' placement, the removals and the section map) and, with `--render`, `render`. Its passages are unchanged from v1, and lens still accepts a v1 reading (as a baseline, for example); the checks that need the new fields are then skipped.
 
 ## Limits
 
@@ -251,9 +269,8 @@ Short, alongside the report and never instead of it:
 | `not_html` | The URL is a file such as a PDF or an image, not an HTML page. |
 | `too_large` | The page is over the 3 MB ceiling. |
 | `empty` | The page answered, but no readable text was left once navigation and boilerplate were removed, or the URL is a feed, sitemap or file. |
-| `refused_language_ru` | The page is in Russian, and this tool does not analyse pages in Russian (the report gives the reason and its sources). One line in the chat, the report, nothing more. |
+| `refused_language_ru` | The page is in Russian, and this tool does not analyse pages in Russian. One line in the chat, the report, nothing more. |
 
-**How a page is judged to be in Russian**, after the text is extracted and before it is cut into passages: the page declares it (`<html lang>` is `ru` or `ru-…`, or a `content-language` meta or header says `ru`), or nothing else is declared and the main text reads as Russian: at least 30 Cyrillic words, at least 8% of them holding one of the three letters U+044B, U+044D, U+0451 (yeru, e, yo) that correct Ukrainian never has, and almost none (under 2%) holding a letter Russian lacks, such as і, ї, є, ґ, ў or the Kazakh and Serbian letters. A declared Ukrainian, Belarusian, Bulgarian, Kazakh, Serbian or other Cyrillic-script language wins over the letters, because Belarusian, Kazakh and others write two of those letters too; and a stray `lang="ru"` on a page plainly written in Ukrainian does not refuse it. The refusal keeps no text, title or passage of the page.
 
 ## If the page cannot be fetched
 

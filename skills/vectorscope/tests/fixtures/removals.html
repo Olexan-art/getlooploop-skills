@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Removal fixture</title>
+<meta name="description" content="A synthetic page with one element for every rule the cleaner removes, used by the loss tests.">
+<style>.x { color: red; }</style>
+<script>var headScript = "a script in the head";</script>
+</head>
+<body>
+<header><nav><a href="/">Home</a> <a href="/docs">Docs</a></nav><p>Site banner tagline text</p></header>
+<div role="banner">Role banner strip text</div>
+<main>
+<header><h1>Removal fixture page</h1><p>The lede of the article stays in the text.</p><select><option>Contents dropdown option</option></select></header>
+<h2>First section</h2>
+<p>The first section explains what the cleaner keeps: the prose of the main region, its headings and its paragraphs, with every piece of furniture taken out before the chunker cuts it into passages.</p>
+<div hidden>Hidden attribute text here</div>
+<span aria-hidden="true">Aria hidden decorative text</span>
+<svg viewBox="0 0 10 10"><text x="0" y="5">SVG label text</text></svg>
+<noscript>Please enable JavaScript to continue</noscript>
+<template><p>Template content text</p></template>
+<h2>Second section</h2>
+<p>The second section is here so the page has two h2 headings and the chunker splits it at them, which gives the section map two rows besides the intro and the text before the first heading.</p>
+<aside>Aside related reading text</aside>
+<form><label>Email address</label><button>Subscribe now</button></form>
+<div class="cookie-banner">We use cookies to improve this site</div>
+<div class="newsletter-box">Join our newsletter today</div>
+<div class="modal-dialog">Modal dialog body text</div>
+<div role="contentinfo">Role contentinfo text</div>
+<div role="navigation">Role navigation links text</div>
+<div role="complementary">Complementary box text</div>
+</main>
+<div class="promo">Outside main promo text that the main region choice drops</div>
+<footer>Footer copyright text</footer>
+<script>console.log("a script in the body");</script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+{
+  "takenWith": "skills/vectorscope at commit e1da92b (2.101), with tools/core-snapshot.mjs",
+  "pages": [
+    {
+      "file": "tests/fixtures/example-com.html",
+      "ok": true,
+      "reasonCode": "ok",
+      "passages": 2,
+      "page": {
+        "url": "https://example.com/",
+        "requestedUrl": "https://example.com/",
+        "title": "Example Domain",
+        "wordCount": 25,
+        "chunksIndexed": 2,
+        "charsIndexed": 170,
+        "charsUnread": 0,
+        "capReached": false,
+        "noindex": false,
+        "headings": 0,
+        "chunkCap": 26,
+        "bodyChars": 156,
+        "h1": [],
+        "metaDescription": ""
+      },
+      "pageSha256": "83da0a4b8b4d56496bc624f860f73595c3d0e0306adfc3935e97ca18a4c4d354",
+      "passagesSha256": "e798a7035e408b09393a91904fb8b4bffb3adef5fd4615873ab2606ca7e0c883"
+    },
+    {
+      "file": "tests/fixtures/getlooploop-vectorscope.html",
+      "ok": true,
+      "reasonCode": "ok",
+      "passages": 17,
+      "page": {
+        "url": "https://www.getlooploop.com/vectorscope",
+        "requestedUrl": "https://www.getlooploop.com/vectorscope",
+        "title": "Semantic Chunking Visualizer for Any URL — Vectorscope",
+        "wordCount": 2463,
+        "chunksIndexed": 17,
+        "charsIndexed": 14211,
+        "charsUnread": 0,
+        "capReached": false,
+        "noindex": false,
+        "headings": 14,
+        "chunkCap": 26,
+        "bodyChars": 13964,
+        "h1": [
+          "Semantic chunking, made visible: see what survives the trip into vector space."
+        ],
+        "metaDescription": "Free semantic chunking visualizer: paste a URL and see the passages a retriever cuts, how they group by meaning, and what falls past the 26-passage cap."
+      },
+      "pageSha256": "9c94bea861d5aedb92a54dfee014c522cd279b63ee74ae787d412c0147570370",
+      "passagesSha256": "125ab2149bfbdbde56a292e327f2d60836d9a08e33286b835183724a317e25ed"
+    },
+    {
+      "file": "tests/fixtures/uk-vectorscope.html",
+      "ok": true,
+      "reasonCode": "ok",
+      "passages": 17,
+      "page": {
+        "url": "https://www.getlooploop.com/uk/vectorscope",
+        "requestedUrl": "https://www.getlooploop.com/uk/vectorscope",
+        "title": "Семантичне розбиття сторінки — Vectorscope",
+        "wordCount": 2120,
+        "chunksIndexed": 17,
+        "charsIndexed": 14179,
+        "charsUnread": 0,
+        "capReached": false,
+        "noindex": false,
+        "headings": 14,
+        "chunkCap": 26,
+        "bodyChars": 13965,
+        "h1": [
+          "Семантичне розбиття наочно: подивіться, що переживе подорож у векторний простір."
+        ],
+        "metaDescription": "Безкоштовно: вставте URL і побачте семантичне розбиття сторінки — уривки, які бере ретривер, їхні групи за змістом і що не вміщується в ліміт 26."
+      },
+      "pageSha256": "8736567aa59777e3c4756c30c43d3c336b81139218e7fff872733a2058b16f1c",
+      "passagesSha256": "1b226bf941fa8fb0e36adccf8e54b9a7ae59fb23d4a9da035b2d5c4fddffc251"
+    },
+    {
+      "file": "tests/fixtures/uk-voicescope.html",
+      "ok": true,
+      "reasonCode": "ok",
+      "passages": 14,
+      "page": {
+        "url": "https://www.getlooploop.com/uk/voicescope",
+        "requestedUrl": "https://www.getlooploop.com/uk/voicescope",
+        "title": "Розмовні запити з ключового слова — Voicescope",
+        "wordCount": 1717,
+        "chunksIndexed": 14,
+        "charsIndexed": 10918,
+        "charsUnread": 0,
+        "capReached": false,
+        "noindex": false,
+        "headings": 12,
+        "chunkCap": 26,
+        "bodyChars": 10786,
+        "h1": [
+          "Voicescope — Розмовні запити: від ключового слова до питання за ним."
+        ],
+        "metaDescription": "Безкоштовно: введіть ключ і побачте розмовні запити, які люди могли б поставити ШІ-асистенту, згруповані за завданням, що стоїть за ними. Без акаунта."
+      },
+      "pageSha256": "62c4d8d25d6ef5e0f76bdf8baa7db8aaf0452ce0f9671588470f691f8986553c",
+      "passagesSha256": "88dc72fd78bb044e4faaa7d06c086bbe2f9dfd5e535dadab2ae7ecda9c75336b"
+    },
+    {
+      "file": "tests/fixtures/removals.html",
+      "ok": true,
+      "reasonCode": "ok",
+      "passages": 4,
+      "page": {
+        "url": "https://example.org/removals",
+        "requestedUrl": "https://example.org/removals",
+        "title": "Removal fixture",
+        "wordCount": 85,
+        "chunksIndexed": 4,
+        "charsIndexed": 575,
+        "charsUnread": 0,
+        "capReached": false,
+        "noindex": false,
+        "headings": 3,
+        "chunkCap": 26,
+        "bodyChars": 480,
+        "h1": [
+          "Removal fixture page"
+        ],
+        "metaDescription": "A synthetic page with one element for every rule the cleaner removes, used by the loss tests."
+      },
+      "pageSha256": "e14378845785c97f04155a3aeccd4d8a6ec12874a41c073504cbbf6428115a70",
+      "passagesSha256": "1e81a475cb031b022e276847809f3f177955179e300f6ad0793ac9ca55a86edd"
+    }
+  ],
+  "vocabulary": [
+    {
+      "reading": "examples/judgement/getlooploop-vectorscope/reading.json",
+      "passagesSha256": "125ab2149bfbdbde56a292e327f2d60836d9a08e33286b835183724a317e25ed",
+      "phrases": [
+        "semantic chunking",
+        "fixed window",
+        "retrieval system",
+        "stand alone",
+        "readable text",
+        "meaning changes",
+        "heading aware",
+        "heading aware chunking",
+        "semantic chunking visualizer",
+        "extraction ratio",
+        "fixed length",
+        "long section",
+        "free semantic chunking visualizer",
+        "repeated sentence shapes",
+        "reader reacts"
+      ],
+      "narrative": [
+        "page",
+        "passage",
+        "cut",
+        "heading",
+        "question",
+        "answer",
+        "cap",
+        "group",
+        "meaning",
+        "vectorscope"
+      ],
+      "phrasesSha256": "1c82fa72cbc4ab4550f73cb0f17337aeac24f93a713b1fa0c5e0e445848036d5",
+      "narrativeSha256": "a566e01feffaab411028cedf52c6f12e804a53d249d433e6dfbc962c47b86f6d",
+      "keywordsSha256": "44652cf679a21400276336aec8fb20127d759359a2b01f00b3fb261bbf2981ce"
+    },
+    {
+      "reading": "examples/judgement/wikipedia-llm/reading.json",
+      "passagesSha256": "625a6c4a0ecc36da2011c34b064ad7fe2f9bd3315d258a8b2d71566ed546a5c1",
+      "phrases": [
+        "language model",
+        "fine tuned",
+        "large language model",
+        "neural network",
+        "natural language",
+        "open weight",
+        "fine tuning",
+        "machine learning",
+        "billion parameter",
+        "larger models",
+        "final answer",
+        "openai o1",
+        "follow instructions",
+        "next word",
+        "parameter count"
+      ],
+      "narrative": [
+        "model",
+        "llm",
+        "token",
+        "text",
+        "gpt",
+        "trained",
+        "input",
+        "training",
+        "data",
+        "dataset"
+      ],
+      "phrasesSha256": "8db2968357bcb3b5396819b60c1c953268a5bfb511e00ffe8e24777823a2a05d",
+      "narrativeSha256": "177e34ba40639dd2b2115a2aa068d81265b978f2497d1d45c80172ef08eedeb2",
+      "keywordsSha256": "67ea55bb5fdec427718e7d3d30edecf598f055cd71a4ac4aeba62b18cd2f74a1"
+    },
+    {
+      "reading": "examples/judgement/http-caching-compare/reading-1.json",
+      "passagesSha256": "2719b77f2ad7086618776ab78abffe37fde1b47c6bb05fb052adf03c48f4f9db",
+      "phrases": [
+        "cache control",
+        "max age",
+        "ok content type",
+        "content length",
+        "shared cache",
+        "origin server",
+        "cached response",
+        "managed cache",
+        "gmt etag",
+        "cache busting",
+        "latest version",
+        "conditional request",
+        "none match",
+        "private cache",
+        "force reload"
+      ],
+      "narrative": [
+        "response",
+        "request",
+        "header",
+        "server",
+        "content",
+        "modified",
+        "caching",
+        "stored",
+        "value",
+        "store"
+      ],
+      "phrasesSha256": "5b39e96aff8b00833eaffd8c128fe141e3a8d30433d310aa0641515ef32c1e25",
+      "narrativeSha256": "34c510ebf16dc4ae0a14be1d3a624a4485f1755e6f6b350649a47af435c47855",
+      "keywordsSha256": "4d949c3572ee673d0493842e04a333d0008da60fd45abdb04e4dfb20a07548d5"
+    },
+    {
+      "reading": "examples/judgement/http-caching-compare/reading-2.json",
+      "passagesSha256": "8e334910289374ac32c1a7e178ed66c2d8a7d372aecbad8956438807dd573893",
+      "phrases": [
+        "cache control",
+        "max age",
+        "network request",
+        "web server",
+        "unnecessary network request",
+        "none match",
+        "cache control value",
+        "web app",
+        "intermediate caches",
+        "following cache control",
+        "versioning information",
+        "re download",
+        "web application",
+        "caching strategy",
+        "css file"
+      ],
+      "narrative": [
+        "browser",
+        "response",
+        "header",
+        "file",
+        "request",
+        "url",
+        "resource",
+        "cached",
+        "caching",
+        "etag"
+      ],
+      "phrasesSha256": "ea61c56440817ba2c63c9860a8a86e3e75559b5db8757078624da1437c236c4d",
+      "narrativeSha256": "27e17e58cf2991a6d4c7e2e1a66e80b53a30b8efde857d979ab6000bc953acd6",
+      "keywordsSha256": "9fb4505043dd3b1bce2cd562db8286d30c6f220056aef6d65bf38b94aa94f848"
+    }
+  ]
+}
