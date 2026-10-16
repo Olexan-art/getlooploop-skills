@@ -33,7 +33,8 @@ export { validateGrouping, buildJudgedLens };
 
 export const COMPARE_SCHEMA = "getlooploop/vectorscope-compare@1";
 export const REFUSAL_SCHEMA = "getlooploop/vectorscope-refusal@1";
-export const SKILL_VERSION = 2;
+/** Versions count in thousandths (2.101, 2.102, …) so the first number moves only on a real break. Mirrors package.json. */
+export const SKILL_VERSION = "2.101";
 
 const USAGE = [
   "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json]",
