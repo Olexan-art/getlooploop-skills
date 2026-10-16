@@ -104,6 +104,14 @@ Three real runs are in [`examples/`](examples), each with the files the agent wr
 
 The skill needs Node 20.18 or later (what cheerio declares) and **no `npm install`**: `dist/read.mjs` and `dist/lens.mjs` are the scripts bundled with their one dependency, [cheerio](https://cheerio.js.org/), so plain `node` runs them, including in sandboxes that block package installs. The readable source is in `scripts/`; `dist/` is generated from it (see *Working on the skill*).
 
+### One command (Claude Code, Codex, opencode and other agents)
+
+```
+npx skills add Olexan-art/getlooploop-skills --skill vectorscope
+```
+
+The [skills CLI](https://skills.sh) asks which agents to install it for (add `-g` for every project, `-a claude-code` to pick one). Then ask your agent to "run vectorscope on <url>".
+
 ### claude.ai and the Claude desktop app
 
 1. Download **`vectorscope.zip`** from this repository's [Releases](https://github.com/Olexan-art/getlooploop-skills/releases). Do not unpack it: the upload takes the zip, with the `vectorscope` folder at its top level.

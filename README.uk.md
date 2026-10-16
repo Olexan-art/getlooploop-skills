@@ -106,6 +106,14 @@ Agent Skills від [GetLoopLoop](https://www.getlooploop.com) для claude.ai 
 
 Навичці потрібен Node 20.18 або новіший (цього вимагає cheerio) і **не потрібен `npm install`**: `dist/read.mjs` і `dist/lens.mjs` — це скрипти, зібрані разом з їхньою єдиною залежністю, [cheerio](https://cheerio.js.org/), тож їх запускає звичайний `node`, зокрема в пісочницях, де встановлювати пакети заборонено. Читабельний код лежить у `scripts/`; `dist/` збирається з нього (див. *Робота над навичкою*).
 
+### Однією командою (Claude Code, Codex, opencode та інші агенти)
+
+```
+npx skills add Olexan-art/getlooploop-skills --skill vectorscope
+```
+
+[Програма skills](https://skills.sh) запитає, для яких агентів встановити навичку (додайте `-g`, щоб вона працювала в усіх проєктах, або `-a claude-code`, щоб вибрати одного агента). Далі попросіть агента: «прожени <адреса> через vectorscope».
+
 ### claude.ai і застосунок Claude для комп’ютера
 
 1. Завантажте **`vectorscope.zip`** з розділу [Releases](https://github.com/Olexan-art/getlooploop-skills/releases) цього репозиторію. Не розпаковуйте його: завантажується сам zip, у якому на верхньому рівні лежить тека `vectorscope`.
