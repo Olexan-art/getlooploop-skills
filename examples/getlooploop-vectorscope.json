@@ -1,0 +1,398 @@
+{
+  "schema": "getlooploop/vectorscope-reading@1",
+  "generatedAt": "2026-10-16T15:20:03.313Z",
+  "producedBy": {
+    "tool": "vectorscope-skill (local, no embeddings)",
+    "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by Claude's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
+    "url": "https://www.getlooploop.com/vectorscope"
+  },
+  "howToRead": {
+    "grouping": "Grouped by Claude's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
+    "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
+    "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 3979 of 14109 indexed characters, about 28%, and always the opening of each passage rather than a sample spread through it.",
+    "keywords": "Counted over the page's whole text, not the excerpts below. A term is one word or two: a two-word term is a pair the page writes side by side often enough that the pair is what it is saying, and where it is counted neither of its words is counted separately, so the occurrences still add up to the page. `count` is occurrences; `groups` is how many of the page's groups the term reaches, and `scope` is true when it reaches most of them. A term with `scope` true describes the page; one with it false is a single section's vocabulary — useful, but not a summary. Plurals were folded into the singular where the page uses both. The group counts rest on the grouping above, which is a judgement.",
+    "groupLabels": "`labelSource` says where each name came from. \"heading\" is the page's own section heading and can be quoted. \"keywords\" is a computed guess — the group's most distinctive words — and is a hint, not a topic; do not quote it back as what the section is called.",
+    "cohesion": "null: cohesion is the mean cosine between a group's passage embeddings, and no embeddings were computed.",
+    "selfSimilarity": "null: the median cosine between passages needs embeddings, and none were computed.",
+    "groupFloor": "null: there was no similarity cut; the groups are a reading of the passages.",
+    "duplicateOf": "The index of an earlier, non-adjacent chunk this one repeats nearly word for word, as judged by reading — the product judges it from embeddings at cosine 0.94. The chunker's own overlap between neighbours is excluded.",
+    "projectionExplained": "null: there is no projection without vectors.",
+    "whatCapReachedMeans": "The pipeline indexes at most 26 chunks per page. `capReached` true with `charsUnread` above zero means an assistant reading this page never sees that tail.",
+    "noindex": "True when the page asks search engines not to index it. Says nothing about whether an assistant can read it, but it is often unintentional."
+  },
+  "cannotAnswer": [
+    "Sentiment or tone of the page. Only about 28% of the text is here, taken from the opening of each passage — enough to produce a confident-sounding verdict from an unrepresentative sample. If asked, say what the sample supports and that it is a sample.",
+    "Anything about competitors, or how this page compares to another. One page was read; no other page was fetched.",
+    "Which search or assistant prompts this page ranks or gets cited for. That needs a query inventory and measurement over time, neither of which is in this export.",
+    "Whether the page is factually correct, current, or original. Nothing here checked any claim on it.",
+    "How the page renders for a browser running JavaScript. This is a plain fetch, which is also what an assistant that does not run JavaScript sees.",
+    "How close any two passages are in an embedding space, or whether any assistant has indexed this page. No embeddings were computed, and this is a preview of the machine's view, not a guarantee of what any assistant does with it."
+  ],
+  "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `keywords` where `describesWholePage` is true, since those are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
+  "page": {
+    "url": "https://www.getlooploop.com/vectorscope",
+    "requestedUrl": "https://www.getlooploop.com/vectorscope",
+    "title": "Semantic Chunking Visualizer for Any URL — Vectorscope",
+    "wordCount": 2447,
+    "headingsFound": 14,
+    "noindex": false
+  },
+  "retrieval": {
+    "embeddingModel": null,
+    "dimensions": null,
+    "chunkCap": 26,
+    "chunksIndexed": 17,
+    "charsIndexed": 14109,
+    "charsUnread": 0,
+    "capReached": false,
+    "duplicateChunks": 0,
+    "groupsMergedByPaletteLimit": null
+  },
+  "textCoverage": {
+    "exportedChars": 3979,
+    "indexedChars": 14109,
+    "share": 0.282
+  },
+  "geometry": {
+    "selfSimilarity": null,
+    "groupFloor": null,
+    "projectionExplained": null,
+    "projectionBasis": null
+  },
+  "keywords": [
+    {
+      "term": "page",
+      "count": 73,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "passage",
+      "count": 62,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "cut",
+      "count": 30,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "semantic chunking",
+      "count": 24,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "heading",
+      "count": 22,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "question",
+      "count": 20,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "answer",
+      "count": 17,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "cap",
+      "count": 14,
+      "groups": 4,
+      "spread": 0.6667,
+      "describesWholePage": true
+    },
+    {
+      "term": "group",
+      "count": 13,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "meaning",
+      "count": 13,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "ask",
+      "count": 12,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "read",
+      "count": 12,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "reading",
+      "count": 12,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "vectorscope",
+      "count": 12,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "see",
+      "count": 11,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "whether",
+      "count": 11,
+      "groups": 3,
+      "spread": 0.5,
+      "describesWholePage": false
+    },
+    {
+      "term": "ai",
+      "count": 10,
+      "groups": 3,
+      "spread": 0.5,
+      "describesWholePage": false
+    },
+    {
+      "term": "assistant",
+      "count": 9,
+      "groups": 4,
+      "spread": 0.6667,
+      "describesWholePage": true
+    },
+    {
+      "term": "embedding",
+      "count": 9,
+      "groups": 4,
+      "spread": 0.6667,
+      "describesWholePage": true
+    },
+    {
+      "term": "url",
+      "count": 9,
+      "groups": 3,
+      "spread": 0.5,
+      "describesWholePage": false
+    }
+  ],
+  "groups": [
+    {
+      "id": 0,
+      "label": "Visualizer · Machine",
+      "labelSource": "keywords",
+      "chunkCount": 5,
+      "charCount": 1734,
+      "shareOfIndexedChars": 0.123,
+      "cohesion": null
+    },
+    {
+      "id": 1,
+      "label": "How to read your result",
+      "labelSource": "heading",
+      "chunkCount": 2,
+      "charCount": 2450,
+      "shareOfIndexedChars": 0.174,
+      "cohesion": null
+    },
+    {
+      "id": 2,
+      "label": "Grouping · Length",
+      "labelSource": "keywords",
+      "chunkCount": 2,
+      "charCount": 3394,
+      "shareOfIndexedChars": 0.241,
+      "cohesion": null
+    },
+    {
+      "id": 3,
+      "label": "Whether · Against",
+      "labelSource": "keywords",
+      "chunkCount": 4,
+      "charCount": 3158,
+      "shareOfIndexedChars": 0.224,
+      "cohesion": null
+    },
+    {
+      "id": 4,
+      "label": "Three · Questions",
+      "labelSource": "keywords",
+      "chunkCount": 2,
+      "charCount": 1081,
+      "shareOfIndexedChars": 0.077,
+      "cohesion": null
+    },
+    {
+      "id": 5,
+      "label": "Questions people ask about this",
+      "labelSource": "heading",
+      "chunkCount": 2,
+      "charCount": 2292,
+      "shareOfIndexedChars": 0.162,
+      "cohesion": null
+    }
+  ],
+  "chunks": [
+    {
+      "index": 0,
+      "group": 0,
+      "heading": "Semantic Chunking Visualizer for Any URL — Vectorscope",
+      "charCount": 286,
+      "duplicateOf": null,
+      "textHead": "Semantic Chunking Visualizer for Any URL — Vectorscope\nSemantic chunking, made visible: see what survives the trip into vector space.\nFree semantic chunking visualizer: paste a URL and see the passages a retriever cuts, how they group by me"
+    },
+    {
+      "index": 1,
+      "group": 0,
+      "heading": null,
+      "charCount": 804,
+      "duplicateOf": null,
+      "textHead": "Free tool No account Experimental\nVectorscope\nSemantic chunking, made visible: see what survives the trip into vector space.\nVectorscope is a free semantic chunking visualizer: it cuts one URL into the passages a retrieval system would stor"
+    },
+    {
+      "index": 2,
+      "group": 0,
+      "heading": "What does this mean?",
+      "charCount": 259,
+      "duplicateOf": null,
+      "textHead": "The reading shows which passages of your page a retriever can receive, and how they group by meaning — the question semantic chunking asks, put to passages already cut. It is a preview of the machine's view, not a guarantee of what any assi"
+    },
+    {
+      "index": 3,
+      "group": 0,
+      "heading": "Important passage outside the cap?",
+      "charCount": 139,
+      "duplicateOf": null,
+      "textHead": "Move it earlier on the page, or split the page so that passage has a budget of its own. This reading takes at most 26 passages from a page."
+    },
+    {
+      "index": 4,
+      "group": 0,
+      "heading": "Models and retrieval caps vary.",
+      "charCount": 246,
+      "duplicateOf": null,
+      "textHead": "This does not establish that any assistant has indexed the page. Each system does its own chunking — fixed windows, headings or semantic chunking — and embeds and caps in its own way; this is the pipeline the product runs. Sources and metho"
+    },
+    {
+      "index": 5,
+      "group": 1,
+      "heading": "How to read your result",
+      "charCount": 1995,
+      "duplicateOf": null,
+      "textHead": "Four readings decide whether a page is legible to a retrieval system. Here is what each one means when it is bad. Chunks that never reach the index A retrieval system reads a fixed number of passages from a page and ignores the rest, so any"
+    },
+    {
+      "index": 6,
+      "group": 1,
+      "heading": "How to read your result",
+      "charCount": 455,
+      "duplicateOf": null,
+      "textHead": "to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page — which is the closest thing to watching a model decide what your page is for. If the returned "
+    },
+    {
+      "index": 7,
+      "group": 2,
+      "heading": "What is semantic chunking?",
+      "charCount": 1994,
+      "duplicateOf": null,
+      "textHead": "Semantic chunking is splitting a page into passages where its meaning changes, instead of every fixed number of characters or at every heading. Vectorscope does not cut that way: it cuts at each h2 and then in fixed windows, and its semanti"
+    },
+    {
+      "index": 8,
+      "group": 3,
+      "heading": "Is my content ready for AI search?",
+      "charCount": 1126,
+      "duplicateOf": null,
+      "textHead": "This page answers that question for one URL at a time, honestly, which means naming what it cannot see as clearly as what it can.\nWhat this tool can tell you\nHow much of your page becomes readable text at all, as a ratio and not an adjectiv"
+    },
+    {
+      "index": 9,
+      "group": 3,
+      "heading": "Using Vectorscope to test a RAG pipeline",
+      "charCount": 863,
+      "duplicateOf": null,
+      "textHead": "If you build retrieval rather than content, this page is a reference implementation you can point at any URL in about twenty seconds.\n1 Run a page you already index, and compare the passage boundaries with your own chunker's — fixed windows"
+    },
+    {
+      "index": 10,
+      "group": 3,
+      "heading": "Who is Vectorscope for?",
+      "charCount": 890,
+      "duplicateOf": null,
+      "textHead": "Vectorscope is for anyone whose page has to be read in passages: the people who write it, and the people who build the retrieval that reads it. Both get the same reading — the cut, the cap, and the semantic chunking question of which passag"
+    },
+    {
+      "index": 11,
+      "group": 2,
+      "heading": "Words used on this page",
+      "charCount": 1400,
+      "duplicateOf": null,
+      "textHead": "The terms this page relies on, each defined once, because a page that uses them without defining them is a page an assistant cannot explain to anybody.\nSemantic chunking\nCutting text into passages where its meaning changes, rather than at a"
+    },
+    {
+      "index": 12,
+      "group": 4,
+      "heading": "Keep reading",
+      "charCount": 335,
+      "duplicateOf": null,
+      "textHead": "Longer answers to the questions this page can only summarise.\nWhat semantic chunking is, and what it trades away The three strategies, side by side, on the same page. How to optimise content for AI search What actually changes a passage's c"
+    },
+    {
+      "index": 13,
+      "group": 5,
+      "heading": "Questions people ask about this",
+      "charCount": 1992,
+      "duplicateOf": null,
+      "textHead": "How does AI Mode choose which sources to cite? Nobody outside Google can state the mechanism, and this page will not pretend to. What is observable is that cited pages tend to contain a passage that answers the query completely on its own, "
+    },
+    {
+      "index": 14,
+      "group": 5,
+      "heading": "Questions people ask about this",
+      "charCount": 300,
+      "duplicateOf": null,
+      "textHead": "after the reading is produced. No account is needed, so there is nothing to attach it to. Is it really free? Yes, with a rate limit rather than a paywall. The limit exists because every reading spends an embedding call, and it resets on a f"
+    },
+    {
+      "index": 15,
+      "group": 4,
+      "heading": "Other free AI search tools",
+      "charCount": 746,
+      "duplicateOf": null,
+      "textHead": "Voicescope Start with one keyword and explore the questions a person may ask an AI assistant across real-life contexts.\nBrandscope Ask three AI assistants the buyer questions around a brand, then compare their answers with the brand's own p"
+    },
+    {
+      "index": 16,
+      "group": 3,
+      "heading": "What this cannot show you",
+      "charCount": 279,
+      "duplicateOf": null,
+      "textHead": "One page on its own. Whether that page answers the questions people actually ask an assistant, how it stands against a rival page on the same subject, and which topics your site has no page for at all — those need a corpus of the whole site"
+    }
+  ]
+}

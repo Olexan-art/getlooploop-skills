@@ -5,6 +5,8 @@ description: Show how a retrieval system (an AI assistant's search step, a RAG p
 
 # Vectorscope (local, no embeddings)
 
+**In plain words, for people opening this file:** an AI assistant does not read a web page whole. A machine fetches it, keeps only the readable text, cuts it into passages and stores at most 26 of them; whatever comes after the 26th is never seen. This skill runs those exact steps on one public page, has Claude group the passages by subject, and writes a report (HTML, Markdown and JSON) showing what was kept, how it groups, and what fell past the limit. It does not score or rank the page, detect AI text, or predict what any assistant will say. It makes no model or embedding calls; the only network request is the fetch of the page.
+
 Three steps. Steps 1 and 3 are scripts that run the product's exact rules. Step 2 is your judgement. Run every command from this skill's folder.
 
 **First run:** if `node_modules/` is missing here, run `npm install --omit=dev` (it installs cheerio and nothing else). Requires Node 18 or later.
@@ -42,16 +44,18 @@ Write `groups.json`:
 ## 3. Compute the read-out
 
 ```
-node scripts/lens.mjs reading.json groups.json --md report.md --json export.json
+node scripts/lens.mjs reading.json groups.json --md report.md --json export.json --html report.html
 ```
 
 The script checks the grouping. If it prints `REFUSED groups.json: …`, fix what it names and run it again. It then computes each group's label (a heading shared by most of the group's passages, or else the group's two most distinctive words), passage and character counts, share of the indexed text, the page's keywords with how many groups each one reaches, and the side-path list. It writes:
 
 - `report.md`: the reading, laid out like the live page;
-- `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
+- `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`;
+- `report.html`: the same reading as one self-contained page in the look of the live tool: header, pipeline, counters, a reading strip of the 26 slots, group cards, every passage (full text behind a toggle), side-path content, keywords and the closing line. No external fonts, scripts or images; all page text is escaped; it follows the system light or dark theme and has a toggle.
 
 ## Presenting the result
 
+- **The visual report first.** After `report.html` is written: if this session has a tool for publishing HTML artifacts or pages, publish `report.html` with it and give the user the link. Otherwise tell the user the file's absolute path, and on a desktop offer to open it in their browser. Then give the chat summary below.
 - Lead with the pipeline line and the counters: passages read, slots used out of 26, characters past the cap.
 - Show the groups table. Quote a label as the section's name only when its source is `heading`. A `keywords` label is a hint.
 - Name any side-path passages, and say they are still indexed.

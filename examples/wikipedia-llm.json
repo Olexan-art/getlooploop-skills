@@ -1,0 +1,470 @@
+{
+  "schema": "getlooploop/vectorscope-reading@1",
+  "generatedAt": "2026-10-16T15:20:03.191Z",
+  "producedBy": {
+    "tool": "vectorscope-skill (local, no embeddings)",
+    "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by Claude's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
+    "url": "https://www.getlooploop.com/vectorscope"
+  },
+  "howToRead": {
+    "grouping": "Grouped by Claude's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
+    "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
+    "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 6053 of 41850 indexed characters, about 14%, and always the opening of each passage rather than a sample spread through it.",
+    "keywords": "Counted over the page's whole text, not the excerpts below. A term is one word or two: a two-word term is a pair the page writes side by side often enough that the pair is what it is saying, and where it is counted neither of its words is counted separately, so the occurrences still add up to the page. `count` is occurrences; `groups` is how many of the page's groups the term reaches, and `scope` is true when it reaches most of them. A term with `scope` true describes the page; one with it false is a single section's vocabulary — useful, but not a summary. Plurals were folded into the singular where the page uses both. The group counts rest on the grouping above, which is a judgement.",
+    "groupLabels": "`labelSource` says where each name came from. \"heading\" is the page's own section heading and can be quoted. \"keywords\" is a computed guess — the group's most distinctive words — and is a hint, not a topic; do not quote it back as what the section is called.",
+    "cohesion": "null: cohesion is the mean cosine between a group's passage embeddings, and no embeddings were computed.",
+    "selfSimilarity": "null: the median cosine between passages needs embeddings, and none were computed.",
+    "groupFloor": "null: there was no similarity cut; the groups are a reading of the passages.",
+    "duplicateOf": "The index of an earlier, non-adjacent chunk this one repeats nearly word for word, as judged by reading — the product judges it from embeddings at cosine 0.94. The chunker's own overlap between neighbours is excluded.",
+    "projectionExplained": "null: there is no projection without vectors.",
+    "whatCapReachedMeans": "The pipeline indexes at most 26 chunks per page. `capReached` true with `charsUnread` above zero means an assistant reading this page never sees that tail.",
+    "noindex": "True when the page asks search engines not to index it. Says nothing about whether an assistant can read it, but it is often unintentional."
+  },
+  "cannotAnswer": [
+    "Sentiment or tone of the page. Only about 14% of the text is here, taken from the opening of each passage — enough to produce a confident-sounding verdict from an unrepresentative sample. If asked, say what the sample supports and that it is a sample.",
+    "Anything about competitors, or how this page compares to another. One page was read; no other page was fetched.",
+    "Which search or assistant prompts this page ranks or gets cited for. That needs a query inventory and measurement over time, neither of which is in this export.",
+    "Whether the page is factually correct, current, or original. Nothing here checked any claim on it.",
+    "How the page renders for a browser running JavaScript. This is a plain fetch, which is also what an assistant that does not run JavaScript sees.",
+    "How close any two passages are in an embedding space, or whether any assistant has indexed this page. No embeddings were computed, and this is a preview of the machine's view, not a guarantee of what any assistant does with it."
+  ],
+  "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `keywords` where `describesWholePage` is true, since those are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
+  "page": {
+    "url": "https://en.wikipedia.org/wiki/Large_language_model",
+    "requestedUrl": "https://en.wikipedia.org/wiki/Large_language_model",
+    "title": "Large language model - Wikipedia",
+    "wordCount": 13718,
+    "headingsFound": 17,
+    "noindex": false
+  },
+  "retrieval": {
+    "embeddingModel": null,
+    "dimensions": null,
+    "chunkCap": 26,
+    "chunksIndexed": 26,
+    "charsIndexed": 41850,
+    "charsUnread": 52973,
+    "capReached": true,
+    "duplicateChunks": 0,
+    "groupsMergedByPaletteLimit": null
+  },
+  "textCoverage": {
+    "exportedChars": 6053,
+    "indexedChars": 41850,
+    "share": 0.145
+  },
+  "geometry": {
+    "selfSimilarity": null,
+    "groupFloor": null,
+    "projectionExplained": null,
+    "projectionBasis": null
+  },
+  "keywords": [
+    {
+      "term": "model",
+      "count": 127,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "llm",
+      "count": 102,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "token",
+      "count": 44,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "edit",
+      "count": 42,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "text",
+      "count": 39,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "language",
+      "count": 33,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "displaystyle",
+      "count": 30,
+      "groups": 2,
+      "spread": 0.3333,
+      "describesWholePage": false
+    },
+    {
+      "term": "gpt",
+      "count": 28,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "trained",
+      "count": 25,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "input",
+      "count": 24,
+      "groups": 4,
+      "spread": 0.6667,
+      "describesWholePage": true
+    },
+    {
+      "term": "log",
+      "count": 24,
+      "groups": 1,
+      "spread": 0.1667,
+      "describesWholePage": false
+    },
+    {
+      "term": "training",
+      "count": 22,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "example",
+      "count": 20,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "based",
+      "count": 19,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "dataset",
+      "count": 19,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "step",
+      "count": 19,
+      "groups": 4,
+      "spread": 0.6667,
+      "describesWholePage": true
+    },
+    {
+      "term": "task",
+      "count": 18,
+      "groups": 4,
+      "spread": 0.6667,
+      "describesWholePage": true
+    },
+    {
+      "term": "data",
+      "count": 17,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "performance",
+      "count": 17,
+      "groups": 5,
+      "spread": 0.8333,
+      "describesWholePage": true
+    },
+    {
+      "term": "reasoning",
+      "count": 16,
+      "groups": 4,
+      "spread": 0.6667,
+      "describesWholePage": true
+    }
+  ],
+  "groups": [
+    {
+      "id": 0,
+      "label": "History",
+      "labelSource": "heading",
+      "chunkCount": 5,
+      "charCount": 6382,
+      "shareOfIndexedChars": 0.152,
+      "cohesion": null
+    },
+    {
+      "id": 1,
+      "label": "Dataset preprocessing",
+      "labelSource": "heading",
+      "chunkCount": 3,
+      "charCount": 4651,
+      "shareOfIndexedChars": 0.111,
+      "cohesion": null
+    },
+    {
+      "id": 2,
+      "label": "Architecture",
+      "labelSource": "heading",
+      "chunkCount": 4,
+      "charCount": 5063,
+      "shareOfIndexedChars": 0.121,
+      "cohesion": null
+    },
+    {
+      "id": 3,
+      "label": "Extensibility",
+      "labelSource": "heading",
+      "chunkCount": 6,
+      "charCount": 11580,
+      "shareOfIndexedChars": 0.277,
+      "cohesion": null
+    },
+    {
+      "id": 4,
+      "label": "Properties",
+      "labelSource": "heading",
+      "chunkCount": 5,
+      "charCount": 8632,
+      "shareOfIndexedChars": 0.206,
+      "cohesion": null
+    },
+    {
+      "id": 5,
+      "label": "Interpretation",
+      "labelSource": "heading",
+      "chunkCount": 3,
+      "charCount": 5542,
+      "shareOfIndexedChars": 0.132,
+      "cohesion": null
+    }
+  ],
+  "chunks": [
+    {
+      "index": 0,
+      "group": 0,
+      "heading": "Large language model - Wikipedia",
+      "charCount": 53,
+      "duplicateOf": null,
+      "textHead": "Large language model - Wikipedia\nLarge language model"
+    },
+    {
+      "index": 1,
+      "group": 0,
+      "heading": null,
+      "charCount": 1157,
+      "duplicateOf": null,
+      "textHead": "Large language model\nFrom Wikipedia, the free encyclopedia\nType of machine learning model\n\"LLM\" redirects here. For other uses, see LLM (disambiguation).\nThe number of publications about large language models by year grouped by publication "
+    },
+    {
+      "index": 2,
+      "group": 0,
+      "heading": "History",
+      "charCount": 1998,
+      "duplicateOf": null,
+      "textHead": "[ edit ] The training compute of notable large models in FLOPs vs publication date over the period 2010–2024. For overall notable models (top left), frontier models (top right), top language models (bottom left) and top models within leadin"
+    },
+    {
+      "index": 3,
+      "group": 0,
+      "heading": "History",
+      "charCount": 1994,
+      "duplicateOf": null,
+      "textHead": "used LSTM-based encoder-decoder architectures, as they preceded the invention of transformers. An illustration of the main components of the transformer model from the original paper, where layers were normalized after (instead of before) m"
+    },
+    {
+      "index": 4,
+      "group": 0,
+      "heading": "History",
+      "charCount": 1180,
+      "duplicateOf": null,
+      "textHead": "impact work.[15] In 2024, OpenAI released the reasoning model OpenAI o1, which generates long chains of thought before returning a final answer.[19] Many LLMs with parameter counts comparable to those of OpenAI's GPT series have been develo"
+    },
+    {
+      "index": 5,
+      "group": 1,
+      "heading": "Dataset preprocessing",
+      "charCount": 1989,
+      "duplicateOf": null,
+      "textHead": "[ edit ] See also: List of datasets for machine-learning research § Internet Tokenization [ edit ] As machine learning algorithms process numbers rather than text, the text must be converted to numbers. In the first step, a vocabulary is de"
+    },
+    {
+      "index": 6,
+      "group": 1,
+      "heading": "Dataset preprocessing",
+      "charCount": 1127,
+      "duplicateOf": null,
+      "textHead": "a vocabulary of prescribed size is obtained. After a tokenizer is trained, any text can be tokenized by it, as long as it does not contain characters not appearing in the initial-set of uni-grams.[24] Dataset cleaning [ edit ] Main article:"
+    },
+    {
+      "index": 7,
+      "group": 1,
+      "heading": "Training",
+      "charCount": 1535,
+      "duplicateOf": null,
+      "textHead": "[ edit ]\nSee also: Fine-tuning (machine learning) and Post-training of large language models\nAn LLM is a type of foundation model (large X model) trained on language. LLMs can be trained in different ways. In particular, GPT models are firs"
+    },
+    {
+      "index": 8,
+      "group": 2,
+      "heading": "Inference",
+      "charCount": 561,
+      "duplicateOf": null,
+      "textHead": "[ edit ]\nSee also: Inference § Inference engines\nInference is the process of providing input to a trained large language model and receiving generated output, such as text, images, code, or other files.\nHosted inference runs a language mode"
+    },
+    {
+      "index": 9,
+      "group": 2,
+      "heading": "Architecture",
+      "charCount": 1998,
+      "duplicateOf": null,
+      "textHead": "[ edit ] LLMs are generally based on the transformer architecture, which leverages an attention mechanism that enables the model to process relationships between all elements in a sequence simultaneously, regardless of their distance from e"
+    },
+    {
+      "index": 10,
+      "group": 2,
+      "heading": "Architecture",
+      "charCount": 1995,
+      "duplicateOf": null,
+      "textHead": "edit ] Main article: Mixture of experts A mixture of experts (MoE) is a machine learning architecture in which multiple specialized neural networks (\"experts\") work together, with a gating mechanism that routes each input to the most approp"
+    },
+    {
+      "index": 11,
+      "group": 2,
+      "heading": "Architecture",
+      "charCount": 509,
+      "duplicateOf": null,
+      "textHead": "simply truncates all the parameters to a given number of bits: this is applicable to static as well as dynamic quantization, but loses much precision. Dynamic quantization allows for the use of a different quantization codebook per layer, e"
+    },
+    {
+      "index": 12,
+      "group": 3,
+      "heading": "Extensibility",
+      "charCount": 1997,
+      "duplicateOf": null,
+      "textHead": "[ edit ] Beyond basic text generation, various techniques have been developed to extend LLM capabilities, including the use of external tools and data sources, improved reasoning on complex problems, and enhanced instruction-following or au"
+    },
+    {
+      "index": 13,
+      "group": 3,
+      "heading": "Extensibility",
+      "charCount": 1992,
+      "duplicateOf": null,
+      "textHead": "authority than the user's input. This is called a \"system prompt\". [ citation needed ] Retrieval-augmented generation [ edit ] Retrieval-augmented generation (RAG) is an approach that integrates LLMs with document retrieval systems. Given a"
+    },
+    {
+      "index": 14,
+      "group": 3,
+      "heading": "Extensibility",
+      "charCount": 1995,
+      "duplicateOf": null,
+      "textHead": "input patterns are used to make the LLM plan actions and tool use is used to potentially carry out these actions.[54] In the DEPS (\"describe, explain, plan and select\") method, an LLM is first connected to the visual world via image descrip"
+    },
+    {
+      "index": 15,
+      "group": 3,
+      "heading": "Extensibility",
+      "charCount": 1766,
+      "duplicateOf": null,
+      "textHead": "an answer. The LLM mimics these examples and also tries to spend some time generating intermediate steps before providing the final answer. This additional step elicited by prompting improves the correctness of the LLM on relatively complex"
+    },
+    {
+      "index": 16,
+      "group": 3,
+      "heading": "Forms of input and output",
+      "charCount": 1999,
+      "duplicateOf": null,
+      "textHead": "[ edit ] Multimodality [ edit ] See also: Multimodal learning Multimodality means having multiple modalities, where a \"modality\" refers to a type of input or output, such as video, image, audio, text, proprioception, etc.[69] For example, G"
+    },
+    {
+      "index": 17,
+      "group": 3,
+      "heading": "Forms of input and output",
+      "charCount": 1831,
+      "duplicateOf": null,
+      "textHead": "visual information into its pre-trained language model.[76] Non-natural languages [ edit ] LLMs can handle programming languages similarly to how they handle natural languages. No special change in token handling is needed as code, like hum"
+    },
+    {
+      "index": 18,
+      "group": 4,
+      "heading": "Properties",
+      "charCount": 1993,
+      "duplicateOf": null,
+      "textHead": "[ edit ] Scaling laws [ edit ] Main article: Neural scaling law The performance of an LLM after pretraining largely depends on the: C {\\displaystyle C} : cost of pretraining (the total amount of compute used), N {\\displaystyle N} : size of "
+    },
+    {
+      "index": 19,
+      "group": 4,
+      "heading": "Properties",
+      "charCount": 1997,
+      "duplicateOf": null,
+      "textHead": "arcs. Performance of bigger models on various tasks, when plotted on a log–log scale, appears as a linear extrapolation of performance achieved by smaller models. However, this linearity may be punctuated by \"break(s)\"[86] in the scaling la"
+    },
+    {
+      "index": 20,
+      "group": 4,
+      "heading": "Properties",
+      "charCount": 654,
+      "duplicateOf": null,
+      "textHead": "token}})} , then ( log ⁡ x , y ) {\\displaystyle (\\log x,y)} is an exponential curve (before it hits the plateau at one), which looks like emergence. When y = average log ⁡ ( Pr ( correct token ) ) {\\displaystyle y={\\text{average }}\\log(\\Pr("
+    },
+    {
+      "index": 21,
+      "group": 5,
+      "heading": "Interpretation",
+      "charCount": 1997,
+      "duplicateOf": null,
+      "textHead": "[ edit ] Mechanistic interpretability [ edit ] Main article: Mechanistic interpretability Large language models are typically regarded as black boxes, and it is not clear how they perform linguistic tasks. Similarly, it is unclear if or how"
+    },
+    {
+      "index": 22,
+      "group": 5,
+      "heading": "Interpretation",
+      "charCount": 1994,
+      "duplicateOf": null,
+      "textHead": "say that a system that passes exams for software engineering candidates is not really intelligent?\"[98] [99] Ilya Sutskever argues that predicting the next word sometimes involves reasoning and deep insights, for example if the LLM has to p"
+    },
+    {
+      "index": 23,
+      "group": 5,
+      "heading": "Interpretation",
+      "charCount": 1551,
+      "duplicateOf": null,
+      "textHead": "on the intelligence of LLMs suggests that our old ideas based on natural intelligence are inadequate\".[97] Efforts to reduce or compensate for hallucinations have employed automated reasoning, retrieval-augmented generation (RAG), fine-tuni"
+    },
+    {
+      "index": 24,
+      "group": 4,
+      "heading": "Evaluation",
+      "charCount": 1991,
+      "duplicateOf": null,
+      "textHead": "[ edit ] See also: LLM-as-a-Judge Perplexity [ edit ] The canonical measure of the performance of any language model is its perplexity on a given text corpus. Perplexity measures how well a model predicts the contents of a dataset; the high"
+    },
+    {
+      "index": 25,
+      "group": 4,
+      "heading": "Evaluation",
+      "charCount": 1997,
+      "duplicateOf": null,
+      "textHead": "to 43% of its size, beating PNG with 58%.[116] Benchmarks [ edit ] Main article: Language model benchmark Benchmarks are used to evaluate LLM performance on specific tasks. Tests evaluate capabilities such as general knowledge, bias, common"
+    }
+  ]
+}

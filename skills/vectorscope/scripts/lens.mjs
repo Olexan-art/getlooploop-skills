@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Step 3 of the Vectorscope skill: labels, counts, shares, keywords and side-path content
-// over the grouping Claude wrote in step 2, and the two outputs.
-//   node scripts/lens.mjs reading.json groups.json [--json out.json] [--md out.md]
+// over the grouping Claude wrote in step 2, and the outputs.
+//   node scripts/lens.mjs reading.json groups.json [--json out.json] [--md out.md] [--html out.html]
 // groups.json: {"groups": [[0,1,2],[3,4],...], "duplicates": {"7": 2}}
 // Every passage index exactly once, at most 6 groups. Refuses with a clear message otherwise.
 
@@ -18,10 +18,11 @@ import {
   PREVIEW_CHARS,
 } from "./lib/lens.mjs";
 import { buildVectorscopeExport, vectorscopeExportName } from "./lib/export.mjs";
+import { renderHtml } from "./lib/html.mjs";
 
 const MAX_GROUPS = 6;
 
-const USAGE = "Usage: node scripts/lens.mjs reading.json groups.json [--json out.json] [--md out.md]";
+const USAGE = "Usage: node scripts/lens.mjs reading.json groups.json [--json out.json] [--md out.md] [--html out.html]";
 
 function fail(message) {
   console.error(`REFUSED  ${message}`);
@@ -29,10 +30,11 @@ function fail(message) {
 }
 
 function parseArgs(argv) {
-  const out = { files: [], json: null, md: null };
+  const out = { files: [], json: null, md: null, html: null };
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--json") out.json = argv[++i];
     else if (argv[i] === "--md") out.md = argv[++i];
+    else if (argv[i] === "--html") out.html = argv[++i];
     else out.files.push(argv[i]);
   }
   return out;
@@ -296,6 +298,7 @@ if (isMain) {
   const mdPath = args.md || jsonPath.replace(/\.json$/, "") + ".md";
   writeFileSync(jsonPath, JSON.stringify(exported, null, 2));
   writeFileSync(mdPath, renderMarkdown(reading, lens));
+  if (args.html) writeFileSync(args.html, renderHtml(reading, lens));
 
   if (grouping.reordered) console.log("note      groups were renumbered by their earliest passage and sorted inside");
   for (const g of lens.groups) {
@@ -304,4 +307,5 @@ if (isMain) {
   console.log(`keywords  ${lens.keywords.slice(0, 8).map((k) => k.term).join(", ")}${lens.keywords.length > 8 ? ", …" : ""}`);
   console.log(`report    ${mdPath}`);
   console.log(`export    ${jsonPath}`);
+  if (args.html) console.log(`html      ${args.html}`);
 }
