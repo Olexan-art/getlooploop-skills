@@ -58,7 +58,7 @@ export function buildVectorscopeExport(page, lens, now = new Date()) {
         "True when the page asks search engines not to index it. Says nothing about whether an assistant can read it, but it is often unintentional.",
     },
 
-    // , plus one line about the grouping.
+    // What this reading cannot answer, plus one line about the grouping.
     cannotAnswer: [
       `Sentiment or tone of the page. Only about ${sharePercent}% of the text is here, taken from the opening of each passage — enough to produce a confident-sounding verdict from an unrepresentative sample. If asked, say what the sample supports and that it is a sample.`,
       "Anything about competitors, or how this page compares to another. One page was read; no other page was fetched.",

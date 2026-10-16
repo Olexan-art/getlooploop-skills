@@ -1,6 +1,8 @@
 // The deterministic half of the Vectorscope read-out: side-path roles, group labels, page keywords.
 // None of this needs vectors; the grouping it is applied to is supplied by the caller.
 
+// Words that carry no subject of their own. English and Ukrainian always (no English token
+// is written in Cyrillic); Ukrainian only, never Russian.
 export const STOP = new Set([
   "a", "an", "the", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with",
   "by", "from", "as", "is", "are", "was", "were", "be", "been", "being", "have", "has",
@@ -13,19 +15,111 @@ export const STOP = new Set([
   "about", "into", "over", "after", "before", "between", "under", "again", "further",
   "then", "once", "here", "there", "any", "if", "vs", "via", "per", "www", "http", "https",
   "com", "org", "net", "html", "php", "asp",
-  // Ukrainian function words
-  "і", "в", "у", "на", "з", "та", "що", "як", "для", "про", "це", "не", "але", "чи", "до",
+  // Ukrainian: conjunctions and particles
+  "і", "й", "та", "а", "але", "або", "чи", "що", "щоб", "як", "якщо", "коли", "бо",
+  "тому", "хоча", "проте", "однак", "тобто", "аби", "ні", "не", "так", "ще", "вже",
+  "уже", "лише", "тільки", "теж", "також", "навіть", "саме", "ось", "би", "б", "ж",
+  // Ukrainian: prepositions
+  "в", "у", "на", "з", "із", "зі", "до", "від", "по", "про", "для", "без", "над",
+  "під", "при", "через", "між", "за", "о", "об", "після", "перед", "біля", "серед",
+  "щодо", "поки",
+  // Ukrainian: pronouns and determiners
+  "я", "ти", "він", "вона", "воно", "ми", "ви", "вони", "мене", "тебе", "його", "її",
+  "їх", "нас", "вас", "них", "мені", "тобі", "йому", "їй", "нам", "вам", "їм", "себе",
+  "мій", "моя", "моє", "мої", "твій", "твоя", "твоє", "твої", "наш", "наша", "наше",
+  "наші", "ваш", "ваша", "ваше", "ваші", "свій", "своя", "своє", "свої", "свою",
+  "їхній", "їхня", "їхнє", "їхні", "це", "цей", "ця", "ці", "цю", "цього", "цієї",
+  "цих", "цьому", "цим", "той", "те", "ті", "ту", "того", "тих", "тим", "який",
+  "яка", "яке", "які", "яку", "якого", "якої", "яких", "якому", "яким", "де", "куди",
+  "чому", "весь", "вся", "все", "всі", "усі", "кожен", "кожна", "кожне", "інший",
+  "інша", "інше", "інші", "тут", "там",
+  // Ukrainian: auxiliaries
+  "є", "був", "була", "було", "були", "бути", "буде", "будуть", "може", "можна",
+  "треба", "дуже", "більш", "більше", "менше",
 ]);
 
-export function tokenize(text) {
+// Spanish words that are never English words, so they are dropped anywhere.
+const STOP_ES_ONLY = new Set([
+  "que", "qué", "una", "unos", "unas", "por", "pero", "más", "este", "esta", "estos",
+  "estas", "esto", "eso", "esos", "esas", "porque", "cuando", "cuándo", "muy", "sobre",
+  "también", "hasta", "donde", "dónde", "desde", "durante", "todos", "todas", "toda",
+  "otro", "otra", "otros", "otras", "ellos", "ellas", "antes", "algunos", "algunas",
+  "tanto", "muchos", "muchas", "quien", "quién", "quienes", "cual", "cuál", "cuales",
+  "cuáles", "poco", "estar", "nosotros", "nosotras", "vosotros", "vosotras", "nuestro",
+  "nuestra", "nuestros", "nuestras", "vuestro", "vuestra", "vuestros", "vuestras", "está",
+  "están", "estás", "estamos", "estoy", "fueron", "sido", "siendo", "había", "habían",
+  "haber", "hemos", "hubo", "tiene", "tienen", "tengo", "tener", "tenía", "puede",
+  "pueden", "cómo", "usted", "ustedes", "aquí", "allí", "así", "aunque", "cada",
+  "mientras", "según", "tras", "hacia", "además", "entonces", "luego", "ahora", "siempre",
+  "nunca", "cuánto", "cuánta", "cuántos", "cuántas", "mismo", "misma", "mismos", "mismas",
+  "pues", "aquel", "aquella", "aquellos", "aquellas", "ello", "él", "mí", "tú", "sí",
+  "sólo", "eres", "somos", "sois", "éramos", "mío", "mía", "tuyo", "tuya",
+  "suyo", "suya", "suyos", "suyas",
+]);
+
+// Spanish function words that are also English tokens ("de facto", "Las Vegas", "/en/"):
+// dropped only from text detected as Spanish, so English text tokenises as it always did.
+const STOP_ES_SHARED = new Set([
+  "de", "la", "el", "en", "es", "se", "lo", "le", "al", "su", "mi", "tu", "te", "ti",
+  "ya", "si", "son", "era", "eran", "eras", "sin", "sea", "hay", "con", "del", "ha",
+  "han", "les", "mas", "nos", "sus", "mis", "tus", "ser", "uno", "esa", "ese", "para",
+  "yo", "os", "ni", "fue", "fui", "los", "las", "como", "todo", "nada", "mucho", "algo",
+  "ella", "ante", "solo", "sino", "un", "soy", "sean",
+]);
+
+// A handful of English function words, only to tell English text from Spanish.
+const EN_MARKERS = new Set([
+  "the", "and", "of", "to", "is", "in", "that", "it", "for", "with", "are", "this", "on",
+  "you", "be", "as", "by", "was", "from", "have", "your", "can", "will", "not", "or",
+]);
+
+// The shared words that count as evidence of Spanish.
+const ES_EVIDENCE = new Set(["de", "la", "el", "los", "las", "del", "con", "para"]);
+
+// How much of a text the language test reads.
+const DETECT_SAMPLE_CHARS = 20_000;
+
+// Spanish when Spanish function words outnumber English ones, at least two of them, and the
+// text has a word only Spanish writes or Spanish spelling (ñ ¿ ¡ á í ó ú). Returns "es" or null.
+export function detectStopLanguage(text) {
+  if (!text) return null;
+  const sample = text.slice(0, DETECT_SAMPLE_CHARS);
+  let spanish = 0;
+  let english = 0;
+  let only = false;
+  for (const word of sample.toLowerCase().split(/[^\p{L}]+/u)) {
+    if (!word) continue;
+    if (STOP_ES_ONLY.has(word)) {
+      spanish += 1;
+      only = true;
+    } else if (ES_EVIDENCE.has(word)) {
+      spanish += 1;
+    } else if (EN_MARKERS.has(word)) {
+      english += 1;
+    }
+  }
+  if (spanish < 2 || spanish <= english) return null;
+  return only || /[ñ¿¡áíóú]/i.test(sample) ? "es" : null;
+}
+
+// Whether a token carries no subject, in the given (or no) extra language.
+export function isStopword(token, language = null) {
+  if (STOP.has(token) || STOP_ES_ONLY.has(token)) return true;
+  return language === "es" && STOP_ES_SHARED.has(token);
+}
+
+// Tokenize text into lowercase terms. `language` is the extra stop list; left out
+// (undefined), it is decided from this text.
+export function tokenize(text, language) {
   if (!text) return [];
+  const extra = language === undefined ? detectStopLanguage(text) : language;
   return text
     .toLowerCase()
     .replace(/https?:\/\//g, " ")
     .replace(/[^\p{L}\p{N}\s._/-]+/gu, " ")
     .split(/[\s/_.-]+/)
     .map((t) => t.trim())
-    .filter((t) => t.length >= 2 && !STOP.has(t) && !/^\d+$/.test(t));
+    .filter((t) => t.length >= 2 && !isStopword(t, extra) && !/^\d+$/.test(t));
 }
 
 // ── side-path roles ──────────────────────────────────────────────────────────
@@ -84,13 +178,14 @@ function usableLabelTerm(token) {
 }
 
 /** A heading of at most 80 chars wins; otherwise the group's two most distinctive words. */
-export function labelGroup(groupTexts, otherTexts, heading) {
+export function labelGroup(groupTexts, otherTexts, heading, language) {
   const clean = (heading || "").trim();
   if (clean && clean.length <= 80) return clean;
 
+  const stopLanguage = language === undefined ? pageStopLanguage([...groupTexts, ...otherTexts]) : language;
   const inside = new Map();
   for (const text of groupTexts) {
-    for (const token of new Set(tokenize(text))) {
+    for (const token of new Set(tokenize(text, stopLanguage))) {
       if (!usableLabelTerm(token)) continue;
       inside.set(token, (inside.get(token) || 0) + 1);
     }
@@ -99,7 +194,7 @@ export function labelGroup(groupTexts, otherTexts, heading) {
 
   const outside = new Map();
   for (const text of otherTexts) {
-    for (const token of new Set(tokenize(text))) {
+    for (const token of new Set(tokenize(text, stopLanguage))) {
       outside.set(token, (outside.get(token) || 0) + 1);
     }
   }
@@ -149,21 +244,25 @@ export function labelSourceOf(label, heading) {
 
 // ── keywords ─────────────────────────────────────────────────────────────────
 
-// , 788, 797, 803, 816.
-const KEYWORD_LIMIT = 20;
+export const KEYWORD_LIMIT = 20;
 const SCOPE_SPREAD = 0.6;
 const MIN_KEYWORD_COUNT = 2;
 const MIN_PHRASE_COUNT = 3;
 const PHRASE_SHARE = 0.5;
 
-function usableKeyword(token) {
+/** The page's language for stop words, decided once for all of its passages. */
+export function pageStopLanguage(texts) {
+  return detectStopLanguage(texts.join("\n"));
+}
+
+function usableKeyword(token, language) {
   if (token.length < 2) return false;
-  if (LABEL_STOP.has(token) || STOP.has(token)) return false;
+  if (LABEL_STOP.has(token) || isStopword(token, language)) return false;
   return /\p{L}/u.test(token);
 }
 
 // runs of directly adjacent content words.
-function contentRuns(text) {
+function contentRuns(text, language) {
   const runs = [];
   let run = [];
   const end = () => {
@@ -178,7 +277,7 @@ function contentRuns(text) {
       return;
     }
     if (!part) return;
-    if (!usableKeyword(part) || /^\d+$/.test(part)) {
+    if (!usableKeyword(part, language) || /^\d+$/.test(part)) {
       end();
       return;
     }
@@ -198,10 +297,11 @@ function pairsOf(run) {
  * The page's vocabulary: one- and two-word terms, counted by occurrence, with how many groups each reaches.
  * `assignment[i]` is the group id of passage i.
  */
-export function pageKeywords(texts, assignment, groupCount, limit = KEYWORD_LIMIT) {
+export function pageKeywords(texts, assignment, groupCount, limit = KEYWORD_LIMIT, language) {
   if (!texts.length) return [];
 
-  const runsByChunk = texts.map((text) => contentRuns(text));
+  const stopLanguage = language === undefined ? pageStopLanguage(texts) : language;
+  const runsByChunk = texts.map((text) => contentRuns(text, stopLanguage));
 
   // Plurals folded into the singular, only when the singular is used on this page.
   const rawCounts = new Map();

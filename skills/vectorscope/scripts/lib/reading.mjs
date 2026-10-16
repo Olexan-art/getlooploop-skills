@@ -62,6 +62,7 @@ export async function readPage({ url, html, finalUrl }) {
 
   const charsIndexed = chunks.reduce((sum, chunk) => sum + chunk.charCount, 0);
   const bodyChars = (analysed.bodyText || "").trim().length;
+  const capReached = chunks.length >= CHUNKS_PER_PAGE;
 
   const page = {
     url: analysed.url,
@@ -70,8 +71,10 @@ export async function readPage({ url, html, finalUrl }) {
     wordCount: analysed.wordCount,
     chunksIndexed: chunks.length,
     charsIndexed,
-    charsUnread: Math.max(0, bodyChars - charsIndexed),
-    capReached: chunks.length >= CHUNKS_PER_PAGE,
+    // Zero unless the cap was reached: below it every character was offered to the chunker,
+    // and the raw difference is only intro repetition, heading lines, overlap and whitespace.
+    charsUnread: capReached ? Math.max(0, bodyChars - charsIndexed) : 0,
+    capReached,
     noindex: analysed.reachability.noindex,
     headings: analysed.h1.length + analysed.h2.length,
     chunkCap: CHUNKS_PER_PAGE,

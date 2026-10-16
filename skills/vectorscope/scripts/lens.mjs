@@ -12,7 +12,9 @@ import {
   dominantHeading,
   labelGroup,
   labelSourceOf,
+  KEYWORD_LIMIT,
   pageKeywords,
+  pageStopLanguage,
   PREVIEW_CHARS,
 } from "./lib/lens.mjs";
 import { buildVectorscopeExport, vectorscopeExportName } from "./lib/export.mjs";
@@ -108,11 +110,13 @@ export function buildJudgedLens(reading, grouping) {
     contentRole: p.contentRole,
   }));
 
+  // One stop-word language for the whole page, as the product decides it.
+  const stopLanguage = pageStopLanguage(passages.map((p) => p.text));
   const groups = grouping.groups.map((memberIndexes, id) => {
     const memberTexts = memberIndexes.map((index) => passages[index].text);
     const otherTexts = passages.filter((_, index) => assignment[index] !== id).map((p) => p.text);
     const heading = dominantHeading(memberIndexes.map((index) => passages[index].rawHeading ?? passages[index].heading));
-    const label = labelGroup(memberTexts, otherTexts, heading);
+    const label = labelGroup(memberTexts, otherTexts, heading, stopLanguage);
     return {
       id,
       label,
@@ -128,7 +132,7 @@ export function buildJudgedLens(reading, grouping) {
     chunks,
     groups,
     duplicates: grouping.duplicates.size,
-    keywords: pageKeywords(passages.map((p) => p.text), assignment, groups.length),
+    keywords: pageKeywords(passages.map((p) => p.text), assignment, groups.length, KEYWORD_LIMIT, stopLanguage),
   };
 }
 
@@ -180,8 +184,8 @@ export function renderMarkdown(reading, lens) {
   out.push(`- **${page.chunksIndexed}** passages read`);
   out.push(`- **${page.chunksIndexed}/${cap}** slots used of the ${cap}-passage cap${page.capReached ? " (every slot filled)" : ""}`);
   out.push(
-    `- **${fmt(page.charsUnread)}** characters past the cap, not read. Counted as extracted characters minus indexed characters; ` +
-      "passages overlap by about 200 characters and the first one repeats the title and description, so this undercounts and can read 0 even when the cap cut off a tail."
+    `- **${fmt(page.charsUnread)}** characters past the cap, not read. Zero unless every slot was filled; then counted as extracted characters minus indexed characters, ` +
+      "and since passages overlap by about 200 characters and the first one repeats the title and description, it undercounts and can read 0 even when the cap cut off a tail."
   );
   out.push("");
 

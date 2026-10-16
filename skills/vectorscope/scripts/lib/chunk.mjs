@@ -241,10 +241,24 @@ function sentenceAwareSplit(text, maxChars, overlap) {
     const part = clean.slice(i, end).trim();
     if (part) chunks.push(part);
     if (end >= clean.length) break;
-    i = Math.max(end - overlap, i + step);
+    i = nextWindowStart(clean, end, Math.max(end - overlap, i + step));
   }
 
   return chunks;
+}
+
+/**
+ * Where the next window opens: on a word, never inside one, and never past the end of the
+ * window just emitted (so no text falls between two windows). A start inside a run with no
+ * space before that end stays where it is.
+ */
+export function nextWindowStart(text, end, proposed) {
+  let start = Math.min(proposed, end);
+  if (start > 0 && start < end && !/\s/.test(text[start - 1])) {
+    const space = text.indexOf(" ", start);
+    if (space !== -1 && space < end) start = space + 1;
+  }
+  return start;
 }
 
 function toStringArray(v) {
