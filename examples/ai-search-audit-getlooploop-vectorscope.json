@@ -1,0 +1,1920 @@
+{
+  "schema": "getlooploop/ai-search-audit@1",
+  "skillVersion": "2.101",
+  "producedBy": "ai-search-audit skill, Lite (local, deterministic, no model calls)",
+  "createdAt": "2026-10-16T23:25:31.781Z",
+  "edition": "lite",
+  "page": {
+    "url": "https://www.getlooploop.com/vectorscope",
+    "requestedUrl": "https://www.getlooploop.com/vectorscope",
+    "title": "Semantic Chunking Visualizer for Any URL — Vectorscope",
+    "saved": false,
+    "redirects": [
+      {
+        "url": "https://www.getlooploop.com/vectorscope",
+        "status": 200
+      }
+    ]
+  },
+  "verdict": {
+    "en": "Nothing hides text from AI",
+    "uk": "Ніщо не ховає текст від ШІ"
+  },
+  "counts": {
+    "total": 8,
+    "blocking": 0,
+    "high": 0,
+    "medium": 4,
+    "low": 4
+  },
+  "tiles": [
+    {
+      "id": "classic",
+      "question": {
+        "en": "Shown well in search?",
+        "uk": "Добре видно в пошуку?"
+      },
+      "state": "prob",
+      "problems": 2
+    },
+    {
+      "id": "find",
+      "question": {
+        "en": "AI finds it?",
+        "uk": "ШІ знаходить?"
+      },
+      "state": "ok",
+      "problems": 0
+    },
+    {
+      "id": "read",
+      "question": {
+        "en": "AI reads all of it?",
+        "uk": "ШІ читає все?"
+      },
+      "state": "prob",
+      "problems": 2
+    },
+    {
+      "id": "quote",
+      "question": {
+        "en": "AI quotes it right?",
+        "uk": "ШІ цитує правильно?"
+      },
+      "state": "prob",
+      "problems": 1
+    },
+    {
+      "id": "markup",
+      "question": {
+        "en": "Rich results & markup",
+        "uk": "Розширені результати й розмітка"
+      },
+      "state": "prob",
+      "problems": 2
+    },
+    {
+      "id": "lang",
+      "question": {
+        "en": "Languages in order?",
+        "uk": "Мови гаразд?"
+      },
+      "state": "ok",
+      "problems": 1
+    }
+  ],
+  "findings": [
+    {
+      "id": "broken_links",
+      "pin": 1,
+      "big": true,
+      "code": "broken_links",
+      "severity": "medium",
+      "area": "classic",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "label": {
+        "en": "2 broken links",
+        "uk": "2 неробочі посилання"
+      },
+      "where": "div.mt-12.space-y-14 > section#more > div.mt-7.grid > a.group.pt-card, div.mt-12.space-y-14 > section#more > div.mt-7.grid > a.group.pt-card",
+      "map": {
+        "zones": [
+          12
+        ],
+        "strip": null
+      },
+      "passages": [],
+      "evidence": {
+        "count": 2,
+        "checked": 27,
+        "unchecked": 0,
+        "samples": [
+          "404 https://www.getlooploop.com/notes/what-is-semantic-chunking",
+          "404 https://www.getlooploop.com/notes/optimise-content-for-ai-search"
+        ]
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: HTTP status codes and network errors",
+          "url": "https://developers.google.com/search/docs/crawling-indexing/http-network-errors"
+        }
+      ]
+    },
+    {
+      "id": "schema_required_missing",
+      "pin": 2,
+      "big": true,
+      "code": "schema_required_missing",
+      "severity": "medium",
+      "area": "markup",
+      "owner": "dev",
+      "hidesText": false,
+      "informational": false,
+      "label": {
+        "en": "Required schema fields missing",
+        "uk": "Бракує обов’язкових полів схеми"
+      },
+      "where": "JSON-LD #2 $",
+      "map": {
+        "zones": [],
+        "strip": {
+          "side": "head",
+          "rows": [
+            "jsonld"
+          ]
+        }
+      },
+      "passages": [],
+      "evidence": {
+        "types": [
+          "SoftwareApplication"
+        ],
+        "items": [
+          "SoftwareApplication: aggregateRating | review"
+        ]
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: introduction to structured data",
+          "url": "https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data"
+        },
+        {
+          "name": "Google Search Central: software app structured data",
+          "url": "https://developers.google.com/search/docs/appearance/structured-data/software-app"
+        }
+      ]
+    },
+    {
+      "id": "mid_sentence_start",
+      "pin": 3,
+      "big": true,
+      "code": "mid_sentence_start",
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "label": {
+        "en": "2 passages start mid-sentence",
+        "uk": "2 уривки із середини речення"
+      },
+      "where": "passages #6, #14",
+      "map": {
+        "zones": [
+          6,
+          12
+        ],
+        "strip": null
+      },
+      "passages": [
+        6,
+        14
+      ],
+      "evidence": {
+        "samples": [
+          {
+            "passage": 6,
+            "text": "to quote. The passage a question actually retrieves Asking the page a question …"
+          },
+          {
+            "passage": 14,
+            "text": "after the reading is produced. No account is needed, so there is nothing to att…"
+          }
+        ],
+        "count": 2
+      },
+      "rules": [
+        {
+          "name": "This skill: the Vectorscope reading (h2 sections, 2,000-character windows, a 26-passage cap)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/skills/vectorscope/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "nav_in_content",
+      "pin": 4,
+      "big": true,
+      "code": "nav_in_content",
+      "severity": "medium",
+      "area": "read",
+      "owner": "dev",
+      "hidesText": false,
+      "informational": false,
+      "label": {
+        "en": "Menu lines inside the text",
+        "uk": "Рядки меню всередині тексту"
+      },
+      "where": "passage #1",
+      "map": {
+        "zones": [
+          1
+        ],
+        "strip": null
+      },
+      "passages": [
+        1
+      ],
+      "evidence": {
+        "runs": 1,
+        "samples": [
+          {
+            "passage": 1,
+            "lines": [
+              "1. Fetched",
+              "2. Extracted",
+              "3. Chunked",
+              "4. Embedded",
+              "5. Grouped",
+              "passages read"
+            ],
+            "count": 6
+          }
+        ]
+      },
+      "rules": [
+        {
+          "name": "HTML Standard: the nav element",
+          "url": "https://html.spec.whatwg.org/multipage/sections.html#the-nav-element"
+        },
+        {
+          "name": "This skill: the Vectorscope reading (h2 sections, 2,000-character windows, a 26-passage cap)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/skills/vectorscope/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "page_weight_heavy",
+      "pin": 5,
+      "big": true,
+      "code": "page_weight_heavy",
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "hidesText": false,
+      "informational": false,
+      "label": {
+        "en": "131 KB, 40 scripts",
+        "uk": "131 КБ, 40 скриптів"
+      },
+      "where": "HTML",
+      "map": {
+        "zones": [],
+        "strip": {
+          "side": "head",
+          "rows": [
+            "scripts"
+          ]
+        }
+      },
+      "passages": [],
+      "evidence": {
+        "htmlBytes": 134426,
+        "scripts": 40,
+        "blocking": 1,
+        "maxBytes": 500000,
+        "maxScripts": 30
+      },
+      "rules": [
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
+      "id": "thin_section",
+      "pin": 6,
+      "big": false,
+      "code": "thin_section",
+      "severity": "low",
+      "area": "read",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "label": {
+        "en": "1 very short section",
+        "uk": "1 надто короткий розділ"
+      },
+      "where": "h2 “Important passage outside the cap?”",
+      "map": {
+        "zones": [
+          4
+        ],
+        "strip": null
+      },
+      "passages": [
+        3
+      ],
+      "evidence": {
+        "samples": [
+          {
+            "passage": 3,
+            "heading": "Important passage outside the cap?",
+            "chars": 139
+          }
+        ],
+        "count": 1
+      },
+      "rules": [
+        {
+          "name": "This skill: the Vectorscope reading (h2 sections, 2,000-character windows, a 26-passage cap)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/skills/vectorscope/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "faq_rich_result_retired",
+      "pin": 7,
+      "big": false,
+      "code": "faq_rich_result_retired",
+      "severity": "low",
+      "area": "markup",
+      "owner": "seo",
+      "hidesText": false,
+      "informational": true,
+      "label": {
+        "en": "FAQ rich result retired",
+        "uk": "Розширеного FAQ більше немає"
+      },
+      "where": "FAQPage",
+      "map": {
+        "zones": [],
+        "strip": {
+          "side": "head",
+          "rows": [
+            "jsonld"
+          ]
+        }
+      },
+      "passages": [],
+      "evidence": {
+        "date": "2026-05-07"
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: documentation updates (FAQ rich result, 7 May 2026)",
+          "url": "https://developers.google.com/search/updates"
+        }
+      ]
+    },
+    {
+      "id": "llms_txt_one_language",
+      "pin": 8,
+      "big": false,
+      "code": "llms_txt_one_language",
+      "severity": "low",
+      "area": "lang",
+      "owner": "seo",
+      "hidesText": false,
+      "informational": true,
+      "label": {
+        "en": "llms.txt: one language only",
+        "uk": "llms.txt: лише одна мова"
+      },
+      "where": "/llms.txt",
+      "map": {
+        "zones": [],
+        "strip": {
+          "side": "robots",
+          "rows": [
+            "llms"
+          ]
+        }
+      },
+      "passages": [],
+      "evidence": {
+        "versions": 3,
+        "mentioned": [
+          "en"
+        ],
+        "links": 32
+      },
+      "rules": [
+        {
+          "name": "The llms.txt proposal",
+          "url": "https://llmstxt.org/"
+        }
+      ]
+    }
+  ],
+  "codes": {
+    "robots_unreachable": {
+      "severity": "blocking",
+      "area": "find",
+      "owner": "dev"
+    },
+    "search_engine_blocked": {
+      "severity": "blocking",
+      "area": "find",
+      "owner": "dev"
+    },
+    "ai_search_blocked": {
+      "severity": "blocking",
+      "area": "find",
+      "owner": "dev"
+    },
+    "noindex": {
+      "severity": "blocking",
+      "area": "find",
+      "owner": "dev"
+    },
+    "ai_training_blocked": {
+      "severity": "low",
+      "area": "find",
+      "owner": "seo"
+    },
+    "llms_txt_missing": {
+      "severity": "low",
+      "area": "find",
+      "owner": "seo"
+    },
+    "not_https": {
+      "severity": "high",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "redirect_chain": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "sitemap_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "sitemap_not_listed": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "title_missing": {
+      "severity": "high",
+      "area": "classic",
+      "owner": "content"
+    },
+    "title_too_long": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "title_too_short": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "meta_description_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "meta_description_short": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "meta_description_long": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "h1_missing": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "content"
+    },
+    "h1_multiple": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "heading_order_skip": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "canonical_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "canonical_relative": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "canonical_other": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "canonical_multiple": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "internal_links_none": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "broken_links": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "content"
+    },
+    "image_alt_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "viewport_missing": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "html_lang_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "social_tags_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "page_weight_heavy": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "url_unreadable": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "jsonld_invalid": {
+      "severity": "medium",
+      "area": "markup",
+      "owner": "dev"
+    },
+    "structured_data_none": {
+      "severity": "low",
+      "area": "markup",
+      "owner": "seo"
+    },
+    "schema_required_missing": {
+      "severity": "medium",
+      "area": "markup",
+      "owner": "dev"
+    },
+    "schema_recommended_missing": {
+      "severity": "low",
+      "area": "markup",
+      "owner": "dev"
+    },
+    "faq_rich_result_retired": {
+      "severity": "low",
+      "area": "markup",
+      "owner": "seo"
+    },
+    "faq_schema_not_visible": {
+      "severity": "high",
+      "area": "quote",
+      "owner": "content"
+    },
+    "lost_faq_questions": {
+      "severity": "high",
+      "area": "quote",
+      "owner": "content"
+    },
+    "mid_sentence_start": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content"
+    },
+    "truncated_teaser": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content"
+    },
+    "repeated_claim": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content"
+    },
+    "cap_overflow": {
+      "severity": "high",
+      "area": "read",
+      "owner": "content"
+    },
+    "js_dependent": {
+      "severity": "high",
+      "area": "read",
+      "owner": "dev"
+    },
+    "hero_lede_dropped": {
+      "severity": "high",
+      "area": "read",
+      "owner": "dev"
+    },
+    "hidden_headings": {
+      "severity": "high",
+      "area": "read",
+      "owner": "dev"
+    },
+    "ssr_placeholder_text": {
+      "severity": "medium",
+      "area": "read",
+      "owner": "dev"
+    },
+    "h1_glued_words": {
+      "severity": "medium",
+      "area": "read",
+      "owner": "dev"
+    },
+    "nav_in_content": {
+      "severity": "medium",
+      "area": "read",
+      "owner": "dev"
+    },
+    "dominant_heading": {
+      "severity": "medium",
+      "area": "read",
+      "owner": "content"
+    },
+    "thin_section": {
+      "severity": "low",
+      "area": "read",
+      "owner": "content"
+    },
+    "hreflang_no_return": {
+      "severity": "high",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "hreflang_invalid_code": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "hreflang_no_self": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "hreflang_alternate_broken": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "title_duplicate_locales": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "content"
+    },
+    "description_duplicate_locales": {
+      "severity": "low",
+      "area": "lang",
+      "owner": "content"
+    },
+    "hreflang_lang_mismatch": {
+      "severity": "low",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "hreflang_no_x_default": {
+      "severity": "low",
+      "area": "lang",
+      "owner": "seo"
+    },
+    "llms_txt_one_language": {
+      "severity": "low",
+      "area": "lang",
+      "owner": "seo"
+    }
+  },
+  "checklist": [
+    {
+      "id": "http_status",
+      "name": {
+        "en": "HTTP status and redirects",
+        "uk": "HTTP-статус і переадресації"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "https",
+      "name": {
+        "en": "Served over HTTPS",
+        "uk": "Віддається через HTTPS"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "robots_search_bots",
+      "name": {
+        "en": "Googlebot and Bingbot may fetch the page",
+        "uk": "Googlebot і Bingbot можуть завантажити сторінку"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "noindex",
+      "name": {
+        "en": "Not marked noindex",
+        "uk": "Не позначено noindex"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "canonical",
+      "name": {
+        "en": "One absolute canonical to the page itself",
+        "uk": "Один абсолютний canonical на саму сторінку"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "in_sitemap",
+      "name": {
+        "en": "Listed in the sitemap",
+        "uk": "Є в sitemap"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "indexed",
+      "name": {
+        "en": "In Google's index",
+        "uk": "В індексі Google"
+      },
+      "state": "na",
+      "codes": []
+    },
+    {
+      "id": "title_length",
+      "name": {
+        "en": "Title present, 10–60 characters",
+        "uk": "Title є, 10–60 символів"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "title_unique",
+      "name": {
+        "en": "A different title per language version",
+        "uk": "Різний title у кожній мовній версії"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "meta_description",
+      "name": {
+        "en": "Description present, 70–160 characters",
+        "uk": "Опис є, 70–160 символів"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "social_preview",
+      "name": {
+        "en": "Open Graph and Twitter card tags",
+        "uk": "Теги Open Graph і Twitter card"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "h1",
+      "name": {
+        "en": "One h1",
+        "uk": "Один h1"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "heading_order",
+      "name": {
+        "en": "No skipped heading levels",
+        "uk": "Без пропущених рівнів заголовків"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "image_alt",
+      "name": {
+        "en": "Images carry alt",
+        "uk": "Зображення мають alt"
+      },
+      "state": "none",
+      "codes": []
+    },
+    {
+      "id": "html_lang",
+      "name": {
+        "en": "html lang declared",
+        "uk": "html lang оголошено"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "url_readable",
+      "name": {
+        "en": "A readable URL",
+        "uk": "Зручна адреса"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "internal_links",
+      "name": {
+        "en": "Internal links present",
+        "uk": "Є внутрішні посилання"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "broken_links",
+      "name": {
+        "en": "Links answer without errors",
+        "uk": "Посилання відповідають без помилок"
+      },
+      "state": "fail",
+      "codes": [
+        "broken_links"
+      ]
+    },
+    {
+      "id": "viewport",
+      "name": {
+        "en": "A mobile viewport",
+        "uk": "Мобільний viewport"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "page_weight",
+      "name": {
+        "en": "HTML size and scripts",
+        "uk": "Розмір HTML і скрипти"
+      },
+      "state": "warn",
+      "codes": [
+        "page_weight_heavy"
+      ]
+    },
+    {
+      "id": "core_web_vitals",
+      "name": {
+        "en": "Core Web Vitals from real users",
+        "uk": "Core Web Vitals від реальних користувачів"
+      },
+      "state": "na",
+      "codes": []
+    },
+    {
+      "id": "hreflang_pairs",
+      "name": {
+        "en": "hreflang versions link back",
+        "uk": "Мовні версії hreflang посилаються взаємно"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "rich_faqpage",
+      "name": {
+        "en": "FAQPage markup",
+        "uk": "Розмітка FAQPage"
+      },
+      "state": "warn",
+      "codes": [
+        "faq_rich_result_retired"
+      ]
+    },
+    {
+      "id": "rich_breadcrumb",
+      "name": {
+        "en": "BreadcrumbList markup",
+        "uk": "Розмітка BreadcrumbList"
+      },
+      "state": "pass",
+      "codes": []
+    }
+  ],
+  "pageMap": {
+    "zones": [
+      {
+        "id": 0,
+        "kind": "header",
+        "label": null,
+        "headings": [],
+        "chars": 90,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": null,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 1,
+        "kind": "hero",
+        "label": "Semantic chunking, made visible: see what survives the trip into vector space.",
+        "headings": [
+          "Semantic chunking, made visible: see what survives the trip into vector space."
+        ],
+        "chars": 1015,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": [
+          4
+        ]
+      },
+      {
+        "id": 2,
+        "kind": "aside",
+        "label": null,
+        "headings": [
+          "Run Vectorscope inside your coding agent"
+        ],
+        "chars": 340,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": null,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 3,
+        "kind": "section",
+        "label": "What does this mean?",
+        "headings": [
+          "What does this mean?"
+        ],
+        "chars": 281,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 4,
+        "kind": "section",
+        "label": "Important passage outside the cap?",
+        "headings": [
+          "Important passage outside the cap?"
+        ],
+        "chars": 175,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": [
+          6
+        ]
+      },
+      {
+        "id": 5,
+        "kind": "section",
+        "label": "Models and retrieval caps vary.",
+        "headings": [
+          "Models and retrieval caps vary."
+        ],
+        "chars": 279,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 6,
+        "kind": "section",
+        "label": "How to read your result",
+        "headings": [
+          "How to read your result"
+        ],
+        "chars": 2282,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": [
+          3
+        ]
+      },
+      {
+        "id": 7,
+        "kind": "section",
+        "label": "What is semantic chunking?",
+        "headings": [
+          "What is semantic chunking?"
+        ],
+        "chars": 2022,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 8,
+        "kind": "section",
+        "label": "Is my content ready for AI search?",
+        "headings": [
+          "Is my content ready for AI search?"
+        ],
+        "chars": 1162,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 9,
+        "kind": "section",
+        "label": "Using Vectorscope to test a RAG pipeline",
+        "headings": [
+          "Using Vectorscope to test a RAG pipeline"
+        ],
+        "chars": 905,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 10,
+        "kind": "section",
+        "label": "Who is Vectorscope for?",
+        "headings": [
+          "Who is Vectorscope for?"
+        ],
+        "chars": 915,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 11,
+        "kind": "section",
+        "label": "Words used on this page",
+        "headings": [
+          "Words used on this page"
+        ],
+        "chars": 1425,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 12,
+        "kind": "more",
+        "label": "Keep reading",
+        "headings": [
+          "Keep reading",
+          "Questions people ask about this",
+          "Other free AI search tools",
+          "What this cannot show you"
+        ],
+        "chars": 3954,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 4,
+        "problems": [
+          1,
+          3
+        ]
+      },
+      {
+        "id": 13,
+        "kind": "footer",
+        "label": null,
+        "headings": [],
+        "chars": 752,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": null,
+        "merged": 0,
+        "problems": []
+      }
+    ],
+    "head": [
+      {
+        "id": "title",
+        "value": {
+          "en": "54 characters",
+          "uk": "54 символи"
+        },
+        "problems": []
+      },
+      {
+        "id": "description",
+        "value": {
+          "en": "152 characters",
+          "uk": "152 символи"
+        },
+        "problems": []
+      },
+      {
+        "id": "canonical",
+        "value": {
+          "en": "/vectorscope",
+          "uk": "/vectorscope"
+        },
+        "problems": []
+      },
+      {
+        "id": "robots",
+        "value": {
+          "en": "index, follow · index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+          "uk": "index, follow · index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+        },
+        "problems": []
+      },
+      {
+        "id": "hreflang",
+        "value": {
+          "en": "en · uk · es · x-default",
+          "uk": "en · uk · es · x-default"
+        },
+        "problems": []
+      },
+      {
+        "id": "lang",
+        "value": {
+          "en": "en",
+          "uk": "en"
+        },
+        "problems": []
+      },
+      {
+        "id": "jsonld",
+        "value": {
+          "en": "Organization, WebSite +6",
+          "uk": "Organization, WebSite +6"
+        },
+        "problems": [
+          2,
+          7
+        ]
+      },
+      {
+        "id": "social",
+        "value": {
+          "en": "4 of 4 tags",
+          "uk": "4 з 4 тегів"
+        },
+        "problems": []
+      },
+      {
+        "id": "viewport",
+        "value": {
+          "en": "set",
+          "uk": "задано"
+        },
+        "problems": []
+      },
+      {
+        "id": "scripts",
+        "value": {
+          "en": "40 · 1 blocking",
+          "uk": "40 · 1 блокують"
+        },
+        "problems": [
+          5
+        ]
+      }
+    ],
+    "robots": [
+      {
+        "id": "search",
+        "value": {
+          "en": "allowed",
+          "uk": "дозволено"
+        },
+        "problems": []
+      },
+      {
+        "id": "ai_search",
+        "value": {
+          "en": "allowed",
+          "uk": "дозволено"
+        },
+        "problems": []
+      },
+      {
+        "id": "ai_training",
+        "value": {
+          "en": "allowed",
+          "uk": "дозволено"
+        },
+        "problems": []
+      },
+      {
+        "id": "sitemap",
+        "value": {
+          "en": "lists the page",
+          "uk": "сторінка є"
+        },
+        "problems": []
+      },
+      {
+        "id": "llms",
+        "value": {
+          "en": "present · 32 links",
+          "uk": "є · 32 посилання"
+        },
+        "problems": [
+          8
+        ]
+      }
+    ]
+  },
+  "robots": {
+    "url": "https://www.getlooploop.com/robots.txt",
+    "status": "ok",
+    "httpStatus": 200,
+    "path": "/vectorscope",
+    "sitemaps": [
+      "https://www.getlooploop.com/sitemap.xml"
+    ],
+    "bots": [
+      {
+        "token": "OAI-SearchBot",
+        "vendor": "OpenAI",
+        "kind": "search",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "ChatGPT-User",
+        "vendor": "OpenAI",
+        "kind": "user",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "GPTBot",
+        "vendor": "OpenAI",
+        "kind": "training",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "Claude-SearchBot",
+        "vendor": "Anthropic",
+        "kind": "search",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "Claude-User",
+        "vendor": "Anthropic",
+        "kind": "user",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "ClaudeBot",
+        "vendor": "Anthropic",
+        "kind": "training",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "PerplexityBot",
+        "vendor": "Perplexity",
+        "kind": "search",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "Perplexity-User",
+        "vendor": "Perplexity",
+        "kind": "user",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "Google-Extended",
+        "vendor": "Google",
+        "kind": "training",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "Googlebot",
+        "vendor": "Google",
+        "kind": "index",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "Bingbot",
+        "vendor": "Microsoft",
+        "kind": "index",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      },
+      {
+        "token": "CCBot",
+        "vendor": "Common Crawl",
+        "kind": "training",
+        "allowed": true,
+        "rule": "Allow: /vectorscope",
+        "group": "*"
+      }
+    ]
+  },
+  "sitemap": {
+    "source": "robots",
+    "declared": [
+      "https://www.getlooploop.com/sitemap.xml"
+    ],
+    "offSite": [],
+    "fetched": [
+      {
+        "url": "https://www.getlooploop.com/sitemap.xml",
+        "status": 200,
+        "kind": "urlset",
+        "count": 1911,
+        "read": true
+      }
+    ],
+    "found": true,
+    "listsPage": true,
+    "matchedIn": "https://www.getlooploop.com/sitemap.xml",
+    "children": {
+      "total": 0,
+      "read": 0,
+      "unread": 0,
+      "cap": 5
+    },
+    "candidatesUnread": 0
+  },
+  "llms": {
+    "url": "https://www.getlooploop.com/llms.txt",
+    "status": 200,
+    "present": true,
+    "links": 32
+  },
+  "languages": {
+    "rows": [
+      {
+        "hreflang": "en",
+        "self": true,
+        "cells": [
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ]
+      },
+      {
+        "hreflang": "uk",
+        "cells": [
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ]
+      },
+      {
+        "hreflang": "es",
+        "cells": [
+          "pass",
+          "pass",
+          "pass",
+          "pass"
+        ]
+      }
+    ],
+    "xDefault": true,
+    "declared": 4,
+    "unread": 0,
+    "cap": 10,
+    "measured": true
+  },
+  "alternates": {
+    "total": 2,
+    "checked": 2,
+    "unchecked": [],
+    "cap": 10,
+    "results": [
+      {
+        "hreflang": "uk",
+        "href": "https://www.getlooploop.com/uk/vectorscope",
+        "ok": true,
+        "status": 200,
+        "finalUrl": "https://www.getlooploop.com/uk/vectorscope",
+        "redirected": false,
+        "title": "Семантичне розбиття сторінки — Vectorscope",
+        "lang": "uk",
+        "noindex": false
+      },
+      {
+        "hreflang": "es",
+        "href": "https://www.getlooploop.com/es/vectorscope",
+        "ok": true,
+        "status": 200,
+        "finalUrl": "https://www.getlooploop.com/es/vectorscope",
+        "redirected": false,
+        "title": "Fragmentado semántico de tu página — Vectorscope",
+        "lang": "es",
+        "noindex": false
+      }
+    ]
+  },
+  "links": {
+    "total": 27,
+    "checked": 27,
+    "unchecked": 0,
+    "cap": 30,
+    "results": [
+      {
+        "url": "https://www.getlooploop.com/",
+        "internal": true,
+        "zone": 0,
+        "path": "div.marketing-root.min-h-screen > header.fixed.inset-x-0 > div.mx-auto.flex > a.flex.items-center",
+        "text": "GetLoopLoop",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/free-tools",
+        "internal": true,
+        "zone": 0,
+        "path": "header.fixed.inset-x-0 > div.mx-auto.flex > nav.hidden.items-center > a.rounded-lg.px-3",
+        "text": "Free tools",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/glossary",
+        "internal": true,
+        "zone": 0,
+        "path": "header.fixed.inset-x-0 > div.mx-auto.flex > nav.hidden.items-center > a.rounded-lg.px-3",
+        "text": "Glossary",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/skills",
+        "internal": true,
+        "zone": 0,
+        "path": "header.fixed.inset-x-0 > div.mx-auto.flex > nav.hidden.items-center > a.rounded-lg.px-3",
+        "text": "Skills",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/news",
+        "internal": true,
+        "zone": 0,
+        "path": "header.fixed.inset-x-0 > div.mx-auto.flex > nav.hidden.items-center > a.rounded-lg.px-3",
+        "text": "News",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/notes",
+        "internal": true,
+        "zone": 0,
+        "path": "header.fixed.inset-x-0 > div.mx-auto.flex > nav.hidden.items-center > a.rounded-lg.px-3",
+        "text": "Notes",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/vectorscope/claude-skill",
+        "internal": true,
+        "zone": 2,
+        "path": "div.mx-auto.w-full > div.pt-card.pt-card--active > div.flex.shrink-0 > a.pt-btn.pt-btn--primary",
+        "text": "Read about the skill",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://github.com/Olexan-art/getlooploop-skills",
+        "internal": false,
+        "zone": 2,
+        "path": "div.mx-auto.w-full > div.pt-card.pt-card--active > div.flex.shrink-0 > a.pt-btn.pt-btn--ghost",
+        "text": "Code on GitHub",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/methodology",
+        "internal": true,
+        "zone": 5,
+        "path": "div.flex.gap-4 > div.min-w-0 > div.pt-body > a.mt-1.inline-flex",
+        "text": "Sources and methodology",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/patternscope",
+        "internal": true,
+        "zone": 10,
+        "path": "div.mt-12.space-y-14 > section#who > p.pt-body.mt-5 > a.font-semibold.text-[var(--pt-accent)]",
+        "text": "PatternScope",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/notes/what-is-semantic-chunking",
+        "internal": true,
+        "zone": 12,
+        "path": "div.mt-12.space-y-14 > section#more > div.mt-7.grid > a.group.pt-card",
+        "text": "What semantic chunking is, and what it trades awayThe three…",
+        "status": 404,
+        "verdict": "broken"
+      },
+      {
+        "url": "https://www.getlooploop.com/notes/optimise-content-for-ai-search",
+        "internal": true,
+        "zone": 12,
+        "path": "div.mt-12.space-y-14 > section#more > div.mt-7.grid > a.group.pt-card",
+        "text": "How to optimise content for AI searchWhat actually changes …",
+        "status": 404,
+        "verdict": "broken"
+      },
+      {
+        "url": "https://www.getlooploop.com/voicescope",
+        "internal": true,
+        "zone": 12,
+        "path": "section.mt-12.border-t > ul.grid.gap-3 > li > a.pt-card.flex",
+        "text": "Voicescope Start with one keyword and explore the questions…",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/brandscope",
+        "internal": true,
+        "zone": 12,
+        "path": "section.mt-12.border-t > ul.grid.gap-3 > li > a.pt-card.flex",
+        "text": "Brandscope Ask three AI assistants the buyer questions arou…",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/reviewscope",
+        "internal": true,
+        "zone": 12,
+        "path": "section.mt-12.border-t > ul.grid.gap-3 > li > a.pt-card.flex",
+        "text": "Reviewscope Ask three AI assistants what reviews say about …",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/ai-volatility",
+        "internal": true,
+        "zone": 12,
+        "path": "section.mt-12.border-t > ul.grid.gap-3 > li > a.pt-card.flex",
+        "text": "AI answer volatility A daily reading of how far AI assistan…",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/invite",
+        "internal": true,
+        "zone": 12,
+        "path": "div.pt > div.mx-auto.w-full > div#limits > a.mt-4.inline-flex",
+        "text": "Ask for an invite",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://x.com/Looploopnow",
+        "internal": false,
+        "zone": 13,
+        "path": "div > ul.mt-5.flex > li > a.group.inline-flex",
+        "text": "X",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://discord.gg/Z6cRuhprMa",
+        "internal": false,
+        "zone": 13,
+        "path": "div > ul.mt-5.flex > li > a.group.inline-flex",
+        "text": "Discord",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/questions",
+        "internal": true,
+        "zone": 13,
+        "path": "div > ul.mt-4.space-y-2.5 > li > a.text-sm.text-gll-gray-400",
+        "text": "Questions",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/ai-model-usage",
+        "internal": true,
+        "zone": 13,
+        "path": "div > ul.mt-4.space-y-2.5 > li > a.text-sm.text-gll-gray-400",
+        "text": "AI model usage",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/legal",
+        "internal": true,
+        "zone": 13,
+        "path": "div > ul.mt-4.space-y-2.5 > li > a.text-sm.text-gll-gray-400",
+        "text": "Legal hub",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/legal/privacy",
+        "internal": true,
+        "zone": 13,
+        "path": "div > ul.mt-4.space-y-2.5 > li > a.text-sm.text-gll-gray-400",
+        "text": "Privacy Policy",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/legal/terms",
+        "internal": true,
+        "zone": 13,
+        "path": "div > ul.mt-4.space-y-2.5 > li > a.text-sm.text-gll-gray-400",
+        "text": "Terms of Service",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/legal/dpa",
+        "internal": true,
+        "zone": 13,
+        "path": "div > ul.mt-4.space-y-2.5 > li > a.text-sm.text-gll-gray-400",
+        "text": "Data Processing Agreement",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/llms.txt",
+        "internal": true,
+        "zone": 13,
+        "path": "footer.border-t.border-white/10 > div.mx-auto.mt-12 > div.flex.flex-wrap > a.font-mono.transition",
+        "text": "llms.txt",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://www.getlooploop.com/glossary/llms.txt",
+        "internal": true,
+        "zone": 13,
+        "path": "footer.border-t.border-white/10 > div.mx-auto.mt-12 > div.flex.flex-wrap > a.font-mono.transition",
+        "text": "glossary/llms.txt",
+        "status": 200,
+        "verdict": "ok"
+      }
+    ]
+  },
+  "structuredData": {
+    "jsonLd": [
+      {
+        "index": 1,
+        "ok": true,
+        "types": [
+          "Organization",
+          "Person",
+          "WebSite"
+        ],
+        "top": [
+          "Organization",
+          "WebSite"
+        ]
+      },
+      {
+        "index": 2,
+        "ok": true,
+        "types": [
+          "SoftwareApplication",
+          "Offer"
+        ],
+        "top": [
+          "SoftwareApplication"
+        ]
+      },
+      {
+        "index": 3,
+        "ok": true,
+        "types": [
+          "HowTo",
+          "HowToStep"
+        ],
+        "top": [
+          "HowTo"
+        ]
+      },
+      {
+        "index": 4,
+        "ok": true,
+        "types": [
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "top": [
+          "BreadcrumbList"
+        ]
+      },
+      {
+        "index": 5,
+        "ok": true,
+        "types": [
+          "FAQPage",
+          "Question",
+          "Answer"
+        ],
+        "top": [
+          "FAQPage"
+        ]
+      },
+      {
+        "index": 6,
+        "ok": true,
+        "types": [
+          "DefinedTermSet",
+          "DefinedTerm"
+        ],
+        "top": [
+          "DefinedTermSet"
+        ]
+      },
+      {
+        "index": 7,
+        "ok": true,
+        "types": [
+          "WebPage",
+          "WebSite",
+          "Thing"
+        ],
+        "top": [
+          "WebPage"
+        ]
+      }
+    ],
+    "microdata": [],
+    "rdfa": []
+  },
+  "reading": {
+    "passages": 17,
+    "cap": 26,
+    "waterfall": {
+      "raw": 48146,
+      "removed": 34177,
+      "kept": 13969,
+      "inPassagesUnique": 13595,
+      "notInPassages": 374,
+      "pastCap": 0
+    },
+    "render": null
+  },
+  "notChecked": [
+    {
+      "id": "zones",
+      "count": 4,
+      "cap": null,
+      "en": "4 sections drawn as one zone on the map",
+      "uk": "4 розділи на мапі показано однією зоною"
+    }
+  ],
+  "notMeasured": [
+    "core_web_vitals",
+    "google_index"
+  ],
+  "cannotSee": [
+    {
+      "en": "Descriptions of each problem and directions to fix it",
+      "uk": "Опис кожної проблеми й напрям виправлення",
+      "links": [
+        {
+          "en": "Full version",
+          "uk": "Повна версія",
+          "href": "https://www.getlooploop.com"
+        }
+      ]
+    },
+    {
+      "en": "What AI says about your brand and reviews, the questions people ask, a target keyword",
+      "uk": "Що ШІ каже про ваш бренд і відгуки, які запитання ставлять люди, цільова ключова фраза",
+      "links": [
+        {
+          "en": "Full version",
+          "uk": "Повна версія",
+          "href": "https://www.getlooploop.com"
+        }
+      ]
+    },
+    {
+      "en": "Several real assistants side by side",
+      "uk": "Кілька справжніх асистентів поруч",
+      "links": [
+        {
+          "en": "Brandscope",
+          "uk": "Brandscope",
+          "href": "https://www.getlooploop.com/brandscope"
+        }
+      ]
+    },
+    {
+      "en": "How their answers change over time",
+      "uk": "Як їхні відповіді змінюються з часом",
+      "links": [
+        {
+          "en": "AI answer volatility",
+          "uk": "Мінливість відповідей ШІ",
+          "href": "https://www.getlooploop.com/ai-volatility"
+        }
+      ]
+    },
+    {
+      "en": "How AI groups your text by meaning (embeddings map)",
+      "uk": "Як ШІ групує ваш текст за змістом (мапа ембедингів)",
+      "links": [
+        {
+          "en": "Vectorscope",
+          "uk": "Vectorscope",
+          "href": "https://www.getlooploop.com/vectorscope"
+        }
+      ]
+    },
+    {
+      "en": "Search Console data, real-user Core Web Vitals, sites beyond one page",
+      "uk": "Дані Search Console, Core Web Vitals реальних користувачів, сайти понад одну сторінку",
+      "links": [
+        {
+          "en": "GetLoopLoop",
+          "uk": "GetLoopLoop",
+          "href": "https://www.getlooploop.com"
+        }
+      ]
+    }
+  ]
+}

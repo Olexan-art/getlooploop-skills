@@ -1,0 +1,1699 @@
+{
+  "schema": "getlooploop/ai-search-audit@1",
+  "skillVersion": "2.101",
+  "producedBy": "ai-search-audit skill, Lite (local, deterministic, no model calls)",
+  "createdAt": "2026-10-16T23:25:45.828Z",
+  "edition": "lite",
+  "page": {
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+    "requestedUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+    "title": "HTTP caching - HTTP | MDN",
+    "saved": false,
+    "redirects": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+        "status": 200
+      }
+    ]
+  },
+  "verdict": {
+    "en": "Nothing hides text from AI",
+    "uk": "Ніщо не ховає текст від ШІ"
+  },
+  "counts": {
+    "total": 4,
+    "blocking": 0,
+    "high": 0,
+    "medium": 2,
+    "low": 2
+  },
+  "tiles": [
+    {
+      "id": "classic",
+      "question": {
+        "en": "Shown well in search?",
+        "uk": "Добре видно в пошуку?"
+      },
+      "state": "ok",
+      "problems": 1
+    },
+    {
+      "id": "find",
+      "question": {
+        "en": "AI finds it?",
+        "uk": "ШІ знаходить?"
+      },
+      "state": "ok",
+      "problems": 1
+    },
+    {
+      "id": "read",
+      "question": {
+        "en": "AI reads all of it?",
+        "uk": "ШІ читає все?"
+      },
+      "state": "prob",
+      "problems": 1
+    },
+    {
+      "id": "quote",
+      "question": {
+        "en": "AI quotes it right?",
+        "uk": "ШІ цитує правильно?"
+      },
+      "state": "prob",
+      "problems": 1
+    },
+    {
+      "id": "markup",
+      "question": {
+        "en": "Rich results & markup",
+        "uk": "Розширені результати й розмітка"
+      },
+      "state": "ok",
+      "problems": 0
+    },
+    {
+      "id": "lang",
+      "question": {
+        "en": "Languages in order?",
+        "uk": "Мови гаразд?"
+      },
+      "state": "na",
+      "problems": 0
+    }
+  ],
+  "findings": [
+    {
+      "id": "mid_sentence_start",
+      "pin": 1,
+      "big": true,
+      "code": "mid_sentence_start",
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "label": {
+        "en": "9 passages start mid-sentence",
+        "uk": "9 уривків із середини речення"
+      },
+      "where": "passages #3, #10, #11, #12, #14, #16",
+      "map": {
+        "zones": [
+          3,
+          8,
+          9,
+          10,
+          12
+        ],
+        "strip": null
+      },
+      "passages": [
+        3,
+        10,
+        11,
+        12,
+        14,
+        16,
+        20,
+        21,
+        23
+      ],
+      "evidence": {
+        "samples": [
+          {
+            "passage": 3,
+            "text": "proxy-revalidate However, in recent years, as HTTPS has become more common and …"
+          },
+          {
+            "passage": 10,
+            "text": "to parse, and distributed servers have difficulty synchronizing file-update tim…"
+          },
+          {
+            "passage": 11,
+            "text": "for caching; it is a standard HTTP header that is also used by content-manageme…"
+          },
+          {
+            "passage": 12,
+            "text": "it must not be reused without revalidation once it is stale — so, in combinatio…"
+          },
+          {
+            "passage": 14,
+            "text": "following being used. http Cache-Control: no-store, no-cache, max-age=0, must-r…"
+          },
+          {
+            "passage": 16,
+            "text": "with no-cache, you can be sure you'll get a 200 OK from the origin server. That…"
+          }
+        ],
+        "count": 9
+      },
+      "rules": [
+        {
+          "name": "This skill: the Vectorscope reading (h2 sections, 2,000-character windows, a 26-passage cap)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/skills/vectorscope/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "nav_in_content",
+      "pin": 2,
+      "big": true,
+      "code": "nav_in_content",
+      "severity": "medium",
+      "area": "read",
+      "owner": "dev",
+      "hidesText": false,
+      "informational": false,
+      "label": {
+        "en": "Menu lines inside the text",
+        "uk": "Рядки меню всередині тексту"
+      },
+      "where": "passage #8",
+      "map": {
+        "zones": [
+          7
+        ],
+        "strip": null
+      },
+      "passages": [
+        8
+      ],
+      "evidence": {
+        "runs": 2,
+        "samples": [
+          {
+            "passage": 8,
+            "lines": [
+              "URL",
+              "Response body",
+              "https://example.com/index.html",
+              "<!doctype html>...",
+              "https://example.com/style.css"
+            ],
+            "count": 5
+          },
+          {
+            "passage": 8,
+            "lines": [
+              "URL",
+              "Accept-Language",
+              "Response body",
+              "https://example.com/index.html",
+              "ja-JP",
+              "<!doctype html>...",
+              "https://example.com/index.html",
+              "en-US"
+            ],
+            "count": 11
+          }
+        ]
+      },
+      "rules": [
+        {
+          "name": "HTML Standard: the nav element",
+          "url": "https://html.spec.whatwg.org/multipage/sections.html#the-nav-element"
+        },
+        {
+          "name": "This skill: the Vectorscope reading (h2 sections, 2,000-character windows, a 26-passage cap)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/skills/vectorscope/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "llms_txt_missing",
+      "pin": 3,
+      "big": true,
+      "code": "llms_txt_missing",
+      "severity": "low",
+      "area": "find",
+      "owner": "seo",
+      "hidesText": false,
+      "informational": true,
+      "label": {
+        "en": "No llms.txt",
+        "uk": "Немає llms.txt"
+      },
+      "where": "/llms.txt",
+      "map": {
+        "zones": [],
+        "strip": {
+          "side": "robots",
+          "rows": [
+            "llms"
+          ]
+        }
+      },
+      "passages": [],
+      "evidence": {
+        "url": "https://developer.mozilla.org/llms.txt",
+        "status": 404,
+        "softNotFound": false
+      },
+      "rules": [
+        {
+          "name": "The llms.txt proposal",
+          "url": "https://llmstxt.org/"
+        }
+      ]
+    },
+    {
+      "id": "social_tags_missing",
+      "pin": 4,
+      "big": true,
+      "code": "social_tags_missing",
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo",
+      "hidesText": false,
+      "informational": false,
+      "label": {
+        "en": "Preview tags missing",
+        "uk": "Бракує тегів прев’ю"
+      },
+      "where": "og:title, og:description, og:image",
+      "map": {
+        "zones": [],
+        "strip": {
+          "side": "head",
+          "rows": [
+            "social"
+          ]
+        }
+      },
+      "passages": [],
+      "evidence": {
+        "missing": [
+          "og:title",
+          "og:description",
+          "og:image"
+        ]
+      },
+      "rules": [
+        {
+          "name": "The Open Graph protocol",
+          "url": "https://ogp.me/"
+        }
+      ]
+    }
+  ],
+  "codes": {
+    "robots_unreachable": {
+      "severity": "blocking",
+      "area": "find",
+      "owner": "dev"
+    },
+    "search_engine_blocked": {
+      "severity": "blocking",
+      "area": "find",
+      "owner": "dev"
+    },
+    "ai_search_blocked": {
+      "severity": "blocking",
+      "area": "find",
+      "owner": "dev"
+    },
+    "noindex": {
+      "severity": "blocking",
+      "area": "find",
+      "owner": "dev"
+    },
+    "ai_training_blocked": {
+      "severity": "low",
+      "area": "find",
+      "owner": "seo"
+    },
+    "llms_txt_missing": {
+      "severity": "low",
+      "area": "find",
+      "owner": "seo"
+    },
+    "not_https": {
+      "severity": "high",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "redirect_chain": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "sitemap_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "sitemap_not_listed": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "title_missing": {
+      "severity": "high",
+      "area": "classic",
+      "owner": "content"
+    },
+    "title_too_long": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "title_too_short": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "meta_description_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "meta_description_short": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "meta_description_long": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "h1_missing": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "content"
+    },
+    "h1_multiple": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "heading_order_skip": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "canonical_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "canonical_relative": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "canonical_other": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "canonical_multiple": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "internal_links_none": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "broken_links": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "content"
+    },
+    "image_alt_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content"
+    },
+    "viewport_missing": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "html_lang_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "social_tags_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "page_weight_heavy": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev"
+    },
+    "url_unreadable": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo"
+    },
+    "jsonld_invalid": {
+      "severity": "medium",
+      "area": "markup",
+      "owner": "dev"
+    },
+    "structured_data_none": {
+      "severity": "low",
+      "area": "markup",
+      "owner": "seo"
+    },
+    "schema_required_missing": {
+      "severity": "medium",
+      "area": "markup",
+      "owner": "dev"
+    },
+    "schema_recommended_missing": {
+      "severity": "low",
+      "area": "markup",
+      "owner": "dev"
+    },
+    "faq_rich_result_retired": {
+      "severity": "low",
+      "area": "markup",
+      "owner": "seo"
+    },
+    "faq_schema_not_visible": {
+      "severity": "high",
+      "area": "quote",
+      "owner": "content"
+    },
+    "lost_faq_questions": {
+      "severity": "high",
+      "area": "quote",
+      "owner": "content"
+    },
+    "mid_sentence_start": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content"
+    },
+    "truncated_teaser": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content"
+    },
+    "repeated_claim": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content"
+    },
+    "cap_overflow": {
+      "severity": "high",
+      "area": "read",
+      "owner": "content"
+    },
+    "js_dependent": {
+      "severity": "high",
+      "area": "read",
+      "owner": "dev"
+    },
+    "hero_lede_dropped": {
+      "severity": "high",
+      "area": "read",
+      "owner": "dev"
+    },
+    "hidden_headings": {
+      "severity": "high",
+      "area": "read",
+      "owner": "dev"
+    },
+    "ssr_placeholder_text": {
+      "severity": "medium",
+      "area": "read",
+      "owner": "dev"
+    },
+    "h1_glued_words": {
+      "severity": "medium",
+      "area": "read",
+      "owner": "dev"
+    },
+    "nav_in_content": {
+      "severity": "medium",
+      "area": "read",
+      "owner": "dev"
+    },
+    "dominant_heading": {
+      "severity": "medium",
+      "area": "read",
+      "owner": "content"
+    },
+    "thin_section": {
+      "severity": "low",
+      "area": "read",
+      "owner": "content"
+    },
+    "hreflang_no_return": {
+      "severity": "high",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "hreflang_invalid_code": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "hreflang_no_self": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "hreflang_alternate_broken": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "title_duplicate_locales": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "content"
+    },
+    "description_duplicate_locales": {
+      "severity": "low",
+      "area": "lang",
+      "owner": "content"
+    },
+    "hreflang_lang_mismatch": {
+      "severity": "low",
+      "area": "lang",
+      "owner": "dev"
+    },
+    "hreflang_no_x_default": {
+      "severity": "low",
+      "area": "lang",
+      "owner": "seo"
+    },
+    "llms_txt_one_language": {
+      "severity": "low",
+      "area": "lang",
+      "owner": "seo"
+    }
+  },
+  "checklist": [
+    {
+      "id": "http_status",
+      "name": {
+        "en": "HTTP status and redirects",
+        "uk": "HTTP-статус і переадресації"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "https",
+      "name": {
+        "en": "Served over HTTPS",
+        "uk": "Віддається через HTTPS"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "robots_search_bots",
+      "name": {
+        "en": "Googlebot and Bingbot may fetch the page",
+        "uk": "Googlebot і Bingbot можуть завантажити сторінку"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "noindex",
+      "name": {
+        "en": "Not marked noindex",
+        "uk": "Не позначено noindex"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "canonical",
+      "name": {
+        "en": "One absolute canonical to the page itself",
+        "uk": "Один абсолютний canonical на саму сторінку"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "in_sitemap",
+      "name": {
+        "en": "Listed in the sitemap",
+        "uk": "Є в sitemap"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "indexed",
+      "name": {
+        "en": "In Google's index",
+        "uk": "В індексі Google"
+      },
+      "state": "na",
+      "codes": []
+    },
+    {
+      "id": "title_length",
+      "name": {
+        "en": "Title present, 10–60 characters",
+        "uk": "Title є, 10–60 символів"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "title_unique",
+      "name": {
+        "en": "A different title per language version",
+        "uk": "Різний title у кожній мовній версії"
+      },
+      "state": "none",
+      "codes": []
+    },
+    {
+      "id": "meta_description",
+      "name": {
+        "en": "Description present, 70–160 characters",
+        "uk": "Опис є, 70–160 символів"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "social_preview",
+      "name": {
+        "en": "Open Graph and Twitter card tags",
+        "uk": "Теги Open Graph і Twitter card"
+      },
+      "state": "warn",
+      "codes": [
+        "social_tags_missing"
+      ]
+    },
+    {
+      "id": "h1",
+      "name": {
+        "en": "One h1",
+        "uk": "Один h1"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "heading_order",
+      "name": {
+        "en": "No skipped heading levels",
+        "uk": "Без пропущених рівнів заголовків"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "image_alt",
+      "name": {
+        "en": "Images carry alt",
+        "uk": "Зображення мають alt"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "html_lang",
+      "name": {
+        "en": "html lang declared",
+        "uk": "html lang оголошено"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "url_readable",
+      "name": {
+        "en": "A readable URL",
+        "uk": "Зручна адреса"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "internal_links",
+      "name": {
+        "en": "Internal links present",
+        "uk": "Є внутрішні посилання"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "broken_links",
+      "name": {
+        "en": "Links answer without errors",
+        "uk": "Посилання відповідають без помилок"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "viewport",
+      "name": {
+        "en": "A mobile viewport",
+        "uk": "Мобільний viewport"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "page_weight",
+      "name": {
+        "en": "HTML size and scripts",
+        "uk": "Розмір HTML і скрипти"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "core_web_vitals",
+      "name": {
+        "en": "Core Web Vitals from real users",
+        "uk": "Core Web Vitals від реальних користувачів"
+      },
+      "state": "na",
+      "codes": []
+    },
+    {
+      "id": "hreflang_pairs",
+      "name": {
+        "en": "hreflang versions link back",
+        "uk": "Мовні версії hreflang посилаються взаємно"
+      },
+      "state": "none",
+      "codes": []
+    },
+    {
+      "id": "rich_faqpage",
+      "name": {
+        "en": "FAQPage markup",
+        "uk": "Розмітка FAQPage"
+      },
+      "state": "none",
+      "codes": []
+    },
+    {
+      "id": "rich_breadcrumb",
+      "name": {
+        "en": "BreadcrumbList markup",
+        "uk": "Розмітка BreadcrumbList"
+      },
+      "state": "none",
+      "codes": []
+    }
+  ],
+  "pageMap": {
+    "zones": [
+      {
+        "id": 0,
+        "kind": "header",
+        "label": null,
+        "headings": [],
+        "chars": 1732,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": null,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 1,
+        "kind": "hero",
+        "label": "HTTP caching",
+        "headings": [
+          "HTTP caching"
+        ],
+        "chars": 798,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 2,
+        "kind": "section",
+        "label": "In this article",
+        "headings": [
+          "In this article"
+        ],
+        "chars": 226,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": null,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 3,
+        "kind": "section",
+        "label": "Types of caches",
+        "headings": [
+          "Types of caches"
+        ],
+        "chars": 4688,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": [
+          1
+        ]
+      },
+      {
+        "id": 4,
+        "kind": "section",
+        "label": "Heuristic caching",
+        "headings": [
+          "Heuristic caching"
+        ],
+        "chars": 1000,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 5,
+        "kind": "section",
+        "label": "Fresh and stale based on age",
+        "headings": [
+          "Fresh and stale based on age"
+        ],
+        "chars": 1707,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 6,
+        "kind": "section",
+        "label": "Expires or max-age",
+        "headings": [
+          "Expires or max-age"
+        ],
+        "chars": 685,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 7,
+        "kind": "section",
+        "label": "Vary",
+        "headings": [
+          "Vary"
+        ],
+        "chars": 1975,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": [
+          2
+        ]
+      },
+      {
+        "id": 8,
+        "kind": "section",
+        "label": "Validation",
+        "headings": [
+          "Validation"
+        ],
+        "chars": 5967,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": [
+          1
+        ]
+      },
+      {
+        "id": 9,
+        "kind": "section",
+        "label": "Don't cache",
+        "headings": [
+          "Don't cache"
+        ],
+        "chars": 2704,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": [
+          1
+        ]
+      },
+      {
+        "id": 10,
+        "kind": "section",
+        "label": "Reload and force reload",
+        "headings": [
+          "Reload and force reload"
+        ],
+        "chars": 2915,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": [
+          1
+        ]
+      },
+      {
+        "id": 11,
+        "kind": "section",
+        "label": "Deleting stored responses",
+        "headings": [
+          "Deleting stored responses"
+        ],
+        "chars": 1300,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 0,
+        "problems": []
+      },
+      {
+        "id": 12,
+        "kind": "more",
+        "label": "Request collapse",
+        "headings": [
+          "Request collapse",
+          "Common caching patterns",
+          "See also",
+          "Help improve MDN"
+        ],
+        "chars": 16162,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": 1,
+        "merged": 5,
+        "problems": [
+          1
+        ]
+      },
+      {
+        "id": 13,
+        "kind": "footer",
+        "label": null,
+        "headings": [],
+        "chars": 502,
+        "hidden": false,
+        "panels": 0,
+        "seenShare": null,
+        "merged": 0,
+        "problems": []
+      }
+    ],
+    "head": [
+      {
+        "id": "title",
+        "value": {
+          "en": "25 characters",
+          "uk": "25 символів"
+        },
+        "problems": []
+      },
+      {
+        "id": "description",
+        "value": {
+          "en": "114 characters",
+          "uk": "114 символів"
+        },
+        "problems": []
+      },
+      {
+        "id": "canonical",
+        "value": {
+          "en": "/en-US/docs/Web/HTTP/Guides/Caching",
+          "uk": "/en-US/docs/Web/HTTP/Guides/Caching"
+        },
+        "problems": []
+      },
+      {
+        "id": "robots",
+        "value": {
+          "en": "not set",
+          "uk": "не задано"
+        },
+        "problems": []
+      },
+      {
+        "id": "hreflang",
+        "value": {
+          "en": "none",
+          "uk": "немає"
+        },
+        "problems": []
+      },
+      {
+        "id": "lang",
+        "value": {
+          "en": "en-US",
+          "uk": "en-US"
+        },
+        "problems": []
+      },
+      {
+        "id": "jsonld",
+        "value": {
+          "en": "BreadcrumbList, ListItem",
+          "uk": "BreadcrumbList, ListItem"
+        },
+        "problems": []
+      },
+      {
+        "id": "social",
+        "value": {
+          "en": "1 of 4 tags",
+          "uk": "1 з 4 тегів"
+        },
+        "problems": [
+          4
+        ]
+      },
+      {
+        "id": "viewport",
+        "value": {
+          "en": "set",
+          "uk": "задано"
+        },
+        "problems": []
+      },
+      {
+        "id": "scripts",
+        "value": {
+          "en": "6 · 0 blocking",
+          "uk": "6 · 0 блокують"
+        },
+        "problems": []
+      }
+    ],
+    "robots": [
+      {
+        "id": "search",
+        "value": {
+          "en": "allowed",
+          "uk": "дозволено"
+        },
+        "problems": []
+      },
+      {
+        "id": "ai_search",
+        "value": {
+          "en": "allowed",
+          "uk": "дозволено"
+        },
+        "problems": []
+      },
+      {
+        "id": "ai_training",
+        "value": {
+          "en": "allowed",
+          "uk": "дозволено"
+        },
+        "problems": []
+      },
+      {
+        "id": "sitemap",
+        "value": {
+          "en": "lists the page",
+          "uk": "сторінка є"
+        },
+        "problems": []
+      },
+      {
+        "id": "llms",
+        "value": {
+          "en": "none",
+          "uk": "немає"
+        },
+        "problems": [
+          3
+        ]
+      }
+    ]
+  },
+  "robots": {
+    "url": "https://developer.mozilla.org/robots.txt",
+    "status": "ok",
+    "httpStatus": 200,
+    "path": "/en-US/docs/Web/HTTP/Guides/Caching",
+    "sitemaps": [
+      "https://developer.mozilla.org/sitemap.xml"
+    ],
+    "bots": [
+      {
+        "token": "OAI-SearchBot",
+        "vendor": "OpenAI",
+        "kind": "search",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "ChatGPT-User",
+        "vendor": "OpenAI",
+        "kind": "user",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "GPTBot",
+        "vendor": "OpenAI",
+        "kind": "training",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Claude-SearchBot",
+        "vendor": "Anthropic",
+        "kind": "search",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Claude-User",
+        "vendor": "Anthropic",
+        "kind": "user",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "ClaudeBot",
+        "vendor": "Anthropic",
+        "kind": "training",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "PerplexityBot",
+        "vendor": "Perplexity",
+        "kind": "search",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Perplexity-User",
+        "vendor": "Perplexity",
+        "kind": "user",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Google-Extended",
+        "vendor": "Google",
+        "kind": "training",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Googlebot",
+        "vendor": "Google",
+        "kind": "index",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Bingbot",
+        "vendor": "Microsoft",
+        "kind": "index",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "CCBot",
+        "vendor": "Common Crawl",
+        "kind": "training",
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      }
+    ]
+  },
+  "sitemap": {
+    "source": "robots",
+    "declared": [
+      "https://developer.mozilla.org/sitemap.xml"
+    ],
+    "offSite": [],
+    "fetched": [
+      {
+        "url": "https://developer.mozilla.org/sitemap.xml",
+        "status": 200,
+        "kind": "sitemapindex",
+        "count": 10,
+        "read": true
+      },
+      {
+        "url": "https://developer.mozilla.org/sitemaps/en-us/sitemap.xml.gz",
+        "status": 200,
+        "kind": "urlset",
+        "count": 14839,
+        "read": true
+      }
+    ],
+    "found": true,
+    "listsPage": true,
+    "matchedIn": "https://developer.mozilla.org/sitemaps/en-us/sitemap.xml.gz",
+    "children": {
+      "total": 10,
+      "read": 1,
+      "unread": 9,
+      "cap": 5
+    },
+    "candidatesUnread": 0
+  },
+  "llms": {
+    "url": "https://developer.mozilla.org/llms.txt",
+    "status": 404,
+    "present": false,
+    "links": 0
+  },
+  "languages": null,
+  "alternates": {
+    "total": 0,
+    "checked": 0,
+    "unchecked": [],
+    "cap": 10,
+    "results": []
+  },
+  "links": {
+    "total": 500,
+    "checked": 30,
+    "unchecked": 470,
+    "cap": 30,
+    "results": [
+      {
+        "url": "https://developer.mozilla.org/en-US/",
+        "internal": true,
+        "zone": 0,
+        "path": "header.page-layout__header > nav.navigation > div.navigation__logo > a.logo",
+        "text": "",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "internal": true,
+        "zone": 0,
+        "path": "mdn-dropdown > div.menu__panel > p.menu__panel-title > a",
+        "text": "HTML: Markup language",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Elements",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Global attributes",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Attributes",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "See all…",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Responsive_images",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Responsive images",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Cheatsheet",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "HTML cheatsheet",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Date_and_time_formats",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Date & time formats",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Guides",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "See all…",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/SVG",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "SVG",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/MathML",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "MathML",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/XML",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "XML",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "internal": true,
+        "zone": 0,
+        "path": "mdn-dropdown > div.menu__panel > p.menu__panel-title > a",
+        "text": "CSS: Styling language",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Properties",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Selectors",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "At-rules",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Values",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "See all…",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Box_model/Introduction",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Box model",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Animations/Using",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Animations",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Flexible_box_layout/Basic_concepts",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Flexbox",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Colors/Applying_color",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Colors",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "See all…",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/How_to/Layout_cookbook/Column_layouts",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Column layouts",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/How_to/Layout_cookbook/Center_an_element",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Centering an element",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/How_to/Layout_cookbook/Card",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Card component",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/How_to/Layout_cookbook",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "See all…",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+        "internal": true,
+        "zone": 0,
+        "path": "mdn-dropdown > div.menu__panel > p.menu__panel-title > a",
+        "text": "JavaScript: Scripting language",
+        "status": 200,
+        "verdict": "ok"
+      },
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects",
+        "internal": true,
+        "zone": 0,
+        "path": "dd > ul > li > a",
+        "text": "Standard built-in objects",
+        "status": 200,
+        "verdict": "ok"
+      }
+    ]
+  },
+  "structuredData": {
+    "jsonLd": [],
+    "microdata": [],
+    "rdfa": [
+      "BreadcrumbList",
+      "ListItem",
+      "WebPage"
+    ]
+  },
+  "reading": {
+    "passages": 26,
+    "cap": 26,
+    "waterfall": {
+      "raw": 93570,
+      "removed": 60964,
+      "kept": 32606,
+      "inPassagesUnique": 32366,
+      "notInPassages": 240,
+      "pastCap": 0
+    },
+    "render": null
+  },
+  "notChecked": [
+    {
+      "id": "links",
+      "count": 470,
+      "cap": 30,
+      "en": "470 links not checked (cap 30)",
+      "uk": "470 посилань не перевірено (ліміт 30)"
+    },
+    {
+      "id": "zones",
+      "count": 5,
+      "cap": null,
+      "en": "5 sections drawn as one zone on the map",
+      "uk": "5 розділів на мапі показано однією зоною"
+    }
+  ],
+  "notMeasured": [
+    "core_web_vitals",
+    "google_index"
+  ],
+  "cannotSee": [
+    {
+      "en": "Descriptions of each problem and directions to fix it",
+      "uk": "Опис кожної проблеми й напрям виправлення",
+      "links": [
+        {
+          "en": "Full version",
+          "uk": "Повна версія",
+          "href": "https://www.getlooploop.com"
+        }
+      ]
+    },
+    {
+      "en": "What AI says about your brand and reviews, the questions people ask, a target keyword",
+      "uk": "Що ШІ каже про ваш бренд і відгуки, які запитання ставлять люди, цільова ключова фраза",
+      "links": [
+        {
+          "en": "Full version",
+          "uk": "Повна версія",
+          "href": "https://www.getlooploop.com"
+        }
+      ]
+    },
+    {
+      "en": "Several real assistants side by side",
+      "uk": "Кілька справжніх асистентів поруч",
+      "links": [
+        {
+          "en": "Brandscope",
+          "uk": "Brandscope",
+          "href": "https://www.getlooploop.com/brandscope"
+        }
+      ]
+    },
+    {
+      "en": "How their answers change over time",
+      "uk": "Як їхні відповіді змінюються з часом",
+      "links": [
+        {
+          "en": "AI answer volatility",
+          "uk": "Мінливість відповідей ШІ",
+          "href": "https://www.getlooploop.com/ai-volatility"
+        }
+      ]
+    },
+    {
+      "en": "How AI groups your text by meaning (embeddings map)",
+      "uk": "Як ШІ групує ваш текст за змістом (мапа ембедингів)",
+      "links": [
+        {
+          "en": "Vectorscope",
+          "uk": "Vectorscope",
+          "href": "https://www.getlooploop.com/vectorscope"
+        }
+      ]
+    },
+    {
+      "en": "Search Console data, real-user Core Web Vitals, sites beyond one page",
+      "uk": "Дані Search Console, Core Web Vitals реальних користувачів, сайти понад одну сторінку",
+      "links": [
+        {
+          "en": "GetLoopLoop",
+          "uk": "GetLoopLoop",
+          "href": "https://www.getlooploop.com"
+        }
+      ]
+    }
+  ]
+}

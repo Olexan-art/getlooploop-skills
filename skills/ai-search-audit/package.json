@@ -1,0 +1,25 @@
+{
+  "name": "getlooploop-ai-search-audit-skill",
+  "version": "2.101.0",
+  "description": "AI Search Audit Lite, run locally: standard search and AI-search checks that rest on published rules (access, robots.txt for search and AI crawlers, the classic SEO checklist, structured data, language versions, and the Vectorscope reading), as a visual report. Deterministic, no model calls.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.18.1"
+  },
+  "scripts": {
+    "read": "node dist/read.mjs",
+    "audit": "node dist/audit.mjs",
+    "build": "node tools/build.mjs",
+    "zip": "node tools/zip.mjs",
+    "test": "node --test tests/assets.test.mjs tests/checks.test.mjs tests/dist.test.mjs tests/fixtures.test.mjs tests/languages.test.mjs tests/map.test.mjs tests/network.test.mjs tests/refusal.test.mjs tests/report.test.mjs tests/robots.test.mjs tests/version.test.mjs",
+    "favicons": "node tools/favicons.mjs"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

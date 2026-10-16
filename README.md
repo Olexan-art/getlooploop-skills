@@ -2,13 +2,14 @@ English · [Українська](README.uk.md)
 
 # GetLoopLoop skills
 
-Vectorscope skill **2.103**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
+Vectorscope skill **2.103** · AI Search Audit Lite **2.101**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
 
 Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
 | Skill | What it does |
 |---|---|
 | [`vectorscope`](skills/vectorscope/SKILL.md) | Shows how a retrieval system reads public pages: the product's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers, automatic structure checks, and the agent's grouping, query test and rewrite plan. Compares 2 to 5 pages. |
+| [`ai-search-audit`](skills/ai-search-audit/SKILL.md) | AI Search Audit Lite: one page against the standard, published rules of classic search and AI search (access and robots.txt, the Google and Bing checklist, structured data, language versions, and the Vectorscope reading), drawn as one visual report with every problem marked on a map of the page. Deterministic, no model calls. |
 
 ## In plain words
 
@@ -192,6 +193,52 @@ node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 
 The scripts make no model or embedding calls and send nothing anywhere except the GETs for the page and its robots.txt (and, with `--render`, the local browser loading the page). Fields that would need vectors (cohesion, self-similarity, the projection) are reported as `null` instead of being estimated. The HTML report escapes every piece of page text and carries a content security policy that blocks all network requests from it, because the passages are third-party content.
 
+## AI Search Audit Lite
+
+Before Google, Bing or an AI assistant can show or quote a page, a crawler has to be allowed in, the page has to say what it is, and the text has to survive the machine's reading. `ai-search-audit` checks one public page against the standard, published rules for all three and draws the result as one report: six status tiles, a map of the page built from its real document with every problem marked where it is, the biggest problems, the bots in robots.txt, the classic Google and Bing checklist, the language versions, and where the text goes on its way to an AI retriever.
+
+Lite is a picture of the problems: each one is a short label, a severity and a place. It does not describe the problems or say how to fix them. A full version with explanations is available from [GetLoopLoop](https://www.getlooploop.com).
+
+![AI Search Audit Lite, dark: the tiles and the page map of the Vectorscope page](docs/ai-search-audit-dark-1280.png)
+
+What it checks, all deterministic (no model, no embeddings, no judgement):
+
+- **Access and indexing:** the HTTP status, the redirect chain, HTTPS; robots.txt for Googlebot, Bingbot and the AI crawlers (the Vectorscope skill's RFC 9309 matching); meta robots and `X-Robots-Tag` noindex; whether the sitemap lists the page; llms.txt.
+- **The classic checklist (24 cells):** title and description length, one h1, heading order, canonical, internal links, broken links (the first 30 checked, the rest counted), images without alt, viewport, html lang, Open Graph and Twitter tags, page weight, a readable URL, hreflang pairs, FAQ and breadcrumb markup. Core Web Vitals and "in Google's index" are always *not measured*: they need field data and Search Console.
+- **Structured data:** JSON-LD parsed (microdata and RDFa types listed), required properties for FAQPage, Product, SoftwareApplication, BreadcrumbList and HowTo, recommended ones for Article and Organization, every FAQPage question looked for in the visible text, and FAQ rich results noted as retired by Google ([7 May 2026](https://developers.google.com/search/updates)).
+- **Languages:** the hreflang set (self-reference, x-default, valid codes), each alternate fetched to see whether it links back, titles and descriptions compared across versions, html lang against hreflang.
+- **AI reading:** the Vectorscope core (passages, the 26-passage cap, where the text goes), plus a hero lede lost with a removed `<header>`, headings in hidden panels, loading placeholders read as content, words glued in the h1, navigation inside the text, thin sections, cut-off teasers and repeated claims; with `--render`, the sections that exist only after JavaScript are drawn dashed on the map.
+
+The same report in Ukrainian and light, and on a narrow screen:
+
+![AI Search Audit Lite in Ukrainian, light](docs/ai-search-audit-light-uk-1280.png)
+
+![AI Search Audit Lite at 500 px, dark](docs/ai-search-audit-dark-500.png) ![AI Search Audit Lite at 500 px, Ukrainian, light: example.com](docs/ai-search-audit-light-uk-500.png)
+
+MDN's HTTP caching guide fills all 26 passages; its last sections are merged into one zone on the map, and the 470 links past the check's cap are counted:
+
+![AI Search Audit Lite on MDN's HTTP caching guide](docs/ai-search-audit-mdn-1280.png)
+
+Real runs in [`examples/`](examples) (17 October 2026), each as HTML, Markdown and JSON:
+
+| Page | Problems | Blocking · high · medium · low | Among them |
+|---|---|---|---|
+| [getlooploop.com/vectorscope](examples/ai-search-audit-getlooploop-vectorscope.html) | 8 | 0 · 0 · 4 · 4 | two links to 404 pages, SoftwareApplication markup without a rating, llms.txt in one language |
+| [getlooploop.com/uk/vectorscope](examples/ai-search-audit-getlooploop-vectorscope-uk.html) | 8 | 0 · 0 · 4 · 4 | the same, read in Ukrainian; the three language versions link to each other |
+| [getlooploop.com/es/vectorscope](examples/ai-search-audit-getlooploop-vectorscope-es.html) | 8 | 0 · 0 · 4 · 4 | the same, in Spanish |
+| [MDN: HTTP caching](examples/ai-search-audit-mdn-http-caching.html) | 4 | 0 · 0 · 2 · 2 | 9 passages start mid-sentence, no llms.txt, no Open Graph tags |
+| [example.com](examples/ai-search-audit-example-com.html) | 8 | 0 · 0 · 1 · 7 | no h1, description, canonical, sitemap or structured data |
+
+Install it the same way as the Vectorscope (`npx skills add Olexan-art/getlooploop-skills --skill ai-search-audit`, or, for claude.ai, the `ai-search-audit.zip` that `npm run zip` writes), then ask your agent for "an AI search audit of <url>". It needs Node 20.18 or later and no `npm install`: `dist/read.mjs` and `dist/audit.mjs` carry everything, the Vectorscope's code included, so the skill folder works on its own.
+
+```
+node dist/read.mjs https://example.com/page --out reading.json      # the page, robots.txt, sitemap, llms.txt, alternates, 30 links
+node dist/audit.mjs reading.json --html report.html --md report.md --json export.json
+```
+
+**Network:** the page, its site's `/robots.txt`, its sitemap (the robots.txt `Sitemap:` lines on the same site, else `/sitemap.xml`, and up to 5 child sitemaps), `/llms.txt`, up to 10 hreflang alternates and a HEAD (or a bodiless GET) of up to 30 links; every cap is reported, never silent. **Outputs:** a self-contained `report.html` (EN | UK, dark and light, no network requests, every piece of page text escaped), `report.md`, and `export.json` (`getlooploop/ai-search-audit@1`), which carries every finding with its evidence and the published rules it rests on.
+
+**This skill's own thresholds**, where no published rule gives a number: a title of 10 to 60 characters; a description of 70 to 160; a redirect chain from 2 hops; a heavy page over 500 KB of HTML or 30 scripts; a hard-to-read URL over 115 characters, with more than 2 query parameters or a session id; hidden headings counted high from 200 hidden characters. Each is a named constant in `skills/ai-search-audit/scripts/lib/checks.mjs` with its reason.
 
 ## Working on the skill
 
@@ -206,6 +253,8 @@ npm run zip          # dist-release/vectorscope.zip, the file to attach to a rel
 ```
 
 Change `scripts/`, run `npm run build`, and commit both.
+
+`skills/ai-search-audit` works the same way. Its `scripts/` import the Vectorscope skill's `scripts/lib` rather than copying it, so run `npm install` in both folders; `npm run build` bundles both into its `dist/`, `npm test` checks that `dist/` matches, and `npm run zip` writes `dist-release/ai-search-audit.zip`.
 
 ## Licence
 

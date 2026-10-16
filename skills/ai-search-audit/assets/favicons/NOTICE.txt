@@ -1,0 +1,6 @@
+These are the favicons of the companies that run the crawlers the report lists: OpenAI
+(openai.com), Anthropic (anthropic.com), Perplexity (perplexity.ai), Google (google.com),
+Microsoft Bing (bing.com) and Common Crawl (commoncrawl.org), each the 32 or 64 px icon the site
+serves. They are the trademarks of their owners and are not covered by this repository's MIT
+licence. The report shows each one at 16 px beside the crawler's robots.txt token, only to say
+which company runs that crawler; no endorsement by, or affiliation with, any of them is implied.
