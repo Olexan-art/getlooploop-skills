@@ -1,0 +1,2113 @@
+{
+  "schema": "getlooploop/vectorscope-compare@1",
+  "generatedAt": "2026-10-16T16:23:21.461Z",
+  "skillVersion": 2,
+  "producedBy": {
+    "tool": "vectorscope-skill (local, no embeddings)",
+    "url": "https://www.getlooploop.com/vectorscope"
+  },
+  "howToRead": "Each page is a full single-page export under pages[]. topics is the one dictionary every page was grouped against; topicTable gives passages and characters per topic per page; topicGaps lists, per page, topics the others cover and it does not; facts and factGaps are the agent's list of citable facts and where each is stated; queries carry a verdict per page and the winner. Grouping, facts and verdicts are judgements; chunking and the cap are the product's exact rules.",
+  "pages": [
+    {
+      "n": 1,
+      "schema": "getlooploop/vectorscope-reading@1",
+      "generatedAt": "2026-10-16T16:23:21.462Z",
+      "producedBy": {
+        "tool": "vectorscope-skill (local, no embeddings)",
+        "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
+        "url": "https://www.getlooploop.com/vectorscope"
+      },
+      "howToRead": {
+        "grouping": "Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
+        "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
+        "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 5992 of 34460 indexed characters, about 17%, and always the opening of each passage rather than a sample spread through it.",
+        "keywords": "Counted over the page's whole text, not the excerpts below. A term is one word or two: a two-word term is a pair the page writes side by side often enough that the pair is what it is saying, and where it is counted neither of its words is counted separately, so the occurrences still add up to the page. `count` is occurrences; `groups` is how many of the page's groups the term reaches, and `scope` is true when it reaches most of them. A term with `scope` true describes the page; one with it false is a single section's vocabulary — useful, but not a summary. Plurals were folded into the singular where the page uses both. The group counts rest on the grouping above, which is a judgement.",
+        "agentLabel": "v2: the name the agent gave the group after reading it, or null. It is a judgement, like the grouping; `label` and `labelSource` are the computed label as in v1.",
+        "groupLabels": "`labelSource` says where each name came from. \"heading\" is the page's own section heading and can be quoted. \"keywords\" is a computed guess — the group's most distinctive words — and is a hint, not a topic; do not quote it back as what the section is called.",
+        "cohesion": "null: cohesion is the mean cosine between a group's passage embeddings, and no embeddings were computed.",
+        "selfSimilarity": "null: the median cosine between passages needs embeddings, and none were computed.",
+        "groupFloor": "null: there was no similarity cut; the groups are a reading of the passages.",
+        "duplicateOf": "The index of an earlier, non-adjacent chunk this one repeats nearly word for word, as judged by reading — the product judges it from embeddings at cosine 0.94. The chunker's own overlap between neighbours is excluded.",
+        "projectionExplained": "null: there is no projection without vectors.",
+        "whatCapReachedMeans": "The pipeline indexes at most 26 chunks per page. `capReached` true with `charsUnread` above zero means an assistant reading this page never sees that tail.",
+        "noindex": "True when the page asks search engines not to index it. Says nothing about whether an assistant can read it, but it is often unintentional."
+      },
+      "cannotAnswer": [
+        "Sentiment or tone of the page. Only about 17% of the text is here, taken from the opening of each passage — enough to produce a confident-sounding verdict from an unrepresentative sample. If asked, say what the sample supports and that it is a sample.",
+        "Anything about competitors, or how this page compares to another. One page was read; no other page was fetched.",
+        "Which search or assistant prompts this page ranks or gets cited for. That needs a query inventory and measurement over time, neither of which is in this export.",
+        "Whether the page is factually correct, current, or original. Nothing here checked any claim on it.",
+        "How the page renders for a browser running JavaScript. This is a plain fetch, which is also what an assistant that does not run JavaScript sees.",
+        "How close any two passages are in an embedding space, or whether any assistant has indexed this page. No embeddings were computed, and this is a preview of the machine's view, not a guarantee of what any assistant does with it."
+      ],
+      "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `keywords` where `describesWholePage` is true, since those are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
+      "page": {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+        "requestedUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+        "title": "HTTP caching - HTTP | MDN",
+        "wordCount": 5153,
+        "headingsFound": 14,
+        "noindex": false
+      },
+      "retrieval": {
+        "embeddingModel": null,
+        "dimensions": null,
+        "chunkCap": 26,
+        "chunksIndexed": 26,
+        "charsIndexed": 34460,
+        "charsUnread": 0,
+        "capReached": true,
+        "duplicateChunks": 0,
+        "groupsMergedByPaletteLimit": null
+      },
+      "textCoverage": {
+        "exportedChars": 5992,
+        "indexedChars": 34460,
+        "share": 0.174
+      },
+      "geometry": {
+        "selfSimilarity": null,
+        "groupFloor": null,
+        "projectionExplained": null,
+        "projectionBasis": null
+      },
+      "keywords": [
+        {
+          "term": "response",
+          "count": 109,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "cache",
+          "count": 99,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "cache control",
+          "count": 50,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "max age",
+          "count": 46,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "request",
+          "count": 44,
+          "groups": 4,
+          "spread": 0.6667,
+          "describesWholePage": true
+        },
+        {
+          "term": "server",
+          "count": 37,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "header",
+          "count": 36,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "content",
+          "count": 32,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "stored",
+          "count": 27,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "store",
+          "count": 26,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "example",
+          "count": 25,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "time",
+          "count": 24,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "caching",
+          "count": 23,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "private",
+          "count": 23,
+          "groups": 4,
+          "spread": 0.6667,
+          "describesWholePage": true
+        },
+        {
+          "term": "etag",
+          "count": 22,
+          "groups": 2,
+          "spread": 0.3333,
+          "describesWholePage": false
+        },
+        {
+          "term": "client",
+          "count": 21,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "url",
+          "count": 21,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "value",
+          "count": 21,
+          "groups": 4,
+          "spread": 0.6667,
+          "describesWholePage": true
+        },
+        {
+          "term": "since",
+          "count": 20,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "directive",
+          "count": 19,
+          "groups": 4,
+          "spread": 0.6667,
+          "describesWholePage": true
+        }
+      ],
+      "groups": [
+        {
+          "id": 0,
+          "label": "Associated · Subsequent",
+          "labelSource": "keywords",
+          "chunkCount": 2,
+          "charCount": 914,
+          "shareOfIndexedChars": 0.027,
+          "cohesion": null,
+          "agentLabel": "What the HTTP cache is",
+          "note": null,
+          "topic": "what"
+        },
+        {
+          "id": 1,
+          "label": "Types of caches",
+          "labelSource": "heading",
+          "chunkCount": 3,
+          "charCount": 5059,
+          "shareOfIndexedChars": 0.147,
+          "cohesion": null,
+          "agentLabel": "Private, proxy and managed caches",
+          "note": null,
+          "topic": "types"
+        },
+        {
+          "id": 2,
+          "label": "Possible · Specifying",
+          "labelSource": "keywords",
+          "chunkCount": 4,
+          "charCount": 5281,
+          "shareOfIndexedChars": 0.153,
+          "cohesion": null,
+          "agentLabel": "Freshness, Expires, heuristic caching and Vary",
+          "note": "Vary is about the cache key, filed here because it decides which stored response is fresh for a request.",
+          "topic": "freshness"
+        },
+        {
+          "id": 3,
+          "label": "Validation",
+          "labelSource": "heading",
+          "chunkCount": 4,
+          "charCount": 6522,
+          "shareOfIndexedChars": 0.189,
+          "cohesion": null,
+          "agentLabel": "Revalidation with If-Modified-Since and ETag",
+          "note": null,
+          "topic": "validation"
+        },
+        {
+          "id": 4,
+          "label": "Force · Right",
+          "labelSource": "keywords",
+          "chunkCount": 6,
+          "charCount": 7883,
+          "shareOfIndexedChars": 0.229,
+          "cohesion": null,
+          "agentLabel": "no-cache, no-store, reloads, deletion and request collapse",
+          "note": null,
+          "topic": "directives"
+        },
+        {
+          "id": 5,
+          "label": "Resources · Bundle",
+          "labelSource": "keywords",
+          "chunkCount": 7,
+          "charCount": 8801,
+          "shareOfIndexedChars": 0.255,
+          "cohesion": null,
+          "agentLabel": "Common caching patterns and cache busting",
+          "note": "#22 to #24 sit under a second \"Validation\" heading, an h3 the chunker takes for the h2 of the same name.",
+          "topic": "patterns"
+        }
+      ],
+      "chunks": [
+        {
+          "index": 0,
+          "group": 0,
+          "heading": "HTTP caching - HTTP | MDN",
+          "charCount": 153,
+          "duplicateOf": null,
+          "textHead": "HTTP caching - HTTP | MDN\nHTTP caching\nThe HTTP cache stores a response associated with a request and reuses the stored response for subsequent requests."
+        },
+        {
+          "index": 1,
+          "group": 0,
+          "heading": null,
+          "charCount": 761,
+          "duplicateOf": null,
+          "textHead": "HTTP caching\nThe HTTP cache stores a response associated with a request and reuses the stored response for subsequent requests.\nThere are several advantages to reusability. First, since there is no need to deliver the request to the origin "
+        },
+        {
+          "index": 2,
+          "group": 1,
+          "heading": "Types of caches",
+          "charCount": 1997,
+          "duplicateOf": null,
+          "textHead": "In the HTTP Caching spec, there are two main types of caches: private caches and shared caches. Private caches A private cache is a cache tied to a specific client — typically a browser cache. Since the stored response is not shared with ot"
+        },
+        {
+          "index": 3,
+          "group": 1,
+          "heading": "Types of caches",
+          "charCount": 1998,
+          "duplicateOf": null,
+          "textHead": "proxy-revalidate However, in recent years, as HTTPS has become more common and client/server communication has become encrypted, proxy caches in the path can only tunnel a response and can't behave as a cache, in many cases. So in that scen"
+        },
+        {
+          "index": 4,
+          "group": 1,
+          "heading": "Types of caches",
+          "charCount": 1064,
+          "duplicateOf": null,
+          "textHead": "Caching spec protocols in favor of explicit manipulation. For example, the following can be specified to opt-out of a private cache or proxy cache, while using your own strategy to cache only in a managed cache. http Cache-Control: no-store"
+        },
+        {
+          "index": 5,
+          "group": 2,
+          "heading": "Heuristic caching",
+          "charCount": 979,
+          "duplicateOf": null,
+          "textHead": "HTTP is designed to cache as much as possible, so even if no Cache-Control is given, responses will get stored and reused if certain conditions are met. This is called heuristic caching.\nFor example, take the following response. This respon"
+        },
+        {
+          "index": 6,
+          "group": 2,
+          "heading": "Fresh and stale based on age",
+          "charCount": 1671,
+          "duplicateOf": null,
+          "textHead": "Stored HTTP responses have two states: fresh and stale. The fresh state usually indicates that the response is still valid and can be reused, while the stale state means that the cached response has already expired.\nThe criterion for determ"
+        },
+        {
+          "index": 7,
+          "group": 2,
+          "heading": "Expires or max-age",
+          "charCount": 665,
+          "duplicateOf": null,
+          "textHead": "In HTTP/1.0, freshness used to be specified by the Expires header.\nThe Expires header specifies the lifetime of the cache using an explicit time rather than by specifying an elapsed time.\nhttp\nExpires: Tue, 28 Feb 2022 22:22:22 GMT\nHowever,"
+        },
+        {
+          "index": 8,
+          "group": 2,
+          "heading": "Vary",
+          "charCount": 1966,
+          "duplicateOf": null,
+          "textHead": "The way that responses are distinguished from one another is essentially based on their URLs:\nURL\nResponse body\nhttps://example.com/index.html\n<!doctype html>...\nhttps://example.com/style.css\nbody { ...\nhttps://example.com/script.js\nfunctio"
+        },
+        {
+          "index": 9,
+          "group": 3,
+          "heading": "Validation",
+          "charCount": 1998,
+          "duplicateOf": null,
+          "textHead": "Stale responses are not immediately discarded. HTTP has a mechanism to transform a stale response into a fresh one by asking the origin server. This is called validation, or sometimes, revalidation. Validation is done by using a conditional"
+        },
+        {
+          "index": 10,
+          "group": 3,
+          "heading": "Validation",
+          "charCount": 1996,
+          "duplicateOf": null,
+          "textHead": "to parse, and distributed servers have difficulty synchronizing file-update times. To solve such problems, the ETag response header was standardized as an alternative. ETag/If-None-Match The value of the ETag response header is an arbitrary"
+        },
+        {
+          "index": 11,
+          "group": 3,
+          "heading": "Validation",
+          "charCount": 1999,
+          "duplicateOf": null,
+          "textHead": "for caching; it is a standard HTTP header that is also used by content-management (CMS) systems to display the last-modified time, by crawlers to adjust crawl frequency, and for other various purposes. So considering the overall HTTP ecosys"
+        },
+        {
+          "index": 12,
+          "group": 3,
+          "heading": "Validation",
+          "charCount": 529,
+          "duplicateOf": null,
+          "textHead": "it must not be reused without revalidation once it is stale — so, in combination, the semantics seem to be the same as no-cache. However, that usage of max-age=0 is a remnant of the fact that many implementations prior to HTTP/1.1 were unab"
+        },
+        {
+          "index": 13,
+          "group": 4,
+          "heading": "Don't cache",
+          "charCount": 1989,
+          "duplicateOf": null,
+          "textHead": "The no-cache directive does not prevent the storing of responses but instead prevents the reuse of responses without revalidation. If you don't want a response stored in any cache, use no-store. http Cache-Control: no-store However, in gene"
+        },
+        {
+          "index": 14,
+          "group": 4,
+          "heading": "Don't cache",
+          "charCount": 886,
+          "duplicateOf": null,
+          "textHead": "following being used. http Cache-Control: no-store, no-cache, max-age=0, must-revalidate, proxy-revalidate It is recommended to use no-cache as an alternative for dealing with such outdated implementations, and it is not a problem if no-cac"
+        },
+        {
+          "index": 15,
+          "group": 4,
+          "heading": "Reload and force reload",
+          "charCount": 1998,
+          "duplicateOf": null,
+          "textHead": "Validation can be performed for requests as well as responses. The reload and force reload actions are common examples of validation performed from the browser side. Reload For recovering from window corruption or updating to the latest ver"
+        },
+        {
+          "index": 16,
+          "group": 4,
+          "heading": "Reload and force reload",
+          "charCount": 1084,
+          "duplicateOf": null,
+          "textHead": "with no-cache, you can be sure you'll get a 200 OK from the origin server. That behavior is also defined in the Fetch standard and can be reproduced in JavaScript by calling fetch() with the cache mode set to reload (note that it's not forc"
+        },
+        {
+          "index": 17,
+          "group": 4,
+          "heading": "Deleting stored responses",
+          "charCount": 1271,
+          "duplicateOf": null,
+          "textHead": "There is no way to delete responses on an intermediate server that have been stored with a long max-age.\nImagine that the following response from https://example.com/ was stored.\nhttp\nHTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: "
+        },
+        {
+          "index": 18,
+          "group": 4,
+          "heading": "Request collapse",
+          "charCount": 655,
+          "duplicateOf": null,
+          "textHead": "The shared cache is primarily located before the origin server and is intended to reduce traffic to the origin server.\nThus, if multiple identical requests arrive at a shared cache at the same time, the intermediate cache will forward a sin"
+        },
+        {
+          "index": 19,
+          "group": 5,
+          "heading": "Common caching patterns",
+          "charCount": 1978,
+          "duplicateOf": null,
+          "textHead": "There are many directives in the Cache-Control spec, and it may be difficult to understand all of them. But most websites can be covered by a combination of a handful of patterns. This section describes the common patterns in designing cach"
+        },
+        {
+          "index": 20,
+          "group": 5,
+          "heading": "Common caching patterns",
+          "charCount": 1992,
+          "duplicateOf": null,
+          "textHead": "based on a version number or hash value. Some of the ways to do that are shown below. # version in filename bundle.v123.js # version in query bundle.js?v=123 # hash in filename bundle.YsAIAAAA-QG4G6kCMAMBAAAAAAAoK.js # hash in query bundle."
+        },
+        {
+          "index": 21,
+          "group": 5,
+          "heading": "Common caching patterns",
+          "charCount": 525,
+          "duplicateOf": null,
+          "textHead": "the Authorization header is set. It is not required otherwise, because a response will be stored in the shared cache as long as max-age is given. So if the response is personalized with basic authentication, the presence of public may cause"
+        },
+        {
+          "index": 22,
+          "group": 5,
+          "heading": "Validation",
+          "charCount": 1997,
+          "duplicateOf": null,
+          "textHead": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading. It's easy to generate those headers for pre-built static files. The ETag value here may be a hash of the file. http # r"
+        },
+        {
+          "index": 23,
+          "group": 5,
+          "heading": "Validation",
+          "charCount": 1990,
+          "duplicateOf": null,
+          "textHead": "instead just want it to always be up-to-date. Furthermore, adding Last-Modified and ETag will allow clients to send conditional requests, and a 304 Not Modified can be returned if there have been no updates to the HTML: http HTTP/1.1 200 OK"
+        },
+        {
+          "index": 24,
+          "group": 5,
+          "heading": "Validation",
+          "charCount": 201,
+          "duplicateOf": null,
+          "textHead": "do the same if it could delete the contents in the Cache API when an update occurs on the server. For more information, see the documentation for your CDN, and consult the service worker documentation."
+        },
+        {
+          "index": 25,
+          "group": 5,
+          "heading": "See also",
+          "charCount": 118,
+          "duplicateOf": null,
+          "textHead": "Cache-Control HTTP header\nRFC 9111: Hypertext Transfer Protocol (HTTP/1.1): Caching\nCaching Tutorial - Mark Nottingham"
+        }
+      ],
+      "skillVersion": 2,
+      "checks": [
+        {
+          "code": "dominant_heading",
+          "severity": "medium",
+          "passages": [
+            9,
+            10,
+            11,
+            12,
+            22,
+            23,
+            24
+          ],
+          "evidence": {
+            "heading": "Validation",
+            "share": 0.311,
+            "chars": 10710
+          },
+          "message": "“Validation” holds 31.1% of the indexed text."
+        },
+        {
+          "code": "mid_sentence_start",
+          "severity": "medium",
+          "passages": [
+            3,
+            10,
+            11,
+            12,
+            14,
+            16,
+            20,
+            21,
+            23,
+            24
+          ],
+          "evidence": {
+            "samples": [
+              {
+                "passage": 3,
+                "text": "proxy-revalidate However, in recent years, as HTTPS has become more common and …"
+              },
+              {
+                "passage": 10,
+                "text": "to parse, and distributed servers have difficulty synchronizing file-update tim…"
+              },
+              {
+                "passage": 11,
+                "text": "for caching; it is a standard HTTP header that is also used by content-manageme…"
+              },
+              {
+                "passage": 12,
+                "text": "it must not be reused without revalidation once it is stale — so, in combinatio…"
+              },
+              {
+                "passage": 14,
+                "text": "following being used. http Cache-Control: no-store, no-cache, max-age=0, must-r…"
+              },
+              {
+                "passage": 16,
+                "text": "with no-cache, you can be sure you'll get a 200 OK from the origin server. That…"
+              }
+            ],
+            "count": 10
+          },
+          "message": "10 passage(s) open on a lowercase word or a punctuation mark."
+        },
+        {
+          "code": "nav_in_content",
+          "severity": "medium",
+          "passages": [
+            8
+          ],
+          "evidence": {
+            "runs": 2,
+            "samples": [
+              {
+                "passage": 8,
+                "lines": [
+                  "URL",
+                  "Response body",
+                  "https://example.com/index.html",
+                  "<!doctype html>...",
+                  "https://example.com/style.css"
+                ],
+                "count": 5
+              },
+              {
+                "passage": 8,
+                "lines": [
+                  "URL",
+                  "Accept-Language",
+                  "Response body",
+                  "https://example.com/index.html",
+                  "ja-JP",
+                  "<!doctype html>...",
+                  "https://example.com/index.html",
+                  "en-US"
+                ],
+                "count": 11
+              }
+            ]
+          },
+          "message": "2 run(s) of four or more one-or-two-word lines."
+        },
+        {
+          "code": "jsonld_none",
+          "severity": "low",
+          "passages": [],
+          "evidence": {},
+          "message": "No JSON-LD on the page."
+        }
+      ],
+      "technical": {
+        "jsonLd": {
+          "blocks": 0,
+          "invalid": 0,
+          "types": []
+        },
+        "canonical": {
+          "present": true,
+          "count": 1,
+          "href": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+          "absolute": true,
+          "resolved": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+          "self": true
+        },
+        "metaDescription": {
+          "present": true,
+          "length": 114
+        },
+        "lang": "en-US"
+      },
+      "robots": {
+        "url": "https://developer.mozilla.org/robots.txt",
+        "status": "ok",
+        "httpStatus": 200,
+        "bots": [
+          {
+            "token": "OAI-SearchBot",
+            "vendor": "OpenAI",
+            "kind": "search",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "ChatGPT-User",
+            "vendor": "OpenAI",
+            "kind": "user",
+            "honours": false,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "GPTBot",
+            "vendor": "OpenAI",
+            "kind": "training",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Claude-SearchBot",
+            "vendor": "Anthropic",
+            "kind": "search",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Claude-User",
+            "vendor": "Anthropic",
+            "kind": "user",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "ClaudeBot",
+            "vendor": "Anthropic",
+            "kind": "training",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "PerplexityBot",
+            "vendor": "Perplexity",
+            "kind": "search",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Perplexity-User",
+            "vendor": "Perplexity",
+            "kind": "user",
+            "honours": false,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Google-Extended",
+            "vendor": "Google",
+            "kind": "training",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Googlebot",
+            "vendor": "Google",
+            "kind": "index",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Bingbot",
+            "vendor": "Microsoft",
+            "kind": "index",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "CCBot",
+            "vendor": "Common Crawl",
+            "kind": "training",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          }
+        ]
+      },
+      "render": {
+        "ok": true,
+        "browser": "chrome.exe",
+        "wordCount": 4678,
+        "passages": 24,
+        "charsIndexed": 30146,
+        "headings": 14
+      },
+      "plan": null,
+      "queries": null,
+      "facts": null,
+      "diff": null
+    },
+    {
+      "n": 2,
+      "schema": "getlooploop/vectorscope-reading@1",
+      "generatedAt": "2026-10-16T16:23:21.462Z",
+      "producedBy": {
+        "tool": "vectorscope-skill (local, no embeddings)",
+        "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
+        "url": "https://www.getlooploop.com/vectorscope"
+      },
+      "howToRead": {
+        "grouping": "Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
+        "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
+        "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 3415 of 13308 indexed characters, about 26%, and always the opening of each passage rather than a sample spread through it.",
+        "keywords": "Counted over the page's whole text, not the excerpts below. A term is one word or two: a two-word term is a pair the page writes side by side often enough that the pair is what it is saying, and where it is counted neither of its words is counted separately, so the occurrences still add up to the page. `count` is occurrences; `groups` is how many of the page's groups the term reaches, and `scope` is true when it reaches most of them. A term with `scope` true describes the page; one with it false is a single section's vocabulary — useful, but not a summary. Plurals were folded into the singular where the page uses both. The group counts rest on the grouping above, which is a judgement.",
+        "agentLabel": "v2: the name the agent gave the group after reading it, or null. It is a judgement, like the grouping; `label` and `labelSource` are the computed label as in v1.",
+        "groupLabels": "`labelSource` says where each name came from. \"heading\" is the page's own section heading and can be quoted. \"keywords\" is a computed guess — the group's most distinctive words — and is a hint, not a topic; do not quote it back as what the section is called.",
+        "cohesion": "null: cohesion is the mean cosine between a group's passage embeddings, and no embeddings were computed.",
+        "selfSimilarity": "null: the median cosine between passages needs embeddings, and none were computed.",
+        "groupFloor": "null: there was no similarity cut; the groups are a reading of the passages.",
+        "duplicateOf": "The index of an earlier, non-adjacent chunk this one repeats nearly word for word, as judged by reading — the product judges it from embeddings at cosine 0.94. The chunker's own overlap between neighbours is excluded.",
+        "projectionExplained": "null: there is no projection without vectors.",
+        "whatCapReachedMeans": "The pipeline indexes at most 26 chunks per page. `capReached` true with `charsUnread` above zero means an assistant reading this page never sees that tail.",
+        "noindex": "True when the page asks search engines not to index it. Says nothing about whether an assistant can read it, but it is often unintentional."
+      },
+      "cannotAnswer": [
+        "Sentiment or tone of the page. Only about 26% of the text is here, taken from the opening of each passage — enough to produce a confident-sounding verdict from an unrepresentative sample. If asked, say what the sample supports and that it is a sample.",
+        "Anything about competitors, or how this page compares to another. One page was read; no other page was fetched.",
+        "Which search or assistant prompts this page ranks or gets cited for. That needs a query inventory and measurement over time, neither of which is in this export.",
+        "Whether the page is factually correct, current, or original. Nothing here checked any claim on it.",
+        "How the page renders for a browser running JavaScript. This is a plain fetch, which is also what an assistant that does not run JavaScript sees.",
+        "How close any two passages are in an embedding space, or whether any assistant has indexed this page. No embeddings were computed, and this is a preview of the machine's view, not a guarantee of what any assistant does with it."
+      ],
+      "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `keywords` where `describesWholePage` is true, since those are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
+      "page": {
+        "url": "https://web.dev/articles/http-cache?hl=en",
+        "requestedUrl": "https://web.dev/articles/http-cache?hl=en",
+        "title": "Prevent unnecessary network requests with the HTTP Cache  |  Articles  |  web.dev",
+        "wordCount": 2060,
+        "headingsFound": 11,
+        "noindex": false
+      },
+      "retrieval": {
+        "embeddingModel": null,
+        "dimensions": null,
+        "chunkCap": 26,
+        "chunksIndexed": 15,
+        "charsIndexed": 13308,
+        "charsUnread": 0,
+        "capReached": false,
+        "duplicateChunks": 0,
+        "groupsMergedByPaletteLimit": null
+      },
+      "textCoverage": {
+        "exportedChars": 3415,
+        "indexedChars": 13308,
+        "share": 0.257
+      },
+      "geometry": {
+        "selfSimilarity": null,
+        "groupFloor": null,
+        "projectionExplained": null,
+        "projectionBasis": null
+      },
+      "keywords": [
+        {
+          "term": "browser",
+          "count": 34,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "cache",
+          "count": 32,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "response",
+          "count": 32,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "header",
+          "count": 25,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "cache control",
+          "count": 21,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "file",
+          "count": 20,
+          "groups": 4,
+          "spread": 0.6667,
+          "describesWholePage": true
+        },
+        {
+          "term": "request",
+          "count": 17,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "server",
+          "count": 17,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "resource",
+          "count": 16,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "cached",
+          "count": 15,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "caching",
+          "count": 14,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "etag",
+          "count": 14,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        },
+        {
+          "term": "url",
+          "count": 14,
+          "groups": 2,
+          "spread": 0.3333,
+          "describesWholePage": false
+        },
+        {
+          "term": "network request",
+          "count": 10,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "value",
+          "count": 10,
+          "groups": 4,
+          "spread": 0.6667,
+          "describesWholePage": true
+        },
+        {
+          "term": "web server",
+          "count": 10,
+          "groups": 4,
+          "spread": 0.6667,
+          "describesWholePage": true
+        },
+        {
+          "term": "content",
+          "count": 9,
+          "groups": 4,
+          "spread": 0.6667,
+          "describesWholePage": true
+        },
+        {
+          "term": "max age",
+          "count": 9,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "version",
+          "count": 9,
+          "groups": 2,
+          "spread": 0.3333,
+          "describesWholePage": false
+        },
+        {
+          "term": "last modified",
+          "count": 7,
+          "groups": 5,
+          "spread": 0.8333,
+          "describesWholePage": true
+        }
+      ],
+      "groups": [
+        {
+          "id": 0,
+          "label": "First · Defense",
+          "labelSource": "keywords",
+          "chunkCount": 3,
+          "charCount": 1766,
+          "shareOfIndexedChars": 0.133,
+          "cohesion": null,
+          "agentLabel": "Why the HTTP cache matters and how it works",
+          "note": null,
+          "topic": "what"
+        },
+        {
+          "id": 1,
+          "label": "Automatically · Understanding",
+          "labelSource": "keywords",
+          "chunkCount": 2,
+          "charCount": 831,
+          "shareOfIndexedChars": 0.062,
+          "cohesion": null,
+          "agentLabel": "Browser support and request headers",
+          "note": null,
+          "topic": "browser"
+        },
+        {
+          "id": 2,
+          "label": "Response headers: configure your web server",
+          "labelSource": "heading",
+          "chunkCount": 1,
+          "charCount": 1606,
+          "shareOfIndexedChars": 0.121,
+          "cohesion": null,
+          "agentLabel": "Response headers to configure on the server",
+          "note": null,
+          "topic": "server"
+        },
+        {
+          "id": 3,
+          "label": "Which response header values should you use?",
+          "labelSource": "heading",
+          "chunkCount": 2,
+          "charCount": 3986,
+          "shareOfIndexedChars": 0.3,
+          "cohesion": null,
+          "agentLabel": "Versioned and unversioned URLs",
+          "note": null,
+          "topic": "patterns"
+        },
+        {
+          "id": 4,
+          "label": "Which response header values should you use?",
+          "labelSource": "heading",
+          "chunkCount": 2,
+          "charCount": 2732,
+          "shareOfIndexedChars": 0.205,
+          "cohesion": null,
+          "agentLabel": "ETag revalidation and 304",
+          "note": null,
+          "topic": "validation"
+        },
+        {
+          "id": 5,
+          "label": "Optimize · Usage",
+          "labelSource": "keywords",
+          "chunkCount": 5,
+          "charCount": 2387,
+          "shareOfIndexedChars": 0.179,
+          "cohesion": null,
+          "agentLabel": "Summary and appendix: recommended values",
+          "note": null,
+          "topic": "patterns"
+        }
+      ],
+      "chunks": [
+        {
+          "index": 0,
+          "group": 0,
+          "heading": "Prevent unnecessary network requests with the HTTP Cache  |  Articles  |  web.dev",
+          "charCount": 235,
+          "duplicateOf": null,
+          "textHead": "Prevent unnecessary network requests with the HTTP Cache  |  Articles  |  web.dev\nPrevent unnecessary network requests with the HTTP Cache\nThe browser&#39;s HTTP Cache is your first line of defense against unnecessary network requests."
+        },
+        {
+          "index": 1,
+          "group": 0,
+          "heading": null,
+          "charCount": 833,
+          "duplicateOf": null,
+          "textHead": "Prevent unnecessary network requests with the HTTP Cache\nIlya Grigorik\nJeff Posnick\nFetching resources over the network is both slow and expensive:\nLarge responses require many roundtrips between the browser and the server.\nYour page won't "
+        },
+        {
+          "index": 2,
+          "group": 1,
+          "heading": "Browser compatibility",
+          "charCount": 261,
+          "duplicateOf": null,
+          "textHead": "There isn't actually a single API called the HTTP Cache. It's the general name for a collection of web platform APIs. Those APIs are supported in all browsers:\nCache-Control\nBrowser Support\nSource\nETag\nBrowser Support\nSource\nLast-Modified\nB"
+        },
+        {
+          "index": 3,
+          "group": 0,
+          "heading": "How the HTTP Cache works",
+          "charCount": 698,
+          "duplicateOf": null,
+          "textHead": "All HTTP requests that the browser makes are first routed to the browser cache to check whether there is a valid cached response that can be used to fulfill the request. If there's a match, the response is read from the cache, which elimina"
+        },
+        {
+          "index": 4,
+          "group": 1,
+          "heading": "Request headers: stick with the defaults (usually)",
+          "charCount": 570,
+          "duplicateOf": null,
+          "textHead": "There are a number of important headers that should be included in your web app's outgoing requests, but the browser almost always takes care of setting them on your behalf when it makes requests. Request headers that affect checking for fr"
+        },
+        {
+          "index": 5,
+          "group": 2,
+          "heading": "Response headers: configure your web server",
+          "charCount": 1606,
+          "duplicateOf": null,
+          "textHead": "The part of the HTTP caching setup that matters the most is the headers that your web server adds to each outgoing response. The following headers all factor into effective caching behavior:\nCache-Control. The server can return a Cache-Cont"
+        },
+        {
+          "index": 6,
+          "group": 3,
+          "heading": "Which response header values should you use?",
+          "charCount": 1995,
+          "duplicateOf": null,
+          "textHead": "There are two important scenarios that you should cover when configuring your web server's response headers. Long-lived caching for versioned URLs How versioned URLs can help your caching strategy Versioned URLs are a good practice because "
+        },
+        {
+          "index": 7,
+          "group": 3,
+          "heading": "Which response header values should you use?",
+          "charCount": 1991,
+          "duplicateOf": null,
+          "textHead": "it can immediately use the value in the HTTP Cache, without having to make a network request to your web server at all. That's great—you've immediately gained the reliability and speed that comes from avoiding the network! Build tools like "
+        },
+        {
+          "index": 8,
+          "group": 4,
+          "heading": "Which response header values should you use?",
+          "charCount": 1996,
+          "duplicateOf": null,
+          "textHead": "can also accept a comma-separated list of directives. See Appendix: Cache-Control examples. Setting either ETag or Last-Modified can also help. As mentioned in Response headers, ETag and Last-Modified both serve the same purpose: determinin"
+        },
+        {
+          "index": 9,
+          "group": 4,
+          "heading": "Which response header values should you use?",
+          "charCount": 736,
+          "duplicateOf": null,
+          "textHead": "there's a match, then the server can respond with a 304 Not Modified HTTP response, which is the equivalent of \"Hey, keep using what you've already got!\" There's very little data to transfer when sending this type of response, so it's usual"
+        },
+        {
+          "index": 10,
+          "group": 5,
+          "heading": "Summary",
+          "charCount": 571,
+          "duplicateOf": null,
+          "textHead": "The HTTP Cache is an effective way to improve load performance because it reduces unnecessary network requests. It's supported in all browsers and doesn't take too much work to set up.\nThe following Cache-Control configurations are a good s"
+        },
+        {
+          "index": 11,
+          "group": 5,
+          "heading": "Learn more",
+          "charCount": 243,
+          "duplicateOf": null,
+          "textHead": "If you're looking to go beyond the basics of using the Cache-Control header, check out Jake Archibald's Caching best practices and max-age gotchas guide.\nSee Love your cache for guidance on how to optimize your cache usage for return visito"
+        },
+        {
+          "index": 12,
+          "group": 5,
+          "heading": "Appendix: More tips",
+          "charCount": 714,
+          "duplicateOf": null,
+          "textHead": "If you have more time, here are further ways that you can optimize your usage of the HTTP Cache:\nUse consistent URLs. If you serve the same content on different URLs, then that content will be fetched and stored multiple times.\nMinimize chu"
+        },
+        {
+          "index": 13,
+          "group": 5,
+          "heading": "Appendix: Cache-Control flowchart",
+          "charCount": 60,
+          "duplicateOf": null,
+          "textHead": "The decision process for setting your Cache-Control headers."
+        },
+        {
+          "index": 14,
+          "group": 5,
+          "heading": "Appendix: Cache-Control examples",
+          "charCount": 799,
+          "duplicateOf": null,
+          "textHead": "Cache-Control value\nExplanation\nmax-age=86400\nThe response can be cached by browsers and intermediary caches for up to 1 day (60 seconds x 60 minutes x 24 hours).\nprivate, max-age=600\nThe response can be cached by the browser (but not inter"
+        }
+      ],
+      "skillVersion": 2,
+      "checks": [
+        {
+          "code": "dominant_heading",
+          "severity": "medium",
+          "passages": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "evidence": {
+            "heading": "Which response header values should you use?",
+            "share": 0.505,
+            "chars": 6718
+          },
+          "message": "“Which response header values should you use?” holds 50.5% of the indexed text."
+        },
+        {
+          "code": "mid_sentence_start",
+          "severity": "medium",
+          "passages": [
+            7,
+            8,
+            9
+          ],
+          "evidence": {
+            "samples": [
+              {
+                "passage": 7,
+                "text": "it can immediately use the value in the HTTP Cache, without having to make a ne…"
+              },
+              {
+                "passage": 8,
+                "text": "can also accept a comma-separated list of directives. See Appendix: Cache-Contr…"
+              },
+              {
+                "passage": 9,
+                "text": "there's a match, then the server can respond with a 304 Not Modified HTTP respo…"
+              }
+            ],
+            "count": 3
+          },
+          "message": "3 passage(s) open on a lowercase word or a punctuation mark."
+        },
+        {
+          "code": "nav_in_content",
+          "severity": "medium",
+          "passages": [
+            2,
+            5
+          ],
+          "evidence": {
+            "runs": 2,
+            "samples": [
+              {
+                "passage": 2,
+                "lines": [
+                  "Cache-Control",
+                  "Browser Support",
+                  "Source",
+                  "ETag",
+                  "Browser Support",
+                  "Source",
+                  "Last-Modified",
+                  "Browser Support"
+                ],
+                "count": 9
+              },
+              {
+                "passage": 5,
+                "lines": [
+                  "Express",
+                  "Apache",
+                  "nginx",
+                  "Firebase Hosting",
+                  "Netlify"
+                ],
+                "count": 5
+              }
+            ]
+          },
+          "message": "2 run(s) of four or more one-or-two-word lines."
+        },
+        {
+          "code": "canonical_other",
+          "severity": "medium",
+          "passages": [],
+          "evidence": {
+            "href": "https://web.dev/articles/http-cache"
+          },
+          "message": "rel=canonical names https://web.dev/articles/http-cache."
+        },
+        {
+          "code": "thin_section",
+          "severity": "low",
+          "passages": [
+            13
+          ],
+          "evidence": {
+            "samples": [
+              {
+                "passage": 13,
+                "heading": "Appendix: Cache-Control flowchart",
+                "chars": 60
+              }
+            ],
+            "count": 1
+          },
+          "message": "1 heading(s) with fewer than 150 characters under them."
+        },
+        {
+          "code": "repeated_claim",
+          "severity": "low",
+          "passages": [
+            1,
+            2,
+            10
+          ],
+          "evidence": {
+            "groupCount": 6,
+            "samples": [
+              {
+                "phrase": "supported in all browsers",
+                "groups": 3,
+                "passages": [
+                  1,
+                  2,
+                  10
+                ]
+              }
+            ]
+          },
+          "message": "1 phrase(s) recur across at least half of the 6 groups."
+        }
+      ],
+      "technical": {
+        "jsonLd": {
+          "blocks": 2,
+          "invalid": 0,
+          "types": [
+            "Article",
+            "BreadcrumbList",
+            "ListItem"
+          ]
+        },
+        "canonical": {
+          "present": true,
+          "count": 1,
+          "href": "https://web.dev/articles/http-cache",
+          "absolute": true,
+          "resolved": "https://web.dev/articles/http-cache",
+          "self": false
+        },
+        "metaDescription": {
+          "present": true,
+          "length": 96
+        },
+        "lang": "en"
+      },
+      "robots": {
+        "url": "https://web.dev/robots.txt",
+        "status": "ok",
+        "httpStatus": 200,
+        "bots": [
+          {
+            "token": "OAI-SearchBot",
+            "vendor": "OpenAI",
+            "kind": "search",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "ChatGPT-User",
+            "vendor": "OpenAI",
+            "kind": "user",
+            "honours": false,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "GPTBot",
+            "vendor": "OpenAI",
+            "kind": "training",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Claude-SearchBot",
+            "vendor": "Anthropic",
+            "kind": "search",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Claude-User",
+            "vendor": "Anthropic",
+            "kind": "user",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "ClaudeBot",
+            "vendor": "Anthropic",
+            "kind": "training",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "PerplexityBot",
+            "vendor": "Perplexity",
+            "kind": "search",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Perplexity-User",
+            "vendor": "Perplexity",
+            "kind": "user",
+            "honours": false,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Google-Extended",
+            "vendor": "Google",
+            "kind": "training",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Googlebot",
+            "vendor": "Google",
+            "kind": "index",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "Bingbot",
+            "vendor": "Microsoft",
+            "kind": "index",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          },
+          {
+            "token": "CCBot",
+            "vendor": "Common Crawl",
+            "kind": "training",
+            "honours": true,
+            "allowed": true,
+            "rule": null,
+            "group": "*"
+          }
+        ]
+      },
+      "render": {
+        "ok": true,
+        "browser": "chrome.exe",
+        "wordCount": 2127,
+        "passages": 17,
+        "charsIndexed": 13635,
+        "headings": 11
+      },
+      "plan": null,
+      "queries": null,
+      "facts": null,
+      "diff": null
+    }
+  ],
+  "topics": [
+    {
+      "id": "what",
+      "name": "What the HTTP cache is and why it helps"
+    },
+    {
+      "id": "types",
+      "name": "Private, shared and managed caches"
+    },
+    {
+      "id": "freshness",
+      "name": "Freshness: max-age, Expires, heuristics, Vary"
+    },
+    {
+      "id": "validation",
+      "name": "Revalidation: ETag, Last-Modified, 304"
+    },
+    {
+      "id": "directives",
+      "name": "Preventing reuse: no-cache, no-store, reloads"
+    },
+    {
+      "id": "patterns",
+      "name": "Recommended settings and cache busting"
+    },
+    {
+      "id": "browser",
+      "name": "Browser support and request headers"
+    },
+    {
+      "id": "server",
+      "name": "Configuring response headers on a server"
+    }
+  ],
+  "topicTable": [
+    {
+      "topic": "what",
+      "name": "What the HTTP cache is and why it helps",
+      "cells": {
+        "1": {
+          "passages": 2,
+          "chars": 914,
+          "share": 0.027
+        },
+        "2": {
+          "passages": 3,
+          "chars": 1766,
+          "share": 0.133
+        }
+      }
+    },
+    {
+      "topic": "types",
+      "name": "Private, shared and managed caches",
+      "cells": {
+        "1": {
+          "passages": 3,
+          "chars": 5059,
+          "share": 0.147
+        },
+        "2": {
+          "passages": 0,
+          "chars": 0,
+          "share": 0
+        }
+      }
+    },
+    {
+      "topic": "freshness",
+      "name": "Freshness: max-age, Expires, heuristics, Vary",
+      "cells": {
+        "1": {
+          "passages": 4,
+          "chars": 5281,
+          "share": 0.153
+        },
+        "2": {
+          "passages": 0,
+          "chars": 0,
+          "share": 0
+        }
+      }
+    },
+    {
+      "topic": "validation",
+      "name": "Revalidation: ETag, Last-Modified, 304",
+      "cells": {
+        "1": {
+          "passages": 4,
+          "chars": 6522,
+          "share": 0.189
+        },
+        "2": {
+          "passages": 2,
+          "chars": 2732,
+          "share": 0.205
+        }
+      }
+    },
+    {
+      "topic": "directives",
+      "name": "Preventing reuse: no-cache, no-store, reloads",
+      "cells": {
+        "1": {
+          "passages": 6,
+          "chars": 7883,
+          "share": 0.229
+        },
+        "2": {
+          "passages": 0,
+          "chars": 0,
+          "share": 0
+        }
+      }
+    },
+    {
+      "topic": "patterns",
+      "name": "Recommended settings and cache busting",
+      "cells": {
+        "1": {
+          "passages": 7,
+          "chars": 8801,
+          "share": 0.255
+        },
+        "2": {
+          "passages": 7,
+          "chars": 6373,
+          "share": 0.479
+        }
+      }
+    },
+    {
+      "topic": "browser",
+      "name": "Browser support and request headers",
+      "cells": {
+        "1": {
+          "passages": 0,
+          "chars": 0,
+          "share": 0
+        },
+        "2": {
+          "passages": 2,
+          "chars": 831,
+          "share": 0.062
+        }
+      }
+    },
+    {
+      "topic": "server",
+      "name": "Configuring response headers on a server",
+      "cells": {
+        "1": {
+          "passages": 0,
+          "chars": 0,
+          "share": 0
+        },
+        "2": {
+          "passages": 1,
+          "chars": 1606,
+          "share": 0.121
+        }
+      }
+    }
+  ],
+  "topicGaps": {
+    "1": [
+      "browser",
+      "server"
+    ],
+    "2": [
+      "types",
+      "freshness",
+      "directives"
+    ]
+  },
+  "facts": [
+    {
+      "id": "f1",
+      "fact": "Cache-Control: max-age=31536000 caches a response for one year, the usual setting for versioned files.",
+      "topic": "patterns",
+      "pages": {
+        "1": [
+          16,
+          20,
+          21
+        ],
+        "2": [
+          6,
+          10,
+          14
+        ]
+      }
+    },
+    {
+      "id": "f2",
+      "fact": "ETag carries a server-chosen token, often a hash of the content, that the client sends back in If-None-Match.",
+      "topic": "validation",
+      "pages": {
+        "1": [
+          10
+        ],
+        "2": [
+          8,
+          9
+        ]
+      }
+    },
+    {
+      "id": "f3",
+      "fact": "A 304 Not Modified response carries no body, so revalidation transfers very little.",
+      "topic": "validation",
+      "pages": {
+        "1": [
+          9
+        ],
+        "2": [
+          9
+        ]
+      }
+    },
+    {
+      "id": "f4",
+      "fact": "no-cache allows storing but forces revalidation before reuse; no-store forbids storing.",
+      "topic": "directives",
+      "pages": {
+        "1": [
+          13
+        ],
+        "2": [
+          7,
+          10
+        ]
+      }
+    },
+    {
+      "id": "f5",
+      "fact": "Without Cache-Control, responses are still cached heuristically.",
+      "topic": "freshness",
+      "pages": {
+        "1": [
+          5
+        ],
+        "2": [
+          5
+        ]
+      }
+    },
+    {
+      "id": "f6",
+      "fact": "The specification suggests reusing a heuristically cached response for about 10% of the time since it was last modified.",
+      "topic": "freshness",
+      "pages": {
+        "1": [
+          5
+        ]
+      }
+    },
+    {
+      "id": "f7",
+      "fact": "Expires was HTTP/1.0's freshness header; when both are present, max-age wins.",
+      "topic": "freshness",
+      "pages": {
+        "1": [
+          7
+        ]
+      }
+    },
+    {
+      "id": "f8",
+      "fact": "Vary keys stored responses by request headers such as Accept-Language.",
+      "topic": "freshness",
+      "pages": {
+        "1": [
+          8
+        ]
+      }
+    },
+    {
+      "id": "f9",
+      "fact": "A private cache belongs to one client; a shared cache sits between client and server and serves many users.",
+      "topic": "types",
+      "pages": {
+        "1": [
+          2
+        ]
+      }
+    },
+    {
+      "id": "f10",
+      "fact": "The immutable directive stops revalidation on reload for content that never changes.",
+      "topic": "patterns",
+      "pages": {
+        "1": [
+          16,
+          22
+        ]
+      }
+    },
+    {
+      "id": "f11",
+      "fact": "QPACK predefines one-week, one-month and one-year max-age values that compress to one byte in HTTP/3.",
+      "topic": "patterns",
+      "pages": {
+        "1": [
+          20
+        ]
+      }
+    },
+    {
+      "id": "f12",
+      "fact": "Clear-Site-Data: cache clears browser caches but has no effect on intermediate caches.",
+      "topic": "directives",
+      "pages": {
+        "1": [
+          17
+        ]
+      }
+    },
+    {
+      "id": "f13",
+      "fact": "ETag is recommended over Last-Modified because it is more accurate.",
+      "topic": "validation",
+      "pages": {
+        "2": [
+          8
+        ]
+      }
+    },
+    {
+      "id": "f14",
+      "fact": "Build tools such as webpack can add hash fingerprints to asset URLs automatically.",
+      "topic": "patterns",
+      "pages": {
+        "2": [
+          7
+        ]
+      }
+    },
+    {
+      "id": "f15",
+      "fact": "private, max-age=600 lets the browser, but not intermediary caches, keep a response for 10 minutes.",
+      "topic": "patterns",
+      "pages": {
+        "2": [
+          14
+        ]
+      }
+    }
+  ],
+  "factGaps": {
+    "unique": {
+      "1": [
+        "f6",
+        "f7",
+        "f8",
+        "f9",
+        "f10",
+        "f11",
+        "f12"
+      ],
+      "2": [
+        "f13",
+        "f14",
+        "f15"
+      ]
+    },
+    "lacking": {
+      "1": [
+        "f13",
+        "f14",
+        "f15"
+      ],
+      "2": [
+        "f6",
+        "f7",
+        "f8",
+        "f9",
+        "f10",
+        "f11",
+        "f12"
+      ]
+    }
+  },
+  "queries": [
+    {
+      "id": "q1",
+      "query": "what is the difference between no-cache and no-store",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 13,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "The no-cache directive does not prevent the storing of responses but instead prevents the reuse of responses without revalidation. If you don't want a response stored in any cache, use no-store."
+        },
+        "2": {
+          "passage": 10,
+          "verdict": "partial",
+          "citable": true,
+          "quote": "Cache-Control: no-cache for resources that should be revalidated with the server before every use."
+        }
+      },
+      "winner": {
+        "winners": [
+          1
+        ],
+        "tie": false
+      }
+    },
+    {
+      "id": "q2",
+      "query": "what max-age should versioned static files get",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 20,
+          "verdict": "partial",
+          "citable": false,
+          "quote": "Numbers 37, 38, and 41 are for periods of one week, one month, and one year."
+        },
+        "2": {
+          "passage": 10,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "Cache-Control: max-age=31536000 for versioned resources."
+        }
+      },
+      "winner": {
+        "winners": [
+          2
+        ],
+        "tie": false
+      }
+    },
+    {
+      "id": "q3",
+      "query": "how does ETag revalidation work",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 10,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "If that response is stale, the client takes the value of the ETag response header for the cached response, and puts it into the If-None-Match request header, to ask the server if the resource has been modified"
+        },
+        "2": {
+          "passage": 9,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "The browser requests /file from the server and includes the If-None-Match header to instruct the server to only return the full file if the ETag of the file on the server doesn't match the browser's If-None-Match value."
+        }
+      },
+      "winner": {
+        "winners": [
+          1,
+          2
+        ],
+        "tie": true
+      }
+    },
+    {
+      "id": "q4",
+      "query": "what is a shared cache",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 2,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "The shared cache is located between the client and the server and can store responses that can be shared among users."
+        },
+        "2": {
+          "passage": null,
+          "verdict": "missing",
+          "citable": false,
+          "quote": null
+        }
+      },
+      "winner": {
+        "winners": [
+          1
+        ],
+        "tie": false
+      }
+    },
+    {
+      "id": "q5",
+      "query": "what happens if I don't set Cache-Control",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 5,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "HTTP is designed to cache as much as possible, so even if no Cache-Control is given, responses will get stored and reused if certain conditions are met."
+        },
+        "2": {
+          "passage": 5,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "Leaving out the Cache-Control response header does not disable HTTP caching!"
+        }
+      },
+      "winner": {
+        "winners": [
+          1,
+          2
+        ],
+        "tie": true
+      }
+    },
+    {
+      "id": "q6",
+      "query": "how to set caching headers in nginx",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": null,
+          "verdict": "missing",
+          "citable": false,
+          "quote": null
+        },
+        "2": {
+          "passage": 5,
+          "verdict": "partial",
+          "citable": false,
+          "quote": "here are instructions on configuring a few popular web servers"
+        }
+      },
+      "winner": {
+        "winners": [
+          2
+        ],
+        "tie": false
+      }
+    },
+    {
+      "id": "q7",
+      "query": "how to bust the cache when a file changes",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 19,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "it is a common best practice to change the URL each time the content changes, so that the URL unit can be cached for a longer period"
+        },
+        "2": {
+          "passage": 6,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "You change the URL of the resource and force the user to download the new response whenever its content changes."
+        }
+      },
+      "winner": {
+        "winners": [
+          1,
+          2
+        ],
+        "tie": true
+      }
+    },
+    {
+      "id": "q8",
+      "query": "does the browser revalidate when the user reloads",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 15,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "The reload and force reload actions are common examples of validation performed from the browser side."
+        },
+        "2": {
+          "passage": null,
+          "verdict": "missing",
+          "citable": false,
+          "quote": null
+        }
+      },
+      "winner": {
+        "winners": [
+          1
+        ],
+        "tie": false
+      }
+    }
+  ],
+  "plan": [
+    {
+      "priority": 1,
+      "page": 2,
+      "passages": [],
+      "check": "canonical_other",
+      "problem": "The page's canonical is https://web.dev/articles/http-cache, and in this run a plain fetch of that URL (no Accept-Language) was redirected to the French ?hl=fr version. A crawler that follows the canonical may store the page in a language the reader did not ask for.",
+      "fix": "Serve the canonical URL in its default language to clients that send no Accept-Language, and keep the language variants on hreflang alternates.",
+      "before": null,
+      "after": null
+    },
+    {
+      "priority": 2,
+      "page": 1,
+      "passages": [
+        22,
+        23,
+        24
+      ],
+      "check": "dominant_heading",
+      "problem": "Under \"Common caching patterns\" an h3 reads \"Validation\", the same text as the earlier h2. The chunker matches heading lines by text, so #22 to #24 are filed under the wrong section and \"Validation\" ends up holding 31% of the page.",
+      "fix": "Give the h3 its own name, such as \"Validating cache-busted files\", and open the passage with its subject.",
+      "before": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading.",
+      "after": "For cache-busted static files, also set Last-Modified and ETag, so that a reload revalidates the file instead of re-transmitting it."
+    },
+    {
+      "priority": 3,
+      "page": 1,
+      "passages": [
+        3
+      ],
+      "check": "mid_sentence_start",
+      "problem": "\"Types of caches\" runs to about 5,000 characters under one h2, so the window cuts it and #3 opens with \"proxy-revalidate However\".",
+      "fix": "Promote Private caches, Shared cache, Proxy caches and Managed caches to h2, so each type is a passage that names itself.",
+      "before": "proxy-revalidate However, in recent years, as HTTPS has become more common and client/server communication has become encrypted, proxy caches in the path can only tunnel a response and can't behave as a cache, in many cases.",
+      "after": "Proxy caches and HTTPS: now that most traffic is encrypted, a proxy cache on the path can usually only tunnel the response and cannot cache it."
+    },
+    {
+      "priority": 4,
+      "page": 2,
+      "passages": [
+        2
+      ],
+      "check": "nav_in_content",
+      "problem": "The browser-compatibility widget becomes the words \"Browser Support / Source\" three times; the passage says nothing a retriever can quote.",
+      "fix": "State the support in a sentence and keep the widget out of the extracted text (or give it an accessible text summary).",
+      "before": "Cache-Control Browser Support Source ETag Browser Support Source Last-Modified Browser Support Source",
+      "after": "Cache-Control, ETag and Last-Modified are supported in all major browsers."
+    },
+    {
+      "priority": 5,
+      "page": 2,
+      "passages": [
+        13
+      ],
+      "check": "thin_section",
+      "problem": "\"Appendix: Cache-Control flowchart\" is an image with a 60-character caption; the decision it draws never reaches the text.",
+      "fix": "Write the flowchart's decisions as a short list under the image.",
+      "before": "The decision process for setting your Cache-Control headers.",
+      "after": "Choosing Cache-Control: if the response must never be reused, use no-store; if it must be checked every time, use no-cache; otherwise use private (browser only) or public, with a max-age that matches how often it changes."
+    },
+    {
+      "priority": 6,
+      "page": 2,
+      "passages": [
+        0
+      ],
+      "check": null,
+      "problem": "The meta description is double-escaped, so passage #0 stores the literal text \"browser&#39;s\".",
+      "fix": "Escape the description once.",
+      "before": "The browser&#39;s HTTP Cache is your first line of defense against unnecessary network requests.",
+      "after": "The browser's HTTP cache is your first line of defense against unnecessary network requests."
+    }
+  ]
+}

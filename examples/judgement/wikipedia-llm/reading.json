@@ -1,0 +1,384 @@
+{
+  "schema": "getlooploop/vectorscope-skill-reading@1",
+  "requestedInput": "https://en.wikipedia.org/wiki/Large_language_model",
+  "ok": true,
+  "reasonCode": "ok",
+  "page": {
+    "url": "https://en.wikipedia.org/wiki/Large_language_model",
+    "requestedUrl": "https://en.wikipedia.org/wiki/Large_language_model",
+    "title": "Large language model - Wikipedia",
+    "wordCount": 13718,
+    "chunksIndexed": 26,
+    "charsIndexed": 41850,
+    "charsUnread": 52973,
+    "capReached": true,
+    "noindex": false,
+    "headings": 17,
+    "chunkCap": 26,
+    "bodyChars": 94823,
+    "h1": [
+      "Large language model"
+    ],
+    "metaDescription": ""
+  },
+  "passages": [
+    {
+      "index": 0,
+      "heading": "Large language model - Wikipedia",
+      "rawHeading": "Large language model - Wikipedia",
+      "contentRole": "main",
+      "charCount": 53,
+      "text": "Large language model - Wikipedia\nLarge language model"
+    },
+    {
+      "index": 1,
+      "heading": null,
+      "rawHeading": null,
+      "contentRole": "main",
+      "charCount": 1157,
+      "text": "Large language model\nFrom Wikipedia, the free encyclopedia\nType of machine learning model\n\"LLM\" redirects here. For other uses, see LLM (disambiguation).\nThe number of publications about large language models by year grouped by publication types\nA large language model (LLM) is an AI model (typically a neural network) trained on a vast amount of text for natural language processing tasks, especially language generation. LLMs can typically generate, summarize, translate, and analyze text in many contexts.[1] They are the basis for many modern chatbots, such as ChatGPT, Claude, Gemini, Grok, Qwen and DeepSeek.\nLLMs are typically based on the transformer neural network architecture.[2] Generative pre-trained transformers (GPTs) are a type of LLM that is pre-trained to predict the next word.[3] GPTs are then often fine-tuned to follow instructions and to behave as assistants.[4]\nBiased or inaccurate training data can make an LLM's output less reliable. A software harness can provide LLMs with memory and access to tools such as web search. Benchmark evaluations for LLMs attempt to measure model reasoning, factual accuracy, alignment, and safety."
+    },
+    {
+      "index": 2,
+      "heading": "History",
+      "rawHeading": "History",
+      "contentRole": "main",
+      "charCount": 1998,
+      "text": "[ edit ] The training compute of notable large models in FLOPs vs publication date over the period 2010–2024. For overall notable models (top left), frontier models (top right), top language models (bottom left) and top models within leading companies (bottom right). The majority of these models are language models. The training compute of notable large AI models in FLOPs vs publication date over the period 2017–2024. The majority of large models are language models or multimodal models with language capacity. Before the emergence of transformer-based models in 2017, some language models were considered large relative to the computational and data constraints of their time. In the early 1990s, IBM's statistical models pioneered word alignment techniques for machine translation, laying the groundwork for corpus-based language modeling. In 2001, a smoothed n-gram model, such as those employing Kneser–Ney smoothing, trained on 300 million words, achieved state-of-the-art perplexity on benchmark tests.[5] During the 2000s, with the rise of widespread internet access, researchers began compiling massive text datasets from the web (\"web as corpus\"[6]) to train statistical language models.[7] [8] Moving beyond n-gram models, researchers started in 2000 to use neural networks as language models.[9] Following the breakthrough of deep neural networks in image classification around 2012,[10] similar architectures were adapted for language tasks. This shift was marked by the development of word embeddings (e.g., Word2Vec by Mikolov in 2013) and sequence-to-sequence (seq2seq) models using LSTM. In 2016, Google transitioned its translation service to neural machine translation (NMT), replacing statistical phrase-based models with deep recurrent neural networks. These early NMT systems used LSTM-based encoder-decoder architectures, as they preceded the invention of transformers. An illustration of the main components of the transformer model from the original paper, where layers"
+    },
+    {
+      "index": 3,
+      "heading": "History",
+      "rawHeading": "History",
+      "contentRole": "main",
+      "charCount": 1994,
+      "text": "used LSTM-based encoder-decoder architectures, as they preceded the invention of transformers. An illustration of the main components of the transformer model from the original paper, where layers were normalized after (instead of before) multiheaded attention At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper \"Attention Is All You Need\".[11] This paper's goal was to improve upon 2014 seq2seq technology, and was based mainly on the attention mechanism developed by Bahdanau et al. in 2014.[12] [13] The following year in 2018, BERT was introduced and quickly became \"ubiquitous\".[14] Though the original transformer has both encoder and decoder blocks, BERT is an encoder-only model. Academic and research usage of BERT began to decline in 2023, following rapid improvements in the abilities of decoder-only models (such as GPT) to solve tasks via prompting.[15] Although decoder-only GPT-1 was introduced in 2018, it was GPT-2 in 2019 that caught widespread attention because OpenAI claimed to have initially deemed it too powerful to release publicly, out of fear of malicious use.[16] GPT-3 in 2020 went a step further and as of 2025 [update] is available only via API with no offering of downloading the model to execute locally. But it was the consumer-facing chatbot ChatGPT in late 2022 that received extensive media coverage and public attention by 2023.[17] The 2023 GPT-4 was praised for its increased accuracy and as a \"holy grail\" for its multimodal capabilities.[18] OpenAI did not reveal the high-level architecture and the number of parameters of GPT-4. The release of ChatGPT led to an uptick in LLM usage across several research subfields of computer science, including robotics, software engineering, and societal impact work.[15] In 2024, OpenAI released the reasoning model OpenAI o1, which generates long chains of thought before returning a final answer.[19] Many LLMs with parameter counts comparable to"
+    },
+    {
+      "index": 4,
+      "heading": "History",
+      "rawHeading": "History",
+      "contentRole": "main",
+      "charCount": 1180,
+      "text": "impact work.[15] In 2024, OpenAI released the reasoning model OpenAI o1, which generates long chains of thought before returning a final answer.[19] Many LLMs with parameter counts comparable to those of OpenAI's GPT series have been developed.[20] Since 2022, open-source models (those with their source code and weights made publicly available) have been gaining popularity, especially at first with BLOOM and LLaMA, though both have restrictions on the field of use. Mistral AI's open-weight models Mistral 7B and Mixtral 8x7B have a more permissive Apache License. [ citation needed ] In January 2025, DeepSeek released DeepSeek R1, a 671-billion-parameter open-weight model that performs comparably to OpenAI o1 but at a much lower price per token for users.[21] Since 2023, many LLMs have been trained to be multimodal, having the ability to also process or generate other types of data, such as images, audio, or 3D meshes. [ citation needed ] Open-weight LLMs have become more influential since 2023. Per Vake et al. (2025), community-driven contributions to open-weight models improve their efficiency and performance via collaborative platforms such as Hugging Face.[22]"
+    },
+    {
+      "index": 5,
+      "heading": "Dataset preprocessing",
+      "rawHeading": "Dataset preprocessing",
+      "contentRole": "related",
+      "charCount": 1989,
+      "text": "[ edit ] See also: List of datasets for machine-learning research § Internet Tokenization [ edit ] As machine learning algorithms process numbers rather than text, the text must be converted to numbers. In the first step, a vocabulary is decided upon, then integer indices are arbitrarily but uniquely assigned to each vocabulary entry, and finally, an embedding is associated with the integer index. Algorithms include byte-pair encoding (BPE) and WordPiece. There are also special tokens serving as control characters, such as [MASK] for masked-out token (as used in BERT), and [UNK] (\"unknown\") for characters not appearing in the vocabulary. Also, some special symbols are used to denote special text formatting. For example, \"Ġ\" denotes a preceding whitespace in RoBERTa and GPT and \"##\" denotes continuation of a preceding word in BERT.[23] For example, the BPE tokenizer used by the legacy version of GPT-3 would split tokenizer: texts -> series of numerical \"tokens\" as token izer : texts -> series of numerical \" t ok ens \" Tokenization also compresses the datasets. Because LLMs generally require input to be an array that is not jagged, the shorter texts must be \"padded\" until they match the length of the longest one. Byte-pair encoding [ edit ] Main article: Byte-pair encoding As an example, consider a tokenizer based on byte-pair encoding. In the first step, all unique characters (including blanks and punctuation marks) are treated as an initial set of n-grams (i.e. initial set of uni-grams). Successively the most frequent pair of adjacent characters is merged into a bi-gram and all instances of the pair are replaced by it. All occurrences of adjacent pairs of (previously merged) n-grams that most frequently occur together are then again merged into even lengthier n-gram, until a vocabulary of prescribed size is obtained. After a tokenizer is trained, any text can be tokenized by it, as long as it does not contain characters not appearing in the initial-set of"
+    },
+    {
+      "index": 6,
+      "heading": "Dataset preprocessing",
+      "rawHeading": "Dataset preprocessing",
+      "contentRole": "main",
+      "charCount": 1127,
+      "text": "a vocabulary of prescribed size is obtained. After a tokenizer is trained, any text can be tokenized by it, as long as it does not contain characters not appearing in the initial-set of uni-grams.[24] Dataset cleaning [ edit ] Main article: Data cleansing In the context of training LLMs, datasets are typically cleaned by removing low-quality, duplicated, or toxic data.[25] Cleaned datasets can increase training efficiency and lead to improved downstream performance.[26] A trained LLM can be used to clean datasets for training a further LLM.[27] With the increasing proportion of LLM-generated content on the web, data cleaning in the future may include filtering out such content. LLM-generated content can pose a problem if the content is similar to human text (making filtering difficult) but of lower quality (degrading performance of models trained on it).[1] Synthetic data [ edit ] Main article: Synthetic data Training of largest language models might need more linguistic data than naturally available, or that the naturally occurring data is of insufficient quality. In these cases, synthetic data might be used."
+    },
+    {
+      "index": 7,
+      "heading": "Training",
+      "rawHeading": "Training",
+      "contentRole": "related",
+      "charCount": 1535,
+      "text": "[ edit ]\nSee also: Fine-tuning (machine learning) and Post-training of large language models\nAn LLM is a type of foundation model (large X model) trained on language. LLMs can be trained in different ways. In particular, GPT models are first pretrained to predict the next word on a large amount of data, before being fine-tuned.[3]\nCost\n[ edit ]\nSubstantial infrastructure is necessary for training the largest models. The tendency towards larger models is visible in the list of large language models. For example, the training of GPT-2 (i.e. a 1.5-billion-parameter model) in 2019 cost $50,000, while training of the PaLM (i.e. a 540-billion-parameter model) in 2022 cost $8 million, and Megatron-Turing NLG 530B (in 2021) cost around $11 million. The qualifier \"large\" in \"large language model\" is inherently vague, as there is no definitive threshold for the number of parameters required to qualify as \"large\".\nFine-tuning\n[ edit ]\nBefore being fine-tuned, most LLMs are next-token predictors.[28] The fine-tuning shapes the LLM's behavior via techniques like reinforcement learning from human feedback (RLHF) or constitutional AI.[29]\nInstruction fine-tuning is a form of supervised learning used to teach LLMs to follow user instructions. In 2022, OpenAI demonstrated InstructGPT, a version of GPT-3 similarly fine-tuned to follow instructions.[30]\nRLHF involves training a reward model to predict which text humans prefer. Then, the LLM can be fine-tuned through reinforcement learning to better satisfy this reward model.[31]"
+    },
+    {
+      "index": 8,
+      "heading": "Inference",
+      "rawHeading": "Inference",
+      "contentRole": "related",
+      "charCount": 561,
+      "text": "[ edit ]\nSee also: Inference § Inference engines\nInference is the process of providing input to a trained large language model and receiving generated output, such as text, images, code, or other files.\nHosted inference runs a language model on remote AI data centers and makes the output available to users over the Internet.\nSome open-weight language models can be downloaded and run locally on a personal computer.[32] The model files are stored on local storage, while during inference the model weights and other data are held in memory for processing.[33]"
+    },
+    {
+      "index": 9,
+      "heading": "Architecture",
+      "rawHeading": "Architecture",
+      "contentRole": "related",
+      "charCount": 1998,
+      "text": "[ edit ] LLMs are generally based on the transformer architecture, which leverages an attention mechanism that enables the model to process relationships between all elements in a sequence simultaneously, regardless of their distance from each other.[11] [34] Peng et al. (2023) proposed state-space representation models as an alternative.[35] Attention mechanism and context window [ edit ] See also: Attention (machine learning) When each head calculates, according to its own criteria, how much other tokens are relevant for the \"it \" token, note that the second attention head, represented by the second column, is focusing most on the first two rows, i.e. the tokens \"The\" and \"animal\", while the third column is focusing most on the bottom two rows, i.e. on \"tired\", which has been tokenized into two tokens.[36] In order to find out which tokens are relevant to each other within the scope of the context window, the attention mechanism calculates \"soft\" weights for each token, more precisely for its embedding, by using multiple attention heads, each with its own \"relevance\" for calculating its own soft weights. For example, the small (i.e. 117M parameter sized) GPT-2 model has had twelve attention heads and a context window of only 1k tokens.[37] Autoregressive models, such as GPTs, are trained to guess how a sequence continues; for example, whether the word sequence \"I like to eat\" is more likely to be followed by the word \"bread\" or the word \"rocks\". Masked models, such as BERT,[38] are trained to guess parts that are missing from a sequence, such as whether the missing word in \"I like to ___ roses\" is more likely to be the word \"smell\" or the word \"eat\". The model's predictions are based on the properties of sequences within its training dataset.[39] Mixture of experts [ edit ] Main article: Mixture of experts A mixture of experts (MoE) is a machine learning architecture in which multiple specialized neural networks (\"experts\") work together, with a gating mechanism"
+    },
+    {
+      "index": 10,
+      "heading": "Architecture",
+      "rawHeading": "Architecture",
+      "contentRole": "related",
+      "charCount": 1995,
+      "text": "edit ] Main article: Mixture of experts A mixture of experts (MoE) is a machine learning architecture in which multiple specialized neural networks (\"experts\") work together, with a gating mechanism that routes each input to the most appropriate expert(s). Mixtures of experts can reduce inference costs, as only a fraction of the parameters are used for each input.[40] Parameter size [ edit ] See also: 1.58-bit large language model Typically, LLMs are trained with single or half-precision floating point numbers (float32 and float16). One float16 has 16 bits, or 2 bytes, and so one billion parameters require 2 gigabytes. The largest models typically have more than 100 billion parameters, which places them outside the range of most consumer electronics.[41] In 2021, Google Brain released Switch Transformer, one of the first natural language processing (NLP) models to cross one trillion parameters.[42] As of July 2026 [update] , the largest open weight frontier model is Kimi K3, developed by Moonshot AI, at 2.8 trillion parameters.[43] According to industry estimates reported by the Financial Times, Anthropic's Claude Mythos, its most powerful model, restricted from public access, has approximately 8 trillion parameters, while its public 'Mythos-class' model Fable 5 has approximately 5 trillion parameters.[44] [45] [46] Quantization [ edit ] Post-training quantization [47] aims to decrease the space requirement by lowering precision of the parameters of a trained model, while preserving most of its performance. Quantization can be further classified as static quantization if the quantization parameters are determined beforehand (typically during a calibration phase), and dynamic quantization if the quantization is applied during inference. The simplest form of quantization simply truncates all the parameters to a given number of bits: this is applicable to static as well as dynamic quantization, but loses much precision. Dynamic quantization allows for the use of a"
+    },
+    {
+      "index": 11,
+      "heading": "Architecture",
+      "rawHeading": "Architecture",
+      "contentRole": "main",
+      "charCount": 509,
+      "text": "simply truncates all the parameters to a given number of bits: this is applicable to static as well as dynamic quantization, but loses much precision. Dynamic quantization allows for the use of a different quantization codebook per layer, either a lookup table of values or a linear mapping (scaling factor and bias), at the cost of foregoing the possible speed improvements from using lower-precision arithmetic. [ citation needed ] It is possible to fine-tune quantized models using low-rank adaptation.[48]"
+    },
+    {
+      "index": 12,
+      "heading": "Extensibility",
+      "rawHeading": "Extensibility",
+      "contentRole": "main",
+      "charCount": 1997,
+      "text": "[ edit ] Beyond basic text generation, various techniques have been developed to extend LLM capabilities, including the use of external tools and data sources, improved reasoning on complex problems, and enhanced instruction-following or autonomy through prompting methods. Prompt engineering [ edit ] Main article: Prompt engineering In 2020, OpenAI researchers demonstrated that their new model GPT-3 could understand what format to use given a few rounds of Q and A (or other type of task) in the input data as example, thanks in part due to the RLHF technique. This technique, called few-shot prompting, allows LLMs to be adapted to any task without requiring fine-tuning.[1] Also in 2022, it was found that the base GPT-3 model can generate an instruction based on user input. The generated instruction along with user input is then used as input to another instance of the model under a \"Instruction: [...], Input: [...], Output:\" format. The other instance is able to complete the output and often produces the correct answer in doing so. The ability to \"self-instruct\" makes LLMs able to bootstrap themselves toward a correct answer.[49] Dialogue processing (chatbot) [ edit ] An LLM can be turned into a chatbot by specializing it for conversation. User input is prefixed with a marker such as \"Q:\" or \"User:\" and the LLM is asked to predict the output after a fixed \"A:\" or \"Assistant:\". This type of model became commercially available in 2022 with ChatGPT, a sibling model of InstructGPT fine-tuned to accept and produce dialog-formatted text based on GPT-3.5. It could similarly follow user instructions. Before the stream of User and Assistant lines, a chat context usually starts with a few lines of overarching instructions, from a role called \"developer\" or \"system\" to convey a higher authority than the user's input. This is called a \"system prompt\". [ citation needed ] Retrieval-augmented generation [ edit ] Retrieval-augmented generation (RAG) is an approach that integrates"
+    },
+    {
+      "index": 13,
+      "heading": "Extensibility",
+      "rawHeading": "Extensibility",
+      "contentRole": "related",
+      "charCount": 1992,
+      "text": "authority than the user's input. This is called a \"system prompt\". [ citation needed ] Retrieval-augmented generation [ edit ] Retrieval-augmented generation (RAG) is an approach that integrates LLMs with document retrieval systems. Given a query, a document retriever is called to retrieve the most relevant documents. This is usually done by encoding the query and the documents into vectors, then finding the documents with vectors (usually stored in a vector database) most similar to the vector of the query. The LLM then generates an output based on both the query and context included from the retrieved documents.[50] Tool use [ edit ] See also: Agent harness Tool use is a mechanism that enables LLMs to interact with external systems, applications, or data sources. It can allow LLMs to, for example, fetch real-time information from an API or to execute code. A program separate from the LLM watches the output stream of the LLM for a special tool-calling syntax. When these special tokens appear, the program calls the tool accordingly and feeds its output back into the LLM's input stream.[51] Early tool-using LLMs were fine-tuned on the use of specific tools. But fine-tuning LLMs for the ability to read API documentation and call APIs correctly has greatly expanded the range of tools accessible to an LLM.[52] [53] Agency [ edit ] Main article: AI agent An LLM is typically not an autonomous agent by itself, as it lacks the ability to interact with dynamic environments, recall past behaviors, and plan future actions. But it can be transformed into an agent by adding supporting elements: the role (profile) and the surrounding environment of an agent can be additional inputs to the LLM, while memory can be integrated as a tool or provided as additional input. Instructions and input patterns are used to make the LLM plan actions and tool use is used to potentially carry out these actions.[54] In the DEPS (\"describe, explain, plan and select\") method, an LLM is first"
+    },
+    {
+      "index": 14,
+      "heading": "Extensibility",
+      "rawHeading": "Extensibility",
+      "contentRole": "main",
+      "charCount": 1995,
+      "text": "input patterns are used to make the LLM plan actions and tool use is used to potentially carry out these actions.[54] In the DEPS (\"describe, explain, plan and select\") method, an LLM is first connected to the visual world via image descriptions. It is then prompted to produce plans for complex tasks and behaviors based on its pretrained knowledge and the environmental feedback it receives.[55] The Reflexion method constructs an agent that learns over multiple episodes. At the end of each episode, the LLM is given the record of the episode, and prompted to think up \"lessons learned\", which would help it perform better at a subsequent episode. These \"lessons learned\" are stored as a form of long-term memory and given to the agent in the subsequent episodes.[56] Monte Carlo tree search can use an LLM as rollout heuristic. When a programmatic world model is not available, an LLM can also be prompted with a description of the environment to act as world model.[57] Multiple agents with memory can interact socially.[58] Chaining [ edit ] Prompt chaining was introduced in 2022.[59] In this method, a user manually breaks a complex problem down into several steps. In each step, the LLM receives as input a prompt telling it what to do and some results from preceding steps. The result from one step is then reused in a next step, until a final answer is reached. The ability of an LLM to follow instructions means that even non-experts can write a successful collection of stepwise prompts given a few rounds of trial and error.[60] [61] A 2022 paper demonstrated a separate technique called chain-of-thought prompting, which makes the LLM break the question down autonomously. An LLM is given some examples where the \"assistant\" verbally breaks down the thought process before arriving at an answer. The LLM mimics these examples and also tries to spend some time generating intermediate steps before providing the final answer. This additional step elicited by prompting improves the"
+    },
+    {
+      "index": 15,
+      "heading": "Extensibility",
+      "rawHeading": "Extensibility",
+      "contentRole": "main",
+      "charCount": 1766,
+      "text": "an answer. The LLM mimics these examples and also tries to spend some time generating intermediate steps before providing the final answer. This additional step elicited by prompting improves the correctness of the LLM on relatively complex questions. On math word questions, a prompted model can exceed even fine-tuned GPT-3 with a verifier.[62] [63] Chain-of-thought can also be elicited by simply adding an instruction like \"Let's think step by step\" to the prompt, in order to encourage the LLM to proceed methodically instead of trying to directly guess the answer.[64] Model-native reasoning [ edit ] Main articles: Reasoning model and Reflection (artificial intelligence) In late 2024, a new approach to LLM development emerged with \"reasoning models\".[65] These are trained to generate step-by-step analysis before producing final answers, enabling better results on complex tasks, for instance in mathematics, coding and logic.[66] OpenAI introduced this concept with their o1 model in September 2024, followed by o3 in April 2025. On the International Mathematics Olympiad qualifying exam problems, GPT-4o achieved 13% accuracy while o1 reached 83%.[67] In January 2025, the Chinese company DeepSeek released DeepSeek-R1, a 671-billion-parameter open-weight reasoning model that achieved comparable performance to OpenAI's o1 while being significantly more cost-effective to operate. Unlike proprietary models from OpenAI, DeepSeek-R1's open-weight nature allowed researchers to study and build upon the algorithm, though its training data remained private.[68] These reasoning models typically require more computational resources per query compared to traditional LLMs, as they perform more extensive processing to work through problems step by step.[67]"
+    },
+    {
+      "index": 16,
+      "heading": "Forms of input and output",
+      "rawHeading": "Forms of input and output",
+      "contentRole": "related",
+      "charCount": 1999,
+      "text": "[ edit ] Multimodality [ edit ] See also: Multimodal learning Multimodality means having multiple modalities, where a \"modality\" refers to a type of input or output, such as video, image, audio, text, proprioception, etc.[69] For example, Google PaLM model was fine-tuned into a multimodal model and applied to robotic control.[70] LLaMA models have also been turned multimodal using the tokenization method, to allow image inputs,[71] and video inputs.[72] GPT-4o can process and generate text, audio and images.[73] A common method to create multimodal models out of an LLM is to \"tokenize\" the output of a trained encoder. Concretely, one can construct an LLM that can understand images as follows: take a trained LLM, and take a trained image encoder E {\\displaystyle E} . Make a small multilayer perceptron f {\\displaystyle f} , so that for any image y {\\displaystyle y} , the post-processed vector f ( E ( y ) ) {\\displaystyle f(E(y))} has the same dimensions as an encoded token. That is an \"image token\". Then, one can interleave text tokens and image tokens. The compound model is then fine-tuned on an image-text dataset. This basic construction can be applied with more sophistication to improve the model. The image encoder may be frozen to improve stability.[74] This type of method, where embeddings from multiple modalities are fused and the predictor is trained on the combined embeddings, is called early fusion. Another method, called intermediate fusion, involves each modality being first processed independently to obtain modality-specific representations; then these intermediate representations are fused together.[75] In general, cross-attention is used for integrating information from different modalities. As an example, the Flamingo model uses cross-attention layers to inject visual information into its pre-trained language model.[76] Non-natural languages [ edit ] LLMs can handle programming languages similarly to how they handle natural languages. No special change"
+    },
+    {
+      "index": 17,
+      "heading": "Forms of input and output",
+      "rawHeading": "Forms of input and output",
+      "contentRole": "main",
+      "charCount": 1831,
+      "text": "visual information into its pre-trained language model.[76] Non-natural languages [ edit ] LLMs can handle programming languages similarly to how they handle natural languages. No special change in token handling is needed as code, like human language, is represented as plain text. LLMs can generate code from problem statements or instructions written in natural language, a process sometimes called vibe coding. They can also describe code in natural language or translate it into other programming languages. They were originally used as a code completion tool, but advances have moved them towards automatic programming. Services such as GitHub Copilot offer LLMs specifically trained, fine-tuned, or prompted for programming.[77] [78] In computational biology, transformer-based architectures, such as DNA LLMs, have also proven useful in analyzing biological sequences: protein, DNA, and RNA. With proteins they appear able to capture a degree of \"grammar\" from the amino-acid sequence, by mapping that sequence into an embedding. On tasks such as structure prediction and mutational outcome prediction, a small model using an embedding as input can approach or exceed much larger models using multiple sequence alignments (MSA) as input.[79] ESMFold, Meta Platforms' embedding-based method for protein structure prediction, runs an order of magnitude faster than AlphaFold2 thanks to the removal of an MSA requirement and a lower parameter count due to the use of embeddings.[80] Meta hosts ESM Atlas, a database of 772 million structures of metagenomic proteins predicted using ESMFold.[81] An LLM can also design proteins unlike any seen in nature.[82] Nucleic acid models have proven useful in detecting regulatory sequences,[83] sequence classification, RNA-RNA interaction prediction, and RNA structure prediction.[84]"
+    },
+    {
+      "index": 18,
+      "heading": "Properties",
+      "rawHeading": "Properties",
+      "contentRole": "main",
+      "charCount": 1993,
+      "text": "[ edit ] Scaling laws [ edit ] Main article: Neural scaling law The performance of an LLM after pretraining largely depends on the: C {\\displaystyle C} : cost of pretraining (the total amount of compute used), N {\\displaystyle N} : size of the artificial neural network itself, such as number of parameters (i.e. amount of neurons in its layers, amount of weights between them and biases), D {\\displaystyle D} : size of its pretraining dataset (i.e. number of tokens in corpus). Scaling laws are empirical statistical laws that predict LLM performance based on such factors. One particular scaling law (\"Chinchilla scaling\") for LLM autoregressively trained for one epoch, with a log–log learning rate schedule, states that:[85] { C = C 0 N D L = A N α + B D β + L 0 {\\displaystyle {\\begin{cases}C=C_{0}ND\\\\[6pt]L={\\frac {A}{N^{\\alpha }}}+{\\frac {B}{D^{\\beta }}}+L_{0}\\end{cases}}} where the variables are C {\\displaystyle C} is the cost of training the model, in FLOPs. N {\\displaystyle N} is the number of parameters in the model. D {\\displaystyle D} is the number of tokens in the training set. L {\\displaystyle L} is the average negative log-likelihood loss per token (nats/token), achieved by the trained LLM on the test dataset. and the statistical hyper-parameters are C 0 = 6 {\\displaystyle C_{0}=6} , meaning that it costs 6 FLOPs per parameter to train on one token. Note that training cost is much higher than inference cost, where it costs 1 to 2 FLOPs per parameter to infer on one token. α = 0.34 , β = 0.28 , A = 406.4 , B = 410.7 , L 0 = 1.69 {\\displaystyle \\alpha =0.34,\\beta =0.28,A=406.4,B=410.7,L_{0}=1.69} Emergent abilities [ edit ] At point(s) referred to as breaks,[86] the lines change their slopes, appearing on a linear–log plot as a series of linear segments connected by arcs. Performance of bigger models on various tasks, when plotted on a log–log scale, appears as a linear extrapolation of performance achieved by smaller models. However, this linearity may be"
+    },
+    {
+      "index": 19,
+      "heading": "Properties",
+      "rawHeading": "Properties",
+      "contentRole": "main",
+      "charCount": 1997,
+      "text": "arcs. Performance of bigger models on various tasks, when plotted on a log–log scale, appears as a linear extrapolation of performance achieved by smaller models. However, this linearity may be punctuated by \"break(s)\"[86] in the scaling law, where the slope of the line changes abruptly, and where larger models acquire \"emergent abilities\".[87] They arise from the complex interaction of the model's components and are not explicitly programmed or designed.[88] Proposed examples of emergent abilities include:[87] reported arithmetics decoding the International Phonetic Alphabet unscrambling a word's letters disambiguating word-in-context datasets[89] converting spatial words cardinal directions (for example, replying \"northeast\" in response to a 3x3 grid of 8 zeros and a 1 in the top-right), color terms represented in text.[90] chain-of-thought prompting: In a 2022 research paper, chain-of-thought prompting only improved the performance for models that had at least 62B parameters. Smaller models perform better when prompted to answer immediately, without chain of thought.[91] identifying offensive content in paragraphs of Hinglish (a combination of Hindi and English), and generating a similar English equivalent of Kiswahili proverbs.[92] Schaeffer et al. argue that the emergent abilities are not unpredictably acquired, but predictably acquired according to a smooth scaling law. The authors considered a toy statistical model of an LLM solving multiple-choice questions, and showed that this statistical model, modified to account for other types of tasks, applies to these tasks as well.[93] Let x {\\displaystyle x} be the number of parameter count, and y {\\displaystyle y} be the performance of the model. When y = average Pr ( correct token ) {\\displaystyle y={\\text{average }}\\Pr({\\text{correct token}})} , then ( log ⁡ x , y ) {\\displaystyle (\\log x,y)} is an exponential curve (before it hits the plateau at one), which looks like emergence. When y = average log ⁡ ( Pr ("
+    },
+    {
+      "index": 20,
+      "heading": "Properties",
+      "rawHeading": "Properties",
+      "contentRole": "main",
+      "charCount": 654,
+      "text": "token}})} , then ( log ⁡ x , y ) {\\displaystyle (\\log x,y)} is an exponential curve (before it hits the plateau at one), which looks like emergence. When y = average log ⁡ ( Pr ( correct token ) ) {\\displaystyle y={\\text{average }}\\log(\\Pr({\\text{correct token}}))} , then the ( log ⁡ x , y ) {\\displaystyle (\\log x,y)} plot is a straight line (before it hits the plateau at zero), which does not look like emergence. When y = average Pr ( the most likely token is correct ) {\\displaystyle y={\\text{average }}\\Pr({\\text{the most likely token is correct}})} , then ( log ⁡ x , y ) {\\displaystyle (\\log x,y)} is a step-function, which looks like emergence."
+    },
+    {
+      "index": 21,
+      "heading": "Interpretation",
+      "rawHeading": "Interpretation",
+      "contentRole": "related",
+      "charCount": 1997,
+      "text": "[ edit ] Mechanistic interpretability [ edit ] Main article: Mechanistic interpretability Large language models are typically regarded as black boxes, and it is not clear how they perform linguistic tasks. Similarly, it is unclear if or how LLMs should be viewed as models of the human brain and/or human mind.[94] Mechanistic interpretability is a subfield of research that aims to understand neural networks' internal workings by analyzing their concrete structures, algorithms and circuits, similar to the reverse engineering of traditional software. The reverse-engineering may lead to the discovery of algorithms that approximate inferences performed by an LLM. For instance, the authors trained small transformers on modular arithmetic addition. The resulting models were reverse-engineered, and it turned out they used discrete Fourier transform.[95] The training of the model also highlighted a phenomenon called grokking, in which the model initially memorizes the training set (overfitting), and later suddenly learns to actually perform the calculation.[96] Understanding and intelligence [ edit ] See also: Philosophy of artificial intelligence and Artificial consciousness NLP researchers were evenly split when asked, in a 2022 survey, whether (untuned) LLMs \"could (ever) understand natural language in some nontrivial sense\".[97] Proponents of \"LLM understanding\" believe that some LLM abilities, such as mathematical reasoning, imply an ability to \"understand\" certain concepts. A Microsoft team argued in 2023 that GPT-4 \"can solve novel and difficult tasks that span mathematics, coding, vision, medicine, law, psychology and more\" and that GPT-4 \"could reasonably be viewed as an early (yet still incomplete) version of an artificial general intelligence system\": \"Can one reasonably say that a system that passes exams for software engineering candidates is not really intelligent?\"[98] [99] Ilya Sutskever argues that predicting the next word sometimes involves reasoning and"
+    },
+    {
+      "index": 22,
+      "heading": "Interpretation",
+      "rawHeading": "Interpretation",
+      "contentRole": "main",
+      "charCount": 1994,
+      "text": "say that a system that passes exams for software engineering candidates is not really intelligent?\"[98] [99] Ilya Sutskever argues that predicting the next word sometimes involves reasoning and deep insights, for example if the LLM has to predict the name of the criminal in an unknown detective novel after processing the entire story leading up to the revelation.[100] Some researchers characterize LLMs as \"alien intelligence\".[101] [102] For example, Conjecture CEO Connor Leahy considers untuned LLMs to be like inscrutable alien \"Shoggoths\", and believes that RLHF tuning creates a \"smiling facade\" obscuring the inner workings of the LLM: \"If you don't push it too far, the smiley face stays on. But then you give it [an unexpected] prompt, and suddenly you see this massive underbelly of insanity, of weird thought processes and clearly non-human understanding.\"[103] [104] In contrast, some skeptics of LLM understanding believe that existing LLMs are \"simply remixing and recombining existing writing\",[102] [105] a phenomenon known as stochastic parrot,[106] or they point to the deficits existing LLMs continue to have in prediction skills, reasoning skills, agency, and explainability.[97] For example, GPT-4 has natural deficits in planning and in real-time learning.[99] Generative LLMs have been observed to confidently assert claims of fact which do not seem to be justified by their training data, a phenomenon which has been termed \"hallucination\".[107] Specifically, hallucinations in the context of LLMs correspond to the generation of text or responses that seem syntactically sound, fluent, and natural but are factually incorrect, nonsensical, or unfaithful to the provided source input.[108] Neuroscientist Terrence Sejnowski has argued that \"The diverging opinions of experts on the intelligence of LLMs suggests that our old ideas based on natural intelligence are inadequate\".[97] Efforts to reduce or compensate for hallucinations have employed automated reasoning,"
+    },
+    {
+      "index": 23,
+      "heading": "Interpretation",
+      "rawHeading": "Interpretation",
+      "contentRole": "main",
+      "charCount": 1551,
+      "text": "on the intelligence of LLMs suggests that our old ideas based on natural intelligence are inadequate\".[97] Efforts to reduce or compensate for hallucinations have employed automated reasoning, retrieval-augmented generation (RAG), fine-tuning, and other methods.[109] The matter of LLM's exhibiting intelligence or understanding has two main aspects—the first is how to model thought and language in a computer system, and the second is how to enable the computer system to generate human-like language.[97] These aspects of language as a model of cognition have been developed in the field of cognitive linguistics. American linguist George Lakoff presented neural theory of language (NTL)[110] as a computational basis for using language as a model of learning tasks and understanding. The NTL model[111] outlines how specific neural structures of the human brain shape the nature of thought and language and in turn what are the computational properties of such neural systems that can be applied to model thought and language in a computer system. After a framework for modeling language in a computer systems was established, the focus shifted to establishing frameworks for computer systems to generate language with acceptable grammar. In his 2014 book titled The Language Myth: Why Language Is Not An Instinct, British cognitive linguist and digital communication technologist Vyvyan Evans mapped out the role of probabilistic context-free grammar (PCFG) in enabling NLP to model cognitive patterns and generate human-like language.[112] [113]"
+    },
+    {
+      "index": 24,
+      "heading": "Evaluation",
+      "rawHeading": "Evaluation",
+      "contentRole": "related",
+      "charCount": 1991,
+      "text": "[ edit ] See also: LLM-as-a-Judge Perplexity [ edit ] The canonical measure of the performance of any language model is its perplexity on a given text corpus. Perplexity measures how well a model predicts the contents of a dataset; the higher the likelihood the model assigns to the dataset, the lower the perplexity. In mathematical terms, perplexity is the exponential of the average negative log likelihood per token. log ⁡ ( Perplexity ) = − 1 N ∑ i = 1 N log ⁡ ( Pr ( token i ∣ context for token i ) ) {\\displaystyle \\log({\\text{Perplexity}})=-{\\frac {1}{N}}\\sum _{i=1}^{N}\\log(\\Pr({\\text{token}}_{i}\\mid {\\text{context for token}}_{i}))} Here, N {\\displaystyle N} is the number of tokens in the text corpus, and \"context for token i {\\displaystyle i} \" depends on the specific type of LLM. If the LLM is autoregressive, then \"context for token i {\\displaystyle i} \" is the segment of text appearing before token i {\\displaystyle i} . If the LLM is masked, then \"context for token i {\\displaystyle i} \" is the segment of text surrounding token i {\\displaystyle i} . Because language models may overfit to training data, models are usually evaluated by their perplexity on a test set.[38] This evaluation is potentially problematic for larger models which, as they are trained on increasingly large corpora of text, are increasingly likely to inadvertently include portions of any given test set.[114] Measures [ edit ] In information theory, the concept of entropy is intricately linked to perplexity, a relationship notably established by Claude Shannon.[115] Due to their ability to accurately predict the next token, LLMs are highly capable in lossless compression. A 2023 study by DeepMind showed that the model Chinchilla, despite being trained primarily on text, was able to compress ImageNet to 43% of its size, beating PNG with 58%.[116] Benchmarks [ edit ] Main article: Language model benchmark Benchmarks are used to evaluate LLM performance on specific tasks. Tests evaluate"
+    },
+    {
+      "index": 25,
+      "heading": "Evaluation",
+      "rawHeading": "Evaluation",
+      "contentRole": "main",
+      "charCount": 1997,
+      "text": "to 43% of its size, beating PNG with 58%.[116] Benchmarks [ edit ] Main article: Language model benchmark Benchmarks are used to evaluate LLM performance on specific tasks. Tests evaluate capabilities such as general knowledge, bias, commonsense reasoning, question answering, and mathematical problem-solving. Composite benchmarks examine multiple capabilities. Results are often sensitive to the prompting method. LLM bias may be assessed through benchmarks such as CrowS-Pairs (Crowdsourced Stereotype Pairs),[117] Stereo Set,[118] and Parity Benchmark.[119] Fact-checking and misinformation detection benchmarks are available. A 2023 study compared the fact-checking accuracy of LLMs including ChatGPT 3.5 and 4.0, Bard, and Bing AI against independent fact-checkers such as PolitiFact and Snopes. The results demonstrated moderate proficiency, with GPT-4 achieving the highest accuracy at 71%, lagging behind human fact-checkers.[120] In addition to standard NLP benchmarks, LLMs have been evaluated as substitutes for human annotators. Several studies find that models such as GPT-3.5 and GPT-4 can outperform crowd workers or student coders on a range of text-annotation tasks, including moderation and classification of political content in English and Spanish news.[121] [122] Datasets [ edit ] Typical datasets consist of pairs of questions and correct answers, for example, (\"Have the San Jose Sharks won the Stanley Cup?\", \"No\").[123] Adversarial evaluations [ edit ] LLMs' rapid improvement regularly renders benchmarks obsolete, with the models exceeding the performance of human annotators.[124] In addition, \"shortcut learning\" allows AIs to \"cheat\" on multiple-choice tests by using statistical correlations in superficial test question wording to guess the correct responses, without considering the specific question.[97] [125] Some datasets are adversarial, focusing on problems that confound LLMs. One example is the TruthfulQA dataset, a question answering dataset consisting"
+    }
+  ],
+  "technical": {
+    "jsonLd": {
+      "blocks": 1,
+      "invalid": 0,
+      "types": [
+        "Article",
+        "ImageObject",
+        "Organization"
+      ]
+    },
+    "canonical": {
+      "present": true,
+      "count": 1,
+      "href": "https://en.wikipedia.org/wiki/Large_language_model",
+      "absolute": true,
+      "resolved": "https://en.wikipedia.org/wiki/Large_language_model",
+      "self": true
+    },
+    "metaDescription": {
+      "present": false,
+      "length": 0
+    },
+    "lang": "en"
+  },
+  "robots": {
+    "url": "https://en.wikipedia.org/robots.txt",
+    "status": "ok",
+    "httpStatus": 200,
+    "bots": [
+      {
+        "token": "OAI-SearchBot",
+        "vendor": "OpenAI",
+        "kind": "search",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "ChatGPT-User",
+        "vendor": "OpenAI",
+        "kind": "user",
+        "honours": false,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "GPTBot",
+        "vendor": "OpenAI",
+        "kind": "training",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Claude-SearchBot",
+        "vendor": "Anthropic",
+        "kind": "search",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Claude-User",
+        "vendor": "Anthropic",
+        "kind": "user",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "ClaudeBot",
+        "vendor": "Anthropic",
+        "kind": "training",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "PerplexityBot",
+        "vendor": "Perplexity",
+        "kind": "search",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Perplexity-User",
+        "vendor": "Perplexity",
+        "kind": "user",
+        "honours": false,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Google-Extended",
+        "vendor": "Google",
+        "kind": "training",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Googlebot",
+        "vendor": "Google",
+        "kind": "index",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Bingbot",
+        "vendor": "Microsoft",
+        "kind": "index",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "CCBot",
+        "vendor": "Common Crawl",
+        "kind": "training",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      }
+    ]
+  },
+  "layout": {
+    "shortLineRuns": []
+  },
+  "render": {
+    "ok": true,
+    "browser": "chrome.exe",
+    "wordCount": 13769,
+    "passages": 26,
+    "charsIndexed": 41850,
+    "headings": 17
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "facts": [
+    { "id": "f1", "topic": "patterns", "fact": "Cache-Control: max-age=31536000 caches a response for one year, the usual setting for versioned files.", "pages": { "1": [16, 20, 21], "2": [6, 10, 14] } },
+    { "id": "f2", "topic": "validation", "fact": "ETag carries a server-chosen token, often a hash of the content, that the client sends back in If-None-Match.", "pages": { "1": [10], "2": [8, 9] } },
+    { "id": "f3", "topic": "validation", "fact": "A 304 Not Modified response carries no body, so revalidation transfers very little.", "pages": { "1": [9], "2": [9] } },
+    { "id": "f4", "topic": "directives", "fact": "no-cache allows storing but forces revalidation before reuse; no-store forbids storing.", "pages": { "1": [13], "2": [7, 10] } },
+    { "id": "f5", "topic": "freshness", "fact": "Without Cache-Control, responses are still cached heuristically.", "pages": { "1": [5], "2": [5] } },
+    { "id": "f6", "topic": "freshness", "fact": "The specification suggests reusing a heuristically cached response for about 10% of the time since it was last modified.", "pages": { "1": [5] } },
+    { "id": "f7", "topic": "freshness", "fact": "Expires was HTTP/1.0's freshness header; when both are present, max-age wins.", "pages": { "1": [7] } },
+    { "id": "f8", "topic": "freshness", "fact": "Vary keys stored responses by request headers such as Accept-Language.", "pages": { "1": [8] } },
+    { "id": "f9", "topic": "types", "fact": "A private cache belongs to one client; a shared cache sits between client and server and serves many users.", "pages": { "1": [2] } },
+    { "id": "f10", "topic": "patterns", "fact": "The immutable directive stops revalidation on reload for content that never changes.", "pages": { "1": [16, 22] } },
+    { "id": "f11", "topic": "patterns", "fact": "QPACK predefines one-week, one-month and one-year max-age values that compress to one byte in HTTP/3.", "pages": { "1": [20] } },
+    { "id": "f12", "topic": "directives", "fact": "Clear-Site-Data: cache clears browser caches but has no effect on intermediate caches.", "pages": { "1": [17] } },
+    { "id": "f13", "topic": "validation", "fact": "ETag is recommended over Last-Modified because it is more accurate.", "pages": { "2": [8] } },
+    { "id": "f14", "topic": "patterns", "fact": "Build tools such as webpack can add hash fingerprints to asset URLs automatically.", "pages": { "2": [7] } },
+    { "id": "f15", "topic": "patterns", "fact": "private, max-age=600 lets the browser, but not intermediary caches, keep a response for 10 minutes.", "pages": { "2": [14] } }
+  ]
+}

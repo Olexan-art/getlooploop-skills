@@ -1,16 +1,17 @@
 {
   "schema": "getlooploop/vectorscope-reading@1",
-  "generatedAt": "2026-10-16T15:20:03.191Z",
+  "generatedAt": "2026-10-16T16:23:21.312Z",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
-    "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by Claude's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
+    "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
     "url": "https://www.getlooploop.com/vectorscope"
   },
   "howToRead": {
-    "grouping": "Grouped by Claude's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
+    "grouping": "Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
     "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
     "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 6053 of 41850 indexed characters, about 14%, and always the opening of each passage rather than a sample spread through it.",
     "keywords": "Counted over the page's whole text, not the excerpts below. A term is one word or two: a two-word term is a pair the page writes side by side often enough that the pair is what it is saying, and where it is counted neither of its words is counted separately, so the occurrences still add up to the page. `count` is occurrences; `groups` is how many of the page's groups the term reaches, and `scope` is true when it reaches most of them. A term with `scope` true describes the page; one with it false is a single section's vocabulary — useful, but not a summary. Plurals were folded into the singular where the page uses both. The group counts rest on the grouping above, which is a judgement.",
+    "agentLabel": "v2: the name the agent gave the group after reading it, or null. It is a judgement, like the grouping; `label` and `labelSource` are the computed label as in v1.",
     "groupLabels": "`labelSource` says where each name came from. \"heading\" is the page's own section heading and can be quoted. \"keywords\" is a computed guess — the group's most distinctive words — and is a hint, not a topic; do not quote it back as what the section is called.",
     "cohesion": "null: cohesion is the mean cosine between a group's passage embeddings, and no embeddings were computed.",
     "selfSimilarity": "null: the median cosine between passages needs embeddings, and none were computed.",
@@ -209,7 +210,10 @@
       "chunkCount": 5,
       "charCount": 6382,
       "shareOfIndexedChars": 0.152,
-      "cohesion": null
+      "cohesion": null,
+      "agentLabel": "Definition and history of LLMs",
+      "note": "The lede, then the timeline from early language models to open-weight reasoning models.",
+      "topic": null
     },
     {
       "id": 1,
@@ -218,7 +222,10 @@
       "chunkCount": 3,
       "charCount": 4651,
       "shareOfIndexedChars": 0.111,
-      "cohesion": null
+      "cohesion": null,
+      "agentLabel": "Tokenization, data cleaning and training",
+      "note": null,
+      "topic": null
     },
     {
       "id": 2,
@@ -227,7 +234,10 @@
       "chunkCount": 4,
       "charCount": 5063,
       "shareOfIndexedChars": 0.121,
-      "cohesion": null
+      "cohesion": null,
+      "agentLabel": "Inference and architecture: attention, MoE, quantization",
+      "note": null,
+      "topic": null
     },
     {
       "id": 3,
@@ -236,7 +246,10 @@
       "chunkCount": 6,
       "charCount": 11580,
       "shareOfIndexedChars": 0.277,
-      "cohesion": null
+      "cohesion": null,
+      "agentLabel": "Prompting, RAG, tools, agents and modalities",
+      "note": null,
+      "topic": null
     },
     {
       "id": 4,
@@ -245,7 +258,10 @@
       "chunkCount": 5,
       "charCount": 8632,
       "shareOfIndexedChars": 0.206,
-      "cohesion": null
+      "cohesion": null,
+      "agentLabel": "Scaling laws, emergence and evaluation",
+      "note": "Measurement: what predicts performance and how it is scored.",
+      "topic": null
     },
     {
       "id": 5,
@@ -254,7 +270,10 @@
       "chunkCount": 3,
       "charCount": 5542,
       "shareOfIndexedChars": 0.132,
-      "cohesion": null
+      "cohesion": null,
+      "agentLabel": "Interpretability and whether LLMs understand",
+      "note": null,
+      "topic": null
     }
   ],
   "chunks": [
@@ -466,5 +485,429 @@
       "duplicateOf": null,
       "textHead": "to 43% of its size, beating PNG with 58%.[116] Benchmarks [ edit ] Main article: Language model benchmark Benchmarks are used to evaluate LLM performance on specific tasks. Tests evaluate capabilities such as general knowledge, bias, common"
     }
-  ]
+  ],
+  "skillVersion": 2,
+  "checks": [
+    {
+      "code": "cap_overflow",
+      "severity": "high",
+      "passages": [
+        25
+      ],
+      "evidence": {
+        "charsUnread": 52973,
+        "cap": 26,
+        "last": 25
+      },
+      "message": "52,973 characters after passage #25 are never stored."
+    },
+    {
+      "code": "mid_sentence_start",
+      "severity": "medium",
+      "passages": [
+        3,
+        4,
+        6,
+        10,
+        11,
+        13,
+        14,
+        15,
+        17,
+        19,
+        20,
+        22,
+        23,
+        25
+      ],
+      "evidence": {
+        "samples": [
+          {
+            "passage": 3,
+            "text": "used LSTM-based encoder-decoder architectures, as they preceded the invention o…"
+          },
+          {
+            "passage": 4,
+            "text": "impact work.[15] In 2024, OpenAI released the reasoning model OpenAI o1, which …"
+          },
+          {
+            "passage": 6,
+            "text": "a vocabulary of prescribed size is obtained. After a tokenizer is trained, any …"
+          },
+          {
+            "passage": 10,
+            "text": "edit ] Main article: Mixture of experts A mixture of experts (MoE) is a machine…"
+          },
+          {
+            "passage": 11,
+            "text": "simply truncates all the parameters to a given number of bits: this is applicab…"
+          },
+          {
+            "passage": 13,
+            "text": "authority than the user's input. This is called a \"system prompt\". [ citation n…"
+          }
+        ],
+        "count": 14
+      },
+      "message": "14 passage(s) open on a lowercase word or a punctuation mark."
+    },
+    {
+      "code": "repeated_claim",
+      "severity": "low",
+      "passages": [
+        3,
+        7,
+        18
+      ],
+      "evidence": {
+        "groupCount": 6,
+        "samples": [
+          {
+            "phrase": "the number of parameters",
+            "groups": 3,
+            "passages": [
+              3,
+              7,
+              18
+            ]
+          }
+        ]
+      },
+      "message": "1 phrase(s) recur across at least half of the 6 groups."
+    },
+    {
+      "code": "meta_description_missing",
+      "severity": "low",
+      "passages": [
+        0
+      ],
+      "evidence": {},
+      "message": "The intro passage (#0) has only the title and h1."
+    }
+  ],
+  "technical": {
+    "jsonLd": {
+      "blocks": 1,
+      "invalid": 0,
+      "types": [
+        "Article",
+        "ImageObject",
+        "Organization"
+      ]
+    },
+    "canonical": {
+      "present": true,
+      "count": 1,
+      "href": "https://en.wikipedia.org/wiki/Large_language_model",
+      "absolute": true,
+      "resolved": "https://en.wikipedia.org/wiki/Large_language_model",
+      "self": true
+    },
+    "metaDescription": {
+      "present": false,
+      "length": 0
+    },
+    "lang": "en"
+  },
+  "robots": {
+    "url": "https://en.wikipedia.org/robots.txt",
+    "status": "ok",
+    "httpStatus": 200,
+    "bots": [
+      {
+        "token": "OAI-SearchBot",
+        "vendor": "OpenAI",
+        "kind": "search",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "ChatGPT-User",
+        "vendor": "OpenAI",
+        "kind": "user",
+        "honours": false,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "GPTBot",
+        "vendor": "OpenAI",
+        "kind": "training",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Claude-SearchBot",
+        "vendor": "Anthropic",
+        "kind": "search",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Claude-User",
+        "vendor": "Anthropic",
+        "kind": "user",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "ClaudeBot",
+        "vendor": "Anthropic",
+        "kind": "training",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "PerplexityBot",
+        "vendor": "Perplexity",
+        "kind": "search",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Perplexity-User",
+        "vendor": "Perplexity",
+        "kind": "user",
+        "honours": false,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Google-Extended",
+        "vendor": "Google",
+        "kind": "training",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Googlebot",
+        "vendor": "Google",
+        "kind": "index",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "Bingbot",
+        "vendor": "Microsoft",
+        "kind": "index",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      },
+      {
+        "token": "CCBot",
+        "vendor": "Common Crawl",
+        "kind": "training",
+        "honours": true,
+        "allowed": true,
+        "rule": null,
+        "group": "*"
+      }
+    ]
+  },
+  "render": {
+    "ok": true,
+    "browser": "chrome.exe",
+    "wordCount": 13769,
+    "passages": 26,
+    "charsIndexed": 41850,
+    "headings": 17
+  },
+  "plan": [
+    {
+      "priority": 1,
+      "page": 1,
+      "passages": [
+        25
+      ],
+      "check": "cap_overflow",
+      "problem": "The article fills all 26 slots by the middle of \"Evaluation\"; about 53,000 characters, including Limitations and challenges, Safety and Societal concerns (copyright, energy demands), are never stored.",
+      "fix": "For a page this long the fix is structural: move the detail of the long middle sections into their \"Main article\" pages and keep a two-paragraph summary here, so the later sections fall inside the cap.",
+      "before": null,
+      "after": null
+    },
+    {
+      "priority": 2,
+      "page": 1,
+      "passages": [
+        2,
+        5,
+        9,
+        12,
+        18
+      ],
+      "check": null,
+      "problem": "Every section's text carries the \"[ edit ]\" link labels; they cost characters in every passage and make \"edit\" one of the page's top keywords.",
+      "fix": "Keep edit links out of the readable text (render them as icons with an aria-label, or outside the heading's text node), so the passage starts with the heading's subject.",
+      "before": "[ edit ] Scaling laws [ edit ] Main article: Neural scaling law",
+      "after": "Scaling laws. Main article: Neural scaling law"
+    },
+    {
+      "priority": 3,
+      "page": 1,
+      "passages": [
+        18,
+        20,
+        24
+      ],
+      "check": null,
+      "problem": "Formulas are extracted twice, as the rendered symbols and as their LaTeX source (\"{\\displaystyle C}\"), so the passages on scaling and perplexity read as noise.",
+      "fix": "Expose one text form of each formula (the alt text or the MathML, not both), and state the formula's meaning in a sentence next to it.",
+      "before": "C {\\displaystyle C} : cost of pretraining (the total amount of compute used)",
+      "after": "C: the cost of pretraining a large language model, as the total amount of compute used"
+    },
+    {
+      "priority": 4,
+      "page": 1,
+      "passages": [
+        3,
+        4,
+        6
+      ],
+      "check": "mid_sentence_start",
+      "problem": "Sections such as History run over 2,000 characters under one h2 and are cut by the window, so passages open mid-sentence and lose their subject.",
+      "fix": "Promote the long sections' subsections to h2, or open each subsection with a sentence that names its subject, so a retriever never receives a passage that starts with a verb.",
+      "before": "used LSTM-based encoder-decoder architectures, as they preceded the invention of transformers.",
+      "after": "Early neural machine translation used LSTM-based encoder-decoder architectures, because they preceded the invention of transformers."
+    },
+    {
+      "priority": 5,
+      "page": 1,
+      "passages": [
+        0
+      ],
+      "check": "meta_description_missing",
+      "problem": "Passage #0 is the title twice and nothing else: the page has no meta description for the intro passage to carry.",
+      "fix": "Add a one-sentence description; the chunker puts it into passage #0.",
+      "before": "Large language model - Wikipedia Large language model",
+      "after": "Large language model - Wikipedia. A large language model (LLM) is a neural network trained on a vast amount of text to generate, summarise, translate and analyse language."
+    }
+  ],
+  "queries": [
+    {
+      "id": "q1",
+      "query": "what is a large language model",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 1,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "A large language model (LLM) is an AI model (typically a neural network) trained on a vast amount of text for natural language processing tasks, especially language generation."
+        }
+      }
+    },
+    {
+      "id": "q2",
+      "query": "who introduced the transformer architecture",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 3,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper \"Attention Is All You Need\"."
+        }
+      }
+    },
+    {
+      "id": "q3",
+      "query": "what is retrieval-augmented generation",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 13,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "Retrieval-augmented generation (RAG) is an approach that integrates LLMs with document retrieval systems."
+        }
+      }
+    },
+    {
+      "id": "q4",
+      "query": "how much does it cost to train an LLM",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 7,
+          "verdict": "partial",
+          "citable": true,
+          "quote": "the training of GPT-2 (i.e. a 1.5-billion-parameter model) in 2019 cost $50,000, while training of the PaLM (i.e. a 540-billion-parameter model) in 2022 cost $8 million"
+        }
+      }
+    },
+    {
+      "id": "q5",
+      "query": "what is chain-of-thought prompting",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 14,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "A 2022 paper demonstrated a separate technique called chain-of-thought prompting, which makes the LLM break the question down autonomously."
+        }
+      }
+    },
+    {
+      "id": "q6",
+      "query": "how is a language model's performance measured",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": 24,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "The canonical measure of the performance of any language model is its perplexity on a given text corpus."
+        }
+      }
+    },
+    {
+      "id": "q7",
+      "query": "how much energy do LLMs use",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": null,
+          "verdict": "missing",
+          "citable": false,
+          "quote": null
+        }
+      }
+    },
+    {
+      "id": "q8",
+      "query": "can LLMs reproduce copyrighted text",
+      "source": "generated",
+      "results": {
+        "1": {
+          "passage": null,
+          "verdict": "missing",
+          "citable": false,
+          "quote": null
+        }
+      }
+    }
+  ],
+  "facts": null,
+  "diff": null
 }

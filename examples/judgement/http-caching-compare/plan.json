@@ -1,0 +1,44 @@
+{
+  "items": [
+    {
+      "priority": 1, "page": 2, "passages": [], "check": "canonical_other",
+      "problem": "The page's canonical is https://web.dev/articles/http-cache, and in this run a plain fetch of that URL (no Accept-Language) was redirected to the French ?hl=fr version. A crawler that follows the canonical may store the page in a language the reader did not ask for.",
+      "fix": "Serve the canonical URL in its default language to clients that send no Accept-Language, and keep the language variants on hreflang alternates."
+    },
+    {
+      "priority": 2, "page": 1, "passages": [22, 23, 24], "check": "dominant_heading",
+      "problem": "Under \"Common caching patterns\" an h3 reads \"Validation\", the same text as the earlier h2. The chunker matches heading lines by text, so #22 to #24 are filed under the wrong section and \"Validation\" ends up holding 31% of the page.",
+      "fix": "Give the h3 its own name, such as \"Validating cache-busted files\", and open the passage with its subject.",
+      "before": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading.",
+      "after": "For cache-busted static files, also set Last-Modified and ETag, so that a reload revalidates the file instead of re-transmitting it."
+    },
+    {
+      "priority": 3, "page": 1, "passages": [3], "check": "mid_sentence_start",
+      "problem": "\"Types of caches\" runs to about 5,000 characters under one h2, so the window cuts it and #3 opens with \"proxy-revalidate However\".",
+      "fix": "Promote Private caches, Shared cache, Proxy caches and Managed caches to h2, so each type is a passage that names itself.",
+      "before": "proxy-revalidate However, in recent years, as HTTPS has become more common and client/server communication has become encrypted, proxy caches in the path can only tunnel a response and can't behave as a cache, in many cases.",
+      "after": "Proxy caches and HTTPS: now that most traffic is encrypted, a proxy cache on the path can usually only tunnel the response and cannot cache it."
+    },
+    {
+      "priority": 4, "page": 2, "passages": [2], "check": "nav_in_content",
+      "problem": "The browser-compatibility widget becomes the words \"Browser Support / Source\" three times; the passage says nothing a retriever can quote.",
+      "fix": "State the support in a sentence and keep the widget out of the extracted text (or give it an accessible text summary).",
+      "before": "Cache-Control Browser Support Source ETag Browser Support Source Last-Modified Browser Support Source",
+      "after": "Cache-Control, ETag and Last-Modified are supported in all major browsers."
+    },
+    {
+      "priority": 5, "page": 2, "passages": [13], "check": "thin_section",
+      "problem": "\"Appendix: Cache-Control flowchart\" is an image with a 60-character caption; the decision it draws never reaches the text.",
+      "fix": "Write the flowchart's decisions as a short list under the image.",
+      "before": "The decision process for setting your Cache-Control headers.",
+      "after": "Choosing Cache-Control: if the response must never be reused, use no-store; if it must be checked every time, use no-cache; otherwise use private (browser only) or public, with a max-age that matches how often it changes."
+    },
+    {
+      "priority": 6, "page": 2, "passages": [0], "check": null,
+      "problem": "The meta description is double-escaped, so passage #0 stores the literal text \"browser&#39;s\".",
+      "fix": "Escape the description once.",
+      "before": "The browser&#39;s HTTP Cache is your first line of defense against unnecessary network requests.",
+      "after": "The browser's HTTP cache is your first line of defense against unnecessary network requests."
+    }
+  ]
+}

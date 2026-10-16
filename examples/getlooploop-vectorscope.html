@@ -12,6 +12,7 @@
   --text:#e6eef8;--muted:#8fa1b8;--faint:#5f728b;
   --accent:#22d3ee;--accent-ink:#04121a;--accent-soft:rgba(34,211,238,.12);--glow:0 0 0 1px rgba(34,211,238,.18),0 0 32px rgba(34,211,238,.10);
   --amber:#f5a524;--amber-soft:rgba(245,165,36,.14);
+  --red:#f87171;--red-soft:rgba(248,113,113,.13);--green:#34d399;--green-soft:rgba(52,211,153,.12);
   --empty:#0f1d33;--shadow:0 1px 0 rgba(255,255,255,.03) inset;
   color-scheme:dark;
 }
@@ -21,6 +22,7 @@
     --text:#0b1626;--muted:#4b5c72;--faint:#74859a;
     --accent:#0e7490;--accent-ink:#ffffff;--accent-soft:rgba(14,116,144,.09);--glow:0 0 0 1px rgba(14,116,144,.10),0 6px 24px rgba(11,22,38,.06);
     --amber:#b45309;--amber-soft:rgba(180,83,9,.10);
+    --red:#b91c1c;--red-soft:rgba(185,28,28,.08);--green:#047857;--green-soft:rgba(4,120,87,.09);
     --empty:#eef3f8;--shadow:none;
     color-scheme:light;
   }
@@ -30,19 +32,23 @@
   --text:#0b1626;--muted:#4b5c72;--faint:#74859a;
   --accent:#0e7490;--accent-ink:#ffffff;--accent-soft:rgba(14,116,144,.09);--glow:0 0 0 1px rgba(14,116,144,.10),0 6px 24px rgba(11,22,38,.06);
   --amber:#b45309;--amber-soft:rgba(180,83,9,.10);
+  --red:#b91c1c;--red-soft:rgba(185,28,28,.08);--green:#047857;--green-soft:rgba(4,120,87,.09);
   --empty:#eef3f8;--shadow:none;
   color-scheme:light;
 }
+.l-uk{display:none}
+:root[data-lang="uk"] .l-en{display:none}
+:root[data-lang="uk"] .l-uk{display:inline}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow-wrap:anywhere}
 a{color:var(--accent)}
 a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
-.mono,.eyebrow,.tag,.chip-n{font-family:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace}
-.wrap{max-width:1120px;margin:0 auto;padding:28px 16px 56px}
+.mono,.eyebrow,.tag,.chip-n,.code{font-family:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 16px 32px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.toggles{display:flex;gap:8px;flex-wrap:wrap}
 .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
-.eyebrow.muted{color:var(--muted);font-weight:500}
 .toggle{display:inline-flex;border:1px solid var(--line);border-radius:10px;padding:3px;background:var(--panel)}
 .toggle button{font:inherit;font-size:13px;color:var(--muted);background:none;border:0;border-radius:7px;padding:4px 12px;cursor:pointer}
 .toggle button[aria-pressed="true"]{background:var(--panel-2);color:var(--text);box-shadow:0 0 0 1px var(--line-2)}
@@ -53,15 +59,19 @@ h3{font-size:16px;margin:0}
 .meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:0;list-style:none}
 .tag{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line-2);border-radius:999px;padding:3px 10px;color:var(--muted);background:var(--panel)}
 .tag b{color:var(--text);font-weight:600}
+.tag a{text-transform:none;letter-spacing:0}
 .tag.warn{border-color:var(--amber);color:var(--amber);background:var(--amber-soft)}
 .tag.warn b{color:var(--amber)}
 .note{margin:0;color:var(--muted);max-width:820px;font-size:14px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:22px;box-shadow:var(--glow)}
-.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px 12px;flex-wrap:wrap;margin-bottom:14px}
 .panel-head .sub{color:var(--muted);font-size:13px}
+.banner{margin-top:18px;border:1.5px solid var(--red);background:var(--red-soft);border-radius:14px;padding:14px 18px}
+.banner h2{color:var(--red);font-size:17px;margin-bottom:4px}
+.banner p{margin:0;font-size:14.5px}
 .pipeline{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0;padding:0 0 16px;list-style:none;border-bottom:1px solid var(--line)}
 .pipeline li{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px}
-.pipeline .step{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2)}
+.pipeline .step{display:inline-flex;align-items:center;flex-wrap:wrap;gap:2px 7px;padding:6px 11px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2);overflow-wrap:normal;word-break:normal}
 .pipeline .step small{color:var(--muted);font-weight:500;font-size:13px}
 .ok{width:15px;height:15px;color:var(--accent);flex:none}
 .arrow{color:var(--faint)}
@@ -87,6 +97,7 @@ h3{font-size:16px;margin:0}
 .scale .out{flex:0 0 22%;min-width:64px;color:var(--amber)}
 .scale .cap{color:var(--accent);font-weight:700}
 .scale .cap.full{color:var(--amber)}
+.compact .cell,.compact .slot{height:30px}
 .readout{margin:12px 0 0;min-height:3.2em;padding:10px 12px;border-radius:10px;background:var(--panel-2);border:1px solid var(--line);font-size:13.5px;color:var(--muted)}
 .readout b{color:var(--text)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:12px 0 0;padding:0;list-style:none;font-size:13px;color:var(--muted)}
@@ -96,8 +107,13 @@ h3{font-size:16px;margin:0}
 .gcard{border:1px solid var(--line);border-top:3px solid var(--c);border-radius:12px;padding:14px 16px;background:var(--panel-2)}
 .gcard .gid{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .gcard h3{margin:4px 0 8px;font-size:16.5px;line-height:1.3}
-.src{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;padding:1px 7px;border:1px solid var(--line-2);color:var(--muted)}
-.src.heading{color:var(--accent);border-color:var(--accent)}
+.gcard .gnote{color:var(--muted);font-size:13px;margin:0 0 8px}
+.src{display:inline-flex;flex-wrap:wrap;gap:2px 6px;align-items:baseline;font-size:11px;letter-spacing:.06em;border-radius:6px;padding:2px 7px;border:1px solid var(--line-2);color:var(--muted);max-width:100%}
+.src .k{text-transform:uppercase}
+.src .v{letter-spacing:0;font-size:12px;color:var(--text);text-transform:none}
+.src.heading{border-color:var(--accent)}
+.src.heading .k{color:var(--accent)}
+.topic{display:inline-block;margin:0 0 8px;font-size:11.5px;border-radius:999px;padding:1px 9px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent)}
 .gstats{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 8px;font-size:13px;color:var(--muted)}
 .gstats b{color:var(--text);font-variant-numeric:tabular-nums}
 .bar{height:6px;border-radius:999px;background:var(--empty);overflow:hidden}
@@ -126,20 +142,86 @@ summary{cursor:pointer;color:var(--accent);font-size:13px;width:max-content;max-
 .sides{margin:0;padding-left:18px}
 .sides li{margin:3px 0}
 .kw{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.kw h3{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+.kw h3,.subhead{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-weight:700}
+.subhead{margin-top:22px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
 .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-2);border-radius:999px;padding:3px 10px;font-size:13.5px;background:var(--panel-2)}
 .chip.scope{border-color:var(--accent);background:var(--accent-soft)}
 .chip-n{font-size:11.5px;color:var(--muted)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel-2)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.code{font-size:12.5px}
+.pill{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:1px 9px;border:1px solid var(--line-2);color:var(--muted);white-space:nowrap;font-weight:600}
+.pill.good{color:var(--green);border-color:var(--green);background:var(--green-soft)}
+.pill.bad{color:var(--red);border-color:var(--red);background:var(--red-soft)}
+.pill.mid{color:var(--amber);border-color:var(--amber);background:var(--amber-soft)}
+.pill.sev-high{color:var(--red);border-color:var(--red);background:var(--red-soft)}
+.pill.sev-medium{color:var(--amber);border-color:var(--amber);background:var(--amber-soft)}
+.pill.sev-low{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.small{font-size:12.5px;color:var(--muted)}
+.facts-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kv{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--panel-2)}
+.kv .k{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kv .v{margin-top:4px;font-size:14px}
+.findings{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.finding{border:1px solid var(--line);border-left:3px solid var(--sev);border-radius:12px;padding:12px 16px;background:var(--panel-2)}
+.finding.high{--sev:var(--red)}.finding.medium{--sev:var(--amber)}.finding.low{--sev:var(--accent)}.finding.info{--sev:var(--line-2)}
+.fhead{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.fhead h3{font-size:15.5px}
+.fhead .code{color:var(--faint)}
+.finding p{margin:6px 0 0;font-size:14px}
+.finding .tell{color:var(--muted)}
+.finding .tell b{color:var(--text)}
+.refs{display:flex;flex-wrap:wrap;gap:4px 8px;margin-top:6px;font-size:13px}
+.refs a{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;text-decoration:none;border:1px solid var(--line-2);border-radius:6px;padding:0 6px}
+.samples{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:4px}
+.samples li{font-size:13px;color:var(--muted);border-left:2px solid var(--line-2);padding-left:10px}
+.samples q{color:var(--text)}
+.plan{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.item{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--panel-2)}
+.ihead{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:8px}
+.ihead .pill{white-space:normal;max-width:100%}
+.prio{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:14px}
+.item dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;font-size:14px}
+.item dt{color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding-top:2px}
+.item dd{margin:0}
+.ba{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:stretch;margin-top:12px}
+.ba .side{border-radius:10px;padding:10px 12px;font-size:13.5px;border:1px solid}
+.ba .side .k{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+.ba .was{border-color:var(--amber);background:var(--amber-soft)}
+.ba .was .k{color:var(--amber)}
+.ba .now{border-color:var(--green);background:var(--green-soft)}
+.ba .now .k{color:var(--green)}
+.ba .to{align-self:center;color:var(--faint);font-size:18px}
+.quote{font-size:13px}
+.win{font-weight:700;color:var(--green)}
+.cellmark{display:flex;flex-direction:column;gap:3px}
+.heat .hbar{display:block;height:4px;border-radius:999px;background:var(--accent);margin-top:4px;opacity:.85}
+.gap{color:var(--faint)}
+.yes{color:var(--green);font-weight:700}
+.only{display:inline-block;margin-left:6px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:0 6px}
 .closing{font-size:16px;font-weight:600;margin:0}
 .closing.full{color:var(--amber)}
 .fine{color:var(--muted);font-size:13px;margin:10px 0 0}
-footer{margin-top:26px;color:var(--faint);font-size:12.5px}
+.foot{margin-top:28px;border-top:1px solid var(--line);padding:18px 0 4px;color:var(--faint);font-size:12.5px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;align-items:center}
+.foot p{margin:0;max-width:560px}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.links a{display:inline-flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 9px;background:var(--panel);font-size:13px}
+.links a:hover{color:var(--text);border-color:var(--line-2)}
+.links svg{width:15px;height:15px;flex:none}
+.pagesec{border-top:1px solid var(--line);margin-top:18px;padding-top:16px}
+.pagesec:first-of-type{border-top:0;margin-top:0;padding-top:0}
+.pagesec h3{font-size:15px;margin-bottom:6px}
 @media (max-width:540px){.counters{grid-template-columns:1fr}}
 @media (max-width:720px){
   .counter .n{font-size:24px}
   .pipeline{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
   .pipeline .arrow{display:none}
+  .pipeline li{min-width:0}
   .pipeline .step{width:100%}
   .kw{grid-template-columns:1fr}
   .cell,.slot{height:36px}
@@ -148,30 +230,46 @@ footer{margin-top:26px;color:var(--faint);font-size:12.5px}
   .tail b{font-size:13px}
   .scale .out{flex-basis:26%}
   .panel{padding:16px}
+  .ba{grid-template-columns:1fr}
+  .ba .to{justify-self:center;transform:rotate(90deg)}
+  .item dl{grid-template-columns:1fr}
+  .facts-grid{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){.cell{transition:none}}
 </style>
 <script>
 (function(){
-  var root=document.documentElement,KEY="vectorscope-theme";
-  function param(){var m=/[?#&]theme=(light|dark)/.exec(location.search+location.hash);return m?m[1]:null}
-  function stored(){try{return localStorage.getItem(KEY)}catch(e){return null}}
+  var root=document.documentElement,KEY="vectorscope-theme",LKEY="vectorscope-lang";
+  function param(re){var m=re.exec(location.search+location.hash);return m?m[1]:null}
+  function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function put(k,v){try{localStorage.setItem(k,v)}catch(e){}}
   function effective(){var t=root.getAttribute("data-theme");if(t)return t;try{return matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}catch(e){return "dark"}}
-  function paint(){var t=effective();var b=document.querySelectorAll("[data-set-theme]");for(var i=0;i<b.length;i++)b[i].setAttribute("aria-pressed",String(b[i].getAttribute("data-set-theme")===t))}
-  var first=param()||stored();if(first==="light"||first==="dark")root.setAttribute("data-theme",first);
+  function paint(){var t=effective(),l=root.getAttribute("data-lang")||"en";var b=document.querySelectorAll("[data-set-theme]");for(var i=0;i<b.length;i++)b[i].setAttribute("aria-pressed",String(b[i].getAttribute("data-set-theme")===t));var c=document.querySelectorAll("[data-set-lang]");for(var j=0;j<c.length;j++)c[j].setAttribute("aria-pressed",String(c[j].getAttribute("data-set-lang")===l))}
+  function applyLang(l){
+    root.setAttribute("data-lang",l);root.setAttribute("lang",l==="uk"?"uk":"en");
+    var els=document.querySelectorAll("[data-i18n]"),pre="data-"+l+"-";
+    for(var i=0;i<els.length;i++){var el=els[i],set=[];for(var j=0;j<el.attributes.length;j++){var a=el.attributes[j];if(a.name.indexOf(pre)===0)set.push([a.name.slice(pre.length),a.value])}for(var k=0;k<set.length;k++)el.setAttribute(set[k][0],set[k][1])}
+  }
+  var first=param(/[?#&]theme=(light|dark)/)||get(KEY);if(first==="light"||first==="dark")root.setAttribute("data-theme",first);
+  var lang=param(/[?#&]lang=(en|uk)/)||get(LKEY);root.setAttribute("data-lang",lang==="uk"?"uk":"en");
   document.addEventListener("DOMContentLoaded",function(){
-    paint();
+    applyLang(root.getAttribute("data-lang"));paint();
     var b=document.querySelectorAll("[data-set-theme]");
-    for(var i=0;i<b.length;i++)b[i].addEventListener("click",function(){var t=this.getAttribute("data-set-theme");root.setAttribute("data-theme",t);try{localStorage.setItem(KEY,t)}catch(e){}paint()});
-    var out=document.getElementById("readout");if(!out)return;var idle=out.innerHTML;
-    var cells=document.querySelectorAll(".cell");
-    function show(c){out.innerHTML=c.getAttribute("data-tip")}
-    for(var j=0;j<cells.length;j++){
-      cells[j].addEventListener("mouseenter",function(){show(this)});
-      cells[j].addEventListener("focus",function(){show(this)});
-      cells[j].addEventListener("mouseleave",function(){if(document.activeElement!==this)out.innerHTML=idle});
-      cells[j].addEventListener("blur",function(){out.innerHTML=idle});
-    }
+    for(var i=0;i<b.length;i++)b[i].addEventListener("click",function(){var t=this.getAttribute("data-set-theme");root.setAttribute("data-theme",t);put(KEY,t);paint()});
+    var c=document.querySelectorAll("[data-set-lang]");
+    for(var j=0;j<c.length;j++)c[j].addEventListener("click",function(){var l=this.getAttribute("data-set-lang");applyLang(l);put(LKEY,l);paint()});
+    var outs=document.querySelectorAll(".readout");
+    for(var o=0;o<outs.length;o++)(function(out){
+      var scope=out.parentNode,cells=scope.querySelectorAll(".cell"),idle=null;
+      function show(c){if(idle===null)idle=out.innerHTML;out.innerHTML=c.getAttribute("data-tip")}
+      function reset(){if(idle!==null)out.innerHTML=idle}
+      for(var q=0;q<cells.length;q++){
+        cells[q].addEventListener("mouseenter",function(){show(this)});
+        cells[q].addEventListener("focus",function(){show(this)});
+        cells[q].addEventListener("mouseleave",function(){if(document.activeElement!==this)reset()});
+        cells[q].addEventListener("blur",reset);
+      }
+    })(outs[o]);
   });
 })();
 </script>
@@ -179,55 +277,58 @@ footer{margin-top:26px;color:var(--faint);font-size:12.5px}
 <body>
 <main class="wrap">
 <div class="top">
-<span class="eyebrow">Vectorscope · local reading</span>
-<div class="toggle" role="group" aria-label="Theme"><button type="button" data-set-theme="dark" aria-pressed="false">Dark</button><button type="button" data-set-theme="light" aria-pressed="false">Light</button></div>
+<span class="eyebrow"><span class="l-en">Vectorscope · local reading</span><span class="l-uk" lang="uk">Vectorscope · локальне читання</span></span>
+<div class="toggles">
+<div class="toggle" role="group" aria-label="Language" data-en-aria-label="Language" data-uk-aria-label="Мова" data-i18n><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="uk" aria-pressed="false" lang="uk">UK</button></div>
+<div class="toggle" role="group" aria-label="Theme" data-en-aria-label="Theme" data-uk-aria-label="Тема" data-i18n><button type="button" data-set-theme="dark" aria-pressed="false"><span class="l-en">Dark</span><span class="l-uk" lang="uk">Темна</span></button><button type="button" data-set-theme="light" aria-pressed="false"><span class="l-en">Light</span><span class="l-uk" lang="uk">Світла</span></button></div>
+</div>
 </div>
 <header>
 <h1>Semantic Chunking Visualizer for Any URL — Vectorscope</h1>
 <a class="url mono" href="https://www.getlooploop.com/vectorscope" rel="noopener noreferrer" target="_blank">https://www.getlooploop.com/vectorscope</a>
 <ul class="meta">
-<li class="tag"><b>2,447</b> words</li>
-<li class="tag"><b>14</b> headings found</li>
-<li class="tag">noindex <b>no</b></li>
+<li class="tag"><span class="l-en"><b>2,447</b> words</span><span class="l-uk" lang="uk"><b>2 447</b> слів</span></li>
+<li class="tag"><span class="l-en"><b>14</b> headings found</span><span class="l-uk" lang="uk"><b>14</b> заголовків</span></li>
+<li class="tag"><span class="l-en">noindex <b>no</b></span><span class="l-uk" lang="uk">noindex <b>ні</b></span></li>
 </ul>
-<p class="note">The groups are Claude's reading of the passages, not an embedding clustering. The fetch, extraction, chunking and the 26-passage cap are the tool's exact rules. For the embedding-based reading with the map, run the page at <a href="https://www.getlooploop.com/vectorscope" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>.</p>
+<p class="note"><span class="l-en">The groups are the agent's reading of the passages, not an embedding clustering. The fetch, extraction, chunking and the 26-passage cap are the tool's exact rules. For the embedding-based reading with the map, run the page at <a href="https://www.getlooploop.com/vectorscope" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>.</span><span class="l-uk" lang="uk">Групи — це прочитання уривків агентом, а не кластеризація ембедингів. Завантаження, видобування тексту, нарізання й ліміт у 26 уривків — точні правила інструмента. Читання на ембедингах із картою — на <a href="https://www.getlooploop.com/vectorscope" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>.</span></p>
 </header>
 <section class="panel" aria-labelledby="h-result">
-<div class="panel-head"><h2 id="h-result" class="eyebrow">Result</h2><span class="sub">what the machine reads</span></div>
+<div class="panel-head"><h2 id="h-result" class="eyebrow"><span class="l-en">Result</span><span class="l-uk" lang="uk">Результат</span></h2><span class="sub"><span class="l-en">what the machine reads</span><span class="l-uk" lang="uk">що читає машина</span></span></div>
 <ol class="pipeline">
-<li><span class="step"><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Fetched</span></li>
-<li><span class="arrow" aria-hidden="true">→</span><span class="step"><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Extracted <small>2,447 words</small></span></li>
-<li><span class="arrow" aria-hidden="true">→</span><span class="step"><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Chunked <small>17 passages</small></span></li>
-<li><span class="arrow" aria-hidden="true">→</span><span class="step"><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Grouped <small>6 groups</small></span></li>
+<li><span class="step"><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="l-en">Fetched</span><span class="l-uk" lang="uk">Завантажено</span></span></li>
+<li><span class="arrow" aria-hidden="true">→</span><span class="step"><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="l-en">Extracted</span><span class="l-uk" lang="uk">Видобуто</span> <small><span class="l-en">2,447 words</span><span class="l-uk" lang="uk">2 447 слів</span></small></span></li>
+<li><span class="arrow" aria-hidden="true">→</span><span class="step"><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="l-en">Chunked</span><span class="l-uk" lang="uk">Нарізано</span> <small><span class="l-en">17 passages</span><span class="l-uk" lang="uk">17 уривків</span></small></span></li>
+<li><span class="arrow" aria-hidden="true">→</span><span class="step"><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="l-en">Grouped</span><span class="l-uk" lang="uk">Згруповано</span> <small><span class="l-en">6 groups</span><span class="l-uk" lang="uk">6 груп</span></small></span></li>
 </ol>
-<p class="pipeline-note">14 headings · 14,109 characters indexed · 0 repeats · grouped by reading, no embedding step</p>
+<p class="pipeline-note"><span class="l-en">14 headings · 14,109 characters indexed · 0 repeats · grouped by reading, no embedding step</span><span class="l-uk" lang="uk">14 заголовків · 14 109 символів в індексі · 0 повторів · групування читанням, без ембедингів</span></p>
 <div class="counters">
-<div class="counter"><div class="n">17</div><div class="l">passages read</div></div>
-<div class="counter"><div class="n">17<small>/26</small></div><div class="l">slots used of the 26-passage cap</div></div>
-<div class="counter"><div class="n">0</div><div class="l">characters past the cap (0 when the page fits)</div></div>
+<div class="counter"><div class="n">17</div><div class="l"><span class="l-en">passages read</span><span class="l-uk" lang="uk">уривків прочитано</span></div></div>
+<div class="counter"><div class="n">17<small>/26</small></div><div class="l"><span class="l-en">slots used of the 26-passage cap</span><span class="l-uk" lang="uk">місць зайнято з ліміту в 26 уривків</span></div></div>
+<div class="counter"><div class="n">0</div><div class="l"><span class="l-en">characters past the cap (0 when the page fits)</span><span class="l-uk" lang="uk">символів за лімітом (0, коли сторінка вміщується)</span></div></div>
 </div>
 </section>
 <section class="panel" aria-labelledby="h-strip">
-<div class="panel-head"><h2 id="h-strip">The reading strip</h2><span class="sub">one cell per passage, in reading order, inside the 26-slot cap</span></div>
+<div class="panel-head"><h2 id="h-strip"><span class="l-en">The reading strip</span><span class="l-uk" lang="uk">Смуга читання</span></h2><span class="sub"><span class="l-en">one cell per passage, in reading order, inside the 26-slot cap</span><span class="l-uk" lang="uk">одна клітинка на уривок, у порядку читання, у межах ліміту в 26 місць</span></span></div>
 <div class="strip">
-<div class="frame" role="list" aria-label="Passages inside the 26-passage cap">
-<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-0" data-tip="&lt;b&gt;#0&lt;/b&gt; · Semantic Chunking Visualizer for Any URL — Vectorscope · group 0: &lt;b&gt;Visualizer · Machine&lt;/b&gt; · 286 chars" aria-label="Passage 0, Semantic Chunking Visualizer for Any URL — Vectorscope, group 0: Visualizer · Machine, 286 characters" title="Passage 0, Semantic Chunking Visualizer for Any URL — Vectorscope, group 0: Visualizer · Machine, 286 characters"></a>
-<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-1" data-tip="&lt;b&gt;#1&lt;/b&gt; · no heading · group 0: &lt;b&gt;Visualizer · Machine&lt;/b&gt; · 804 chars" aria-label="Passage 1, no heading, group 0: Visualizer · Machine, 804 characters" title="Passage 1, no heading, group 0: Visualizer · Machine, 804 characters"></a>
-<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-2" data-tip="&lt;b&gt;#2&lt;/b&gt; · What does this mean? · group 0: &lt;b&gt;Visualizer · Machine&lt;/b&gt; · 259 chars" aria-label="Passage 2, What does this mean?, group 0: Visualizer · Machine, 259 characters" title="Passage 2, What does this mean?, group 0: Visualizer · Machine, 259 characters"></a>
-<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-3" data-tip="&lt;b&gt;#3&lt;/b&gt; · Important passage outside the cap? · group 0: &lt;b&gt;Visualizer · Machine&lt;/b&gt; · 139 chars" aria-label="Passage 3, Important passage outside the cap?, group 0: Visualizer · Machine, 139 characters" title="Passage 3, Important passage outside the cap?, group 0: Visualizer · Machine, 139 characters"></a>
-<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-4" data-tip="&lt;b&gt;#4&lt;/b&gt; · Models and retrieval caps vary. · group 0: &lt;b&gt;Visualizer · Machine&lt;/b&gt; · 246 chars" aria-label="Passage 4, Models and retrieval caps vary., group 0: Visualizer · Machine, 246 characters" title="Passage 4, Models and retrieval caps vary., group 0: Visualizer · Machine, 246 characters"></a>
-<a role="listitem" class="cell" style="--c:#8b5cf6" href="#p-5" data-tip="&lt;b&gt;#5&lt;/b&gt; · How to read your result · group 1: &lt;b&gt;How to read your result&lt;/b&gt; · 1,995 chars" aria-label="Passage 5, How to read your result, group 1: How to read your result, 1995 characters" title="Passage 5, How to read your result, group 1: How to read your result, 1995 characters"></a>
-<a role="listitem" class="cell" style="--c:#8b5cf6" href="#p-6" data-tip="&lt;b&gt;#6&lt;/b&gt; · How to read your result · group 1: &lt;b&gt;How to read your result&lt;/b&gt; · 455 chars" aria-label="Passage 6, How to read your result, group 1: How to read your result, 455 characters" title="Passage 6, How to read your result, group 1: How to read your result, 455 characters"></a>
-<a role="listitem" class="cell" style="--c:#16a34a" href="#p-7" data-tip="&lt;b&gt;#7&lt;/b&gt; · What is semantic chunking? · group 2: &lt;b&gt;Grouping · Length&lt;/b&gt; · 1,994 chars" aria-label="Passage 7, What is semantic chunking?, group 2: Grouping · Length, 1994 characters" title="Passage 7, What is semantic chunking?, group 2: Grouping · Length, 1994 characters"></a>
-<a role="listitem" class="cell" style="--c:#e0458a" href="#p-8" data-tip="&lt;b&gt;#8&lt;/b&gt; · Is my content ready for AI search? · group 3: &lt;b&gt;Whether · Against&lt;/b&gt; · 1,126 chars" aria-label="Passage 8, Is my content ready for AI search?, group 3: Whether · Against, 1126 characters" title="Passage 8, Is my content ready for AI search?, group 3: Whether · Against, 1126 characters"></a>
-<a role="listitem" class="cell" style="--c:#e0458a" href="#p-9" data-tip="&lt;b&gt;#9&lt;/b&gt; · Using Vectorscope to test a RAG pipeline · group 3: &lt;b&gt;Whether · Against&lt;/b&gt; · 863 chars" aria-label="Passage 9, Using Vectorscope to test a RAG pipeline, group 3: Whether · Against, 863 characters" title="Passage 9, Using Vectorscope to test a RAG pipeline, group 3: Whether · Against, 863 characters"></a>
-<a role="listitem" class="cell" style="--c:#e0458a" href="#p-10" data-tip="&lt;b&gt;#10&lt;/b&gt; · Who is Vectorscope for? · group 3: &lt;b&gt;Whether · Against&lt;/b&gt; · 890 chars" aria-label="Passage 10, Who is Vectorscope for?, group 3: Whether · Against, 890 characters" title="Passage 10, Who is Vectorscope for?, group 3: Whether · Against, 890 characters"></a>
-<a role="listitem" class="cell" style="--c:#16a34a" href="#p-11" data-tip="&lt;b&gt;#11&lt;/b&gt; · Words used on this page · group 2: &lt;b&gt;Grouping · Length&lt;/b&gt; · 1,400 chars" aria-label="Passage 11, Words used on this page, group 2: Grouping · Length, 1400 characters" title="Passage 11, Words used on this page, group 2: Grouping · Length, 1400 characters"></a>
-<a role="listitem" class="cell" style="--c:#3d7ef0" href="#p-12" data-tip="&lt;b&gt;#12&lt;/b&gt; · Keep reading · group 4: &lt;b&gt;Three · Questions&lt;/b&gt; · 335 chars" aria-label="Passage 12, Keep reading, group 4: Three · Questions, 335 characters" title="Passage 12, Keep reading, group 4: Three · Questions, 335 characters"></a>
-<a role="listitem" class="cell" style="--c:#7a8a14" href="#p-13" data-tip="&lt;b&gt;#13&lt;/b&gt; · Questions people ask about this · group 5: &lt;b&gt;Questions people ask about this&lt;/b&gt; · 1,992 chars" aria-label="Passage 13, Questions people ask about this, group 5: Questions people ask about this, 1992 characters" title="Passage 13, Questions people ask about this, group 5: Questions people ask about this, 1992 characters"></a>
-<a role="listitem" class="cell" style="--c:#7a8a14" href="#p-14" data-tip="&lt;b&gt;#14&lt;/b&gt; · Questions people ask about this · group 5: &lt;b&gt;Questions people ask about this&lt;/b&gt; · 300 chars" aria-label="Passage 14, Questions people ask about this, group 5: Questions people ask about this, 300 characters" title="Passage 14, Questions people ask about this, group 5: Questions people ask about this, 300 characters"></a>
-<a role="listitem" class="cell" style="--c:#3d7ef0" href="#p-15" data-tip="&lt;b&gt;#15&lt;/b&gt; · Other free AI search tools · group 4: &lt;b&gt;Three · Questions&lt;/b&gt; · 746 chars" aria-label="Passage 15, Other free AI search tools, group 4: Three · Questions, 746 characters" title="Passage 15, Other free AI search tools, group 4: Three · Questions, 746 characters"></a>
-<a role="listitem" class="cell" style="--c:#e0458a" href="#p-16" data-tip="&lt;b&gt;#16&lt;/b&gt; · What this cannot show you · group 3: &lt;b&gt;Whether · Against&lt;/b&gt; · 279 chars" aria-label="Passage 16, What this cannot show you, group 3: Whether · Against, 279 characters" title="Passage 16, What this cannot show you, group 3: Whether · Against, 279 characters"></a>
+<div class="frame" role="list" aria-label="Passages inside the 26-passage cap" data-en-aria-label="Passages inside the 26-passage cap" data-uk-aria-label="Уривки в межах ліміту в 26 уривків" data-i18n>
+<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-0" data-tip="&lt;b&gt;#0&lt;/b&gt; · Semantic Chunking Visualizer for Any URL — Vectorscope · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 286 chars" data-en-data-tip="&lt;b&gt;#0&lt;/b&gt; · Semantic Chunking Visualizer for Any URL — Vectorscope · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 286 chars" data-uk-data-tip="&lt;b&gt;#0&lt;/b&gt; · Semantic Chunking Visualizer for Any URL — Vectorscope · група 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 286 симв." aria-label="Passage 0, Semantic Chunking Visualizer for Any URL — Vectorscope, group 0: What Vectorscope is, and what its reading does not prove, 286 characters" data-en-aria-label="Passage 0, Semantic Chunking Visualizer for Any URL — Vectorscope, group 0: What Vectorscope is, and what its reading does not prove, 286 characters" data-uk-aria-label="Уривок 0, Semantic Chunking Visualizer for Any URL — Vectorscope, група 0: What Vectorscope is, and what its reading does not prove, 286 символів" title="Passage 0, Semantic Chunking Visualizer for Any URL — Vectorscope, group 0: What Vectorscope is, and what its reading does not prove, 286 characters" data-en-title="Passage 0, Semantic Chunking Visualizer for Any URL — Vectorscope, group 0: What Vectorscope is, and what its reading does not prove, 286 characters" data-uk-title="Уривок 0, Semantic Chunking Visualizer for Any URL — Vectorscope, група 0: What Vectorscope is, and what its reading does not prove, 286 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-1" data-tip="&lt;b&gt;#1&lt;/b&gt; · no heading · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 804 chars" data-en-data-tip="&lt;b&gt;#1&lt;/b&gt; · no heading · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 804 chars" data-uk-data-tip="&lt;b&gt;#1&lt;/b&gt; · без заголовка · група 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 804 симв." aria-label="Passage 1, no heading, group 0: What Vectorscope is, and what its reading does not prove, 804 characters" data-en-aria-label="Passage 1, no heading, group 0: What Vectorscope is, and what its reading does not prove, 804 characters" data-uk-aria-label="Уривок 1, без заголовка, група 0: What Vectorscope is, and what its reading does not prove, 804 символів" title="Passage 1, no heading, group 0: What Vectorscope is, and what its reading does not prove, 804 characters" data-en-title="Passage 1, no heading, group 0: What Vectorscope is, and what its reading does not prove, 804 characters" data-uk-title="Уривок 1, без заголовка, група 0: What Vectorscope is, and what its reading does not prove, 804 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-2" data-tip="&lt;b&gt;#2&lt;/b&gt; · What does this mean? · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 259 chars" data-en-data-tip="&lt;b&gt;#2&lt;/b&gt; · What does this mean? · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 259 chars" data-uk-data-tip="&lt;b&gt;#2&lt;/b&gt; · What does this mean? · група 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 259 симв." aria-label="Passage 2, What does this mean?, group 0: What Vectorscope is, and what its reading does not prove, 259 characters" data-en-aria-label="Passage 2, What does this mean?, group 0: What Vectorscope is, and what its reading does not prove, 259 characters" data-uk-aria-label="Уривок 2, What does this mean?, група 0: What Vectorscope is, and what its reading does not prove, 259 символів" title="Passage 2, What does this mean?, group 0: What Vectorscope is, and what its reading does not prove, 259 characters" data-en-title="Passage 2, What does this mean?, group 0: What Vectorscope is, and what its reading does not prove, 259 characters" data-uk-title="Уривок 2, What does this mean?, група 0: What Vectorscope is, and what its reading does not prove, 259 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-3" data-tip="&lt;b&gt;#3&lt;/b&gt; · Important passage outside the cap? · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 139 chars" data-en-data-tip="&lt;b&gt;#3&lt;/b&gt; · Important passage outside the cap? · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 139 chars" data-uk-data-tip="&lt;b&gt;#3&lt;/b&gt; · Important passage outside the cap? · група 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 139 симв." aria-label="Passage 3, Important passage outside the cap?, group 0: What Vectorscope is, and what its reading does not prove, 139 characters" data-en-aria-label="Passage 3, Important passage outside the cap?, group 0: What Vectorscope is, and what its reading does not prove, 139 characters" data-uk-aria-label="Уривок 3, Important passage outside the cap?, група 0: What Vectorscope is, and what its reading does not prove, 139 символів" title="Passage 3, Important passage outside the cap?, group 0: What Vectorscope is, and what its reading does not prove, 139 characters" data-en-title="Passage 3, Important passage outside the cap?, group 0: What Vectorscope is, and what its reading does not prove, 139 characters" data-uk-title="Уривок 3, Important passage outside the cap?, група 0: What Vectorscope is, and what its reading does not prove, 139 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#0e9ab8" href="#p-4" data-tip="&lt;b&gt;#4&lt;/b&gt; · Models and retrieval caps vary. · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 246 chars" data-en-data-tip="&lt;b&gt;#4&lt;/b&gt; · Models and retrieval caps vary. · group 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 246 chars" data-uk-data-tip="&lt;b&gt;#4&lt;/b&gt; · Models and retrieval caps vary. · група 0: &lt;b&gt;What Vectorscope is, and what its reading does not prove&lt;/b&gt; · 246 симв." aria-label="Passage 4, Models and retrieval caps vary., group 0: What Vectorscope is, and what its reading does not prove, 246 characters" data-en-aria-label="Passage 4, Models and retrieval caps vary., group 0: What Vectorscope is, and what its reading does not prove, 246 characters" data-uk-aria-label="Уривок 4, Models and retrieval caps vary., група 0: What Vectorscope is, and what its reading does not prove, 246 символів" title="Passage 4, Models and retrieval caps vary., group 0: What Vectorscope is, and what its reading does not prove, 246 characters" data-en-title="Passage 4, Models and retrieval caps vary., group 0: What Vectorscope is, and what its reading does not prove, 246 characters" data-uk-title="Уривок 4, Models and retrieval caps vary., група 0: What Vectorscope is, and what its reading does not prove, 246 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#8b5cf6" href="#p-5" data-tip="&lt;b&gt;#5&lt;/b&gt; · How to read your result · group 1: &lt;b&gt;How to read the four results&lt;/b&gt; · 1,995 chars" data-en-data-tip="&lt;b&gt;#5&lt;/b&gt; · How to read your result · group 1: &lt;b&gt;How to read the four results&lt;/b&gt; · 1,995 chars" data-uk-data-tip="&lt;b&gt;#5&lt;/b&gt; · How to read your result · група 1: &lt;b&gt;How to read the four results&lt;/b&gt; · 1 995 симв." aria-label="Passage 5, How to read your result, group 1: How to read the four results, 1995 characters" data-en-aria-label="Passage 5, How to read your result, group 1: How to read the four results, 1995 characters" data-uk-aria-label="Уривок 5, How to read your result, група 1: How to read the four results, 1995 символів" title="Passage 5, How to read your result, group 1: How to read the four results, 1995 characters" data-en-title="Passage 5, How to read your result, group 1: How to read the four results, 1995 characters" data-uk-title="Уривок 5, How to read your result, група 1: How to read the four results, 1995 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#8b5cf6" href="#p-6" data-tip="&lt;b&gt;#6&lt;/b&gt; · How to read your result · group 1: &lt;b&gt;How to read the four results&lt;/b&gt; · 455 chars" data-en-data-tip="&lt;b&gt;#6&lt;/b&gt; · How to read your result · group 1: &lt;b&gt;How to read the four results&lt;/b&gt; · 455 chars" data-uk-data-tip="&lt;b&gt;#6&lt;/b&gt; · How to read your result · група 1: &lt;b&gt;How to read the four results&lt;/b&gt; · 455 симв." aria-label="Passage 6, How to read your result, group 1: How to read the four results, 455 characters" data-en-aria-label="Passage 6, How to read your result, group 1: How to read the four results, 455 characters" data-uk-aria-label="Уривок 6, How to read your result, група 1: How to read the four results, 455 символів" title="Passage 6, How to read your result, group 1: How to read the four results, 455 characters" data-en-title="Passage 6, How to read your result, group 1: How to read the four results, 455 characters" data-uk-title="Уривок 6, How to read your result, група 1: How to read the four results, 455 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#16a34a" href="#p-7" data-tip="&lt;b&gt;#7&lt;/b&gt; · What is semantic chunking? · group 2: &lt;b&gt;Chunking strategies and the terms behind them&lt;/b&gt; · 1,994 chars" data-en-data-tip="&lt;b&gt;#7&lt;/b&gt; · What is semantic chunking? · group 2: &lt;b&gt;Chunking strategies and the terms behind them&lt;/b&gt; · 1,994 chars" data-uk-data-tip="&lt;b&gt;#7&lt;/b&gt; · What is semantic chunking? · група 2: &lt;b&gt;Chunking strategies and the terms behind them&lt;/b&gt; · 1 994 симв." aria-label="Passage 7, What is semantic chunking?, group 2: Chunking strategies and the terms behind them, 1994 characters" data-en-aria-label="Passage 7, What is semantic chunking?, group 2: Chunking strategies and the terms behind them, 1994 characters" data-uk-aria-label="Уривок 7, What is semantic chunking?, група 2: Chunking strategies and the terms behind them, 1994 символів" title="Passage 7, What is semantic chunking?, group 2: Chunking strategies and the terms behind them, 1994 characters" data-en-title="Passage 7, What is semantic chunking?, group 2: Chunking strategies and the terms behind them, 1994 characters" data-uk-title="Уривок 7, What is semantic chunking?, група 2: Chunking strategies and the terms behind them, 1994 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#e0458a" href="#p-8" data-tip="&lt;b&gt;#8&lt;/b&gt; · Is my content ready for AI search? · group 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 1,126 chars" data-en-data-tip="&lt;b&gt;#8&lt;/b&gt; · Is my content ready for AI search? · group 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 1,126 chars" data-uk-data-tip="&lt;b&gt;#8&lt;/b&gt; · Is my content ready for AI search? · група 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 1 126 симв." aria-label="Passage 8, Is my content ready for AI search?, group 3: What the tool can and cannot tell you, and who it is for, 1126 characters" data-en-aria-label="Passage 8, Is my content ready for AI search?, group 3: What the tool can and cannot tell you, and who it is for, 1126 characters" data-uk-aria-label="Уривок 8, Is my content ready for AI search?, група 3: What the tool can and cannot tell you, and who it is for, 1126 символів" title="Passage 8, Is my content ready for AI search?, group 3: What the tool can and cannot tell you, and who it is for, 1126 characters" data-en-title="Passage 8, Is my content ready for AI search?, group 3: What the tool can and cannot tell you, and who it is for, 1126 characters" data-uk-title="Уривок 8, Is my content ready for AI search?, група 3: What the tool can and cannot tell you, and who it is for, 1126 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#e0458a" href="#p-9" data-tip="&lt;b&gt;#9&lt;/b&gt; · Using Vectorscope to test a RAG pipeline · group 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 863 chars" data-en-data-tip="&lt;b&gt;#9&lt;/b&gt; · Using Vectorscope to test a RAG pipeline · group 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 863 chars" data-uk-data-tip="&lt;b&gt;#9&lt;/b&gt; · Using Vectorscope to test a RAG pipeline · група 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 863 симв." aria-label="Passage 9, Using Vectorscope to test a RAG pipeline, group 3: What the tool can and cannot tell you, and who it is for, 863 characters" data-en-aria-label="Passage 9, Using Vectorscope to test a RAG pipeline, group 3: What the tool can and cannot tell you, and who it is for, 863 characters" data-uk-aria-label="Уривок 9, Using Vectorscope to test a RAG pipeline, група 3: What the tool can and cannot tell you, and who it is for, 863 символів" title="Passage 9, Using Vectorscope to test a RAG pipeline, group 3: What the tool can and cannot tell you, and who it is for, 863 characters" data-en-title="Passage 9, Using Vectorscope to test a RAG pipeline, group 3: What the tool can and cannot tell you, and who it is for, 863 characters" data-uk-title="Уривок 9, Using Vectorscope to test a RAG pipeline, група 3: What the tool can and cannot tell you, and who it is for, 863 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#e0458a" href="#p-10" data-tip="&lt;b&gt;#10&lt;/b&gt; · Who is Vectorscope for? · group 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 890 chars" data-en-data-tip="&lt;b&gt;#10&lt;/b&gt; · Who is Vectorscope for? · group 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 890 chars" data-uk-data-tip="&lt;b&gt;#10&lt;/b&gt; · Who is Vectorscope for? · група 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 890 симв." aria-label="Passage 10, Who is Vectorscope for?, group 3: What the tool can and cannot tell you, and who it is for, 890 characters" data-en-aria-label="Passage 10, Who is Vectorscope for?, group 3: What the tool can and cannot tell you, and who it is for, 890 characters" data-uk-aria-label="Уривок 10, Who is Vectorscope for?, група 3: What the tool can and cannot tell you, and who it is for, 890 символів" title="Passage 10, Who is Vectorscope for?, group 3: What the tool can and cannot tell you, and who it is for, 890 characters" data-en-title="Passage 10, Who is Vectorscope for?, group 3: What the tool can and cannot tell you, and who it is for, 890 characters" data-uk-title="Уривок 10, Who is Vectorscope for?, група 3: What the tool can and cannot tell you, and who it is for, 890 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#16a34a" href="#p-11" data-tip="&lt;b&gt;#11&lt;/b&gt; · Words used on this page · group 2: &lt;b&gt;Chunking strategies and the terms behind them&lt;/b&gt; · 1,400 chars" data-en-data-tip="&lt;b&gt;#11&lt;/b&gt; · Words used on this page · group 2: &lt;b&gt;Chunking strategies and the terms behind them&lt;/b&gt; · 1,400 chars" data-uk-data-tip="&lt;b&gt;#11&lt;/b&gt; · Words used on this page · група 2: &lt;b&gt;Chunking strategies and the terms behind them&lt;/b&gt; · 1 400 симв." aria-label="Passage 11, Words used on this page, group 2: Chunking strategies and the terms behind them, 1400 characters" data-en-aria-label="Passage 11, Words used on this page, group 2: Chunking strategies and the terms behind them, 1400 characters" data-uk-aria-label="Уривок 11, Words used on this page, група 2: Chunking strategies and the terms behind them, 1400 символів" title="Passage 11, Words used on this page, group 2: Chunking strategies and the terms behind them, 1400 characters" data-en-title="Passage 11, Words used on this page, group 2: Chunking strategies and the terms behind them, 1400 characters" data-uk-title="Уривок 11, Words used on this page, група 2: Chunking strategies and the terms behind them, 1400 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#3d7ef0" href="#p-12" data-tip="&lt;b&gt;#12&lt;/b&gt; · Keep reading · group 4: &lt;b&gt;Links to further reading and other tools&lt;/b&gt; · 335 chars" data-en-data-tip="&lt;b&gt;#12&lt;/b&gt; · Keep reading · group 4: &lt;b&gt;Links to further reading and other tools&lt;/b&gt; · 335 chars" data-uk-data-tip="&lt;b&gt;#12&lt;/b&gt; · Keep reading · група 4: &lt;b&gt;Links to further reading and other tools&lt;/b&gt; · 335 симв." aria-label="Passage 12, Keep reading, group 4: Links to further reading and other tools, 335 characters" data-en-aria-label="Passage 12, Keep reading, group 4: Links to further reading and other tools, 335 characters" data-uk-aria-label="Уривок 12, Keep reading, група 4: Links to further reading and other tools, 335 символів" title="Passage 12, Keep reading, group 4: Links to further reading and other tools, 335 characters" data-en-title="Passage 12, Keep reading, group 4: Links to further reading and other tools, 335 characters" data-uk-title="Уривок 12, Keep reading, група 4: Links to further reading and other tools, 335 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#7a8a14" href="#p-13" data-tip="&lt;b&gt;#13&lt;/b&gt; · Questions people ask about this · group 5: &lt;b&gt;FAQ: AI citations and how Vectorscope works&lt;/b&gt; · 1,992 chars" data-en-data-tip="&lt;b&gt;#13&lt;/b&gt; · Questions people ask about this · group 5: &lt;b&gt;FAQ: AI citations and how Vectorscope works&lt;/b&gt; · 1,992 chars" data-uk-data-tip="&lt;b&gt;#13&lt;/b&gt; · Questions people ask about this · група 5: &lt;b&gt;FAQ: AI citations and how Vectorscope works&lt;/b&gt; · 1 992 симв." aria-label="Passage 13, Questions people ask about this, group 5: FAQ: AI citations and how Vectorscope works, 1992 characters" data-en-aria-label="Passage 13, Questions people ask about this, group 5: FAQ: AI citations and how Vectorscope works, 1992 characters" data-uk-aria-label="Уривок 13, Questions people ask about this, група 5: FAQ: AI citations and how Vectorscope works, 1992 символів" title="Passage 13, Questions people ask about this, group 5: FAQ: AI citations and how Vectorscope works, 1992 characters" data-en-title="Passage 13, Questions people ask about this, group 5: FAQ: AI citations and how Vectorscope works, 1992 characters" data-uk-title="Уривок 13, Questions people ask about this, група 5: FAQ: AI citations and how Vectorscope works, 1992 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#7a8a14" href="#p-14" data-tip="&lt;b&gt;#14&lt;/b&gt; · Questions people ask about this · group 5: &lt;b&gt;FAQ: AI citations and how Vectorscope works&lt;/b&gt; · 300 chars" data-en-data-tip="&lt;b&gt;#14&lt;/b&gt; · Questions people ask about this · group 5: &lt;b&gt;FAQ: AI citations and how Vectorscope works&lt;/b&gt; · 300 chars" data-uk-data-tip="&lt;b&gt;#14&lt;/b&gt; · Questions people ask about this · група 5: &lt;b&gt;FAQ: AI citations and how Vectorscope works&lt;/b&gt; · 300 симв." aria-label="Passage 14, Questions people ask about this, group 5: FAQ: AI citations and how Vectorscope works, 300 characters" data-en-aria-label="Passage 14, Questions people ask about this, group 5: FAQ: AI citations and how Vectorscope works, 300 characters" data-uk-aria-label="Уривок 14, Questions people ask about this, група 5: FAQ: AI citations and how Vectorscope works, 300 символів" title="Passage 14, Questions people ask about this, group 5: FAQ: AI citations and how Vectorscope works, 300 characters" data-en-title="Passage 14, Questions people ask about this, group 5: FAQ: AI citations and how Vectorscope works, 300 characters" data-uk-title="Уривок 14, Questions people ask about this, група 5: FAQ: AI citations and how Vectorscope works, 300 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#3d7ef0" href="#p-15" data-tip="&lt;b&gt;#15&lt;/b&gt; · Other free AI search tools · group 4: &lt;b&gt;Links to further reading and other tools&lt;/b&gt; · 746 chars" data-en-data-tip="&lt;b&gt;#15&lt;/b&gt; · Other free AI search tools · group 4: &lt;b&gt;Links to further reading and other tools&lt;/b&gt; · 746 chars" data-uk-data-tip="&lt;b&gt;#15&lt;/b&gt; · Other free AI search tools · група 4: &lt;b&gt;Links to further reading and other tools&lt;/b&gt; · 746 симв." aria-label="Passage 15, Other free AI search tools, group 4: Links to further reading and other tools, 746 characters" data-en-aria-label="Passage 15, Other free AI search tools, group 4: Links to further reading and other tools, 746 characters" data-uk-aria-label="Уривок 15, Other free AI search tools, група 4: Links to further reading and other tools, 746 символів" title="Passage 15, Other free AI search tools, group 4: Links to further reading and other tools, 746 characters" data-en-title="Passage 15, Other free AI search tools, group 4: Links to further reading and other tools, 746 characters" data-uk-title="Уривок 15, Other free AI search tools, група 4: Links to further reading and other tools, 746 символів" data-i18n></a>
+<a role="listitem" class="cell" style="--c:#e0458a" href="#p-16" data-tip="&lt;b&gt;#16&lt;/b&gt; · What this cannot show you · group 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 279 chars" data-en-data-tip="&lt;b&gt;#16&lt;/b&gt; · What this cannot show you · group 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 279 chars" data-uk-data-tip="&lt;b&gt;#16&lt;/b&gt; · What this cannot show you · група 3: &lt;b&gt;What the tool can and cannot tell you, and who it is for&lt;/b&gt; · 279 симв." aria-label="Passage 16, What this cannot show you, group 3: What the tool can and cannot tell you, and who it is for, 279 characters" data-en-aria-label="Passage 16, What this cannot show you, group 3: What the tool can and cannot tell you, and who it is for, 279 characters" data-uk-aria-label="Уривок 16, What this cannot show you, група 3: What the tool can and cannot tell you, and who it is for, 279 символів" title="Passage 16, What this cannot show you, group 3: What the tool can and cannot tell you, and who it is for, 279 characters" data-en-title="Passage 16, What this cannot show you, group 3: What the tool can and cannot tell you, and who it is for, 279 characters" data-uk-title="Уривок 16, What this cannot show you, група 3: What the tool can and cannot tell you, and who it is for, 279 символів" data-i18n></a>
 <span class="slot" aria-hidden="true"></span>
 <span class="slot" aria-hidden="true"></span>
 <span class="slot" aria-hidden="true"></span>
@@ -240,91 +341,176 @@ footer{margin-top:26px;color:var(--faint);font-size:12.5px}
 </div>
 </div>
 <div class="scale mono" aria-hidden="true">
-<div class="in"><span>#0</span><span class="cap">cap · 26 ▲</span></div>
+<div class="in"><span>#0</span><span class="cap"><span class="l-en">cap</span><span class="l-uk" lang="uk">ліміт</span> · 26 ▲</span></div>
 </div>
-<p class="readout" id="readout" aria-live="polite">Hover or focus a cell to see its passage, heading and group. Striped cells are side-path content. Select a cell to jump to the passage.</p>
+<p class="readout" aria-live="polite"><span class="l-en">Hover or focus a cell to see its passage, heading and group. Striped cells are side-path content. Select a cell to jump to the passage.</span><span class="l-uk" lang="uk">Наведіть курсор або перейдіть на клітинку, щоб побачити її уривок, заголовок і групу. Смугасті клітинки — побічний вміст. Натисніть клітинку, щоб перейти до уривка.</span></p>
 <ul class="legend">
-<li><span class="sw" style="--c:#0e9ab8"></span>0 · Visualizer · Machine</li>
-<li><span class="sw" style="--c:#8b5cf6"></span>1 · How to read your result</li>
-<li><span class="sw" style="--c:#16a34a"></span>2 · Grouping · Length</li>
-<li><span class="sw" style="--c:#e0458a"></span>3 · Whether · Against</li>
-<li><span class="sw" style="--c:#3d7ef0"></span>4 · Three · Questions</li>
-<li><span class="sw" style="--c:#7a8a14"></span>5 · Questions people ask about this</li>
+<li><span class="sw" style="--c:#0e9ab8"></span>0 · What Vectorscope is, and what its reading does not prove</li>
+<li><span class="sw" style="--c:#8b5cf6"></span>1 · How to read the four results</li>
+<li><span class="sw" style="--c:#16a34a"></span>2 · Chunking strategies and the terms behind them</li>
+<li><span class="sw" style="--c:#e0458a"></span>3 · What the tool can and cannot tell you, and who it is for</li>
+<li><span class="sw" style="--c:#3d7ef0"></span>4 · Links to further reading and other tools</li>
+<li><span class="sw" style="--c:#7a8a14"></span>5 · FAQ: AI citations and how Vectorscope works</li>
 </ul>
 </section>
+<section class="panel" id="checks" aria-labelledby="h-checks">
+<div class="panel-head"><h2 id="h-checks"><span class="l-en">Checks</span><span class="l-uk" lang="uk">Перевірки</span></h2><span class="sub"><span class="l-en">automatic, ranked by severity; each names the passages it rests on</span><span class="l-uk" lang="uk">автоматичні, за важливістю; кожна називає уривки, на яких ґрунтується</span></span></div>
+<h3 class="subhead" style="margin-top:0"><span class="l-en">AI crawlers and robots.txt</span><span class="l-uk" lang="uk">ШІ-краулери і robots.txt</span></h3>
+<p class="small" style="margin:0 0 8px"><span class="l-en">rules for the path <span class="mono">/vectorscope</span></span><span class="l-uk" lang="uk">правила для шляху <span class="mono">/vectorscope</span></span></p>
+<div class="tablewrap"><table>
+<thead><tr><th><span class="l-en">Crawler</span><span class="l-uk" lang="uk">Краулер</span></th><th><span class="l-en">Vendor</span><span class="l-uk" lang="uk">Компанія</span></th><th><span class="l-en">What it does</span><span class="l-uk" lang="uk">Що робить</span></th><th><span class="l-en">This page</span><span class="l-uk" lang="uk">Ця сторінка</span></th><th><span class="l-en">Deciding rule</span><span class="l-uk" lang="uk">Вирішальне правило</span></th></tr></thead><tbody>
+<tr><td class="code">OAI-SearchBot</td><td>OpenAI</td><td><span class="l-en">search index for the assistant</span><span class="l-uk" lang="uk">пошуковий індекс асистента</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">ChatGPT-User</td><td>OpenAI</td><td><span class="l-en">fetches when a user asks</span><span class="l-uk" lang="uk">завантажує на запит користувача</span><div class="small"><span class="l-en">the vendor says robots.txt may not apply to it</span><span class="l-uk" lang="uk">компанія зазначає, що robots.txt може на нього не діяти</span></div></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">GPTBot</td><td>OpenAI</td><td><span class="l-en">collects training data</span><span class="l-uk" lang="uk">збирає дані для навчання</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">Claude-SearchBot</td><td>Anthropic</td><td><span class="l-en">search index for the assistant</span><span class="l-uk" lang="uk">пошуковий індекс асистента</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">Claude-User</td><td>Anthropic</td><td><span class="l-en">fetches when a user asks</span><span class="l-uk" lang="uk">завантажує на запит користувача</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">ClaudeBot</td><td>Anthropic</td><td><span class="l-en">collects training data</span><span class="l-uk" lang="uk">збирає дані для навчання</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">PerplexityBot</td><td>Perplexity</td><td><span class="l-en">search index for the assistant</span><span class="l-uk" lang="uk">пошуковий індекс асистента</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">Perplexity-User</td><td>Perplexity</td><td><span class="l-en">fetches when a user asks</span><span class="l-uk" lang="uk">завантажує на запит користувача</span><div class="small"><span class="l-en">the vendor says robots.txt may not apply to it</span><span class="l-uk" lang="uk">компанія зазначає, що robots.txt може на нього не діяти</span></div></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">Google-Extended</td><td>Google</td><td><span class="l-en">collects training data</span><span class="l-uk" lang="uk">збирає дані для навчання</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">Googlebot</td><td>Google</td><td><span class="l-en">web search index assistants answer from</span><span class="l-uk" lang="uk">вебіндекс, з якого відповідають асистенти</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">Bingbot</td><td>Microsoft</td><td><span class="l-en">web search index assistants answer from</span><span class="l-uk" lang="uk">вебіндекс, з якого відповідають асистенти</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+<tr><td class="code">CCBot</td><td>Common Crawl</td><td><span class="l-en">collects training data</span><span class="l-uk" lang="uk">збирає дані для навчання</span></td><td><span class="pill good"><span class="l-en">allowed</span><span class="l-uk" lang="uk">дозволено</span></span></td><td><span class="code">Allow: /vectorscope</span> <span class="small"><span class="l-en">via *</span><span class="l-uk" lang="uk">через *</span></span></td></tr>
+</tbody></table></div>
+<p class="small" style="margin:8px 0 0"><span class="l-en">Read from <span class="mono">https://www.getlooploop.com/robots.txt</span>. Groups matched by product token, case-insensitively; longest matching rule wins, Allow wins a tie (RFC 9309).</span><span class="l-uk" lang="uk">Прочитано з <span class="mono">https://www.getlooploop.com/robots.txt</span>. Групи зіставлено за токеном продукту без огляду на регістр; перемагає найдовше правило, за рівної довжини — Allow (RFC 9309).</span></p>
+<h3 class="subhead"><span class="l-en">Technical markup</span><span class="l-uk" lang="uk">Технічна розмітка</span></h3>
+<div class="facts-grid">
+<div class="kv"><div class="k"><span class="l-en">Structured data (JSON-LD)</span><span class="l-uk" lang="uk">Структуровані дані (JSON-LD)</span></div><div class="v"><span class="code">Answer</span>, <span class="code">BreadcrumbList</span>, <span class="code">DefinedTerm</span>, <span class="code">DefinedTermSet</span>, <span class="code">FAQPage</span>, <span class="code">HowTo</span>, <span class="code">HowToStep</span>, <span class="code">ListItem</span>, <span class="code">Offer</span>, <span class="code">Organization</span>, <span class="code">Person</span>, <span class="code">Question</span>, <span class="code">SoftwareApplication</span>, <span class="code">Thing</span>, <span class="code">WebPage</span>, <span class="code">WebSite</span></div></div>
+<div class="kv"><div class="k"><span class="l-en">Canonical</span><span class="l-uk" lang="uk">Canonical</span></div><div class="v"><span class="pill good"><span class="l-en">points to this page</span><span class="l-uk" lang="uk">вказує на цю сторінку</span></span><div class="small mono" style="margin-top:4px">https://www.getlooploop.com/vectorscope</div></div></div>
+<div class="kv"><div class="k"><span class="l-en">Meta description</span><span class="l-uk" lang="uk">Meta description</span></div><div class="v"><span class="l-en">152 characters</span><span class="l-uk" lang="uk">152 символи</span></div></div>
+</div>
+<div class="kv" style="margin-top:10px"><div class="k"><span class="l-en">With JavaScript</span><span class="l-uk" lang="uk">З JavaScript</span></div><div class="v"><span class="l-en">2,463 words and 17 passages with JavaScript, against 2,447 words and 17 passages from the plain fetch. The reading above is the plain fetch.</span><span class="l-uk" lang="uk">2 463 слова і 17 уривків з JavaScript проти 2 447 слів і 17 уривків у звичайному завантаженні. Читання вище — звичайне завантаження.</span></div></div>
+<h3 class="subhead"><span class="l-en">Findings</span><span class="l-uk" lang="uk">Знахідки</span></h3>
+<ol class="findings">
+<li class="finding medium"><div class="fhead"><span class="pill sev-medium"><span class="l-en">medium</span><span class="l-uk" lang="uk">середній</span></span><h3><span class="l-en">Passages that start mid-sentence</span><span class="l-uk" lang="uk">Уривки, що починаються посеред речення</span></h3><span class="code">mid_sentence_start</span></div><p><span class="l-en">2 passage(s) open on a lowercase word or a punctuation mark.</span><span class="l-uk" lang="uk">Уривків, що починаються з малої літери чи розділового знака: 2.</span></p><ul class="samples"><li><a href="#p-6" class="mono">#6</a> <q>to quote. The passage a question actually retrieves Asking the page a question …</q></li><li><a href="#p-14" class="mono">#14</a> <q>after the reading is produced. No account is needed, so there is nothing to att…</q></li></ul><p class="tell"><b><span class="l-en">What to do</span><span class="l-uk" lang="uk">Що зробити</span>:</b> <span class="l-en">The section was longer than 2,000 characters and the window cut it. Break long sections with h2 headings so passages start where a topic starts.</span><span class="l-uk" lang="uk">Розділ був довший за 2 000 символів, і вікно його розрізало. Розбийте довгі розділи заголовками h2, щоб уривки починалися там, де починається тема.</span></p></li>
+<li class="finding medium"><div class="fhead"><span class="pill sev-medium"><span class="l-en">medium</span><span class="l-uk" lang="uk">середній</span></span><h3><span class="l-en">Navigation inside the content</span><span class="l-uk" lang="uk">Навігація всередині вмісту</span></h3><span class="code">nav_in_content</span></div><p><span class="l-en">1 run(s) of four or more one-or-two-word lines.</span><span class="l-uk" lang="uk">Серій із чотирьох і більше рядків по одному-два слова: 1.</span></p><ul class="samples"><li><a href="#p-1" class="mono">#1</a> <q>1. Fetched · 2. Extracted · 3. Chunked · 4. Embedded · 5. Grouped · passages read</q></li></ul><p class="tell"><b><span class="l-en">What to do</span><span class="l-uk" lang="uk">Що зробити</span>:</b> <span class="l-en">Menus, tag lists or label tables inside the main region become passage text. Wrap them in nav or move them out of main.</span><span class="l-uk" lang="uk">Меню, списки тегів чи таблиці підписів у головній області стають текстом уривків. Загорніть їх у nav або винесіть з main.</span></p></li>
+<li class="finding low"><div class="fhead"><span class="pill sev-low"><span class="l-en">low</span><span class="l-uk" lang="uk">низький</span></span><h3><span class="l-en">Thin sections</span><span class="l-uk" lang="uk">Тонкі розділи</span></h3><span class="code">thin_section</span></div><p><span class="l-en">1 heading(s) with fewer than 150 characters under them.</span><span class="l-uk" lang="uk">Заголовків, під якими менше 150 символів: 1.</span></p><ul class="samples"><li><a href="#p-3" class="mono">#3</a> <q>Important passage outside the cap?</q> <span class="small">· 139</span></li></ul><p class="tell"><b><span class="l-en">What to do</span><span class="l-uk" lang="uk">Що зробити</span>:</b> <span class="l-en">A passage this short cannot answer much on its own. Merge it into a neighbour or say what the heading promises.</span><span class="l-uk" lang="uk">Такий короткий уривок мало що може відповісти сам. Об’єднайте його з сусіднім або напишіть те, що обіцяє заголовок.</span></p></li>
+<li class="finding low"><div class="fhead"><span class="pill sev-low"><span class="l-en">low</span><span class="l-uk" lang="uk">низький</span></span><h3><span class="l-en">The same words in most groups</span><span class="l-uk" lang="uk">Ті самі слова в більшості груп</span></h3><span class="code">repeated_claim</span></div><p><span class="l-en">1 phrase(s) recur across at least half of the 6 groups.</span><span class="l-uk" lang="uk">Фраз, що повторюються щонайменше в половині з 6 груп: 1.</span></p><ul class="samples"><li><q>the question semantic chunking</q> <span class="small">· 3/6 · <a class="mono" href="#p-2">#2</a> <a class="mono" href="#p-7">#7</a> <a class="mono" href="#p-8">#8</a></span></li></ul><p class="tell"><b><span class="l-en">What to do</span><span class="l-uk" lang="uk">Що зробити</span>:</b> <span class="l-en">Repetition spends passages on what was already said and blurs the groups. Say it once, where it belongs.</span><span class="l-uk" lang="uk">Повтори витрачають уривки на вже сказане й розмивають групи. Скажіть це один раз, там, де йому місце.</span></p></li>
+</ol>
+</section>
+<section class="panel" id="plan" aria-labelledby="h-plan">
+<div class="panel-head"><h2 id="h-plan"><span class="l-en">Rewrite plan</span><span class="l-uk" lang="uk">План переписування</span></h2><span class="sub"><span class="l-en">the agent's judgement, in priority order; every passage must stand on its own, because a retriever sees it alone</span><span class="l-uk" lang="uk">судження агента, за пріоритетом; кожен уривок має бути самодостатнім, бо ретривер бачить його окремо</span></span></div>
+<ol class="plan">
+<li class="item">
+<div class="ihead"><span class="prio">1</span><span class="pill"><span class="l-en">Navigation inside the content</span><span class="l-uk" lang="uk">Навігація всередині вмісту</span></span><a class="mono small" href="#p-1">#1</a></div>
+<dl><dt><span class="l-en">Problem</span><span class="l-uk" lang="uk">Проблема</span></dt><dd>The empty result widget is inside main, so its step labels and counter captions become passage #1: a retriever stores &quot;1. Fetched 2. Extracted …&quot; as content.</dd><dt><span class="l-en">Fix</span><span class="l-uk" lang="uk">Виправлення</span></dt><dd>Render the result widget only after a run, or mark the placeholder aria-hidden and move it out of main. If the counts should stay readable, say them in one sentence.</dd></dl>
+<div class="ba"><div class="side was"><span class="k"><span class="l-en">Before</span><span class="l-uk" lang="uk">Було</span></span>passages read
+slots used of the 26-passage cap
+characters the cap cut off (0 when the page fits)</div><div class="to" aria-hidden="true">→</div><div class="side now"><span class="k"><span class="l-en">After</span><span class="l-uk" lang="uk">Стало</span></span>For each page, Vectorscope reports three counts: the passages it read, the slots used of its 26-passage cap, and the characters the cap cut off.</div></div>
+</li>
+<li class="item">
+<div class="ihead"><span class="prio">2</span><span class="pill"><span class="l-en">Passages that start mid-sentence</span><span class="l-uk" lang="uk">Уривки, що починаються посеред речення</span></span><a class="mono small" href="#p-5">#5</a> <a class="mono small" href="#p-6">#6</a></div>
+<dl><dt><span class="l-en">Problem</span><span class="l-uk" lang="uk">Проблема</span></dt><dd>&quot;How to read your result&quot; is 2,450 characters under one h2, so the 2,000-character window cuts it and passage #6 opens with &quot;to quote.&quot; mid-sentence.</dd><dt><span class="l-en">Fix</span><span class="l-uk" lang="uk">Виправлення</span></dt><dd>Make each of the four readings its own h2 (&quot;Chunks that never reach the index&quot;, &quot;The extraction ratio&quot;, …), so every passage starts where its topic starts and carries the heading that names it.</dd></dl>
+<div class="ba"><div class="side was"><span class="k"><span class="l-en">Before</span><span class="l-uk" lang="uk">Було</span></span>to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page</div><div class="to" aria-hidden="true">→</div><div class="side now"><span class="k"><span class="l-en">After</span><span class="l-uk" lang="uk">Стало</span></span>Which passage does a question retrieve? Asking Vectorscope a question returns the passages of the page that answer it, ranked, using only that page.</div></div>
+</li>
+<li class="item">
+<div class="ihead"><span class="prio">3</span><span class="pill"><span class="l-en">Passages that start mid-sentence</span><span class="l-uk" lang="uk">Уривки, що починаються посеред речення</span></span><a class="mono small" href="#p-13">#13</a> <a class="mono small" href="#p-14">#14</a></div>
+<dl><dt><span class="l-en">Problem</span><span class="l-uk" lang="uk">Проблема</span></dt><dd>The FAQ is one h2 of 2,292 characters; the window splits the answer to &quot;Is it really free?&quot; across two passages, and #14 opens with &quot;after the reading is produced&quot;.</dd><dt><span class="l-en">Fix</span><span class="l-uk" lang="uk">Виправлення</span></dt><dd>Split the FAQ into two h2 sections (AI citations; using Vectorscope), each under 2,000 characters, so no answer is cut away from its question.</dd></dl>
+<div class="ba"><div class="side was"><span class="k"><span class="l-en">Before</span><span class="l-uk" lang="uk">Було</span></span>after the reading is produced. No account is needed, so there is nothing to attach it to.</div><div class="to" aria-hidden="true">→</div><div class="side now"><span class="k"><span class="l-en">After</span><span class="l-uk" lang="uk">Стало</span></span>Vectorscope does not keep the fetched page once the reading is produced, and it needs no account, so nothing is attached to you.</div></div>
+</li>
+<li class="item">
+<div class="ihead"><span class="prio">4</span><span class="pill"><span class="l-en">Thin sections</span><span class="l-uk" lang="uk">Тонкі розділи</span></span><a class="mono small" href="#p-3">#3</a></div>
+<dl><dt><span class="l-en">Problem</span><span class="l-uk" lang="uk">Проблема</span></dt><dd>&quot;Important passage outside the cap?&quot; has 139 characters under it, and the answer leans on the heading: &quot;Move it earlier&quot; says nothing to a retriever that sees the passage alone.</dd><dt><span class="l-en">Fix</span><span class="l-uk" lang="uk">Виправлення</span></dt><dd>Repeat the subject in the answer and name the cap, so the passage stands on its own.</dd></dl>
+<div class="ba"><div class="side was"><span class="k"><span class="l-en">Before</span><span class="l-uk" lang="uk">Було</span></span>Move it earlier on the page, or split the page so that passage has a budget of its own.</div><div class="to" aria-hidden="true">→</div><div class="side now"><span class="k"><span class="l-en">After</span><span class="l-uk" lang="uk">Стало</span></span>If an important passage falls outside Vectorscope&#39;s 26-passage cap, move it earlier on the page, or split the page so that passage has a budget of its own.</div></div>
+</li>
+<li class="item">
+<div class="ihead"><span class="prio">5</span><a class="mono small" href="#p-16">#16</a></div>
+<dl><dt><span class="l-en">Problem</span><span class="l-uk" lang="uk">Проблема</span></dt><dd>&quot;One page on its own.&quot; opens the passage with no subject; read alone it does not say what is limited.</dd><dt><span class="l-en">Fix</span><span class="l-uk" lang="uk">Виправлення</span></dt><dd>Name the product and the limit in the first sentence.</dd></dl>
+<div class="ba"><div class="side was"><span class="k"><span class="l-en">Before</span><span class="l-uk" lang="uk">Було</span></span>One page on its own.</div><div class="to" aria-hidden="true">→</div><div class="side now"><span class="k"><span class="l-en">After</span><span class="l-uk" lang="uk">Стало</span></span>Vectorscope reads one page on its own.</div></div>
+</li>
+</ol>
+</section>
+<section class="panel" id="queries" aria-labelledby="h-queries">
+<div class="panel-head"><h2 id="h-queries"><span class="l-en">Query test</span><span class="l-uk" lang="uk">Тест запитів</span></h2><span class="sub"><span class="l-en">the agent's judgement: for each typical query, the best passage and whether it answers on its own</span><span class="l-uk" lang="uk">судження агента: для кожного типового запиту — найкращий уривок і чи відповідає він сам по собі</span></span></div>
+<p class="note" style="margin-bottom:12px"><span class="l-en">6 of 8 queries answered completely, 2 partly, 0 not at all; 6 with a citable passage.</span><span class="l-uk" lang="uk">Повна відповідь: 6 з 8, часткова: 2, немає: 0; придатний до цитування уривок: 6.</span></p>
+<div class="tablewrap"><table>
+<thead><tr><th><span class="l-en">Query</span><span class="l-uk" lang="uk">Запит</span></th><th><span class="l-en">Best passage</span><span class="l-uk" lang="uk">Найкращий уривок</span></th><th><span class="l-en">Answer</span><span class="l-uk" lang="uk">Відповідь</span></th><th><span class="l-en">Citable</span><span class="l-uk" lang="uk">Цитовне</span></th><th><span class="l-en">The words that answer</span><span class="l-uk" lang="uk">Слова, що відповідають</span></th></tr></thead><tbody>
+<tr><td>what is semantic chunking<div class="small"><span class="l-en">written by the agent</span><span class="l-uk" lang="uk">запит від агента</span></div></td><td class="num"><a class="mono" href="#p-7">#7</a></td><td><span class="pill good"><span class="l-en">complete</span><span class="l-uk" lang="uk">повна</span></span></td><td><span class="yes"><span class="l-en">yes</span><span class="l-uk" lang="uk">так</span></span></td><td class="quote"><q>Semantic chunking is splitting a page into passages where its meaning changes, instead of every fixed number of characters or at every heading.</q></td></tr>
+<tr><td>does Vectorscope use semantic chunking<div class="small"><span class="l-en">written by the agent</span><span class="l-uk" lang="uk">запит від агента</span></div></td><td class="num"><a class="mono" href="#p-13">#13</a></td><td><span class="pill good"><span class="l-en">complete</span><span class="l-uk" lang="uk">повна</span></span></td><td><span class="yes"><span class="l-en">yes</span><span class="l-uk" lang="uk">так</span></span></td><td class="quote"><q>Does Vectorscope use semantic chunking? Not to cut the page. Vectorscope cuts at every h2</q></td></tr>
+<tr><td>how many passages of a page does a retriever read<div class="small"><span class="l-en">written by the agent</span><span class="l-uk" lang="uk">запит від агента</span></div></td><td class="num"><a class="mono" href="#p-3">#3</a></td><td><span class="pill mid"><span class="l-en">partial</span><span class="l-uk" lang="uk">часткова</span></span></td><td><span class="gap"><span class="l-en">no</span><span class="l-uk" lang="uk">ні</span></span></td><td class="quote"><q>This reading takes at most 26 passages from a page.</q></td></tr>
+<tr><td>how do I get cited in AI Overviews<div class="small"><span class="l-en">written by the agent</span><span class="l-uk" lang="uk">запит від агента</span></div></td><td class="num"><a class="mono" href="#p-13">#13</a></td><td><span class="pill good"><span class="l-en">complete</span><span class="l-uk" lang="uk">повна</span></span></td><td><span class="yes"><span class="l-en">yes</span><span class="l-uk" lang="uk">так</span></span></td><td class="quote"><q>Give the answer its own passage, under a heading that names the question, high enough on the page to survive the retrieval cap.</q></td></tr>
+<tr><td>what is the extraction ratio<div class="small"><span class="l-en">written by the agent</span><span class="l-uk" lang="uk">запит від агента</span></div></td><td class="num"><a class="mono" href="#p-5">#5</a></td><td><span class="pill good"><span class="l-en">complete</span><span class="l-uk" lang="uk">повна</span></span></td><td><span class="yes"><span class="l-en">yes</span><span class="l-uk" lang="uk">так</span></span></td><td class="quote"><q>The extraction ratio is how much of the page turned into readable text</q></td></tr>
+<tr><td>how to compare my RAG chunker against a reference<div class="small"><span class="l-en">written by the agent</span><span class="l-uk" lang="uk">запит від агента</span></div></td><td class="num"><a class="mono" href="#p-9">#9</a></td><td><span class="pill good"><span class="l-en">complete</span><span class="l-uk" lang="uk">повна</span></span></td><td><span class="yes"><span class="l-en">yes</span><span class="l-uk" lang="uk">так</span></span></td><td class="quote"><q>Run a page you already index, and compare the passage boundaries with your own chunker&#39;s</q></td></tr>
+<tr><td>is Vectorscope free<div class="small"><span class="l-en">written by the agent</span><span class="l-uk" lang="uk">запит від агента</span></div></td><td class="num"><a class="mono" href="#p-14">#14</a></td><td><span class="pill good"><span class="l-en">complete</span><span class="l-uk" lang="uk">повна</span></span></td><td><span class="yes"><span class="l-en">yes</span><span class="l-uk" lang="uk">так</span></span></td><td class="quote"><q>Is it really free? Yes, with a rate limit rather than a paywall.</q></td></tr>
+<tr><td>which chunking strategy is best for RAG<div class="small"><span class="l-en">written by the agent</span><span class="l-uk" lang="uk">запит від агента</span></div></td><td class="num"><a class="mono" href="#p-7">#7</a></td><td><span class="pill mid"><span class="l-en">partial</span><span class="l-uk" lang="uk">часткова</span></span></td><td><span class="gap"><span class="l-en">no</span><span class="l-uk" lang="uk">ні</span></span></td><td class="quote"><q>Fixed-length chunking cuts every N characters and is the default in most pipelines because it is trivial to implement.</q></td></tr>
+</tbody></table></div>
+</section>
 <section class="panel" aria-labelledby="h-groups">
-<div class="panel-head"><h2 id="h-groups">The groups this page falls into</h2><span class="sub">6 groups, by Claude's reading</span></div>
+<div class="panel-head"><h2 id="h-groups"><span class="l-en">The groups this page falls into</span><span class="l-uk" lang="uk">Групи, на які розпадається сторінка</span></h2><span class="sub"><span class="l-en">6 groups, by the agent's reading</span><span class="l-uk" lang="uk">6 груп, за прочитанням агента</span></span></div>
 <div class="groups">
 <article class="gcard" style="--c:#0e9ab8">
-<div class="gid mono">Group 0</div>
-<h3>Visualizer · Machine</h3>
-<span class="src keywords" title="The group's two most distinctive words: a hint, not the section's name">label: keywords (a hint)</span>
-<div class="gstats"><span><b>5</b> passages</span><span><b>1,734</b> chars</span><span><b>12.3%</b> of the indexed text</span></div>
-<div class="bar" role="img" aria-label="12.3% of the indexed text"><span style="width:12.3%"></span></div>
+<div class="gid mono"><span class="l-en">Group 0</span><span class="l-uk" lang="uk">Група 0</span></div>
+<h3>What Vectorscope is, and what its reading does not prove</h3>
+<p class="gnote">The intro, the empty result widget, and three short caveats.</p>
+<span class="src keywords" title="The group&#39;s two most distinctive words: a hint, not the section&#39;s name" data-en-title="The group&#39;s two most distinctive words: a hint, not the section&#39;s name" data-uk-title="Два найхарактерніші слова групи: підказка, а не назва розділу" data-i18n><span class="k"><span class="l-en">label source</span><span class="l-uk" lang="uk">джерело мітки</span>: <span class="l-en">keywords (a hint)</span><span class="l-uk" lang="uk">ключові слова (підказка)</span></span><span class="v">Visualizer · Machine</span></span>
+<div class="gstats"><span><span class="l-en">5 passages</span><span class="l-uk" lang="uk">5 уривків</span></span><span><b>1,734</b> <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span><span><b>12.3%</b> <span class="l-en">of the indexed text</span><span class="l-uk" lang="uk">індексованого тексту</span></span></div>
+<div class="bar" role="img" aria-label="12.3%"><span style="width:12.3%"></span></div>
 </article>
 <article class="gcard" style="--c:#8b5cf6">
-<div class="gid mono">Group 1</div>
-<h3>How to read your result</h3>
-<span class="src heading" title="The page's own section heading">label: heading</span>
-<div class="gstats"><span><b>2</b> passages</span><span><b>2,450</b> chars</span><span><b>17.4%</b> of the indexed text</span></div>
-<div class="bar" role="img" aria-label="17.4% of the indexed text"><span style="width:17.4%"></span></div>
+<div class="gid mono"><span class="l-en">Group 1</span><span class="l-uk" lang="uk">Група 1</span></div>
+<h3>How to read the four results</h3>
+<p class="gnote">Cap, extraction ratio, groups, and the passage a question retrieves; one long section the window cuts in two.</p>
+<span class="src heading" title="The page&#39;s own section heading" data-en-title="The page&#39;s own section heading" data-uk-title="Власний заголовок розділу сторінки" data-i18n><span class="k"><span class="l-en">label source</span><span class="l-uk" lang="uk">джерело мітки</span>: <span class="l-en">heading</span><span class="l-uk" lang="uk">заголовок</span></span><span class="v">How to read your result</span></span>
+<div class="gstats"><span><span class="l-en">2 passages</span><span class="l-uk" lang="uk">2 уривки</span></span><span><b>2,450</b> <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span><span><b>17.4%</b> <span class="l-en">of the indexed text</span><span class="l-uk" lang="uk">індексованого тексту</span></span></div>
+<div class="bar" role="img" aria-label="17.4%"><span style="width:17.4%"></span></div>
 </article>
 <article class="gcard" style="--c:#16a34a">
-<div class="gid mono">Group 2</div>
-<h3>Grouping · Length</h3>
-<span class="src keywords" title="The group's two most distinctive words: a hint, not the section's name">label: keywords (a hint)</span>
-<div class="gstats"><span><b>2</b> passages</span><span><b>3,394</b> chars</span><span><b>24.1%</b> of the indexed text</span></div>
-<div class="bar" role="img" aria-label="24.1% of the indexed text"><span style="width:24.1%"></span></div>
+<div class="gid mono"><span class="l-en">Group 2</span><span class="l-uk" lang="uk">Група 2</span></div>
+<h3>Chunking strategies and the terms behind them</h3>
+<span class="src keywords" title="The group&#39;s two most distinctive words: a hint, not the section&#39;s name" data-en-title="The group&#39;s two most distinctive words: a hint, not the section&#39;s name" data-uk-title="Два найхарактерніші слова групи: підказка, а не назва розділу" data-i18n><span class="k"><span class="l-en">label source</span><span class="l-uk" lang="uk">джерело мітки</span>: <span class="l-en">keywords (a hint)</span><span class="l-uk" lang="uk">ключові слова (підказка)</span></span><span class="v">Grouping · Length</span></span>
+<div class="gstats"><span><span class="l-en">2 passages</span><span class="l-uk" lang="uk">2 уривки</span></span><span><b>3,394</b> <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span><span><b>24.1%</b> <span class="l-en">of the indexed text</span><span class="l-uk" lang="uk">індексованого тексту</span></span></div>
+<div class="bar" role="img" aria-label="24.1%"><span style="width:24.1%"></span></div>
 </article>
 <article class="gcard" style="--c:#e0458a">
-<div class="gid mono">Group 3</div>
-<h3>Whether · Against</h3>
-<span class="src keywords" title="The group's two most distinctive words: a hint, not the section's name">label: keywords (a hint)</span>
-<div class="gstats"><span><b>4</b> passages</span><span><b>3,158</b> chars</span><span><b>22.4%</b> of the indexed text</span></div>
-<div class="bar" role="img" aria-label="22.4% of the indexed text"><span style="width:22.4%"></span></div>
+<div class="gid mono"><span class="l-en">Group 3</span><span class="l-uk" lang="uk">Група 3</span></div>
+<h3>What the tool can and cannot tell you, and who it is for</h3>
+<span class="src keywords" title="The group&#39;s two most distinctive words: a hint, not the section&#39;s name" data-en-title="The group&#39;s two most distinctive words: a hint, not the section&#39;s name" data-uk-title="Два найхарактерніші слова групи: підказка, а не назва розділу" data-i18n><span class="k"><span class="l-en">label source</span><span class="l-uk" lang="uk">джерело мітки</span>: <span class="l-en">keywords (a hint)</span><span class="l-uk" lang="uk">ключові слова (підказка)</span></span><span class="v">Whether · Against</span></span>
+<div class="gstats"><span><span class="l-en">4 passages</span><span class="l-uk" lang="uk">4 уривки</span></span><span><b>3,158</b> <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span><span><b>22.4%</b> <span class="l-en">of the indexed text</span><span class="l-uk" lang="uk">індексованого тексту</span></span></div>
+<div class="bar" role="img" aria-label="22.4%"><span style="width:22.4%"></span></div>
 </article>
 <article class="gcard" style="--c:#3d7ef0">
-<div class="gid mono">Group 4</div>
-<h3>Three · Questions</h3>
-<span class="src keywords" title="The group's two most distinctive words: a hint, not the section's name">label: keywords (a hint)</span>
-<div class="gstats"><span><b>2</b> passages</span><span><b>1,081</b> chars</span><span><b>7.7%</b> of the indexed text</span></div>
-<div class="bar" role="img" aria-label="7.7% of the indexed text"><span style="width:7.7%"></span></div>
+<div class="gid mono"><span class="l-en">Group 4</span><span class="l-uk" lang="uk">Група 4</span></div>
+<h3>Links to further reading and other tools</h3>
+<span class="src keywords" title="The group&#39;s two most distinctive words: a hint, not the section&#39;s name" data-en-title="The group&#39;s two most distinctive words: a hint, not the section&#39;s name" data-uk-title="Два найхарактерніші слова групи: підказка, а не назва розділу" data-i18n><span class="k"><span class="l-en">label source</span><span class="l-uk" lang="uk">джерело мітки</span>: <span class="l-en">keywords (a hint)</span><span class="l-uk" lang="uk">ключові слова (підказка)</span></span><span class="v">Three · Questions</span></span>
+<div class="gstats"><span><span class="l-en">2 passages</span><span class="l-uk" lang="uk">2 уривки</span></span><span><b>1,081</b> <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span><span><b>7.7%</b> <span class="l-en">of the indexed text</span><span class="l-uk" lang="uk">індексованого тексту</span></span></div>
+<div class="bar" role="img" aria-label="7.7%"><span style="width:7.7%"></span></div>
 </article>
 <article class="gcard" style="--c:#7a8a14">
-<div class="gid mono">Group 5</div>
-<h3>Questions people ask about this</h3>
-<span class="src heading" title="The page's own section heading">label: heading</span>
-<div class="gstats"><span><b>2</b> passages</span><span><b>2,292</b> chars</span><span><b>16.2%</b> of the indexed text</span></div>
-<div class="bar" role="img" aria-label="16.2% of the indexed text"><span style="width:16.2%"></span></div>
+<div class="gid mono"><span class="l-en">Group 5</span><span class="l-uk" lang="uk">Група 5</span></div>
+<h3>FAQ: AI citations and how Vectorscope works</h3>
+<p class="gnote">The questions survive as text, so each answer keeps its question.</p>
+<span class="src heading" title="The page&#39;s own section heading" data-en-title="The page&#39;s own section heading" data-uk-title="Власний заголовок розділу сторінки" data-i18n><span class="k"><span class="l-en">label source</span><span class="l-uk" lang="uk">джерело мітки</span>: <span class="l-en">heading</span><span class="l-uk" lang="uk">заголовок</span></span><span class="v">Questions people ask about this</span></span>
+<div class="gstats"><span><span class="l-en">2 passages</span><span class="l-uk" lang="uk">2 уривки</span></span><span><b>2,292</b> <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span><span><b>16.2%</b> <span class="l-en">of the indexed text</span><span class="l-uk" lang="uk">індексованого тексту</span></span></div>
+<div class="bar" role="img" aria-label="16.2%"><span style="width:16.2%"></span></div>
 </article>
 </div>
-<p class="explain">A <b>heading</b> label is the page's own section heading and can be quoted. A <b>keywords</b> label is the group's two most distinctive words: a hint at what the group is about, not what the section is called.</p>
+<p class="explain"><span class="l-en">The large name is the agent's label for the group. Under it, the <b>label source</b>: a <b>heading</b> is the page's own section heading and can be quoted; <b>keywords</b> are the group's two most distinctive words, a hint and not what the section is called.</span><span class="l-uk" lang="uk">Велика назва — мітка групи від агента. Під нею <b>джерело мітки</b>: <b>заголовок</b> — власний заголовок розділу сторінки, його можна цитувати; <b>ключові слова</b> — два найхарактерніші слова групи, підказка, а не назва розділу.</span></p>
 </section>
 <section class="panel" aria-labelledby="h-passages">
-<div class="panel-head"><h2 id="h-passages">Passages, by group</h2><span class="sub">in reading order inside each group; each opens with its first 240 characters</span></div>
+<div class="panel-head"><h2 id="h-passages"><span class="l-en">Passages, by group</span><span class="l-uk" lang="uk">Уривки за групами</span></h2><span class="sub"><span class="l-en">in reading order inside each group; each opens with its first 240 characters</span><span class="l-uk" lang="uk">у порядку читання всередині групи; кожен показано першими 240 символами</span></span></div>
 <div class="pgroup" style="--c:#0e9ab8">
-<div class="pgroup-head"><span class="sw"></span><h3>0 · Visualizer · Machine</h3><small>5 passages</small></div>
+<div class="pgroup-head"><span class="sw"></span><h3>0 · What Vectorscope is, and what its reading does not prove</h3><small><span class="l-en">5 passages</span><span class="l-uk" lang="uk">5 уривків</span></small></div>
 <ol class="plist">
 <li class="passage" id="p-0">
 <div class="phead">
 <span class="num">#0</span>
 <span class="ph">Semantic Chunking Visualizer for Any URL — Vectorscope</span>
-<span>286 chars</span>
-<span class="role main">main</span>
+<span>286 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">Semantic Chunking Visualizer for Any URL — Vectorscope Semantic chunking, made visible: see what survives the trip into vector space. Free semantic chunking visualizer: paste a URL and see the passages a retriever cuts, how they group by me…</p>
-<details><summary>Show the full passage</summary><div class="full-text">Semantic Chunking Visualizer for Any URL — Vectorscope
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">Semantic Chunking Visualizer for Any URL — Vectorscope
 Semantic chunking, made visible: see what survives the trip into vector space.
 Free semantic chunking visualizer: paste a URL and see the passages a retriever cuts, how they group by meaning, and what falls past the 26-passage cap.</div></details>
 </li>
 <li class="passage" id="p-1">
 <div class="phead">
 <span class="num">#1</span>
-<span>804 chars</span>
-<span class="role main">main</span>
+<span>804 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">Free tool No account Experimental Vectorscope Semantic chunking, made visible: see what survives the trip into vector space. Vectorscope is a free semantic chunking visualizer: it cuts one URL into the passages a retrieval system would stor…</p>
-<details><summary>Show the full passage</summary><div class="full-text">Free tool No account Experimental
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">Free tool No account Experimental
 Vectorscope
 Semantic chunking, made visible: see what survives the trip into vector space.
 Vectorscope is a free semantic chunking visualizer: it cuts one URL into the passages a retrieval system would store, groups them by meaning, and shows how much of the page never reaches the index at all.
@@ -346,18 +532,18 @@ Paste a URL above. The page is cut into passages at its h2 headings; the ones in
 <div class="phead">
 <span class="num">#2</span>
 <span class="ph">What does this mean?</span>
-<span>259 chars</span>
-<span class="role main">main</span>
+<span>259 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">The reading shows which passages of your page a retriever can receive, and how they group by meaning — the question semantic chunking asks, put to passages already cut. It is a preview of the machine&#39;s view, not a guarantee of what any assi…</p>
-<details><summary>Show the full passage</summary><div class="full-text">The reading shows which passages of your page a retriever can receive, and how they group by meaning — the question semantic chunking asks, put to passages already cut. It is a preview of the machine&#39;s view, not a guarantee of what any assistant does with it.</div></details>
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">The reading shows which passages of your page a retriever can receive, and how they group by meaning — the question semantic chunking asks, put to passages already cut. It is a preview of the machine&#39;s view, not a guarantee of what any assistant does with it.</div></details>
 </li>
 <li class="passage" id="p-3">
 <div class="phead">
 <span class="num">#3</span>
 <span class="ph">Important passage outside the cap?</span>
-<span>139 chars</span>
-<span class="role main">main</span>
+<span>139 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">Move it earlier on the page, or split the page so that passage has a budget of its own. This reading takes at most 26 passages from a page.</p>
 </li>
@@ -365,51 +551,51 @@ Paste a URL above. The page is cut into passages at its h2 headings; the ones in
 <div class="phead">
 <span class="num">#4</span>
 <span class="ph">Models and retrieval caps vary.</span>
-<span>246 chars</span>
-<span class="role main">main</span>
+<span>246 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">This does not establish that any assistant has indexed the page. Each system does its own chunking — fixed windows, headings or semantic chunking — and embeds and caps in its own way; this is the pipeline the product runs. Sources and metho…</p>
-<details><summary>Show the full passage</summary><div class="full-text">This does not establish that any assistant has indexed the page. Each system does its own chunking — fixed windows, headings or semantic chunking — and embeds and caps in its own way; this is the pipeline the product runs. Sources and methodology</div></details>
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">This does not establish that any assistant has indexed the page. Each system does its own chunking — fixed windows, headings or semantic chunking — and embeds and caps in its own way; this is the pipeline the product runs. Sources and methodology</div></details>
 </li>
 </ol>
 </div>
 <div class="pgroup" style="--c:#8b5cf6">
-<div class="pgroup-head"><span class="sw"></span><h3>1 · How to read your result</h3><small>2 passages</small></div>
+<div class="pgroup-head"><span class="sw"></span><h3>1 · How to read the four results</h3><small><span class="l-en">2 passages</span><span class="l-uk" lang="uk">2 уривки</span></small></div>
 <ol class="plist">
 <li class="passage" id="p-5">
 <div class="phead">
 <span class="num">#5</span>
 <span class="ph">How to read your result</span>
-<span>1,995 chars</span>
-<span class="role main">main</span>
+<span>1,995 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">Four readings decide whether a page is legible to a retrieval system. Here is what each one means when it is bad. Chunks that never reach the index A retrieval system reads a fixed number of passages from a page and ignores the rest, so any…</p>
-<details><summary>Show the full passage</summary><div class="full-text">Four readings decide whether a page is legible to a retrieval system. Here is what each one means when it is bad. Chunks that never reach the index A retrieval system reads a fixed number of passages from a page and ignores the rest, so anything below that cut is invisible no matter how good it is. Vectorscope applies the same cap the product applies and names the passages that fell outside it. If your answer, your differentiator or your FAQ sits below the cut, the fix is not more words, and semantic chunking will not rescue it either: a well-cut passage past the cap is still a passage nobody reads. Move that passage up, or split the page so it has a passage budget of its own. The extraction ratio The extraction ratio is how much of the page turned into readable text — a low one means most of what you shipped was navigation, boilerplate or markup that no model will ever see. A long page with a low ratio is a short page as far as retrieval is concerned. Extraction happens before any chunking, semantic chunking included, so text lost here is lost to every strategy. Common causes, in the order we see them: text rendered only by JavaScript, an article wrapped in so much chrome that the body is a minority of the document, and images carrying words that exist nowhere in the HTML. Groups, and what a tight group means Groups are the semantic part of this reading, the nearest it comes to semantic chunking: passages the embedding places close together in meaning, whatever heading they sit under. One enormous group usually means the page says one thing many times, which reads as thin to a retriever even when it reads as thorough to an editor. Several small groups with one passage each is the opposite problem: a page that changes subject constantly gives a retriever nothing complete to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page — which is the closest thing to watching a model</div></details>
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">Four readings decide whether a page is legible to a retrieval system. Here is what each one means when it is bad. Chunks that never reach the index A retrieval system reads a fixed number of passages from a page and ignores the rest, so anything below that cut is invisible no matter how good it is. Vectorscope applies the same cap the product applies and names the passages that fell outside it. If your answer, your differentiator or your FAQ sits below the cut, the fix is not more words, and semantic chunking will not rescue it either: a well-cut passage past the cap is still a passage nobody reads. Move that passage up, or split the page so it has a passage budget of its own. The extraction ratio The extraction ratio is how much of the page turned into readable text — a low one means most of what you shipped was navigation, boilerplate or markup that no model will ever see. A long page with a low ratio is a short page as far as retrieval is concerned. Extraction happens before any chunking, semantic chunking included, so text lost here is lost to every strategy. Common causes, in the order we see them: text rendered only by JavaScript, an article wrapped in so much chrome that the body is a minority of the document, and images carrying words that exist nowhere in the HTML. Groups, and what a tight group means Groups are the semantic part of this reading, the nearest it comes to semantic chunking: passages the embedding places close together in meaning, whatever heading they sit under. One enormous group usually means the page says one thing many times, which reads as thin to a retriever even when it reads as thorough to an editor. Several small groups with one passage each is the opposite problem: a page that changes subject constantly gives a retriever nothing complete to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page — which is the closest thing to watching a model</div></details>
 </li>
 <li class="passage" id="p-6">
 <div class="phead">
 <span class="num">#6</span>
 <span class="ph">How to read your result</span>
-<span>455 chars</span>
-<span class="role main">main</span>
+<span>455 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page — which is the closest thing to watching a model decide what your page is for. If the returned…</p>
-<details><summary>Show the full passage</summary><div class="full-text">to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page — which is the closest thing to watching a model decide what your page is for. If the returned passage is not the one you would have chosen, the page is not organised the way you think it is. This is also the fastest way to test a heading rewrite: change the heading, run the page again, ask the same question.</div></details>
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page — which is the closest thing to watching a model decide what your page is for. If the returned passage is not the one you would have chosen, the page is not organised the way you think it is. This is also the fastest way to test a heading rewrite: change the heading, run the page again, ask the same question.</div></details>
 </li>
 </ol>
 </div>
 <div class="pgroup" style="--c:#16a34a">
-<div class="pgroup-head"><span class="sw"></span><h3>2 · Grouping · Length</h3><small>2 passages</small></div>
+<div class="pgroup-head"><span class="sw"></span><h3>2 · Chunking strategies and the terms behind them</h3><small><span class="l-en">2 passages</span><span class="l-uk" lang="uk">2 уривки</span></small></div>
 <ol class="plist">
 <li class="passage" id="p-7">
 <div class="phead">
 <span class="num">#7</span>
 <span class="ph">What is semantic chunking?</span>
-<span>1,994 chars</span>
-<span class="role main">main</span>
+<span>1,994 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">Semantic chunking is splitting a page into passages where its meaning changes, instead of every fixed number of characters or at every heading. Vectorscope does not cut that way: it cuts at each h2 and then in fixed windows, and its semanti…</p>
-<details><summary>Show the full passage</summary><div class="full-text">Semantic chunking is splitting a page into passages where its meaning changes, instead of every fixed number of characters or at every heading. Vectorscope does not cut that way: it cuts at each h2 and then in fixed windows, and its semantic step comes after the cut, when the passages are grouped by meaning.
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">Semantic chunking is splitting a page into passages where its meaning changes, instead of every fixed number of characters or at every heading. Vectorscope does not cut that way: it cuts at each h2 and then in fixed windows, and its semantic step comes after the cut, when the passages are grouped by meaning.
 01 Fixed-length chunking
 Fixed-length chunking cuts every N characters and is the default in most pipelines because it is trivial to implement. It also cuts through the middle of a sentence, separates a heading from the answer under it, and produces passages that begin with half a word.
 Vectorscope uses it only inside a long section: a window of 2,000 characters with 200 characters of overlap, ending at a sentence break where one is close enough.
@@ -424,11 +610,11 @@ So the map asks the question semantic chunking asks — where does one idea end?
 <div class="phead">
 <span class="num">#11</span>
 <span class="ph">Words used on this page</span>
-<span>1,400 chars</span>
-<span class="role main">main</span>
+<span>1,400 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">The terms this page relies on, each defined once, because a page that uses them without defining them is a page an assistant cannot explain to anybody. Semantic chunking Cutting text into passages where its meaning changes, rather than at a…</p>
-<details><summary>Show the full passage</summary><div class="full-text">The terms this page relies on, each defined once, because a page that uses them without defining them is a page an assistant cannot explain to anybody.
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">The terms this page relies on, each defined once, because a page that uses them without defining them is a page an assistant cannot explain to anybody.
 Semantic chunking
 Cutting text into passages where its meaning changes, rather than at a fixed length or at a heading. On this page the meaning-based step is the grouping of passages that are already cut, not the cut itself.
 Chunk
@@ -445,17 +631,17 @@ Turning a fetched HTML document into the readable text a model receives, discard
 </ol>
 </div>
 <div class="pgroup" style="--c:#e0458a">
-<div class="pgroup-head"><span class="sw"></span><h3>3 · Whether · Against</h3><small>4 passages</small></div>
+<div class="pgroup-head"><span class="sw"></span><h3>3 · What the tool can and cannot tell you, and who it is for</h3><small><span class="l-en">4 passages</span><span class="l-uk" lang="uk">4 уривки</span></small></div>
 <ol class="plist">
 <li class="passage" id="p-8">
 <div class="phead">
 <span class="num">#8</span>
 <span class="ph">Is my content ready for AI search?</span>
-<span>1,126 chars</span>
-<span class="role main">main</span>
+<span>1,126 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">This page answers that question for one URL at a time, honestly, which means naming what it cannot see as clearly as what it can. What this tool can tell you How much of your page becomes readable text at all, as a ratio and not an adjectiv…</p>
-<details><summary>Show the full passage</summary><div class="full-text">This page answers that question for one URL at a time, honestly, which means naming what it cannot see as clearly as what it can.
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">This page answers that question for one URL at a time, honestly, which means naming what it cannot see as clearly as what it can.
 What this tool can tell you
 How much of your page becomes readable text at all, as a ratio and not an adjective.
 Exactly which passages a retriever would receive, in order, with the ones beyond the cap marked.
@@ -472,11 +658,11 @@ Whether you are cited in an answer today. That is a measurement over time on pro
 <div class="phead">
 <span class="num">#9</span>
 <span class="ph">Using Vectorscope to test a RAG pipeline</span>
-<span>863 chars</span>
-<span class="role main">main</span>
+<span>863 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">If you build retrieval rather than content, this page is a reference implementation you can point at any URL in about twenty seconds. 1 Run a page you already index, and compare the passage boundaries with your own chunker&#39;s — fixed windows…</p>
-<details><summary>Show the full passage</summary><div class="full-text">If you build retrieval rather than content, this page is a reference implementation you can point at any URL in about twenty seconds.
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">If you build retrieval rather than content, this page is a reference implementation you can point at any URL in about twenty seconds.
 1 Run a page you already index, and compare the passage boundaries with your own chunker&#39;s — fixed windows, headings or semantic chunking.
 2 Note the extraction ratio: if yours is lower on the same URL, your extractor is discarding body text, not boilerplate.
 3 Ask the page a question you know the answer to, and check whether the top passage is the one that contains it.
@@ -487,11 +673,11 @@ The chunker (h2 cuts, then 2,000-character windows with 200 of overlap), the emb
 <div class="phead">
 <span class="num">#10</span>
 <span class="ph">Who is Vectorscope for?</span>
-<span>890 chars</span>
-<span class="role main">main</span>
+<span>890 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">Vectorscope is for anyone whose page has to be read in passages: the people who write it, and the people who build the retrieval that reads it. Both get the same reading — the cut, the cap, and the semantic chunking question of which passag…</p>
-<details><summary>Show the full passage</summary><div class="full-text">Vectorscope is for anyone whose page has to be read in passages: the people who write it, and the people who build the retrieval that reads it. Both get the same reading — the cut, the cap, and the semantic chunking question of which passages belong together.
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">Vectorscope is for anyone whose page has to be read in passages: the people who write it, and the people who build the retrieval that reads it. Both get the same reading — the cut, the cap, and the semantic chunking question of which passages belong together.
 Content and SEO teams
 For checking that the answer a page exists to give survives into one passage a retriever can quote, above the cap, under a heading that names it.
 Engineers building RAG
@@ -504,38 +690,38 @@ Once the passages are right, the words inside them are next: PatternScope reads 
 <div class="phead">
 <span class="num">#16</span>
 <span class="ph">What this cannot show you</span>
-<span>279 chars</span>
-<span class="role main">main</span>
+<span>279 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">One page on its own. Whether that page answers the questions people actually ask an assistant, how it stands against a rival page on the same subject, and which topics your site has no page for at all — those need a corpus of the whole site…</p>
-<details><summary>Show the full passage</summary><div class="full-text">One page on its own. Whether that page answers the questions people actually ask an assistant, how it stands against a rival page on the same subject, and which topics your site has no page for at all — those need a corpus of the whole site, measured over time.
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">One page on its own. Whether that page answers the questions people actually ask an assistant, how it stands against a rival page on the same subject, and which topics your site has no page for at all — those need a corpus of the whole site, measured over time.
 Ask for an invite</div></details>
 </li>
 </ol>
 </div>
 <div class="pgroup" style="--c:#3d7ef0">
-<div class="pgroup-head"><span class="sw"></span><h3>4 · Three · Questions</h3><small>2 passages</small></div>
+<div class="pgroup-head"><span class="sw"></span><h3>4 · Links to further reading and other tools</h3><small><span class="l-en">2 passages</span><span class="l-uk" lang="uk">2 уривки</span></small></div>
 <ol class="plist">
 <li class="passage" id="p-12">
 <div class="phead">
 <span class="num">#12</span>
 <span class="ph">Keep reading</span>
-<span>335 chars</span>
-<span class="role main">main</span>
+<span>335 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">Longer answers to the questions this page can only summarise. What semantic chunking is, and what it trades away The three strategies, side by side, on the same page. How to optimise content for AI search What actually changes a passage&#39;s c…</p>
-<details><summary>Show the full passage</summary><div class="full-text">Longer answers to the questions this page can only summarise.
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">Longer answers to the questions this page can only summarise.
 What semantic chunking is, and what it trades away The three strategies, side by side, on the same page. How to optimise content for AI search What actually changes a passage&#39;s chances of being retrieved. Methodology Every formula behind the readings above, stated in full.</div></details>
 </li>
 <li class="passage" id="p-15">
 <div class="phead">
 <span class="num">#15</span>
 <span class="ph">Other free AI search tools</span>
-<span>746 chars</span>
-<span class="role main">main</span>
+<span>746 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">Voicescope Start with one keyword and explore the questions a person may ask an AI assistant across real-life contexts. Brandscope Ask three AI assistants the buyer questions around a brand, then compare their answers with the brand&#39;s own p…</p>
-<details><summary>Show the full passage</summary><div class="full-text">Voicescope Start with one keyword and explore the questions a person may ask an AI assistant across real-life contexts.
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">Voicescope Start with one keyword and explore the questions a person may ask an AI assistant across real-life contexts.
 Brandscope Ask three AI assistants the buyer questions around a brand, then compare their answers with the brand&#39;s own page.
 Reviewscope Ask three AI assistants what reviews say about a brand — first without naming a platform, then naming all twelve — and see which ratings they state without a source.
 PatternScope Paste a page to see the stock phrases, repeated sentence shapes and unchecked claims a reader reacts to. Not an AI detector.
@@ -545,48 +731,60 @@ All free tools</div></details>
 </ol>
 </div>
 <div class="pgroup" style="--c:#7a8a14">
-<div class="pgroup-head"><span class="sw"></span><h3>5 · Questions people ask about this</h3><small>2 passages</small></div>
+<div class="pgroup-head"><span class="sw"></span><h3>5 · FAQ: AI citations and how Vectorscope works</h3><small><span class="l-en">2 passages</span><span class="l-uk" lang="uk">2 уривки</span></small></div>
 <ol class="plist">
 <li class="passage" id="p-13">
 <div class="phead">
 <span class="num">#13</span>
 <span class="ph">Questions people ask about this</span>
-<span>1,992 chars</span>
-<span class="role main">main</span>
+<span>1,992 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">How does AI Mode choose which sources to cite? Nobody outside Google can state the mechanism, and this page will not pretend to. What is observable is that cited pages tend to contain a passage that answers the query completely on its own,…</p>
-<details><summary>Show the full passage</summary><div class="full-text">How does AI Mode choose which sources to cite? Nobody outside Google can state the mechanism, and this page will not pretend to. What is observable is that cited pages tend to contain a passage that answers the query completely on its own, and that pages whose answer is spread across several sections are cited less often than their content deserves. Vectorscope shows you whether your page has such a passage. How do I get cited in AI Overviews? Give the answer its own passage, under a heading that names the question, high enough on the page to survive the retrieval cap. That is not a trick — it is the shape retrieval rewards, and you can check whether your page has it by running it here. Is this an embedding visualization tool? Yes, for one page at a time. It embeds every passage of a URL and groups them by meaning, so you can see which parts of the page are near each other and which stand alone. It does not plot a corpus of thousands of documents. What is the difference between heading-aware and semantic chunking? Heading-aware chunking cuts at the page&#39;s own headings; semantic chunking cuts where the meaning changes, whether or not there is a heading there. The first is cheap and follows the author; the second needs every sentence embedded before a single cut is made. Does Vectorscope use semantic chunking? Not to cut the page. Vectorscope cuts at every h2 — an h3 does not start a passage — and splits a long section into 2,000-character windows with 200 characters of overlap. The semantic step comes after: each passage is embedded and passages close in meaning are grouped, which shows where semantic chunking would disagree with your headings. Do you store the page I test? The reading is kept briefly so it can be shared with a link, and the fetched page itself is not retained after the reading is produced. No account is needed, so there is nothing to attach it to. Is it really free? Yes, with a rate limit rather than a paywall. The limit exists because every</div></details>
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">How does AI Mode choose which sources to cite? Nobody outside Google can state the mechanism, and this page will not pretend to. What is observable is that cited pages tend to contain a passage that answers the query completely on its own, and that pages whose answer is spread across several sections are cited less often than their content deserves. Vectorscope shows you whether your page has such a passage. How do I get cited in AI Overviews? Give the answer its own passage, under a heading that names the question, high enough on the page to survive the retrieval cap. That is not a trick — it is the shape retrieval rewards, and you can check whether your page has it by running it here. Is this an embedding visualization tool? Yes, for one page at a time. It embeds every passage of a URL and groups them by meaning, so you can see which parts of the page are near each other and which stand alone. It does not plot a corpus of thousands of documents. What is the difference between heading-aware and semantic chunking? Heading-aware chunking cuts at the page&#39;s own headings; semantic chunking cuts where the meaning changes, whether or not there is a heading there. The first is cheap and follows the author; the second needs every sentence embedded before a single cut is made. Does Vectorscope use semantic chunking? Not to cut the page. Vectorscope cuts at every h2 — an h3 does not start a passage — and splits a long section into 2,000-character windows with 200 characters of overlap. The semantic step comes after: each passage is embedded and passages close in meaning are grouped, which shows where semantic chunking would disagree with your headings. Do you store the page I test? The reading is kept briefly so it can be shared with a link, and the fetched page itself is not retained after the reading is produced. No account is needed, so there is nothing to attach it to. Is it really free? Yes, with a rate limit rather than a paywall. The limit exists because every</div></details>
 </li>
 <li class="passage" id="p-14">
 <div class="phead">
 <span class="num">#14</span>
 <span class="ph">Questions people ask about this</span>
-<span>300 chars</span>
-<span class="role main">main</span>
+<span>300 <span class="l-en">chars</span><span class="l-uk" lang="uk">симв.</span></span>
+<span class="role main"><span class="l-en">main</span><span class="l-uk" lang="uk">основний</span></span>
 </div>
 <p class="opening">after the reading is produced. No account is needed, so there is nothing to attach it to. Is it really free? Yes, with a rate limit rather than a paywall. The limit exists because every reading spends an embedding call, and it resets on a f…</p>
-<details><summary>Show the full passage</summary><div class="full-text">after the reading is produced. No account is needed, so there is nothing to attach it to. Is it really free? Yes, with a rate limit rather than a paywall. The limit exists because every reading spends an embedding call, and it resets on a fixed window that the page tells you about before you hit it.</div></details>
+<details><summary><span class="l-en">Show the full passage</span><span class="l-uk" lang="uk">Показати весь уривок</span></summary><div class="full-text">after the reading is produced. No account is needed, so there is nothing to attach it to. Is it really free? Yes, with a rate limit rather than a paywall. The limit exists because every reading spends an embedding call, and it resets on a fixed window that the page tells you about before you hit it.</div></details>
 </li>
 </ol>
 </div>
 </section>
 <section class="panel" aria-labelledby="h-side">
-<div class="panel-head"><h2 id="h-side">Side-path content</h2></div>
-<p class="note">No passage looks like related links or utility copy.</p>
+<div class="panel-head"><h2 id="h-side"><span class="l-en">Side-path content</span><span class="l-uk" lang="uk">Побічний вміст</span></h2></div>
+<p class="note"><span class="l-en">No passage looks like related links or utility copy.</span><span class="l-uk" lang="uk">Жоден уривок не схожий на пов’язані посилання чи службовий текст.</span></p>
 </section>
 <section class="panel" aria-labelledby="h-kw">
-<div class="panel-head"><h2 id="h-kw">The words and phrases this page keeps using</h2></div>
-<p class="note" style="margin-bottom:14px">Counted across the whole page, as single words and as the two-word phrases it writes often enough to be saying the phrase. A term reaching most groups describes the page; one confined to fewer is a section's own vocabulary. Group counts rest on the grouping above. Each chip shows uses and groups reached.</p>
+<div class="panel-head"><h2 id="h-kw"><span class="l-en">The words and phrases this page keeps using</span><span class="l-uk" lang="uk">Слова й фрази, які сторінка повторює</span></h2></div>
+<p class="note" style="margin-bottom:14px"><span class="l-en">Counted across the whole page, as single words and as the two-word phrases it writes often enough to be saying the phrase. A term reaching most groups describes the page; one confined to fewer is a section's own vocabulary. Group counts rest on the grouping above. Each chip shows uses and groups reached.</span><span class="l-uk" lang="uk">Пораховано по всій сторінці: окремі слова і двослівні фрази, які сторінка пише достатньо часто. Термін, що є в більшості груп, описує сторінку; той, що в меншій кількості, — словник окремого розділу. Підрахунок груп спирається на групування вище. На кожній позначці — кількість вживань і охоплених груп.</span></p>
 <div class="kw">
-<div><h3>Describes the page</h3><ul class="chips"><li class="chip scope" title="73 uses, in 6 of 6 groups">page <span class="chip-n">×73 · 6/6</span></li><li class="chip scope" title="62 uses, in 6 of 6 groups">passage <span class="chip-n">×62 · 6/6</span></li><li class="chip scope" title="30 uses, in 5 of 6 groups">cut <span class="chip-n">×30 · 5/6</span></li><li class="chip scope" title="24 uses, in 6 of 6 groups">semantic chunking <span class="chip-n">×24 · 6/6</span></li><li class="chip scope" title="22 uses, in 5 of 6 groups">heading <span class="chip-n">×22 · 5/6</span></li><li class="chip scope" title="20 uses, in 6 of 6 groups">question <span class="chip-n">×20 · 6/6</span></li><li class="chip scope" title="17 uses, in 5 of 6 groups">answer <span class="chip-n">×17 · 5/6</span></li><li class="chip scope" title="14 uses, in 4 of 6 groups">cap <span class="chip-n">×14 · 4/6</span></li><li class="chip scope" title="13 uses, in 5 of 6 groups">group <span class="chip-n">×13 · 5/6</span></li><li class="chip scope" title="13 uses, in 5 of 6 groups">meaning <span class="chip-n">×13 · 5/6</span></li><li class="chip scope" title="12 uses, in 5 of 6 groups">ask <span class="chip-n">×12 · 5/6</span></li><li class="chip scope" title="12 uses, in 5 of 6 groups">read <span class="chip-n">×12 · 5/6</span></li><li class="chip scope" title="12 uses, in 5 of 6 groups">reading <span class="chip-n">×12 · 5/6</span></li><li class="chip scope" title="12 uses, in 5 of 6 groups">vectorscope <span class="chip-n">×12 · 5/6</span></li><li class="chip scope" title="11 uses, in 6 of 6 groups">see <span class="chip-n">×11 · 6/6</span></li><li class="chip scope" title="9 uses, in 4 of 6 groups">assistant <span class="chip-n">×9 · 4/6</span></li><li class="chip scope" title="9 uses, in 4 of 6 groups">embedding <span class="chip-n">×9 · 4/6</span></li></ul></div>
-<div><h3>Belongs to one section</h3><ul class="chips"><li class="chip" title="11 uses, in 3 of 6 groups">whether <span class="chip-n">×11 · 3/6</span></li><li class="chip" title="10 uses, in 3 of 6 groups">ai <span class="chip-n">×10 · 3/6</span></li><li class="chip" title="9 uses, in 3 of 6 groups">url <span class="chip-n">×9 · 3/6</span></li></ul></div>
+<div><h3><span class="l-en">Describes the page</span><span class="l-uk" lang="uk">Описує сторінку</span></h3><ul class="chips"><li class="chip scope" title="73 uses, in 6 of 6 groups" data-en-title="73 uses, in 6 of 6 groups" data-uk-title="вживань: 73, у 6 з 6 груп" data-i18n>page <span class="chip-n">×73 · 6/6</span></li><li class="chip scope" title="62 uses, in 6 of 6 groups" data-en-title="62 uses, in 6 of 6 groups" data-uk-title="вживань: 62, у 6 з 6 груп" data-i18n>passage <span class="chip-n">×62 · 6/6</span></li><li class="chip scope" title="30 uses, in 5 of 6 groups" data-en-title="30 uses, in 5 of 6 groups" data-uk-title="вживань: 30, у 5 з 6 груп" data-i18n>cut <span class="chip-n">×30 · 5/6</span></li><li class="chip scope" title="24 uses, in 6 of 6 groups" data-en-title="24 uses, in 6 of 6 groups" data-uk-title="вживань: 24, у 6 з 6 груп" data-i18n>semantic chunking <span class="chip-n">×24 · 6/6</span></li><li class="chip scope" title="22 uses, in 5 of 6 groups" data-en-title="22 uses, in 5 of 6 groups" data-uk-title="вживань: 22, у 5 з 6 груп" data-i18n>heading <span class="chip-n">×22 · 5/6</span></li><li class="chip scope" title="20 uses, in 6 of 6 groups" data-en-title="20 uses, in 6 of 6 groups" data-uk-title="вживань: 20, у 6 з 6 груп" data-i18n>question <span class="chip-n">×20 · 6/6</span></li><li class="chip scope" title="17 uses, in 5 of 6 groups" data-en-title="17 uses, in 5 of 6 groups" data-uk-title="вживань: 17, у 5 з 6 груп" data-i18n>answer <span class="chip-n">×17 · 5/6</span></li><li class="chip scope" title="14 uses, in 4 of 6 groups" data-en-title="14 uses, in 4 of 6 groups" data-uk-title="вживань: 14, у 4 з 6 груп" data-i18n>cap <span class="chip-n">×14 · 4/6</span></li><li class="chip scope" title="13 uses, in 5 of 6 groups" data-en-title="13 uses, in 5 of 6 groups" data-uk-title="вживань: 13, у 5 з 6 груп" data-i18n>group <span class="chip-n">×13 · 5/6</span></li><li class="chip scope" title="13 uses, in 5 of 6 groups" data-en-title="13 uses, in 5 of 6 groups" data-uk-title="вживань: 13, у 5 з 6 груп" data-i18n>meaning <span class="chip-n">×13 · 5/6</span></li><li class="chip scope" title="12 uses, in 5 of 6 groups" data-en-title="12 uses, in 5 of 6 groups" data-uk-title="вживань: 12, у 5 з 6 груп" data-i18n>ask <span class="chip-n">×12 · 5/6</span></li><li class="chip scope" title="12 uses, in 5 of 6 groups" data-en-title="12 uses, in 5 of 6 groups" data-uk-title="вживань: 12, у 5 з 6 груп" data-i18n>read <span class="chip-n">×12 · 5/6</span></li><li class="chip scope" title="12 uses, in 5 of 6 groups" data-en-title="12 uses, in 5 of 6 groups" data-uk-title="вживань: 12, у 5 з 6 груп" data-i18n>reading <span class="chip-n">×12 · 5/6</span></li><li class="chip scope" title="12 uses, in 5 of 6 groups" data-en-title="12 uses, in 5 of 6 groups" data-uk-title="вживань: 12, у 5 з 6 груп" data-i18n>vectorscope <span class="chip-n">×12 · 5/6</span></li><li class="chip scope" title="11 uses, in 6 of 6 groups" data-en-title="11 uses, in 6 of 6 groups" data-uk-title="вживань: 11, у 6 з 6 груп" data-i18n>see <span class="chip-n">×11 · 6/6</span></li><li class="chip scope" title="9 uses, in 4 of 6 groups" data-en-title="9 uses, in 4 of 6 groups" data-uk-title="вживань: 9, у 4 з 6 груп" data-i18n>assistant <span class="chip-n">×9 · 4/6</span></li><li class="chip scope" title="9 uses, in 4 of 6 groups" data-en-title="9 uses, in 4 of 6 groups" data-uk-title="вживань: 9, у 4 з 6 груп" data-i18n>embedding <span class="chip-n">×9 · 4/6</span></li></ul></div>
+<div><h3><span class="l-en">Belongs to one section</span><span class="l-uk" lang="uk">Належить одному розділу</span></h3><ul class="chips"><li class="chip" title="11 uses, in 3 of 6 groups" data-en-title="11 uses, in 3 of 6 groups" data-uk-title="вживань: 11, у 3 з 6 груп" data-i18n>whether <span class="chip-n">×11 · 3/6</span></li><li class="chip" title="10 uses, in 3 of 6 groups" data-en-title="10 uses, in 3 of 6 groups" data-uk-title="вживань: 10, у 3 з 6 груп" data-i18n>ai <span class="chip-n">×10 · 3/6</span></li><li class="chip" title="9 uses, in 3 of 6 groups" data-en-title="9 uses, in 3 of 6 groups" data-uk-title="вживань: 9, у 3 з 6 груп" data-i18n>url <span class="chip-n">×9 · 3/6</span></li></ul></div>
 </div>
 </section>
-<section class="panel" aria-label="Closing">
-<p class="closing">A page contributes at most 26 passages; this one needed 17, so none of its extracted text fell past the cap.</p>
-<p class="fine">This is a preview of the machine's view, not a guarantee of what any assistant does with it: it does not establish that any assistant has indexed the page, and each system chunks, embeds and caps in its own way.</p>
+<section class="panel" id="facts" aria-labelledby="h-facts">
+<div class="panel-head"><h2 id="h-facts"><span class="l-en">Citable facts</span><span class="l-uk" lang="uk">Факти для цитування</span></h2><span class="sub"><span class="l-en">the agent's list of the concrete facts, figures and claims the passages state</span><span class="l-uk" lang="uk">перелік конкретних фактів, чисел і тверджень з уривків, складений агентом</span></span></div>
+<div class="tablewrap"><table>
+<thead><tr><th><span class="l-en">Fact</span><span class="l-uk" lang="uk">Факт</span></th><th><span class="l-en">Passages</span><span class="l-uk" lang="uk">Уривки</span></th></tr></thead><tbody>
+<tr><td>A page contributes at most 26 passages; the rest is never read.</td><td class="num"><a class="mono" href="#p-1">#1</a> <a class="mono" href="#p-3">#3</a></td></tr>
+<tr><td>Long sections are cut into 2,000-character windows with 200 characters of overlap.</td><td class="num"><a class="mono" href="#p-7">#7</a> <a class="mono" href="#p-9">#9</a> <a class="mono" href="#p-13">#13</a></td></tr>
+<tr><td>Only an h2 starts a passage; an h3 stays inside the passage of the h2 above it.</td><td class="num"><a class="mono" href="#p-7">#7</a> <a class="mono" href="#p-13">#13</a></td></tr>
+<tr><td>The grouping embeds each passage after the cut; the cut itself is not semantic.</td><td class="num"><a class="mono" href="#p-7">#7</a> <a class="mono" href="#p-13">#13</a></td></tr>
+<tr><td>A test of one URL takes about twenty seconds.</td><td class="num"><a class="mono" href="#p-9">#9</a></td></tr>
+<tr><td>Free with a rate limit, no account; the fetched page is not retained.</td><td class="num"><a class="mono" href="#p-13">#13</a> <a class="mono" href="#p-14">#14</a></td></tr>
+</tbody></table></div>
 </section>
-<footer>Made with the vectorscope skill: the scripts fetched the page once and sent nothing anywhere; no embedding was computed. <a href="https://www.getlooploop.com/vectorscope" rel="noopener noreferrer" target="_blank">GetLoopLoop Vectorscope</a></footer>
+<section class="panel" aria-label="Closing">
+<p class="closing"><span class="l-en">A page contributes at most 26 passages; this one needed 17, so none of its extracted text fell past the cap.</span><span class="l-uk" lang="uk">Сторінка дає щонайбільше 26 уривків; цій знадобилося 17, тож жоден видобутий текст не вийшов за ліміт.</span></p>
+<p class="fine"><span class="l-en">This is a preview of the machine's view, not a guarantee of what any assistant does with it: it does not establish that any assistant has indexed the page, and each system chunks, embeds and caps in its own way.</span><span class="l-uk" lang="uk">Це попередній перегляд того, що бачить машина, а не гарантія того, що з цим зробить будь-який асистент: звідси не випливає, що якийсь асистент проіндексував сторінку, а кожна система нарізає, вбудовує й обмежує по-своєму.</span></p>
+</section>
+<footer class="foot"><p><span class="l-en">Made with the vectorscope skill: the scripts fetched the page and its robots.txt and sent nothing anywhere; no model or embedding was called.</span><span class="l-uk" lang="uk">Зроблено навичкою vectorscope: скрипти завантажили сторінку та її robots.txt і нікуди нічого не надсилали; жодної моделі чи ембедингів не викликано.</span></p><ul class="links"><li><a href="https://www.getlooploop.com" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 7.5a4.5 4.5 0 1 0 0 9c2.4 0 3.4-1.9 4.5-4.5s2.1-4.5 4.5-4.5a4.5 4.5 0 1 1 0 9c-2.4 0-3.4-1.9-4.5-4.5S9.9 7.5 7.5 7.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span>GetLoopLoop</span></a></li><li><a href="https://x.com/Looploopnow" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>X</span></a></li><li><a href="https://bsky.app/profile/getlooploop.bsky.social" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5.2 3.3C8 5.4 11 9.6 12 11.8c1-2.2 4-6.4 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6-.6 6.9-.8 3-3.8 3.7-6.5 3.3 4.7.8 5.9 3.4 3.3 6.1-4.9 5-7-1.3-7.6-2.9l-.6-1.7-.6 1.7c-.6 1.6-2.7 7.9-7.6 2.9-2.6-2.7-1.4-5.3 3.3-6.1-2.7.4-5.7-.3-6.5-3.3C.4 10.3 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg><span>Bluesky</span></a></li><li><a href="https://www.linkedin.com/in/olexandr-tsyrkin-07460539" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg><span>LinkedIn · <span class="l-en">the author</span><span class="l-uk" lang="uk">автор</span></span></a></li></ul></footer>
 </main>
 </body>
 </html>

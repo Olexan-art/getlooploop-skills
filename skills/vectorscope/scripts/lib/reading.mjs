@@ -1,21 +1,55 @@
 // Step 1 as a function: URL → fetch → extract → chunk → cap → roles.
 // The full read, end to end,
 // minus everything that needs a quota, a database, or an embedding model.
+// v2 adds layers around that core (technical markup, robots.txt, line layout, an optional
+// JavaScript render); none of them changes a passage.
 
 import { judgeRequestedUrl } from "./guards.mjs";
 import { fetchPublicPage } from "./fetchPage.mjs";
 import { analyseHtml } from "./extract.mjs";
 import { chunkPage, CHUNKS_PER_PAGE } from "./chunk.mjs";
 import { contentRole } from "./lens.mjs";
+import { readTechnical } from "./technical.mjs";
+import { fetchRobots, robotsReport } from "./robots.mjs";
+import { shortLineRuns } from "./checks.mjs";
+import { renderPage } from "./render.mjs";
+import { basename } from "node:path";
 
 export const READING_SCHEMA = "getlooploop/vectorscope-skill-reading@1";
+
+/** Extract and chunk one HTML document exactly as the product does. */
+function chunkHtml(html, finalUrl, urlKey, host) {
+  const analysed = analyseHtml({
+    html,
+    url: finalUrl,
+    requestedUrl: urlKey,
+    statusCode: 200,
+    contentType: "text/html",
+  });
+
+  const chunks = chunkPage({
+    id: "public",
+    url: analysed.url,
+    domain: host,
+    title: analysed.title || null,
+    h1: analysed.h1,
+    h2: analysed.h2,
+    metaDescription: analysed.metaDescription || null,
+    bodyText: analysed.bodyText || null,
+    isCompetitor: false,
+  });
+  return { analysed, chunks };
+}
 
 /**
  * Read one page. `html` may be supplied to skip the network (a saved copy of the same URL);
  * every other step is identical.
- * Returns { schema, ok, reasonCode, status?, requestedInput, page?, passages? }.
+ * Options (all layers, none touches the passages):
+ *   robots: "fetch" (default when the page is fetched), "skip", or { text } for a saved robots.txt;
+ *   render: true to compare against a headless-browser render.
+ * Returns { schema, ok, reasonCode, status?, requestedInput, page?, passages?, technical?, robots?, layout?, render? }.
  */
-export async function readPage({ url, html, finalUrl }) {
+export async function readPage({ url, html, finalUrl, robots, render = false, onHtml }) {
   const base = { schema: READING_SCHEMA, requestedInput: String(url ?? "") };
 
   const verdict = judgeRequestedUrl(url);
@@ -37,26 +71,9 @@ export async function readPage({ url, html, finalUrl }) {
       ...(fetched.status === undefined ? {} : { status: fetched.status }),
     };
   }
+  if (onHtml) onHtml(fetched.html, fetched.url);
 
-  const analysed = analyseHtml({
-    html: fetched.html,
-    url: fetched.url,
-    requestedUrl: urlKey,
-    statusCode: 200,
-    contentType: "text/html",
-  });
-
-  const chunks = chunkPage({
-    id: "public",
-    url: analysed.url,
-    domain: host,
-    title: analysed.title || null,
-    h1: analysed.h1,
-    h2: analysed.h2,
-    metaDescription: analysed.metaDescription || null,
-    bodyText: analysed.bodyText || null,
-    isCompetitor: false,
-  });
+  const { analysed, chunks } = chunkHtml(fetched.html, fetched.url, urlKey, host);
 
   if (!chunks.length) return { ...base, ok: false, reasonCode: "empty" };
 
@@ -94,5 +111,47 @@ export async function readPage({ url, html, finalUrl }) {
     text: chunk.chunkText,
   }));
 
-  return { ...base, ok: true, reasonCode: "ok", page, passages };
+  // ── layers (v2) ──
+  const technical = readTechnical(fetched.html, analysed.url);
+  const layout = { shortLineRuns: shortLineRuns(analysed.bodyText || "", passages) };
+
+  let robotsFetched;
+  if (robots && typeof robots === "object" && typeof robots.text === "string") {
+    robotsFetched = { status: "ok", url: `${new URL(analysed.url).origin}/robots.txt`, httpStatus: null, text: robots.text };
+  } else if (robots === "skip" || (robots === undefined && typeof html === "string")) {
+    robotsFetched = { status: "not_checked" };
+  } else {
+    robotsFetched = await fetchRobots(analysed.url);
+  }
+
+  let rendered;
+  if (render) {
+    const result = await renderPage(analysed.url);
+    if (!result.ok) {
+      rendered = { ok: false, reason: result.reason, browser: result.browser ? basename(result.browser) : null };
+    } else {
+      const js = chunkHtml(result.html, analysed.url, urlKey, host);
+      rendered = {
+        ok: true,
+        // The executable name only: the reading may be shared, the install path is nobody's business.
+        browser: basename(result.browser),
+        wordCount: js.analysed.wordCount,
+        passages: js.chunks.length,
+        charsIndexed: js.chunks.reduce((sum, chunk) => sum + chunk.charCount, 0),
+        headings: js.analysed.h1.length + js.analysed.h2.length,
+      };
+    }
+  }
+
+  return {
+    ...base,
+    ok: true,
+    reasonCode: "ok",
+    page,
+    passages,
+    technical,
+    robots: robotsReport(robotsFetched, analysed.url),
+    layout,
+    ...(rendered ? { render: rendered } : {}),
+  };
 }

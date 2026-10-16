@@ -1,7 +1,7 @@
 {
   "name": "getlooploop-vectorscope-skill",
-  "version": "0.1.0",
-  "description": "The GetLoopLoop Vectorscope, run locally: the product's fetch, extraction, chunking and 26-passage cap, with the grouping done by Claude's reading instead of embeddings.",
+  "version": "0.2.0",
+  "description": "The GetLoopLoop Vectorscope, run locally: the product's fetch, extraction, chunking and 26-passage cap, with automatic checks, robots.txt for AI crawlers, and the grouping done by the agent's reading instead of embeddings.",
   "type": "module",
   "private": true,
   "license": "MIT",
@@ -10,7 +10,8 @@
   },
   "scripts": {
     "read": "node scripts/read.mjs",
-    "lens": "node scripts/lens.mjs"
+    "lens": "node scripts/lens.mjs",
+    "test": "node --test tests/checks.test.mjs tests/robots.test.mjs tests/judgement.test.mjs tests/report.test.mjs"
   },
   "dependencies": {
     "cheerio": "^1.2.0"

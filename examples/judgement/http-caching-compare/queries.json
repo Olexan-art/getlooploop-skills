@@ -1,0 +1,28 @@
+{
+  "queries": [
+    { "id": "q1", "query": "what is the difference between no-cache and no-store", "source": "generated", "results": {
+      "1": { "passage": 13, "verdict": "complete", "citable": true, "quote": "The no-cache directive does not prevent the storing of responses but instead prevents the reuse of responses without revalidation. If you don't want a response stored in any cache, use no-store." },
+      "2": { "passage": 10, "verdict": "partial", "citable": true, "quote": "Cache-Control: no-cache for resources that should be revalidated with the server before every use." } } },
+    { "id": "q2", "query": "what max-age should versioned static files get", "source": "generated", "results": {
+      "1": { "passage": 20, "verdict": "partial", "citable": false, "quote": "Numbers 37, 38, and 41 are for periods of one week, one month, and one year." },
+      "2": { "passage": 10, "verdict": "complete", "citable": true, "quote": "Cache-Control: max-age=31536000 for versioned resources." } } },
+    { "id": "q3", "query": "how does ETag revalidation work", "source": "generated", "results": {
+      "1": { "passage": 10, "verdict": "complete", "citable": true, "quote": "If that response is stale, the client takes the value of the ETag response header for the cached response, and puts it into the If-None-Match request header, to ask the server if the resource has been modified" },
+      "2": { "passage": 9, "verdict": "complete", "citable": true, "quote": "The browser requests /file from the server and includes the If-None-Match header to instruct the server to only return the full file if the ETag of the file on the server doesn't match the browser's If-None-Match value." } } },
+    { "id": "q4", "query": "what is a shared cache", "source": "generated", "results": {
+      "1": { "passage": 2, "verdict": "complete", "citable": true, "quote": "The shared cache is located between the client and the server and can store responses that can be shared among users." },
+      "2": { "passage": null, "verdict": "missing", "citable": false } } },
+    { "id": "q5", "query": "what happens if I don't set Cache-Control", "source": "generated", "results": {
+      "1": { "passage": 5, "verdict": "complete", "citable": true, "quote": "HTTP is designed to cache as much as possible, so even if no Cache-Control is given, responses will get stored and reused if certain conditions are met." },
+      "2": { "passage": 5, "verdict": "complete", "citable": true, "quote": "Leaving out the Cache-Control response header does not disable HTTP caching!" } } },
+    { "id": "q6", "query": "how to set caching headers in nginx", "source": "generated", "results": {
+      "1": { "passage": null, "verdict": "missing", "citable": false },
+      "2": { "passage": 5, "verdict": "partial", "citable": false, "quote": "here are instructions on configuring a few popular web servers" } } },
+    { "id": "q7", "query": "how to bust the cache when a file changes", "source": "generated", "results": {
+      "1": { "passage": 19, "verdict": "complete", "citable": true, "quote": "it is a common best practice to change the URL each time the content changes, so that the URL unit can be cached for a longer period" },
+      "2": { "passage": 6, "verdict": "complete", "citable": true, "quote": "You change the URL of the resource and force the user to download the new response whenever its content changes." } } },
+    { "id": "q8", "query": "does the browser revalidate when the user reloads", "source": "generated", "results": {
+      "1": { "passage": 15, "verdict": "complete", "citable": true, "quote": "The reload and force reload actions are common examples of validation performed from the browser side." },
+      "2": { "passage": null, "verdict": "missing", "citable": false } } }
+  ]
+}

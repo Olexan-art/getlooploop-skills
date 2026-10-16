@@ -1,0 +1,11 @@
+{
+  "groups": [
+    { "members": [0, 1], "label": "What the HTTP cache is", "topic": "what" },
+    { "members": [2, 3, 4], "label": "Private, proxy and managed caches", "topic": "types" },
+    { "members": [5, 6, 7, 8], "label": "Freshness, Expires, heuristic caching and Vary", "topic": "freshness", "note": "Vary is about the cache key, filed here because it decides which stored response is fresh for a request." },
+    { "members": [9, 10, 11, 12], "label": "Revalidation with If-Modified-Since and ETag", "topic": "validation" },
+    { "members": [13, 14, 15, 16, 17, 18], "label": "no-cache, no-store, reloads, deletion and request collapse", "topic": "directives" },
+    { "members": [19, 20, 21, 22, 23, 24, 25], "label": "Common caching patterns and cache busting", "topic": "patterns", "note": "#22 to #24 sit under a second \"Validation\" heading, an h3 the chunker takes for the h2 of the same name." }
+  ],
+  "duplicates": {}
+}

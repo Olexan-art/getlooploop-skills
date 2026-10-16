@@ -1,0 +1,10 @@
+{
+  "facts": [
+    { "id": "f1", "fact": "A page contributes at most 26 passages; the rest is never read.", "passages": [1, 3] },
+    { "id": "f2", "fact": "Long sections are cut into 2,000-character windows with 200 characters of overlap.", "passages": [7, 9, 13] },
+    { "id": "f3", "fact": "Only an h2 starts a passage; an h3 stays inside the passage of the h2 above it.", "passages": [7, 13] },
+    { "id": "f4", "fact": "The grouping embeds each passage after the cut; the cut itself is not semantic.", "passages": [7, 13] },
+    { "id": "f5", "fact": "A test of one URL takes about twenty seconds.", "passages": [9] },
+    { "id": "f6", "fact": "Free with a rate limit, no account; the fetched page is not retained.", "passages": [13, 14] }
+  ]
+}

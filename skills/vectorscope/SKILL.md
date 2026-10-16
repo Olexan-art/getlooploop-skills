@@ -1,77 +1,215 @@
 ---
 name: vectorscope
-description: Show how a retrieval system (an AI assistant's search step, a RAG pipeline) reads one public web page. It fetches the page, extracts the text a crawler keeps, cuts it into passages with the GetLoopLoop Vectorscope's exact chunker and 26-passage cap, groups the passages into topics, and reports labels, keywords, side-path content and what fell past the cap. Use it when the user asks how an AI assistant, retriever or RAG system reads a page, what passages a page splits into, what falls past a retrieval cap, how a page's content groups into topics, which words a page keeps using, or asks for "vectorscope" by name. The grouping is done by reading the passages, not with embeddings.
+description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для AI-ботів». No embeddings - the agent groups the passages by reading them.
 ---
 
 # Vectorscope (local, no embeddings)
 
-**In plain words, for people opening this file:** an AI assistant does not read a web page whole. A machine fetches it, keeps only the readable text, cuts it into passages and stores at most 26 of them; whatever comes after the 26th is never seen. This skill runs those exact steps on one public page, has Claude group the passages by subject, and writes a report (HTML, Markdown and JSON) showing what was kept, how it groups, and what fell past the limit. It does not score or rank the page, detect AI text, or predict what any assistant will say. It makes no model or embedding calls; the only network request is the fetch of the page.
+**In plain words, for people opening this file:** an AI assistant does not read a web page whole. A machine fetches it, keeps only the readable text, cuts it into passages and stores at most 26 of them; whatever comes after the 26th is never seen. This skill runs those exact steps on a public page, checks whether AI crawlers may fetch it, flags the structural problems that make passages hard to quote, and has the agent group the passages by subject, test the questions people ask and write a rewrite plan. It writes a report (HTML, Markdown and JSON). It does not score or rank the page, detect AI text, or predict what any assistant will say. It makes no model or embedding calls; the only network requests are the page and its robots.txt.
 
-Three steps. Steps 1 and 3 are scripts that run the product's exact rules. Step 2 is your judgement. Run every command from this skill's folder.
+**Коротко українською:** ШІ-асистент не читає сторінку цілком. Машина завантажує її, лишає тільки текст, ріже на уривки й зберігає не більше 26; усе після 26-го вона не бачить. Ця навичка проганяє сторінку саме цими кроками, перевіряє robots.txt для ШІ-краулерів і показує структурні проблеми, через які уривки важко цитувати. Агент групує уривки за темою, перевіряє типові запити й пише план переписування з прикладами «було → стало». Можна порівняти від 2 до 5 сторінок. Скрипти не викликають жодних моделей чи ембедингів.
+
+**Answer the user in the language they wrote in.** The report itself has an EN | UK switch; English is the default.
+
+Steps marked *script* run the product's exact rules and are deterministic. Steps marked *judgement* are yours: you write a small JSON file, and the next script validates it and refuses with a message naming what to fix. Run every command from this skill's folder.
 
 **First run:** if `node_modules/` is missing here, run `npm install --omit=dev` (it installs cheerio and nothing else). Requires Node 18 or later.
 
-## 1. Read the page
+## Single page
 
+1. *script* `node scripts/read.mjs <url> --out reading.json` (add `--render` to compare with a JavaScript render, see Limits).
+   It prints the counts, the robots.txt verdict, the technical markup and the first checks. If it prints `REFUSED <code>` (exit code 2), stop and explain the code (table at the end). Do not retry with another URL unless asked.
+2. *judgement* Read the `text` of **every** passage in `reading.json`, in full, and write `groups.json` (rules below).
+3. *script* `node scripts/lens.mjs reading.json groups.json --html report.html --md report.md --json export.json`
+   This validates the grouping, computes labels, keywords and all checks, and prints the findings with their passage ids.
+4. *judgement* Write `queries.json` (5 to 10 typical queries, each answered from the passages) and `plan.json` (the rewrite plan). Write `facts.json` too if the user wants the citable facts listed.
+5. *script* Run lens again with everything:
+   `node scripts/lens.mjs reading.json groups.json --plan plan.json --queries queries.json [--facts facts.json] --html report.html --md report.md --json export.json`
+   A `REFUSED` names the file and the item; fix it and rerun. A `warning` (for example a plan item citing a check that did not fire) is kept, but deserves a sentence in your answer.
+
+**Before / after:** keep the old `reading.json` (and its `groups.json`). After the page changes, read it again and add `--baseline old-reading.json [--baseline-groups old-groups.json]` to lens. The report gains a diff: passages unchanged, changed, added and removed; the cap status before and now; and, with the old groups, which old groups each new group's passages came from.
+
+## Compare (2 to 5 pages)
+
+1. *script* `node scripts/read.mjs <url1> <url2> [… <url5>] --out-dir readings`
+   One reading per URL (`readings/reading-1.json` …) and `readings/manifest.json`. Pages are numbered 1…N in the order given. A refused page is left out of the comparison; at least two must read.
+2. *judgement* Read every passage of every page. Write **one** shared `readings/topics.json`, then `readings/groups-<n>.json` for each page, where every group names a topic from that dictionary. Then `readings/facts.json`, `readings/queries.json` and (optional) `readings/plan.json`.
+3. *script* `node scripts/lens.mjs --compare readings/manifest.json --html readings/compare.html --md readings/compare.md --json readings/compare.json`
+
+The comparison report shows each page's counts and blocked crawlers, the topic × page table (passages and characters per topic), topic gaps (topics the others cover and a page does not), fact gaps (facts only one page states), who wins each query, the plan, the crawler table by page, every page's findings, and each page's strip and groups.
+
+Compare the pages the user names. Do not volunteer a comparison against a named company's page unless the user asks for it.
+
+## The files you write
+
+Page numbers are 1-based (as in the manifest; single mode is page 1). Passage ids are the `index` values in the reading, 0-based. Every quote and every `before` text must be copied **verbatim** from the passage it cites: the scripts fold whitespace, curly quotes, dashes and case, and refuse anything else.
+
+### groups.json
+
+```json
+{
+  "groups": [
+    { "members": [0, 1, 2], "label": "What the HTTP cache is", "note": "optional, up to 240 characters", "topic": "what" },
+    { "members": [3, 4] }
+  ],
+  "duplicates": { "7": 2 }
+}
 ```
-node scripts/read.mjs <url> --out reading.json
-```
 
-This fetches the page (one plain HTTP GET, no JavaScript), extracts the visible text, chunks it, applies the 26-passage cap and marks side-path passages. It writes `reading.json` with the page fields and every passage: `index`, `heading`, `contentRole` (`main` / `related` / `utility`), `charCount`, and the full `text`.
+The v1 shape, `{"groups": [[0, 1, 2], [3, 4]]}`, still works, and the two shapes can be mixed. `label` (up to 80 characters) is your name for the group; the report shows it first and keeps the computed label (a heading most of the group's passages share, or else its two most distinctive words) as the "label source". `topic` is required in compare mode and must be an id from `topics.json`.
 
-If the script prints `REFUSED <code>` (exit code 2), stop and tell the user what the code means (see the table below). Do not retry with a different URL unless they ask.
-
-## 2. Group the passages (your judgement)
-
-Read the `text` of **every** passage in `reading.json`, in full. Then group them the way the product's average-link clustering would:
+Group them the way the product's average-link clustering would:
 
 - **Same subject, same group.** Put two passages together when a reader would say they are about the same thing: the same topic, product, question or procedure. Sitting next to each other or sharing a heading is not enough on its own.
 - **Join the group, not one member.** A passage joins a group only if it fits the group as a whole, not just its nearest neighbour. Do not chain A–B–C when A and C have nothing in common.
 - **Ignore the overlap.** Neighbouring passages share about 200 characters by design. That shared text is not evidence that they belong together.
-- **At most 6 groups.** If you see more subjects than that, merge the two closest subjects, and keep merging until there are 6 or fewer.
-- **Every page splits into its facets.** The product's cut is relative to the page itself, so a page about one subject still splits into the parts it covers. Expect 2 to 5 groups on a normal page. Use a single group only when the page has one or two passages.
-- **Alone is allowed.** A passage that shares no subject with any other passage gets a group of its own.
+- **At most 6 groups.** If you see more subjects than that, merge the two closest, and keep merging until there are 6 or fewer.
+- **Every page splits into its facets.** Expect 2 to 5 groups on a normal page. Use a single group only when the page has one or two passages.
+- **Alone is allowed.** A passage that shares no subject with any other gets a group of its own.
 - **Side-path passages are grouped like any others,** by subject. The report lists them separately.
-- **Duplicates:** if a passage repeats an earlier, **non-adjacent** passage almost word for word (repeated boilerplate, a call to action printed twice), record `"later": earlier`. Adjacent passages are never duplicates. Most pages have none.
-- Each passage index appears **exactly once**. Number groups in reading order, so group 0 holds passage 0. The script also renumbers them.
+- **Duplicates:** if a passage repeats an earlier, **non-adjacent** passage almost word for word, record `"later": earlier`. Adjacent passages are never duplicates. Most pages have none.
+- Each passage index appears **exactly once**. The script renumbers groups by their earliest passage.
+- **Labels name the subject**, in the page's language, the way a reader would: "Revalidation with ETag", not "Validation stuff". Never name a subject the passages do not cover.
 
-Write `groups.json`:
+### topics.json (compare mode)
 
 ```json
-{"groups": [[0, 1, 2], [3, 4], [5]], "duplicates": {"7": 2}}
+{ "topics": [ { "id": "freshness", "name": "Freshness: max-age, Expires, heuristics" } ] }
 ```
 
-## 3. Compute the read-out
+One dictionary for all pages, written **before** the groups, so the groups line up across pages. Ids are short lowercase slugs (`a-z`, `0-9`, `-`, `_`); at most 12 topics. Make a topic for every subject any page covers, named neutrally (not after one page's heading). Two groups of one page may share a topic. A topic only one page covers is fine: that is what a topic gap is.
 
+### facts.json
+
+```json
+{ "facts": [ { "id": "f1", "fact": "max-age=31536000 caches for one year.", "topic": "patterns", "pages": { "1": [16, 20], "2": [6] } } ] }
 ```
-node scripts/lens.mjs reading.json groups.json --md report.md --json export.json --html report.html
+
+A fact is something concrete and citable: a number, a name, a rule, a definition, a date, a specific claim. Not "the page explains caching". Write each fact **once** and list every page and passage that states it, in any wording; leave a page out when it does not state it. In single mode `"passages": [16, 20]` may replace `pages`. List every fact the pages give, not a sample: the fact gaps are only as fair as this list.
+
+### queries.json
+
+```json
+{
+  "queries": [
+    { "id": "q1", "query": "what is the difference between no-cache and no-store", "source": "generated",
+      "results": {
+        "1": { "passage": 13, "verdict": "complete", "citable": true, "quote": "The no-cache directive does not prevent the storing of responses" },
+        "2": { "passage": null, "verdict": "missing", "citable": false } } }
+  ]
+}
 ```
 
-The script checks the grouping. If it prints `REFUSED groups.json: …`, fix what it names and run it again. It then computes each group's label (a heading shared by most of the group's passages, or else the group's two most distinctive words), passage and character counts, share of the indexed text, the page's keywords with how many groups each one reaches, and the side-path list. It writes:
+5 to 10 typical queries. Use the user's own queries when they give them (`"source": "user"`); otherwise write the questions a person would actually type into an assistant about this subject (`"source": "generated"`), including at least one the page probably does not answer. For each page:
 
-- `report.md`: the reading, laid out like the live page;
-- `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`;
-- `report.html`: the same reading as one self-contained page in the look of the live tool: header, pipeline, counters, a reading strip of the 26 slots, group cards, every passage (full text behind a toggle), side-path content, keywords and the closing line. No external fonts, scripts or images; all page text is escaped; it follows the system light or dark theme and has a toggle.
+- `passage`: the single passage a retriever should return (or `null` when none does).
+- `verdict`: `complete` (the passage alone answers it), `partial` (it helps but leaves part out, or needs a neighbouring passage), `missing`.
+- `citable`: true only if the quoted words make sense quoted alone, with their subject in them. "It does this automatically" is not citable.
+- `quote`: the exact words that answer, up to 400 characters, verbatim from that passage. Required unless the verdict is `missing`.
+
+Judge only from the passages, never from what you know about the subject. In single mode `"result": {…}` may replace `results`. The report counts complete, partial and missing per page and, in compare mode, names who wins each query (the better verdict, then citable; ties are shown).
+
+### plan.json
+
+```json
+{
+  "items": [
+    { "priority": 1, "page": 1, "passages": [3], "check": "mid_sentence_start",
+      "problem": "…", "fix": "…",
+      "before": "verbatim text from passage 3", "after": "the rewrite" }
+  ]
+}
+```
+
+Priority 1 is first. `check` is a check code (below) or `null` for a problem you found by reading. `page` defaults to 1. `before` and `after` go together; give them for the weakest passages, at least two or three per page.
+
+**The guiding principle: every passage must stand on its own, because a retriever sees it alone.** A passage is returned without the one before it, without the page title and without the heading above it unless the heading is inside it. So the rewrite:
+
+- names the product or subject instead of "it", "this", "our editor", "the tool";
+- keeps the question next to its answer (an FAQ answer without its question is a fact with no address);
+- keeps the fact next to the claim (the number, the limit, the date in the same sentence as the promise);
+- opens on the subject, not mid-sentence and not on a transition;
+- says in a sentence what an image, a widget or a table shows.
+
+Order the plan by what changes retrieval most: blocked crawlers and noindex first, then text past the cap, then passages whose questions or subjects were lost, then thin or fragmented sections, then markup. Keep `after` faithful to the page: rewrite what it says, never add claims it does not make. Write the plan after you have the checks, so it can cite them.
+
+## The checks
+
+The scripts run these on every page; each finding has a code, a severity, the passages it rests on and the evidence. Thresholds are named constants in `scripts/lib/checks.mjs`, each with its reason.
+
+| Code | Severity | What it means | Tell the user |
+|---|---|---|---|
+| `robots_unreachable` | high | robots.txt answered 5xx or not at all | Under RFC 9309 a crawler then assumes it may fetch nothing. Say this first. |
+| `ai_search_blocked` | high | robots.txt disallows this path for a search or user-fetch crawler (OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, Googlebot, Bingbot) | **Say this first:** for those assistants the rest of the report is moot until the rule changes. |
+| `noindex` | high | meta robots says noindex | Search indexes that assistants answer from will drop the page. |
+| `js_dependent` | high | with `--render`, JavaScript adds 50% more words or more (and at least 150) | A retriever that does not run JavaScript reads the smaller number. |
+| `cap_overflow` | high | all 26 slots filled and text left over | Name what fell past the cap; it can never be retrieved. |
+| `lost_faq_questions` | high | 3 or more sentences open with "Yes."/"No." (and similar) and there are fewer "?" than half of them | The questions were in buttons or accordions and did not survive; each answer has lost its address. |
+| `dominant_heading` | medium | one heading holds over 30% of the text | The chunker splits only at h2; the subheadings there are h3 or styled text. |
+| `mid_sentence_start` | medium | a passage opens lowercase or on punctuation | A section over 2,000 characters was cut by the window. |
+| `nav_in_content` | medium | 4 or more consecutive one-or-two-word lines inside the main text | Menus, tag lists or label tables became passage text. |
+| `canonical_other` | medium | the canonical names another URL | Indexes will prefer that URL. |
+| `canonical_multiple` | medium | more than one canonical | Conflicting canonicals are ignored. |
+| `jsonld_invalid` | medium | a JSON-LD block does not parse | It is ignored whole. |
+| `ai_training_blocked` | low | only training crawlers (GPTBot, ClaudeBot, Google-Extended, CCBot) are blocked | Usually deliberate; it does not stop an assistant citing the page today. |
+| `thin_section` | low | a heading with fewer than 150 characters under it | Too short to answer anything alone. |
+| `truncated_teaser` | low (medium at 3 or more) | lines ending in "…" or "..." (code samples excluded) | A cut-off teaser gives the retriever half a claim. |
+| `repeated_claim` | low | the same 4-word phrase (with grammar in it, not code) in at least half the groups | Repetition spends passages on what was already said. |
+| `canonical_missing`, `canonical_relative` | low | no canonical, or a relative one | Add one absolute canonical. |
+| `jsonld_none` | low | no JSON-LD | Optional; FAQPage, HowTo, Product or Article markup states what the page is. |
+| `meta_description_missing`, `meta_description_short`, `meta_description_long` | low | missing, under 70 or over 160 characters | The chunker puts the description into passage #0. |
+| `robots_not_checked` | info | a saved page was read | Run on the live URL to check the crawlers. |
+
+### AI crawlers
+
+The robots.txt check reads `/robots.txt` on the page's own origin and follows RFC 9309: user-agent lines are grouped; a group naming the token (matched case-insensitively) replaces `*`; groups naming the same token are combined; the longest matching Allow or Disallow pattern wins (`*` and `$` supported), and Allow wins a tie. A 4xx robots.txt means no rules; a 5xx or no answer means everything is assumed disallowed. The tokens, as the vendors document them:
+
+| Token | Vendor | Purpose | Source |
+|---|---|---|---|
+| OAI-SearchBot | OpenAI | ChatGPT search results | https://developers.openai.com/api/docs/bots |
+| ChatGPT-User | OpenAI | fetches when a user asks; OpenAI says robots.txt rules may not apply | same |
+| GPTBot | OpenAI | training data | same |
+| Claude-SearchBot | Anthropic | search result quality | https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler |
+| Claude-User | Anthropic | fetches when a Claude user asks | same |
+| ClaudeBot | Anthropic | training data | same |
+| PerplexityBot | Perplexity | Perplexity search results | https://docs.perplexity.ai/guides/bots |
+| Perplexity-User | Perplexity | fetches when a user asks; Perplexity says it generally ignores robots.txt | same |
+| Google-Extended | Google | a robots.txt-only token for Gemini training and grounding; Google says it does not affect Search | https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers |
+| Googlebot | Google | Google Search | same |
+| Bingbot | Microsoft | Bing's index | https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0 (token `bingbot`; that page renders with JavaScript) |
+| CCBot | Common Crawl | the open web crawl | https://commoncrawl.org/ccbot |
+
+RFC 9309: https://www.rfc-editor.org/rfc/rfc9309. A user-fetch crawler that ignores robots.txt can still be blocked at the server; say so if the user wants to block it.
 
 ## Presenting the result
 
-- **The visual report first.** After `report.html` is written: if this session has a tool for publishing HTML artifacts or pages, publish `report.html` with it and give the user the link. Otherwise tell the user the file's absolute path, and on a desktop offer to open it in their browser. Then give the chat summary below.
-- Lead with the pipeline line and the counters: passages read, slots used out of 26, characters past the cap.
-- Show the groups table. Quote a label as the section's name only when its source is `heading`. A `keywords` label is a hint.
-- Name any side-path passages, and say they are still indexed.
-- Give the keywords in two lists: "describes the page" and "belongs to one section".
-- End with the closing sentence from the report: what the cap left unread, or that nothing was left out.
-- Always say, once, that the groups are your reading of the passages and not an embedding clustering. The chunking and the cap are the product's exact rules. For the embedding-based reading with the map, point to https://www.getlooploop.com/vectorscope.
-- Do not claim that any assistant has indexed the page. This is a preview of the machine's view, not a guarantee of what any assistant does with it.
-- A very low word count on a page that looks rich in a browser usually means its content is drawn by JavaScript. Say so: an assistant that does not run JavaScript reads about that much and no more.
+- **The visual report first.** If this session has a tool for publishing HTML artifacts or pages, publish `report.html` (or `compare.html`) with it and give the user the link. Otherwise tell the user the file's absolute path, and on a desktop offer to open it in their browser. The report has an EN | UK switch (`#lang=uk` opens it in Ukrainian) and a light and a dark theme.
+- **If an answering crawler is blocked (`ai_search_blocked`, `robots_unreachable`) or the page is noindex, say that before anything else.**
+- Then the pipeline line and the counters: passages read, slots used of 26, characters past the cap.
+- The findings, high first, each with its passage ids and what to do.
+- The plan's top three items, with one before → after.
+- The query test: how many queries were answered completely, and which found nothing. In compare mode: the topic gaps, the facts only one page has, and who wins each query.
+- The groups, briefly. Your label first; quote the computed label as the section's name only when its source is `heading`.
+- Say, once, that the groups, the queries and the plan are the agent's reading of the passages, not an embedding clustering; the chunking, the cap and the checks are deterministic. For the embedding-based reading with the map, point to https://www.getlooploop.com/vectorscope.
+- Do not claim that any assistant has indexed the page, ranks it or will cite it.
+- A very low word count on a page that looks rich in a browser usually means its content is drawn by JavaScript. Suggest `--render` to measure it.
+
+## Outputs
+
+- `report.html`: one self-contained page (no external fonts, scripts or images; a content security policy blocks all network requests; every piece of page text is escaped), in the look of the live tool, safe down to 375 px.
+- `report.md`: the same reading in Markdown, in English.
+- `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. v2 only **adds** fields, so the schema id is unchanged: `skillVersion`, `checks` (each with an English `message`), `technical`, `robots`, `render`, `plan`, `queries`, `facts`, `diff`, and on each group `agentLabel`, `note` and `topic`. `label` and `labelSource` keep their v1 meaning (the computed label). Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
+- Compare mode writes `compare.json` (`getlooploop/vectorscope-compare@1`): every page's export under `pages[]`, plus `topics`, `topicTable`, `topicGaps`, `facts`, `factGaps`, `queries` (each with its `winner`) and `plan`.
+- `reading.json` (`getlooploop/vectorscope-skill-reading@1`) gains `technical`, `robots`, `layout` and, with `--render`, `render`. Its passages are unchanged from v1, and lens still accepts a v1 reading (as a baseline, for example); the checks that need the new fields are then skipped.
 
 ## Limits
 
-- One public URL per run. The guard refuses localhost, private and link-local addresses, hostnames without a dot, non-standard ports and anything that is not http(s). It checks every redirect hop (5 at most).
-- No login and no cookies: a page behind a sign-in is read as an anonymous visitor sees it.
-- No JavaScript rendering. The product does not render JavaScript either: it parses the fetched HTML with cheerio, and so does this skill.
-- 12-second timeout, 3,000,000-character ceiling, HTML only (`text/html` or `application/xhtml+xml`).
-- The fetch sends `User-Agent: GetLoopLoop/1.0 SEO Crawler`, as the product does.
+- One public URL per reading (up to 5 in compare mode, read one after another). The guard refuses localhost, private and link-local addresses, hostnames without a dot, non-standard ports and anything that is not http(s). It checks every redirect hop (5 at most), for the page and for robots.txt.
+- No login and no cookies: a page behind a sign-in is read as an anonymous visitor sees it. The fetch sends no Accept-Language, so a site that picks a language by location may answer in another language; pass the URL with its language parameter if so.
+- No JavaScript in the reading. The product parses the fetched HTML with cheerio, and so does this skill. `--render` also runs the page in a local Chrome, Chromium or Edge (`CHROME_PATH`, else the usual install paths) with a fresh throwaway profile and `--dump-dom`, and reports words and passages with JavaScript against the plain fetch; the reading itself stays the plain one. With no browser it says so and continues.
+- 12-second timeout, 3,000,000-character ceiling, HTML only (`text/html` or `application/xhtml+xml`). robots.txt is read up to 500 KiB.
+- The fetch sends `User-Agent: GetLoopLoop/1.0 SEO Crawler`, as the product does. `--html saved.html` reads a saved copy instead (robots.txt is then not checked unless `--robots saved.txt` is given); `--save-html page.html` keeps the fetched copy.
+- Tests: `npm test` (Node's built-in runner, no network).
 
 ## Refusal codes
 
@@ -86,4 +224,3 @@ The script checks the grouping. If it prints `REFUSED groups.json: …`, fix wha
 | `not_html` | The URL is a file such as a PDF or an image, not an HTML page. |
 | `too_large` | The page is over the 3 MB ceiling. |
 | `empty` | The page answered, but no readable text was left once navigation and boilerplate were removed, or the URL is a feed, sitemap or file. |
-

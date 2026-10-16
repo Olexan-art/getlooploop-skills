@@ -1,0 +1,12 @@
+{
+  "topics": [
+    { "id": "what", "name": "What the HTTP cache is and why it helps" },
+    { "id": "types", "name": "Private, shared and managed caches" },
+    { "id": "freshness", "name": "Freshness: max-age, Expires, heuristics, Vary" },
+    { "id": "validation", "name": "Revalidation: ETag, Last-Modified, 304" },
+    { "id": "directives", "name": "Preventing reuse: no-cache, no-store, reloads" },
+    { "id": "patterns", "name": "Recommended settings and cache busting" },
+    { "id": "browser", "name": "Browser support and request headers" },
+    { "id": "server", "name": "Configuring response headers on a server" }
+  ]
+}

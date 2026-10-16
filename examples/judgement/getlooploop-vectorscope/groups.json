@@ -1,0 +1,11 @@
+{
+  "groups": [
+    { "members": [0, 1, 2, 3, 4], "label": "What Vectorscope is, and what its reading does not prove", "note": "The intro, the empty result widget, and three short caveats." },
+    { "members": [5, 6], "label": "How to read the four results", "note": "Cap, extraction ratio, groups, and the passage a question retrieves; one long section the window cuts in two." },
+    { "members": [7, 11], "label": "Chunking strategies and the terms behind them" },
+    { "members": [8, 9, 10, 16], "label": "What the tool can and cannot tell you, and who it is for" },
+    { "members": [12, 15], "label": "Links to further reading and other tools" },
+    { "members": [13, 14], "label": "FAQ: AI citations and how Vectorscope works", "note": "The questions survive as text, so each answer keeps its question." }
+  ],
+  "duplicates": {}
+}

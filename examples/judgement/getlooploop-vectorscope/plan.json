@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "priority": 1,
+      "passages": [1],
+      "check": "nav_in_content",
+      "problem": "The empty result widget is inside main, so its step labels and counter captions become passage #1: a retriever stores \"1. Fetched 2. Extracted …\" as content.",
+      "fix": "Render the result widget only after a run, or mark the placeholder aria-hidden and move it out of main. If the counts should stay readable, say them in one sentence.",
+      "before": "passages read\nslots used of the 26-passage cap\ncharacters the cap cut off (0 when the page fits)",
+      "after": "For each page, Vectorscope reports three counts: the passages it read, the slots used of its 26-passage cap, and the characters the cap cut off."
+    },
+    {
+      "priority": 2,
+      "passages": [5, 6],
+      "check": "mid_sentence_start",
+      "problem": "\"How to read your result\" is 2,450 characters under one h2, so the 2,000-character window cuts it and passage #6 opens with \"to quote.\" mid-sentence.",
+      "fix": "Make each of the four readings its own h2 (\"Chunks that never reach the index\", \"The extraction ratio\", …), so every passage starts where its topic starts and carries the heading that names it.",
+      "before": "to quote. The passage a question actually retrieves Asking the page a question returns the passages that answer it, ranked, using only that page",
+      "after": "Which passage does a question retrieve? Asking Vectorscope a question returns the passages of the page that answer it, ranked, using only that page."
+    },
+    {
+      "priority": 3,
+      "passages": [13, 14],
+      "check": "mid_sentence_start",
+      "problem": "The FAQ is one h2 of 2,292 characters; the window splits the answer to \"Is it really free?\" across two passages, and #14 opens with \"after the reading is produced\".",
+      "fix": "Split the FAQ into two h2 sections (AI citations; using Vectorscope), each under 2,000 characters, so no answer is cut away from its question.",
+      "before": "after the reading is produced. No account is needed, so there is nothing to attach it to.",
+      "after": "Vectorscope does not keep the fetched page once the reading is produced, and it needs no account, so nothing is attached to you."
+    },
+    {
+      "priority": 4,
+      "passages": [3],
+      "check": "thin_section",
+      "problem": "\"Important passage outside the cap?\" has 139 characters under it, and the answer leans on the heading: \"Move it earlier\" says nothing to a retriever that sees the passage alone.",
+      "fix": "Repeat the subject in the answer and name the cap, so the passage stands on its own.",
+      "before": "Move it earlier on the page, or split the page so that passage has a budget of its own.",
+      "after": "If an important passage falls outside Vectorscope's 26-passage cap, move it earlier on the page, or split the page so that passage has a budget of its own."
+    },
+    {
+      "priority": 5,
+      "passages": [16],
+      "check": null,
+      "problem": "\"One page on its own.\" opens the passage with no subject; read alone it does not say what is limited.",
+      "fix": "Name the product and the limit in the first sentence.",
+      "before": "One page on its own.",
+      "after": "Vectorscope reads one page on its own."
+    }
+  ]
+}

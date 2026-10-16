@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "priority": 1,
+      "passages": [25],
+      "check": "cap_overflow",
+      "problem": "The article fills all 26 slots by the middle of \"Evaluation\"; about 53,000 characters, including Limitations and challenges, Safety and Societal concerns (copyright, energy demands), are never stored.",
+      "fix": "For a page this long the fix is structural: move the detail of the long middle sections into their \"Main article\" pages and keep a two-paragraph summary here, so the later sections fall inside the cap."
+    },
+    {
+      "priority": 2,
+      "passages": [2, 5, 9, 12, 18],
+      "check": null,
+      "problem": "Every section's text carries the \"[ edit ]\" link labels; they cost characters in every passage and make \"edit\" one of the page's top keywords.",
+      "fix": "Keep edit links out of the readable text (render them as icons with an aria-label, or outside the heading's text node), so the passage starts with the heading's subject.",
+      "before": "[ edit ] Scaling laws [ edit ] Main article: Neural scaling law",
+      "after": "Scaling laws. Main article: Neural scaling law"
+    },
+    {
+      "priority": 3,
+      "passages": [18, 20, 24],
+      "check": null,
+      "problem": "Formulas are extracted twice, as the rendered symbols and as their LaTeX source (\"{\\displaystyle C}\"), so the passages on scaling and perplexity read as noise.",
+      "fix": "Expose one text form of each formula (the alt text or the MathML, not both), and state the formula's meaning in a sentence next to it.",
+      "before": "C {\\displaystyle C} : cost of pretraining (the total amount of compute used)",
+      "after": "C: the cost of pretraining a large language model, as the total amount of compute used"
+    },
+    {
+      "priority": 4,
+      "passages": [3, 4, 6],
+      "check": "mid_sentence_start",
+      "problem": "Sections such as History run over 2,000 characters under one h2 and are cut by the window, so passages open mid-sentence and lose their subject.",
+      "fix": "Promote the long sections' subsections to h2, or open each subsection with a sentence that names its subject, so a retriever never receives a passage that starts with a verb.",
+      "before": "used LSTM-based encoder-decoder architectures, as they preceded the invention of transformers.",
+      "after": "Early neural machine translation used LSTM-based encoder-decoder architectures, because they preceded the invention of transformers."
+    },
+    {
+      "priority": 5,
+      "passages": [0],
+      "check": "meta_description_missing",
+      "problem": "Passage #0 is the title twice and nothing else: the page has no meta description for the intro passage to carry.",
+      "fix": "Add a one-sentence description; the chunker puts it into passage #0.",
+      "before": "Large language model - Wikipedia Large language model",
+      "after": "Large language model - Wikipedia. A large language model (LLM) is a neural network trained on a vast amount of text to generate, summarise, translate and analyse language."
+    }
+  ]
+}

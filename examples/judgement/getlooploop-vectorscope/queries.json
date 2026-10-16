@@ -1,0 +1,20 @@
+{
+  "queries": [
+    { "id": "q1", "query": "what is semantic chunking", "source": "generated",
+      "result": { "passage": 7, "verdict": "complete", "citable": true, "quote": "Semantic chunking is splitting a page into passages where its meaning changes, instead of every fixed number of characters or at every heading." } },
+    { "id": "q2", "query": "does Vectorscope use semantic chunking", "source": "generated",
+      "result": { "passage": 13, "verdict": "complete", "citable": true, "quote": "Does Vectorscope use semantic chunking? Not to cut the page. Vectorscope cuts at every h2" } },
+    { "id": "q3", "query": "how many passages of a page does a retriever read", "source": "generated",
+      "result": { "passage": 3, "verdict": "partial", "citable": false, "quote": "This reading takes at most 26 passages from a page." } },
+    { "id": "q4", "query": "how do I get cited in AI Overviews", "source": "generated",
+      "result": { "passage": 13, "verdict": "complete", "citable": true, "quote": "Give the answer its own passage, under a heading that names the question, high enough on the page to survive the retrieval cap." } },
+    { "id": "q5", "query": "what is the extraction ratio", "source": "generated",
+      "result": { "passage": 5, "verdict": "complete", "citable": true, "quote": "The extraction ratio is how much of the page turned into readable text" } },
+    { "id": "q6", "query": "how to compare my RAG chunker against a reference", "source": "generated",
+      "result": { "passage": 9, "verdict": "complete", "citable": true, "quote": "Run a page you already index, and compare the passage boundaries with your own chunker's" } },
+    { "id": "q7", "query": "is Vectorscope free", "source": "generated",
+      "result": { "passage": 14, "verdict": "complete", "citable": true, "quote": "Is it really free? Yes, with a rate limit rather than a paywall." } },
+    { "id": "q8", "query": "which chunking strategy is best for RAG", "source": "generated",
+      "result": { "passage": 7, "verdict": "partial", "citable": false, "quote": "Fixed-length chunking cuts every N characters and is the default in most pipelines because it is trivial to implement." } }
+  ]
+}

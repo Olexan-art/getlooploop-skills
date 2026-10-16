@@ -1,0 +1,20 @@
+{
+  "queries": [
+    { "id": "q1", "query": "what is a large language model", "source": "generated",
+      "result": { "passage": 1, "verdict": "complete", "citable": true, "quote": "A large language model (LLM) is an AI model (typically a neural network) trained on a vast amount of text for natural language processing tasks, especially language generation." } },
+    { "id": "q2", "query": "who introduced the transformer architecture", "source": "generated",
+      "result": { "passage": 3, "verdict": "complete", "citable": true, "quote": "At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper \"Attention Is All You Need\"." } },
+    { "id": "q3", "query": "what is retrieval-augmented generation", "source": "generated",
+      "result": { "passage": 13, "verdict": "complete", "citable": true, "quote": "Retrieval-augmented generation (RAG) is an approach that integrates LLMs with document retrieval systems." } },
+    { "id": "q4", "query": "how much does it cost to train an LLM", "source": "generated",
+      "result": { "passage": 7, "verdict": "partial", "citable": true, "quote": "the training of GPT-2 (i.e. a 1.5-billion-parameter model) in 2019 cost $50,000, while training of the PaLM (i.e. a 540-billion-parameter model) in 2022 cost $8 million" } },
+    { "id": "q5", "query": "what is chain-of-thought prompting", "source": "generated",
+      "result": { "passage": 14, "verdict": "complete", "citable": true, "quote": "A 2022 paper demonstrated a separate technique called chain-of-thought prompting, which makes the LLM break the question down autonomously." } },
+    { "id": "q6", "query": "how is a language model's performance measured", "source": "generated",
+      "result": { "passage": 24, "verdict": "complete", "citable": true, "quote": "The canonical measure of the performance of any language model is its perplexity on a given text corpus." } },
+    { "id": "q7", "query": "how much energy do LLMs use", "source": "generated",
+      "result": { "passage": null, "verdict": "missing", "citable": false } },
+    { "id": "q8", "query": "can LLMs reproduce copyrighted text", "source": "generated",
+      "result": { "passage": null, "verdict": "missing", "citable": false } }
+  ]
+}

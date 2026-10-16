@@ -1,0 +1,11 @@
+{
+  "groups": [
+    { "members": [0, 1, 2, 3, 4], "label": "Definition and history of LLMs", "note": "The lede, then the timeline from early language models to open-weight reasoning models." },
+    { "members": [5, 6, 7], "label": "Tokenization, data cleaning and training" },
+    { "members": [8, 9, 10, 11], "label": "Inference and architecture: attention, MoE, quantization" },
+    { "members": [12, 13, 14, 15, 16, 17], "label": "Prompting, RAG, tools, agents and modalities" },
+    { "members": [18, 19, 20, 24, 25], "label": "Scaling laws, emergence and evaluation", "note": "Measurement: what predicts performance and how it is scored." },
+    { "members": [21, 22, 23], "label": "Interpretability and whether LLMs understand" }
+  ],
+  "duplicates": {}
+}

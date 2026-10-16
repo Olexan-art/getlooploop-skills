@@ -6,7 +6,7 @@ export const VECTORSCOPE_EXPORT_SCHEMA = "getlooploop/vectorscope-reading@1";
 export const PRODUCED_BY = "vectorscope-skill (local, no embeddings)";
 
 const GROUPING_NOTE =
-  "Grouped by Claude's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.";
+  "Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.";
 
 function round(value) {
   return Math.round(value * 1000) / 1000;
@@ -42,6 +42,8 @@ export function buildVectorscopeExport(page, lens, now = new Date()) {
       textHead: `Only the first 240 characters of each chunk are included. Across this page that is ${exportedChars} of ${indexedChars} indexed characters, about ${sharePercent}%, and always the opening of each passage rather than a sample spread through it.`,
       keywords:
         "Counted over the page's whole text, not the excerpts below. A term is one word or two: a two-word term is a pair the page writes side by side often enough that the pair is what it is saying, and where it is counted neither of its words is counted separately, so the occurrences still add up to the page. `count` is occurrences; `groups` is how many of the page's groups the term reaches, and `scope` is true when it reaches most of them. A term with `scope` true describes the page; one with it false is a single section's vocabulary — useful, but not a summary. Plurals were folded into the singular where the page uses both. The group counts rest on the grouping above, which is a judgement.",
+      agentLabel:
+        "v2: the name the agent gave the group after reading it, or null. It is a judgement, like the grouping; `label` and `labelSource` are the computed label as in v1.",
       groupLabels: headingsPresent
         ? "`labelSource` says where each name came from. \"heading\" is the page's own section heading and can be quoted. \"keywords\" is a computed guess — the group's most distinctive words — and is a hint, not a topic; do not quote it back as what the section is called."
         : "Every `labelSource` here is \"keywords\": a computed guess at the group's most distinctive two words, not a heading the page carries. Treat it as a hint and never quote it as the section's name.",
@@ -120,6 +122,11 @@ export function buildVectorscopeExport(page, lens, now = new Date()) {
       charCount: group.charCount,
       shareOfIndexedChars: indexedChars > 0 ? round(group.charCount / indexedChars) : 0,
       cohesion: null,
+      // v2, additive: the agent's own name and note for the group, and its shared topic in
+      // compare mode. `label` keeps its v1 meaning (the computed heading/keyword label).
+      agentLabel: group.agentLabel ?? null,
+      note: group.note ?? null,
+      topic: group.topic ?? null,
     })),
 
     chunks: lens.chunks.map((chunk) => ({

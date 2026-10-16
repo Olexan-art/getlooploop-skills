@@ -1,0 +1,11 @@
+{
+  "groups": [
+    { "members": [0, 1, 3], "label": "Why the HTTP cache matters and how it works", "topic": "what" },
+    { "members": [2, 4], "label": "Browser support and request headers", "topic": "browser" },
+    { "members": [5], "label": "Response headers to configure on the server", "topic": "server" },
+    { "members": [6, 7], "label": "Versioned and unversioned URLs", "topic": "patterns" },
+    { "members": [8, 9], "label": "ETag revalidation and 304", "topic": "validation" },
+    { "members": [10, 11, 12, 13, 14], "label": "Summary and appendix: recommended values", "topic": "patterns" }
+  ],
+  "duplicates": {}
+}

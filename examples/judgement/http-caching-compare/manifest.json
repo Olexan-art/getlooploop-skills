@@ -1,0 +1,23 @@
+{
+  "schema": "getlooploop/vectorscope-skill-manifest@1",
+  "mode": "compare",
+  "createdAt": "2026-10-16T16:08:40.708Z",
+  "pages": [
+    {
+      "n": 1,
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+      "requested": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+      "reading": "reading-1.json",
+      "ok": true,
+      "reasonCode": "ok"
+    },
+    {
+      "n": 2,
+      "url": "https://web.dev/articles/http-cache?hl=en",
+      "requested": "https://web.dev/articles/http-cache?hl=en",
+      "reading": "reading-2.json",
+      "ok": true,
+      "reasonCode": "ok"
+    }
+  ]
+}
