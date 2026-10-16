@@ -78,7 +78,7 @@ Three real runs are in [`examples/`](examples), each with the files the agent wr
 
 ## Install
 
-The skill needs Node 18 or later and **no `npm install`**: `dist/read.mjs` and `dist/lens.mjs` are the scripts bundled with their one dependency, [cheerio](https://cheerio.js.org/), so plain `node` runs them, including in sandboxes that block package installs. The readable source is in `scripts/`; `dist/` is generated from it (see *Working on the skill*).
+The skill needs Node 20.18 or later (what cheerio declares) and **no `npm install`**: `dist/read.mjs` and `dist/lens.mjs` are the scripts bundled with their one dependency, [cheerio](https://cheerio.js.org/), so plain `node` runs them, including in sandboxes that block package installs. The readable source is in `scripts/`; `dist/` is generated from it (see *Working on the skill*).
 
 ### claude.ai and the Claude desktop app
 
@@ -159,6 +159,12 @@ node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 ```
 
 The scripts make no model or embedding calls and send nothing anywhere except the GETs for the page and its robots.txt (and, with `--render`, the local browser loading the page). Fields that would need vectors (cohesion, self-similarity, the projection) are reported as `null` instead of being estimated. The HTML report escapes every piece of page text and carries a content security policy that blocks all network requests from it, because the passages are third-party content.
+
+## Pages in Russian are not analysed
+
+Vectorscope does not analyse pages written in Russian. This is the publisher's decision, made because of Russia's war against Ukraine. A page in Russian gets a report with the reason and the findings it rests on, and nothing of the page: [United Nations General Assembly](https://news.un.org/en/story/2022/03/1113152) ([and](https://news.un.org/en/story/2022/10/1129492)), [European Parliament](https://www.europarl.europa.eu/news/en/press-room/20221118IPR55707/european-parliament-declares-russia-to-be-a-state-sponsor-of-terrorism), [International Criminal Court](https://www.icc-cpi.int/news/situation-ukraine-icc-judges-issue-arrest-warrants-against-vladimir-vladimirovich-putin-and), [UN Commission of Inquiry on Ukraine](https://news.un.org/en/story/2025/03/1161281), [Office of the Prosecutor General of Ukraine](https://gp.gov.ua/en/posts/ponad-190-tisyac-vojennix-zlociniv-ofis-genprokurora-predstaviv-komisiyi-oon-masstabi-zlociniv-rf-proti-ukrayini).
+
+![The report a page in Russian gets](docs/report-refused.png)
 
 ## Working on the skill
 

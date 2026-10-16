@@ -20,7 +20,7 @@ export const ENTRIES = ["read", "lens"];
 const banner = (name) =>
   [
     `// GENERATED FILE - do not edit. Bundled by esbuild from scripts/${name}.mjs and scripts/lib/,`,
-    "// with cheerio and its dependencies inlined, so it runs with Node 18+ and no npm install.",
+    "// with cheerio and its dependencies inlined, so it runs with Node 20.18 or later and no npm install.",
     "// The readable source is scripts/. To rebuild after changing it: npm install && npm run build",
     "// (tests/dist.test.mjs fails if this file differs from a fresh build).",
     // Some bundled CommonJS dependencies call require() for Node built-ins; an ES module has no
@@ -45,7 +45,8 @@ export function buildOptions(name) {
     bundle: true,
     platform: "node",
     format: "esm",
-    target: "node18",
+    // cheerio declares Node 20.18.1 or later, and nothing older was tested.
+    target: "node20",
     minify: false,
     keepNames: true,
     legalComments: "inline",

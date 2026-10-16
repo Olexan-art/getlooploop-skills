@@ -66,6 +66,32 @@ h3{font-size:16px;margin:0}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:22px;box-shadow:var(--glow)}
 .panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px 12px;flex-wrap:wrap;margin-bottom:14px}
 .panel-head .sub{color:var(--muted);font-size:13px}
+.info{display:flex;gap:12px;align-items:flex-start;margin-top:18px;border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--panel);border-radius:12px;padding:14px 18px}
+.info>svg{width:20px;height:20px;color:var(--accent);flex:none;margin-top:1px}
+.info-items{display:grid;gap:10px;min-width:0}
+.info h2{font-size:14.5px;margin:0 0 2px}
+.info p{margin:0;font-size:14px;color:var(--muted);max-width:860px;overflow-wrap:anywhere}
+.info p b{color:var(--text);font-weight:600}
+@media (max-width:480px){.info{padding:12px 14px;gap:10px}}
+.lb-uk{display:none}
+:root[data-lang="uk"] .lb-en{display:none}
+:root[data-lang="uk"] .lb-uk{display:block}
+.refusal{margin-top:18px;border:1.5px solid var(--red);border-left-width:4px;background:var(--panel);border-radius:14px;padding:18px 20px;box-shadow:var(--glow)}
+.refusal-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.refusal-head svg{width:30px;height:30px;color:var(--red);flex:none}
+.refusal-head h2{font-size:clamp(20px,3.4vw,26px);color:var(--text);margin:0}
+.refusal .lead{margin:0 0 14px;font-size:15.5px;max-width:860px}
+.refusal ul{margin:0;padding-left:20px;max-width:860px}
+.refusal>div>ul>li{margin:0 0 12px}
+.refusal li ul{margin-top:6px}
+.refusal li li{margin:0 0 6px}
+.refusal p,.refusal li{font-size:14.5px;line-height:1.55;overflow-wrap:anywhere}
+.refusal b{font-weight:700;color:var(--text)}
+.refusal .src-link{white-space:nowrap;margin-left:4px;font-size:13px}
+.refusal .sanctions{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);max-width:860px}
+.refusal .last{margin:12px 0 0;color:var(--muted)}
+.refusal.compact{margin-top:10px;padding:14px 16px}
+@media (max-width:480px){.refusal{padding:14px 14px}.refusal ul{padding-left:16px}}
 .banner{margin-top:18px;border:1.5px solid var(--red);background:var(--red-soft);border-radius:14px;padding:14px 18px}
 .banner h2{color:var(--red);font-size:17px;margin-bottom:4px}
 .banner p{margin:0;font-size:14.5px}
@@ -292,8 +318,12 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 <li class="tag"><span class="l-en"><b>17</b> headings found</span><span class="l-uk" lang="uk"><b>17</b> заголовків</span></li>
 <li class="tag"><span class="l-en">noindex <b>no</b></span><span class="l-uk" lang="uk">noindex <b>ні</b></span></li>
 </ul>
-<p class="note"><span class="l-en">The groups are the agent's reading of the passages, not an embedding clustering. The fetch, extraction, chunking and the 26-passage cap are the tool's exact rules. For the embedding-based reading with the map, run the page at <a href="https://www.getlooploop.com/vectorscope" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>.</span><span class="l-uk" lang="uk">Групи — це прочитання уривків агентом, а не кластеризація ембедингів. Завантаження, видобування тексту, нарізання й ліміт у 26 уривків — точні правила інструмента. Читання на ембедингах із картою — на <a href="https://www.getlooploop.com/vectorscope" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>.</span></p>
 </header>
+<section class="info" aria-label="How to read this report" data-en-aria-label="How to read this report" data-uk-aria-label="Як читати цей звіт" data-i18n><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.2" r="1.35" fill="currentColor"/></svg><div class="info-items">
+<div><h2><span class="l-en">Same for everyone</span><span class="l-uk" lang="uk">Однаково для всіх</span></h2><p><span class="l-en">The fetch, the text extraction, the cut (at h2 headings, then 2,000-character windows), the 26-passage cap, robots.txt and the automatic checks are scripts: identical whichever model runs the skill.</span><span class="l-uk" lang="uk">Завантаження, видобування тексту, нарізання (за заголовками h2, далі вікнами по 2 000 символів), ліміт у 26 уривків, robots.txt і автоматичні перевірки виконують скрипти: результат однаковий, хоч би яка модель запускала навичку.</span></p></div>
+<div><h2><span class="l-en">Your model's judgement</span><span class="l-uk" lang="uk">Судження вашої моделі</span></h2><p><span class="l-en">The groups, their names, the rewrite plan, the query test and the facts are the reading of the model that ran this skill (model not stated by the agent). Another model may group a little differently. For the embedding-based reading with the map, run the page at <a href="https://www.getlooploop.com/vectorscope" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>.</span><span class="l-uk" lang="uk">Групи, їхні назви, план переписування, тест запитів і факти — це прочитання моделі, яка запустила цю навичку (агент не вказав модель). Інша модель може згрупувати трохи інакше. Читання на ембедингах із картою — на <a href="https://www.getlooploop.com/vectorscope" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>.</span></p></div>
+<div><h2><span class="l-en">Not any assistant's pipeline</span><span class="l-uk" lang="uk">Не конвеєр жодного асистента</span></h2><p><span class="l-en">ChatGPT, Gemini, Perplexity, Copilot and others use their own crawlers, cuts and embeddings, and do not publish them. The principle is the same (fetch → text → passages → retrieval); the details differ. This reading is a working model of a typical retriever, not a copy of any one of them; the 26-passage cap is this tool's.</span><span class="l-uk" lang="uk">ChatGPT, Gemini, Perplexity, Copilot та інші мають власні краулери, власне нарізання й ембединги і не публікують їх. Принцип той самий (завантаження → текст → уривки → пошук), деталі різняться. Це читання — робоча модель типового ретривера, а не копія котрогось із них; ліміт у 26 уривків — правило цього інструмента.</span></p></div>
+</div></section>
 <section class="panel" aria-labelledby="h-result">
 <div class="panel-head"><h2 id="h-result" class="eyebrow"><span class="l-en">Result</span><span class="l-uk" lang="uk">Результат</span></h2><span class="sub"><span class="l-en">what the machine reads</span><span class="l-uk" lang="uk">що читає машина</span></span></div>
 <ol class="pipeline">

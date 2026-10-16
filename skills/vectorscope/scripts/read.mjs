@@ -49,6 +49,12 @@ const fmt = (n) => Number(n).toLocaleString("en-US");
 function summarise(reading, file, prefix = "") {
   if (!reading.ok) {
     console.log(`${prefix}REFUSED  ${reading.reasonCode}${reading.status ? ` (HTTP ${reading.status})` : ""}`);
+    if (reading.reasonCode === "refused_language_ru") {
+      const l = reading.language || {};
+      const why = l.basis === "declared" ? `declared ${l.declared?.[0]?.source}="${l.declared?.[0]?.value}"` : `${l.markerWords} of ${l.cyrillicWords} Cyrillic words carry letters Ukrainian does not have`;
+      console.log(`${prefix}reason    pages in Russian are not analysed (${why}); nothing of the page was kept`);
+      console.log(`${prefix}report    run lens.mjs on this reading alone to write the report that says why`);
+    }
     console.log(`${prefix}reading  ${file}`);
     return;
   }

@@ -9,6 +9,7 @@ import { CHECK_COPY, tr, checkCopy } from "./i18n.mjs";
 import { displayLabel } from "./analysis.mjs";
 import { queryWinner } from "./judgement.mjs";
 import { pathOf } from "./robots.mjs";
+import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS } from "./refusal.mjs";
 
 const VECTORSCOPE_URL = "https://www.getlooploop.com/vectorscope";
 
@@ -77,6 +78,7 @@ function safeEvidence(evidence) {
 
 const CHECK = '<svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const ARROW = '<span class="arrow" aria-hidden="true">→</span>';
+const STOP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 2.5h7.6l5.7 5.7v7.6l-5.7 5.7H8.2l-5.7-5.7V8.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 12h9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
 const INFO = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.2" r="1.35" fill="currentColor"/></svg>';
 
 // Brand marks for the footer, drawn inline (no external images under this CSP).
@@ -164,6 +166,25 @@ h3{font-size:16px;margin:0}
 .info p{margin:0;font-size:14px;color:var(--muted);max-width:860px;overflow-wrap:anywhere}
 .info p b{color:var(--text);font-weight:600}
 @media (max-width:480px){.info{padding:12px 14px;gap:10px}}
+.lb-uk{display:none}
+:root[data-lang="uk"] .lb-en{display:none}
+:root[data-lang="uk"] .lb-uk{display:block}
+.refusal{margin-top:18px;border:1.5px solid var(--red);border-left-width:4px;background:var(--panel);border-radius:14px;padding:18px 20px;box-shadow:var(--glow)}
+.refusal-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.refusal-head svg{width:30px;height:30px;color:var(--red);flex:none}
+.refusal-head h2{font-size:clamp(20px,3.4vw,26px);color:var(--text);margin:0}
+.refusal .lead{margin:0 0 14px;font-size:15.5px;max-width:860px}
+.refusal ul{margin:0;padding-left:20px;max-width:860px}
+.refusal>div>ul>li{margin:0 0 12px}
+.refusal li ul{margin-top:6px}
+.refusal li li{margin:0 0 6px}
+.refusal p,.refusal li{font-size:14.5px;line-height:1.55;overflow-wrap:anywhere}
+.refusal b{font-weight:700;color:var(--text)}
+.refusal .src-link{white-space:nowrap;margin-left:4px;font-size:13px}
+.refusal .sanctions{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);max-width:860px}
+.refusal .last{margin:12px 0 0;color:var(--muted)}
+.refusal.compact{margin-top:10px;padding:14px 16px}
+@media (max-width:480px){.refusal{padding:14px 14px}.refusal ul{padding-left:16px}}
 .banner{margin-top:18px;border:1.5px solid var(--red);background:var(--red-soft);border-radius:14px;padding:14px 18px}
 .banner h2{color:var(--red);font-size:17px;margin-bottom:4px}
 .banner p{margin:0;font-size:14.5px}
@@ -410,12 +431,12 @@ function topBar(eyebrowKey) {
   ];
 }
 
-function footer() {
+function footer(madeKey = "footerMade") {
   const links = FOOTER_LINKS.map((link) => {
     const label = link.key ? `${esc(link.name)} · ${L(link.key)}` : esc(link.name);
     return `<li><a href="${esc(link.href)}" rel="noopener noreferrer" target="_blank">${ICONS[link.id]}<span>${label}</span></a></li>`;
   }).join("");
-  return [`<footer class="foot"><p>${L("footerMade")}</p><ul class="links">${links}</ul></footer>`];
+  return [`<footer class="foot"><p>${L(madeKey)}</p><ul class="links">${links}</ul></footer>`];
 }
 
 function documentEnd() {
@@ -442,6 +463,68 @@ function bannerFor(robots, prefix = "") {
   if (!blocked.length) return [];
   const bots = blocked.map((b) => `<b class="mono">${esc(b.token)}</b>`).join(", ");
   return [`<section class="banner" role="alert"><h2>${prefix}${L("bannerTitle")}</h2><p>${L("bannerBody", { bots })}</p></section>`];
+}
+
+// ── the refusal: pages in Russian are not analysed ───────────────────────────
+
+/** Approved copy with **bold** spans: escaped first, then the marks become <b>. */
+function boldMarks(text) {
+  return esc(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+}
+
+function sourceLink(url) {
+  let host = url;
+  try {
+    host = new URL(url).hostname.replace(/^www\./, "");
+  } catch {}
+  return `<a class="src-link" href="${esc(url)}" rel="noopener noreferrer" target="_blank">${esc(host)} ↗</a>`;
+}
+
+function refusalBody(lang) {
+  const out = [`<p class="lead">${esc(REFUSAL_COPY.lead[lang])}</p>`, "<ul>"];
+  for (const f of FINDINGS) {
+    if (f.items) {
+      out.push(`<li><b>${esc(f.source[lang])}</b><ul>`);
+      for (const item of f.items) out.push(`<li>${boldMarks(item.text[lang])} ${sourceLink(item.url)}</li>`);
+      out.push("</ul></li>");
+    } else {
+      out.push(`<li><b>${esc(f.source[lang])}</b>${esc(f.joiner[lang])}${boldMarks(f.text[lang])} ${sourceLink(f.url)}</li>`);
+    }
+  }
+  out.push("</ul>");
+  const lists = SANCTIONS_LINKS.map((l) => `<a href="${esc(l.url)}" rel="noopener noreferrer" target="_blank">${esc(l.name)}</a>`).join(" · ");
+  out.push(`<p class="sanctions"><b>${esc(REFUSAL_COPY.sanctionsLabel[lang])}:</b> ${esc(REFUSAL_COPY.sanctions[lang])} ${lists}</p>`);
+  out.push(`<p class="last">${esc(REFUSAL_COPY.lastLine[lang])}</p>`);
+  return out.join("");
+}
+
+/** The refusal block, both languages; compact in a compare slot. */
+export function refusalBlock(compact = false) {
+  return [
+    `<section class="refusal${compact ? " compact" : ""}" role="alert">`,
+    `<div class="refusal-head">${STOP}<h2>${L("refusalTitle")}</h2></div>`,
+    `<div class="lb-en">${refusalBody("en")}</div><div class="lb-uk" lang="uk">${refusalBody("uk")}</div>`,
+    "</section>",
+  ];
+}
+
+/** The whole report for a refused page: the header with its URL, the refusal, the footer. Nothing of the page. */
+export function renderRefusalHtml(reading) {
+  const url = reading.page?.url || reading.requestedInput || "";
+  const href = safeHref(url);
+  const out = documentStart(`Vectorscope: ${REFUSAL_COPY.title.en}`);
+  out.push(...topBar("eyebrow"));
+  out.push("<header>");
+  out.push(
+    href
+      ? `<a class="url mono" href="${esc(href)}" rel="noopener noreferrer" target="_blank">${esc(url)}</a>`
+      : `<span class="url mono">${esc(url)}</span>`
+  );
+  out.push("</header>");
+  out.push(...refusalBlock());
+  out.push(...footer("footerMadeRefused"));
+  out.push(...documentEnd());
+  return out.join("\n") + "\n";
 }
 
 /** Who did the reading, in one language: groups.json's agent and model, or "not stated". */
@@ -948,6 +1031,7 @@ function hostOf(url) {
  */
 export function renderCompareHtml(data) {
   const { pages, topics, topicCmp, facts, factCmp, queries, plan } = data;
+  const refused = data.refused ?? [];
   const topicsById = new Map(topics.map((t) => [t.id, t]));
   const anchorFor = (n) => (i) => `p${n}-${i}`;
   const short = (p) => `<span class="mono">${p.n}</span> · ${esc(clip(hostOf(p.reading.page.url), 48))}`;
@@ -961,6 +1045,7 @@ export function renderCompareHtml(data) {
     const href = safeHref(p.reading.page.url);
     out.push(`<li class="tag"><b>${p.n}</b> ${href ? `<a href="${esc(href)}" rel="noopener noreferrer" target="_blank">${esc(clip(hostOf(p.reading.page.url), 60))}</a>` : esc(p.reading.page.url)}</li>`);
   }
+  for (const r of refused) out.push(`<li class="tag warn"><b>${r.n}</b> ${esc(clip(hostOf(r.url), 60))} · ${L("refusedTag")}</li>`);
   out.push("</ul>");
   out.push("</header>");
   out.push(...infoPanel(pages[0].reading.page.chunkCap, pages.map((p) => ({ n: p.n, j: p.lens.judgement }))));
@@ -1121,6 +1206,11 @@ export function renderCompareHtml(data) {
       out.push(`<li class="passage" id="${anchor(c.chunkIndex)}" style="${colour}"><div class="phead"><span class="num">#${c.chunkIndex}</span>${c.heading ? `<span class="ph">${esc(oneLine(c.heading))}</span>` : ""}<span>${fmt(c.charCount)} ${L("chars")}</span></div><div class="full-text">${esc(text)}</div></li>`);
     }
     out.push("</ol></details>");
+    out.push("</div>");
+  }
+  for (const r of refused) {
+    out.push(`<div class="pagesec"><h3><span class="mono">${r.n}</span> · ${esc(clip(hostOf(r.url), 48))}</h3>`);
+    out.push(...refusalBlock(true));
     out.push("</div>");
   }
   out.push("</section>");

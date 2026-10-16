@@ -1,6 +1,6 @@
 {
   "schema": "getlooploop/vectorscope-reading@1",
-  "generatedAt": "2026-10-16T16:31:42.245Z",
+  "generatedAt": "2026-10-16T17:40:31.734Z",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -657,6 +657,10 @@
     }
   ],
   "skillVersion": 2,
+  "judgement": {
+    "agent": null,
+    "model": null
+  },
   "checks": [
     {
       "code": "mid_sentence_start",

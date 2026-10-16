@@ -22,7 +22,8 @@ import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { PREVIEW_CHARS } from "./lib/lens.mjs";
 import { buildVectorscopeExport, vectorscopeExportName } from "./lib/export.mjs";
-import { renderHtml, renderCompareHtml } from "./lib/html.mjs";
+import { renderHtml, renderCompareHtml, renderRefusalHtml } from "./lib/html.mjs";
+import { FINDINGS, REFUSAL_CODE, REFUSAL_COPY, SANCTIONS_LINKS } from "./lib/refusal.mjs";
 import { buildJudgedLens, compareFacts, compareTopics, diffReadings, displayLabel, pageChecks } from "./lib/analysis.mjs";
 import { queryWinner, validateFacts, validateGrouping, validatePlan, validateQueries, validateTopics } from "./lib/judgement.mjs";
 import { checkCopy } from "./lib/i18n.mjs";
@@ -31,6 +32,7 @@ import { checkCopy } from "./lib/i18n.mjs";
 export { validateGrouping, buildJudgedLens };
 
 export const COMPARE_SCHEMA = "getlooploop/vectorscope-compare@1";
+export const REFUSAL_SCHEMA = "getlooploop/vectorscope-refusal@1";
 export const SKILL_VERSION = 2;
 
 const USAGE = [
@@ -238,6 +240,52 @@ function closingLine(page) {
   return `A page contributes at most ${cap} passages; this one needed ${page.chunksIndexed}, so none of its extracted text fell past the cap.`;
 }
 
+// ── a page in Russian: the refusal and nothing of the page ─────────────────────
+
+/** The refusal in Markdown, English then Ukrainian, every finding with its link. */
+function refusalMarkdown(heading = "##") {
+  const lang = (code) => {
+    const out = [`${heading} ${REFUSAL_COPY.title[code]}`, "", REFUSAL_COPY.lead[code], ""];
+    for (const f of FINDINGS) {
+      if (f.items) {
+        out.push(`**${f.source[code]}**`, "");
+        for (const item of f.items) out.push(`- ${item.text[code]} → ${item.url}`);
+        out.push("");
+      } else {
+        out.push(`**${f.source[code]}**${f.joiner[code]}${f.text[code]} → ${f.url}`, "");
+      }
+    }
+    out.push(`**${REFUSAL_COPY.sanctionsLabel[code]}:** ${REFUSAL_COPY.sanctions[code]} ${SANCTIONS_LINKS.map((l) => `${l.name} (${l.url})`).join(" · ")}`, "");
+    out.push(REFUSAL_COPY.lastLine[code], "");
+    return out;
+  };
+  return [...lang("en"), ...lang("uk")];
+}
+
+export function renderRefusalMarkdown(reading) {
+  const url = reading.page?.url || reading.requestedInput || "";
+  return [`# Vectorscope: ${REFUSAL_COPY.title.en}`, "", `URL: ${cell(url)}`, "", ...refusalMarkdown("##")].join("\n");
+}
+
+function refusalExport(reading) {
+  return {
+    schema: REFUSAL_SCHEMA,
+    generatedAt: new Date().toISOString(),
+    skillVersion: SKILL_VERSION,
+    producedBy: { tool: "vectorscope-skill (local, no embeddings)", url: "https://www.getlooploop.com/vectorscope" },
+    refused: true,
+    reasonCode: reading.reasonCode,
+    page: { url: reading.page?.url ?? null, requestedUrl: reading.page?.requestedUrl ?? reading.requestedInput ?? null },
+    language: reading.language ?? null,
+    passages: [],
+  };
+}
+
+function runRefused(args, reading) {
+  console.log(`REFUSED  ${reading.reasonCode}: pages in Russian are not analysed; the report holds the reason and nothing of the page`);
+  writeOutputs(args, refusalExport(reading), renderRefusalMarkdown(reading), renderRefusalHtml(reading), "vectorscope-refused.json");
+}
+
 /** Who did the reading, as groups.json states it; "model not stated by the agent" otherwise. */
 function byMarkdown(judgements) {
   const one = (j) => [j?.model ? `model: ${cell(j.model)}` : "model not stated by the agent", j?.agent ? `agent: ${cell(j.agent)}` : null].filter(Boolean).join(" · ");
@@ -399,6 +447,10 @@ export function renderCompareMarkdown(data) {
   const out = [`# Vectorscope comparison: ${pages.length} pages, one topic dictionary`, ""];
   out.push(...infoMarkdown(pages[0].reading.page.chunkCap, pages.map((p) => ({ n: p.n, j: p.lens.judgement }))));
   out.push("> The agent grouped every page against one shared topic dictionary, so the topics line up across pages.", "");
+  if (data.refused?.length) {
+    out.push(`Not analysed: ${data.refused.map((r) => `page ${r.n} (${cell(r.url)})`).join(", ")}.`, "");
+    out.push(...refusalMarkdown("##"));
+  }
   for (const p of pages) out.push(...blockedBanner(p.reading.robots, `Page ${p.n}: `));
   out.push("## The pages", "");
   out.push("| Page | URL | Words | Passages | Past cap | AI crawlers blocked | Findings (high/medium/low) |", "|---|---|---|---|---|---|---|");
@@ -512,6 +564,10 @@ function printChecks(checks, prefix = "") {
 }
 
 function runSingle(args) {
+  if (args.files.length >= 1 && args.files.length <= 2) {
+    const first = readJson(args.files[0], "reading");
+    if (first.reasonCode === REFUSAL_CODE) return runRefused(args, first);
+  }
   if (args.files.length !== 2) {
     console.error(USAGE);
     process.exit(1);
@@ -567,6 +623,7 @@ function runCompare(args) {
   if (!Array.isArray(manifest.pages)) fail("manifest.json has no pages; write it with read.mjs and several URLs.");
   const dir = dirname(manifestPath);
   const usable = manifest.pages.filter((p) => p.ok);
+  const refused = manifest.pages.filter((p) => !p.ok && p.reasonCode === REFUSAL_CODE).map((p) => ({ n: p.n, url: p.url ?? p.requested, reasonCode: p.reasonCode }));
   if (usable.length < 2) fail(`only ${usable.length} page(s) in the manifest could be read; a comparison needs two.`);
   for (const p of manifest.pages.filter((x) => !x.ok)) console.log(`note      page ${p.n} (${p.requested}) was refused (${p.reasonCode}) and is left out`);
 
@@ -605,7 +662,7 @@ function runCompare(args) {
 
   const topicCmp = compareTopics(pages, topics);
   const factCmp = facts ? compareFacts(pages, facts) : null;
-  const data = { pages, topics, topicCmp, facts, factCmp, queries, plan };
+  const data = { pages, topics, topicCmp, facts, factCmp, queries, plan, refused };
 
   for (const w of warnings) console.log(`warning   ${w}`);
   for (const p of pages) {
@@ -635,6 +692,8 @@ function runCompare(args) {
     factGaps: factCmp,
     queries: queries ? queries.map((q) => ({ ...q, winner: queryWinner(q) })) : null,
     plan: plan?.items ?? null,
+    // Pages in Russian are not analysed: listed, with nothing of the page.
+    refused,
   };
   writeOutputs(args, exported, renderCompareMarkdown(data), renderCompareHtml(data), join(dir, "compare.json"));
 }

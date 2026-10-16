@@ -1,6 +1,12 @@
 # Vectorscope comparison: 2 pages, one topic dictionary
 
-> Each page was read with the product's exact fetch, extraction, chunking and 26-passage cap. The agent grouped every page against one shared topic dictionary, so the topics line up across pages; the grouping, the facts and the query verdicts are a judgement.
+> **Same for everyone.** The fetch, the text extraction, the cut (at h2 headings, then 2,000-character windows), the 26-passage cap, robots.txt and the automatic checks are scripts: identical whichever model runs the skill.
+>
+> **Your model's judgement.** The groups, their names, the rewrite plan, the query test and the facts are the reading of the model that ran this skill (model not stated by the agent). Another model may group a little differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.
+>
+> **Not any assistant's pipeline.** ChatGPT, Gemini, Perplexity, Copilot and others use their own crawlers, cuts and embeddings, and do not publish them. The principle is the same (fetch → text → passages → retrieval); the details differ. This reading is a working model of a typical retriever, not a copy of any one of them; the 26-passage cap is this tool's.
+
+> The agent grouped every page against one shared topic dictionary, so the topics line up across pages.
 
 ## The pages
 

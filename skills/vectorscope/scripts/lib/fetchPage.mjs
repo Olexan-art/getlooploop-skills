@@ -69,7 +69,7 @@ export async function fetchPublicPage(startUrl) {
     }
     if (html.length > MAX_HTML_BYTES) return { ok: false, reason: "too_large" };
 
-    return { ok: true, url: current, html };
+    return { ok: true, url: current, html, contentLanguage: response.headers.get("content-language") };
   }
 
   return { ok: false, reason: "http_error" };

@@ -55,7 +55,7 @@ function checkFrontmatter(text) {
   return { name, descriptionChars: [...description].length };
 }
 
-// CRC-32 (IEEE), as the ZIP format needs it; zlib.crc32 is not in every Node 18.
+// CRC-32 (IEEE), as the ZIP format needs it; zlib.crc32 only arrived in Node 20.15 and 22.2.
 const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
   let c = n;
   for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;

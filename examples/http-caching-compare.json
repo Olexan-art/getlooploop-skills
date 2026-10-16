@@ -1,17 +1,21 @@
 {
   "schema": "getlooploop/vectorscope-compare@1",
-  "generatedAt": "2026-10-16T16:31:42.581Z",
+  "generatedAt": "2026-10-16T17:40:32.064Z",
   "skillVersion": 2,
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "url": "https://www.getlooploop.com/vectorscope"
   },
   "howToRead": "Each page is a full single-page export under pages[]. topics is the one dictionary every page was grouped against; topicTable gives passages and characters per topic per page; topicGaps lists, per page, topics the others cover and it does not; facts and factGaps are the agent's list of citable facts and where each is stated; queries carry a verdict per page and the winner. Grouping, facts and verdicts are judgements; chunking and the cap are the product's exact rules.",
+  "judgement": {
+    "agent": null,
+    "model": null
+  },
   "pages": [
     {
       "n": 1,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T16:31:42.581Z",
+      "generatedAt": "2026-10-16T17:40:32.065Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -740,6 +744,10 @@
         }
       ],
       "skillVersion": 2,
+      "judgement": {
+        "agent": null,
+        "model": null
+      },
       "checks": [
         {
           "code": "dominant_heading",
@@ -1003,7 +1011,7 @@
     {
       "n": 2,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T16:31:42.582Z",
+      "generatedAt": "2026-10-16T17:40:32.065Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -1644,6 +1652,10 @@
         }
       ],
       "skillVersion": 2,
+      "judgement": {
+        "agent": null,
+        "model": null
+      },
       "checks": [
         {
           "code": "dominant_heading",
@@ -2593,5 +2605,6 @@
       "before": "The browser&#39;s HTTP Cache is your first line of defense against unnecessary network requests.",
       "after": "The browser's HTTP cache is your first line of defense against unnecessary network requests."
     }
-  ]
+  ],
+  "refused": []
 }

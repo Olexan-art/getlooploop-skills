@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // GENERATED FILE - do not edit. Bundled by esbuild from scripts/lens.mjs and scripts/lib/,
-// with cheerio and its dependencies inlined, so it runs with Node 18+ and no npm install.
+// with cheerio and its dependencies inlined, so it runs with Node 20.18 or later and no npm install.
 // The readable source is scripts/. To rebuild after changing it: npm install && npm run build
 // (tests/dist.test.mjs fails if this file differs from a fresh build).
 import { createRequire as __vectorscopeCreateRequire } from "node:module";
@@ -1324,6 +1324,95 @@ function vectorscopeExportName(page) {
 }
 __name(vectorscopeExportName, "vectorscopeExportName");
 
+// scripts/lib/refusal.mjs
+var REFUSAL_CODE = "refused_language_ru";
+var PROSECUTOR_FIGURES_AS_OF = "2025-11-05";
+var REFUSAL_COPY = {
+  title: { en: "This page was not analysed", uk: "Цю сторінку не проаналізовано" },
+  lead: {
+    en: "Vectorscope does not analyse pages written in Russian. This is the publisher's decision, made because of Russia's war against Ukraine. These are the findings it rests on:",
+    uk: "Vectorscope не аналізує сторінки російською мовою. Це рішення автора інструмента через війну Росії проти України. Воно спирається на такі висновки:"
+  },
+  sanctionsLabel: { en: "Sanctions", uk: "Санкції" },
+  sanctions: {
+    en: "If this site is operated by people or companies in Russia, it may be subject to sanctions. Check the official lists:",
+    uk: "Якщо сайт належить особам чи компаніям у Росії, він може підпадати під санкції. Перевірте офіційні списки:"
+  },
+  lastLine: {
+    en: "If the site has a version in another language, run that URL instead.",
+    uk: "Якщо сайт має версію іншою мовою, запустіть її адресу."
+  }
+};
+var FINDINGS = [
+  {
+    id: "unga",
+    source: { en: "United Nations General Assembly", uk: "Генеральна Асамблея ООН" },
+    items: [
+      {
+        id: "es-11-1",
+        text: {
+          en: "Deplored Russia's aggression against Ukraine and demanded the withdrawal of its forces: **141 states in favour, 5 against, 35 abstentions** (resolution ES-11/1, 2 March 2022).",
+          uk: "Засудила агресію Росії проти України й вимагала вивести її війська: **141 держава «за», 5 «проти», 35 утрималися** (резолюція ES-11/1, 2 березня 2022 р.)."
+        },
+        url: "https://news.un.org/en/story/2022/03/1113152"
+      },
+      {
+        id: "es-11-4",
+        text: {
+          en: "Declared the attempted annexation of four Ukrainian regions invalid: **143 in favour, 5 against, 35 abstentions** (resolution ES-11/4, 12 October 2022).",
+          uk: "Визнала недійсною спробу анексії чотирьох областей України: **143 «за», 5 «проти», 35 утрималися** (резолюція ES-11/4, 12 жовтня 2022 р.)."
+        },
+        url: "https://news.un.org/en/story/2022/10/1129492"
+      }
+    ]
+  },
+  {
+    id: "europarl",
+    source: { en: "European Parliament", uk: "Європейський парламент" },
+    joiner: { en: ": ", uk: " " },
+    text: {
+      en: "recognised Russia as a **state sponsor of terrorism** (494 votes to 58, 23 November 2022).",
+      uk: "визнав Росію **державою — спонсором тероризму** (494 голоси проти 58, 23 листопада 2022 р.)."
+    },
+    url: "https://www.europarl.europa.eu/news/en/press-room/20221118IPR55707/european-parliament-declares-russia-to-be-a-state-sponsor-of-terrorism"
+  },
+  {
+    id: "icc",
+    source: { en: "International Criminal Court", uk: "Міжнародний кримінальний суд" },
+    joiner: { en: ": ", uk: " " },
+    text: {
+      en: "issued arrest warrants for Vladimir Putin and Maria Lvova-Belova for the **war crime of unlawfully deporting Ukrainian children** (17 March 2023).",
+      uk: "видав ордери на арешт Володимира Путіна та Марії Львової-Бєлової за **воєнний злочин — незаконну депортацію українських дітей** (17 березня 2023 р.)."
+    },
+    url: "https://www.icc-cpi.int/news/situation-ukraine-icc-judges-issue-arrest-warrants-against-vladimir-vladimirovich-putin-and"
+  },
+  {
+    id: "coi",
+    source: { en: "UN Commission of Inquiry on Ukraine", uk: "Комісія ООН з розслідування щодо України" },
+    joiner: { en: ": ", uk: " " },
+    text: {
+      en: 'found that enforced disappearances of civilians by Russian authorities were "widespread and systematic" and amount to **crimes against humanity**, as does its torture of detainees (March 2025).',
+      uk: "встановила, що насильницькі зникнення цивільних, які чинить російська влада, «масові й систематичні» і є **злочинами проти людяності**, як і катування утримуваних (березень 2025 р.)."
+    },
+    url: "https://news.un.org/en/story/2025/03/1161281"
+  },
+  {
+    id: "pgo",
+    source: { en: "Office of the Prosecutor General of Ukraine", uk: "Офіс Генерального прокурора України" },
+    joiner: { en: ": ", uk: ": " },
+    asOf: PROSECUTOR_FIGURES_AS_OF,
+    text: {
+      en: "**over 190,000 war crimes** registered since the full-scale invasion, **747 indictments** sent to court and **206 people convicted** (5 November 2025).",
+      uk: "зареєстровано **понад 190 000 воєнних злочинів** від початку повномасштабного вторгнення, **747 обвинувальних актів** скеровано до суду, **206 осіб засуджено** (5 листопада 2025 р.)."
+    },
+    url: "https://gp.gov.ua/en/posts/ponad-190-tisyac-vojennix-zlociniv-ofis-genprokurora-predstaviv-komisiyi-oon-masstabi-zlociniv-rf-proti-ukrayini"
+  }
+];
+var SANCTIONS_LINKS = [
+  { id: "eu", name: "EU Sanctions Map", url: "https://sanctionsmap.eu" },
+  { id: "ofac", name: "US OFAC Sanctions List Search", url: "https://sanctionssearch.ofac.treas.gov" }
+];
+
 // scripts/lib/i18n.mjs
 var fmtN = /* @__PURE__ */ __name((n) => Number(n).toLocaleString("en-US"), "fmtN");
 var fmtUk = /* @__PURE__ */ __name((n) => Number(n).toLocaleString("en-US").replace(/,/g, " "), "fmtUk");
@@ -1375,6 +1464,9 @@ var S = {
     en: /* @__PURE__ */ __name((v) => `ChatGPT, Gemini, Perplexity, Copilot and others use their own crawlers, cuts and embeddings, and do not publish them. The principle is the same (fetch → text → passages → retrieval); the details differ. This reading is a working model of a typical retriever, not a copy of any one of them; the ${v.cap}-passage cap is this tool's.`, "en"),
     uk: /* @__PURE__ */ __name((v) => `ChatGPT, Gemini, Perplexity, Copilot та інші мають власні краулери, власне нарізання й ембединги і не публікують їх. Принцип той самий (завантаження → текст → уривки → пошук), деталі різняться. Це читання — робоча модель типового ретривера, а не копія котрогось із них; ліміт у ${v.cap} ${ukForm(v.cap, "уривок", "уривки", "уривків")} — правило цього інструмента.`, "uk")
   },
+  // ── the refusal (its copy lives in refusal.mjs)
+  refusalTitle: REFUSAL_COPY.title,
+  refusedTag: { en: "not analysed", uk: "не проаналізовано" },
   // ── blocked banner
   bannerTitle: { en: "AI crawlers are blocked from this page", uk: "ШІ-краулерам закрито доступ до цієї сторінки" },
   bannerBody: {
@@ -1625,6 +1717,10 @@ var S = {
   fine: {
     en: "This is a preview of the machine's view, not a guarantee of what any assistant does with it: it does not establish that any assistant has indexed the page, and each system chunks, embeds and caps in its own way.",
     uk: "Це попередній перегляд того, що бачить машина, а не гарантія того, що з цим зробить будь-який асистент: звідси не випливає, що якийсь асистент проіндексував сторінку, а кожна система нарізає, вбудовує й обмежує по-своєму."
+  },
+  footerMadeRefused: {
+    en: "Made with the vectorscope skill: the scripts fetched the page, found it was in Russian and kept nothing of it; no model or embedding was called.",
+    uk: "Зроблено навичкою vectorscope: скрипти завантажили сторінку, визначили, що вона російською, і нічого з неї не зберегли; жодної моделі чи ембедингів не викликано."
   },
   footerMade: {
     en: "Made with the vectorscope skill: the scripts fetched the page and its robots.txt and sent nothing anywhere; no model or embedding was called.",
@@ -2617,6 +2713,7 @@ function safeEvidence(evidence) {
 __name(safeEvidence, "safeEvidence");
 var CHECK = '<svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var ARROW = '<span class="arrow" aria-hidden="true">→</span>';
+var STOP2 = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 2.5h7.6l5.7 5.7v7.6l-5.7 5.7H8.2l-5.7-5.7V8.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 12h9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
 var INFO = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.2" r="1.35" fill="currentColor"/></svg>';
 var ICONS = {
   getlooploop: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 7.5a4.5 4.5 0 1 0 0 9c2.4 0 3.4-1.9 4.5-4.5s2.1-4.5 4.5-4.5a4.5 4.5 0 1 1 0 9c-2.4 0-3.4-1.9-4.5-4.5S9.9 7.5 7.5 7.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>',
@@ -2697,6 +2794,25 @@ h3{font-size:16px;margin:0}
 .info p{margin:0;font-size:14px;color:var(--muted);max-width:860px;overflow-wrap:anywhere}
 .info p b{color:var(--text);font-weight:600}
 @media (max-width:480px){.info{padding:12px 14px;gap:10px}}
+.lb-uk{display:none}
+:root[data-lang="uk"] .lb-en{display:none}
+:root[data-lang="uk"] .lb-uk{display:block}
+.refusal{margin-top:18px;border:1.5px solid var(--red);border-left-width:4px;background:var(--panel);border-radius:14px;padding:18px 20px;box-shadow:var(--glow)}
+.refusal-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.refusal-head svg{width:30px;height:30px;color:var(--red);flex:none}
+.refusal-head h2{font-size:clamp(20px,3.4vw,26px);color:var(--text);margin:0}
+.refusal .lead{margin:0 0 14px;font-size:15.5px;max-width:860px}
+.refusal ul{margin:0;padding-left:20px;max-width:860px}
+.refusal>div>ul>li{margin:0 0 12px}
+.refusal li ul{margin-top:6px}
+.refusal li li{margin:0 0 6px}
+.refusal p,.refusal li{font-size:14.5px;line-height:1.55;overflow-wrap:anywhere}
+.refusal b{font-weight:700;color:var(--text)}
+.refusal .src-link{white-space:nowrap;margin-left:4px;font-size:13px}
+.refusal .sanctions{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);max-width:860px}
+.refusal .last{margin:12px 0 0;color:var(--muted)}
+.refusal.compact{margin-top:10px;padding:14px 16px}
+@media (max-width:480px){.refusal{padding:14px 14px}.refusal ul{padding-left:16px}}
 .banner{margin-top:18px;border:1.5px solid var(--red);background:var(--red-soft);border-radius:14px;padding:14px 18px}
 .banner h2{color:var(--red);font-size:17px;margin-bottom:4px}
 .banner p{margin:0;font-size:14.5px}
@@ -2936,12 +3052,12 @@ function topBar(eyebrowKey) {
   ];
 }
 __name(topBar, "topBar");
-function footer() {
+function footer(madeKey = "footerMade") {
   const links = FOOTER_LINKS.map((link) => {
     const label = link.key ? `${esc(link.name)} · ${L(link.key)}` : esc(link.name);
     return `<li><a href="${esc(link.href)}" rel="noopener noreferrer" target="_blank">${ICONS[link.id]}<span>${label}</span></a></li>`;
   }).join("");
-  return [`<footer class="foot"><p>${L("footerMade")}</p><ul class="links">${links}</ul></footer>`];
+  return [`<footer class="foot"><p>${L(madeKey)}</p><ul class="links">${links}</ul></footer>`];
 }
 __name(footer, "footer");
 function documentEnd() {
@@ -2968,6 +3084,62 @@ function bannerFor(robots, prefix = "") {
   return [`<section class="banner" role="alert"><h2>${prefix}${L("bannerTitle")}</h2><p>${L("bannerBody", { bots })}</p></section>`];
 }
 __name(bannerFor, "bannerFor");
+function boldMarks(text) {
+  return esc(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+}
+__name(boldMarks, "boldMarks");
+function sourceLink(url) {
+  let host = url;
+  try {
+    host = new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+  }
+  return `<a class="src-link" href="${esc(url)}" rel="noopener noreferrer" target="_blank">${esc(host)} ↗</a>`;
+}
+__name(sourceLink, "sourceLink");
+function refusalBody(lang) {
+  const out = [`<p class="lead">${esc(REFUSAL_COPY.lead[lang])}</p>`, "<ul>"];
+  for (const f of FINDINGS) {
+    if (f.items) {
+      out.push(`<li><b>${esc(f.source[lang])}</b><ul>`);
+      for (const item of f.items) out.push(`<li>${boldMarks(item.text[lang])} ${sourceLink(item.url)}</li>`);
+      out.push("</ul></li>");
+    } else {
+      out.push(`<li><b>${esc(f.source[lang])}</b>${esc(f.joiner[lang])}${boldMarks(f.text[lang])} ${sourceLink(f.url)}</li>`);
+    }
+  }
+  out.push("</ul>");
+  const lists = SANCTIONS_LINKS.map((l) => `<a href="${esc(l.url)}" rel="noopener noreferrer" target="_blank">${esc(l.name)}</a>`).join(" · ");
+  out.push(`<p class="sanctions"><b>${esc(REFUSAL_COPY.sanctionsLabel[lang])}:</b> ${esc(REFUSAL_COPY.sanctions[lang])} ${lists}</p>`);
+  out.push(`<p class="last">${esc(REFUSAL_COPY.lastLine[lang])}</p>`);
+  return out.join("");
+}
+__name(refusalBody, "refusalBody");
+function refusalBlock(compact = false) {
+  return [
+    `<section class="refusal${compact ? " compact" : ""}" role="alert">`,
+    `<div class="refusal-head">${STOP2}<h2>${L("refusalTitle")}</h2></div>`,
+    `<div class="lb-en">${refusalBody("en")}</div><div class="lb-uk" lang="uk">${refusalBody("uk")}</div>`,
+    "</section>"
+  ];
+}
+__name(refusalBlock, "refusalBlock");
+function renderRefusalHtml(reading) {
+  const url = reading.page?.url || reading.requestedInput || "";
+  const href = safeHref(url);
+  const out = documentStart(`Vectorscope: ${REFUSAL_COPY.title.en}`);
+  out.push(...topBar("eyebrow"));
+  out.push("<header>");
+  out.push(
+    href ? `<a class="url mono" href="${esc(href)}" rel="noopener noreferrer" target="_blank">${esc(url)}</a>` : `<span class="url mono">${esc(url)}</span>`
+  );
+  out.push("</header>");
+  out.push(...refusalBlock());
+  out.push(...footer("footerMadeRefused"));
+  out.push(...documentEnd());
+  return out.join("\n") + "\n";
+}
+__name(renderRefusalHtml, "renderRefusalHtml");
 function byLine(judgements, lang) {
   const one = /* @__PURE__ */ __name((j) => tr("infoBy", lang, { agent: j?.agent ? esc(j.agent) : null, model: j?.model ? esc(j.model) : null }), "one");
   const keys = judgements.map((x) => JSON.stringify([x.j?.agent ?? null, x.j?.model ?? null]));
@@ -3426,6 +3598,7 @@ function hostOf(url) {
 __name(hostOf, "hostOf");
 function renderCompareHtml(data) {
   const { pages, topics, topicCmp, facts, factCmp, queries, plan } = data;
+  const refused = data.refused ?? [];
   const topicsById = new Map(topics.map((t) => [t.id, t]));
   const anchorFor = /* @__PURE__ */ __name((n) => (i) => `p${n}-${i}`, "anchorFor");
   const short = /* @__PURE__ */ __name((p) => `<span class="mono">${p.n}</span> · ${esc(clip2(hostOf(p.reading.page.url), 48))}`, "short");
@@ -3438,6 +3611,7 @@ function renderCompareHtml(data) {
     const href = safeHref(p.reading.page.url);
     out.push(`<li class="tag"><b>${p.n}</b> ${href ? `<a href="${esc(href)}" rel="noopener noreferrer" target="_blank">${esc(clip2(hostOf(p.reading.page.url), 60))}</a>` : esc(p.reading.page.url)}</li>`);
   }
+  for (const r of refused) out.push(`<li class="tag warn"><b>${r.n}</b> ${esc(clip2(hostOf(r.url), 60))} · ${L("refusedTag")}</li>`);
   out.push("</ul>");
   out.push("</header>");
   out.push(...infoPanel(pages[0].reading.page.chunkCap, pages.map((p) => ({ n: p.n, j: p.lens.judgement }))));
@@ -3579,6 +3753,11 @@ function renderCompareHtml(data) {
     out.push("</ol></details>");
     out.push("</div>");
   }
+  for (const r of refused) {
+    out.push(`<div class="pagesec"><h3><span class="mono">${r.n}</span> · ${esc(clip2(hostOf(r.url), 48))}</h3>`);
+    out.push(...refusalBlock(true));
+    out.push("</div>");
+  }
   out.push("</section>");
   out.push('<section class="panel" aria-label="Closing">');
   out.push(`<p class="fine" style="margin:0">${L("fine")}</p>`);
@@ -3591,6 +3770,7 @@ __name(renderCompareHtml, "renderCompareHtml");
 
 // scripts/lens.mjs
 var COMPARE_SCHEMA = "getlooploop/vectorscope-compare@1";
+var REFUSAL_SCHEMA = "getlooploop/vectorscope-refusal@1";
 var SKILL_VERSION = 2;
 var USAGE = [
   "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json]",
@@ -3790,6 +3970,49 @@ function closingLine(page) {
   return `A page contributes at most ${cap} passages; this one needed ${page.chunksIndexed}, so none of its extracted text fell past the cap.`;
 }
 __name(closingLine, "closingLine");
+function refusalMarkdown(heading = "##") {
+  const lang = /* @__PURE__ */ __name((code) => {
+    const out = [`${heading} ${REFUSAL_COPY.title[code]}`, "", REFUSAL_COPY.lead[code], ""];
+    for (const f of FINDINGS) {
+      if (f.items) {
+        out.push(`**${f.source[code]}**`, "");
+        for (const item of f.items) out.push(`- ${item.text[code]} → ${item.url}`);
+        out.push("");
+      } else {
+        out.push(`**${f.source[code]}**${f.joiner[code]}${f.text[code]} → ${f.url}`, "");
+      }
+    }
+    out.push(`**${REFUSAL_COPY.sanctionsLabel[code]}:** ${REFUSAL_COPY.sanctions[code]} ${SANCTIONS_LINKS.map((l) => `${l.name} (${l.url})`).join(" · ")}`, "");
+    out.push(REFUSAL_COPY.lastLine[code], "");
+    return out;
+  }, "lang");
+  return [...lang("en"), ...lang("uk")];
+}
+__name(refusalMarkdown, "refusalMarkdown");
+function renderRefusalMarkdown(reading) {
+  const url = reading.page?.url || reading.requestedInput || "";
+  return [`# Vectorscope: ${REFUSAL_COPY.title.en}`, "", `URL: ${cell(url)}`, "", ...refusalMarkdown("##")].join("\n");
+}
+__name(renderRefusalMarkdown, "renderRefusalMarkdown");
+function refusalExport(reading) {
+  return {
+    schema: REFUSAL_SCHEMA,
+    generatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+    skillVersion: SKILL_VERSION,
+    producedBy: { tool: "vectorscope-skill (local, no embeddings)", url: "https://www.getlooploop.com/vectorscope" },
+    refused: true,
+    reasonCode: reading.reasonCode,
+    page: { url: reading.page?.url ?? null, requestedUrl: reading.page?.requestedUrl ?? reading.requestedInput ?? null },
+    language: reading.language ?? null,
+    passages: []
+  };
+}
+__name(refusalExport, "refusalExport");
+function runRefused(args, reading) {
+  console.log(`REFUSED  ${reading.reasonCode}: pages in Russian are not analysed; the report holds the reason and nothing of the page`);
+  writeOutputs(args, refusalExport(reading), renderRefusalMarkdown(reading), renderRefusalHtml(reading), "vectorscope-refused.json");
+}
+__name(runRefused, "runRefused");
 function byMarkdown(judgements) {
   const one = /* @__PURE__ */ __name((j) => [j?.model ? `model: ${cell(j.model)}` : "model not stated by the agent", j?.agent ? `agent: ${cell(j.agent)}` : null].filter(Boolean).join(" · "), "one");
   const keys = judgements.map((x) => JSON.stringify([x.j?.agent ?? null, x.j?.model ?? null]));
@@ -3935,6 +4158,10 @@ function renderCompareMarkdown(data) {
   const out = [`# Vectorscope comparison: ${pages.length} pages, one topic dictionary`, ""];
   out.push(...infoMarkdown(pages[0].reading.page.chunkCap, pages.map((p) => ({ n: p.n, j: p.lens.judgement }))));
   out.push("> The agent grouped every page against one shared topic dictionary, so the topics line up across pages.", "");
+  if (data.refused?.length) {
+    out.push(`Not analysed: ${data.refused.map((r) => `page ${r.n} (${cell(r.url)})`).join(", ")}.`, "");
+    out.push(...refusalMarkdown("##"));
+  }
   for (const p of pages) out.push(...blockedBanner(p.reading.robots, `Page ${p.n}: `));
   out.push("## The pages", "");
   out.push("| Page | URL | Words | Passages | Past cap | AI crawlers blocked | Findings (high/medium/low) |", "|---|---|---|---|---|---|---|");
@@ -4044,6 +4271,10 @@ function printChecks(checks, prefix = "") {
 }
 __name(printChecks, "printChecks");
 function runSingle(args) {
+  if (args.files.length >= 1 && args.files.length <= 2) {
+    const first = readJson(args.files[0], "reading");
+    if (first.reasonCode === REFUSAL_CODE) return runRefused(args, first);
+  }
   if (args.files.length !== 2) {
     console.error(USAGE);
     process.exit(1);
@@ -4097,6 +4328,7 @@ function runCompare(args) {
   if (!Array.isArray(manifest.pages)) fail("manifest.json has no pages; write it with read.mjs and several URLs.");
   const dir = dirname(manifestPath);
   const usable = manifest.pages.filter((p) => p.ok);
+  const refused = manifest.pages.filter((p) => !p.ok && p.reasonCode === REFUSAL_CODE).map((p) => ({ n: p.n, url: p.url ?? p.requested, reasonCode: p.reasonCode }));
   if (usable.length < 2) fail(`only ${usable.length} page(s) in the manifest could be read; a comparison needs two.`);
   for (const p of manifest.pages.filter((x) => !x.ok)) console.log(`note      page ${p.n} (${p.requested}) was refused (${p.reasonCode}) and is left out`);
   const topicsPath = join(dir, "topics.json");
@@ -4131,7 +4363,7 @@ function runCompare(args) {
   }
   const topicCmp = compareTopics(pages, topics);
   const factCmp = facts ? compareFacts(pages, facts) : null;
-  const data = { pages, topics, topicCmp, facts, factCmp, queries, plan };
+  const data = { pages, topics, topicCmp, facts, factCmp, queries, plan, refused };
   for (const w of warnings) console.log(`warning   ${w}`);
   for (const p of pages) {
     console.log(`page ${p.n}    ${p.reading.page.url} · ${p.reading.page.chunksIndexed} passages · ${p.lens.groups.length} groups`);
@@ -4157,7 +4389,9 @@ function runCompare(args) {
     facts,
     factGaps: factCmp,
     queries: queries ? queries.map((q) => ({ ...q, winner: queryWinner(q) })) : null,
-    plan: plan?.items ?? null
+    plan: plan?.items ?? null,
+    // Pages in Russian are not analysed: listed, with nothing of the page.
+    refused
   };
   writeOutputs(args, exported, renderCompareMarkdown(data), renderCompareHtml(data), join(dir, "compare.json"));
 }
@@ -4177,9 +4411,11 @@ if (isMain) {
 }
 export {
   COMPARE_SCHEMA,
+  REFUSAL_SCHEMA,
   SKILL_VERSION,
   buildJudgedLens,
   renderCompareMarkdown,
   renderMarkdown,
+  renderRefusalMarkdown,
   validateGrouping
 };

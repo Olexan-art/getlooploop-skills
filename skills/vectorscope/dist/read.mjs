@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // GENERATED FILE - do not edit. Bundled by esbuild from scripts/read.mjs and scripts/lib/,
-// with cheerio and its dependencies inlined, so it runs with Node 18+ and no npm install.
+// with cheerio and its dependencies inlined, so it runs with Node 20.18 or later and no npm install.
 // The readable source is scripts/. To rebuild after changing it: npm install && npm run build
 // (tests/dist.test.mjs fails if this file differs from a fresh build).
 import { createRequire as __vectorscopeCreateRequire } from "node:module";
@@ -5206,7 +5206,7 @@ async function fetchPublicPage(startUrl) {
       return { ok: false, reason: "unreachable" };
     }
     if (html3.length > MAX_HTML_BYTES) return { ok: false, reason: "too_large" };
-    return { ok: true, url: current, html: html3 };
+    return { ok: true, url: current, html: html3, contentLanguage: response.headers.get("content-language") };
   }
   return { ok: false, reason: "http_error" };
 }
@@ -21646,15 +21646,81 @@ __name(renderPage, "renderPage");
 
 // scripts/lib/reading.mjs
 import { basename } from "node:path";
+
+// scripts/lib/language.mjs
+var MIN_CYRILLIC_WORDS = 30;
+var MARKER_SHARE = 0.08;
+var OTHER_SHARE = 0.02;
+var CYRILLIC_WORD = /[\u0400-\u04ff\u0500-\u052f]+/g;
+var MARKERS = /[\u044b\u044d\u0451]/;
+var NOT_RUSSIAN = /[\u0456\u0457\u0454\u0491\u045e\u04d9\u0493\u049b\u04a3\u04e9\u04b1\u04af\u04bb\u0458\u0459\u045a\u045b\u0452\u045f\u0453\u045c\u0455]/;
+var OTHER_CYRILLIC_LANGS = /* @__PURE__ */ new Set(["uk", "be", "bg", "sr", "mk", "kk", "ky", "mn", "tg", "tt", "ba", "cv", "sah", "ab", "os", "ce", "rue"]);
+var OTHER_OVERRIDES_DECLARED = 0.1;
+function primaryTag(value) {
+  const first2 = String(value ?? "").split(",")[0].trim().toLowerCase();
+  const tag = first2.split(/[-_;\s]/)[0];
+  return /^[a-z]{2,3}$/.test(tag) ? tag : null;
+}
+__name(primaryTag, "primaryTag");
+function declaredLanguages($2, contentLanguageHeader) {
+  const out = [];
+  const add2 = /* @__PURE__ */ __name((source, value) => {
+    const tag = primaryTag(value);
+    if (tag) out.push({ source, value: String(value).trim().slice(0, 40), tag });
+  }, "add");
+  add2("html lang", $2("html").attr("lang"));
+  add2("html xml:lang", $2("html").attr("xml:lang"));
+  $2("meta[http-equiv]").each((_, el) => {
+    if (String($2(el).attr("http-equiv")).toLowerCase() === "content-language") add2("meta content-language", $2(el).attr("content"));
+  });
+  add2("Content-Language header", contentLanguageHeader);
+  return out;
+}
+__name(declaredLanguages, "declaredLanguages");
+function declaredLanguagesFromHtml(html3, contentLanguageHeader) {
+  return declaredLanguages(load(html3), contentLanguageHeader);
+}
+__name(declaredLanguagesFromHtml, "declaredLanguagesFromHtml");
+function letterCounts(text3) {
+  const words = String(text3 ?? "").toLowerCase().match(CYRILLIC_WORD) || [];
+  let marker = 0;
+  let other = 0;
+  for (const word of words) {
+    if (MARKERS.test(word)) marker++;
+    if (NOT_RUSSIAN.test(word)) other++;
+  }
+  return { cyrillicWords: words.length, markerWords: marker, otherWords: other };
+}
+__name(letterCounts, "letterCounts");
+function judgeLanguage({ declared = [], text: text3 = "" }) {
+  const counts = letterCounts(text3);
+  const tag = declared[0]?.tag ?? null;
+  const result = /* @__PURE__ */ __name((russian, basis) => ({ russian, basis, declared, ...counts, markerShare: counts.cyrillicWords ? counts.markerWords / counts.cyrillicWords : 0 }), "result");
+  const plainlyOther = counts.cyrillicWords >= MIN_CYRILLIC_WORDS && counts.otherWords / counts.cyrillicWords >= OTHER_OVERRIDES_DECLARED;
+  if (tag === "ru") return plainlyOther ? result(false, "declared_contradicted") : result(true, "declared");
+  if (tag && OTHER_CYRILLIC_LANGS.has(tag)) return result(false, "declared_other");
+  const { cyrillicWords, markerWords, otherWords } = counts;
+  if (cyrillicWords >= MIN_CYRILLIC_WORDS && markerWords / cyrillicWords >= MARKER_SHARE && otherWords / cyrillicWords < OTHER_SHARE) {
+    return result(true, "letters");
+  }
+  return result(false, null);
+}
+__name(judgeLanguage, "judgeLanguage");
+
+// scripts/lib/reading.mjs
+var REFUSED_LANGUAGE_RU = "refused_language_ru";
 var READING_SCHEMA = "getlooploop/vectorscope-skill-reading@1";
-function chunkHtml(html3, finalUrl, urlKey, host) {
-  const analysed = analyseHtml({
+function analyse(html3, finalUrl, urlKey) {
+  return analyseHtml({
     html: html3,
     url: finalUrl,
     requestedUrl: urlKey,
     statusCode: 200,
     contentType: "text/html"
   });
+}
+__name(analyse, "analyse");
+function chunkHtml(html3, finalUrl, urlKey, host, analysed = analyse(html3, finalUrl, urlKey)) {
   const chunks = chunkPage({
     id: "public",
     url: analysed.url,
@@ -21690,7 +21756,24 @@ async function readPage({ url, html: html3, finalUrl, robots, render: render3 = 
     };
   }
   if (onHtml) onHtml(fetched.html, fetched.url);
-  const { analysed, chunks } = chunkHtml(fetched.html, fetched.url, urlKey, host);
+  const analysed = analyse(fetched.html, fetched.url, urlKey);
+  const language = judgeLanguage({ declared: declaredLanguagesFromHtml(fetched.html, fetched.contentLanguage), text: analysed.bodyText || "" });
+  if (language.russian) {
+    return {
+      ...base,
+      ok: false,
+      reasonCode: REFUSED_LANGUAGE_RU,
+      page: { url: analysed.url, requestedUrl: urlKey },
+      language: {
+        basis: language.basis,
+        declared: language.declared,
+        cyrillicWords: language.cyrillicWords,
+        markerWords: language.markerWords,
+        otherWords: language.otherWords
+      }
+    };
+  }
+  const { chunks } = chunkHtml(fetched.html, fetched.url, urlKey, host, analysed);
   if (!chunks.length) return { ...base, ok: false, reasonCode: "empty" };
   const charsIndexed = chunks.reduce((sum, chunk) => sum + chunk.charCount, 0);
   const bodyChars = (analysed.bodyText || "").trim().length;
@@ -21795,6 +21878,12 @@ var fmt = /* @__PURE__ */ __name((n) => Number(n).toLocaleString("en-US"), "fmt"
 function summarise(reading, file, prefix = "") {
   if (!reading.ok) {
     console.log(`${prefix}REFUSED  ${reading.reasonCode}${reading.status ? ` (HTTP ${reading.status})` : ""}`);
+    if (reading.reasonCode === "refused_language_ru") {
+      const l = reading.language || {};
+      const why = l.basis === "declared" ? `declared ${l.declared?.[0]?.source}="${l.declared?.[0]?.value}"` : `${l.markerWords} of ${l.cyrillicWords} Cyrillic words carry letters Ukrainian does not have`;
+      console.log(`${prefix}reason    pages in Russian are not analysed (${why}); nothing of the page was kept`);
+      console.log(`${prefix}report    run lens.mjs on this reading alone to write the report that says why`);
+    }
     console.log(`${prefix}reading  ${file}`);
     return;
   }

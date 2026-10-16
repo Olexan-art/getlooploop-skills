@@ -6,14 +6,14 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": ">=18"
+    "node": ">=20.18.1"
   },
   "scripts": {
     "read": "node dist/read.mjs",
     "lens": "node dist/lens.mjs",
     "build": "node tools/build.mjs",
     "zip": "node tools/zip.mjs",
-    "test": "node --test tests/checks.test.mjs tests/robots.test.mjs tests/judgement.test.mjs tests/report.test.mjs tests/vocabulary.test.mjs tests/dist.test.mjs"
+    "test": "node --test tests/checks.test.mjs tests/robots.test.mjs tests/judgement.test.mjs tests/report.test.mjs tests/vocabulary.test.mjs tests/language.test.mjs tests/refusal.test.mjs tests/dist.test.mjs"
   },
   "dependencies": {
     "cheerio": "^1.2.0"

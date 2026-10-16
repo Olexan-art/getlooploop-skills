@@ -2,6 +2,8 @@
 // never translated; only the report's own words are. Every entry is { en, uk }, each a string
 // or a function of the values it needs. Values passed in are already HTML-safe.
 
+import { REFUSAL_COPY } from "./refusal.mjs";
+
 export const LANGS = ["en", "uk"];
 
 const fmtN = (n) => Number(n).toLocaleString("en-US");
@@ -58,6 +60,10 @@ export const S = {
     en: (v) => `ChatGPT, Gemini, Perplexity, Copilot and others use their own crawlers, cuts and embeddings, and do not publish them. The principle is the same (fetch → text → passages → retrieval); the details differ. This reading is a working model of a typical retriever, not a copy of any one of them; the ${v.cap}-passage cap is this tool's.`,
     uk: (v) => `ChatGPT, Gemini, Perplexity, Copilot та інші мають власні краулери, власне нарізання й ембединги і не публікують їх. Принцип той самий (завантаження → текст → уривки → пошук), деталі різняться. Це читання — робоча модель типового ретривера, а не копія котрогось із них; ліміт у ${v.cap} ${ukForm(v.cap, "уривок", "уривки", "уривків")} — правило цього інструмента.`,
   },
+
+  // ── the refusal (its copy lives in refusal.mjs)
+  refusalTitle: REFUSAL_COPY.title,
+  refusedTag: { en: "not analysed", uk: "не проаналізовано" },
 
   // ── blocked banner
   bannerTitle: { en: "AI crawlers are blocked from this page", uk: "ШІ-краулерам закрито доступ до цієї сторінки" },
@@ -321,6 +327,10 @@ export const S = {
   fine: {
     en: "This is a preview of the machine's view, not a guarantee of what any assistant does with it: it does not establish that any assistant has indexed the page, and each system chunks, embeds and caps in its own way.",
     uk: "Це попередній перегляд того, що бачить машина, а не гарантія того, що з цим зробить будь-який асистент: звідси не випливає, що якийсь асистент проіндексував сторінку, а кожна система нарізає, вбудовує й обмежує по-своєму.",
+  },
+  footerMadeRefused: {
+    en: "Made with the vectorscope skill: the scripts fetched the page, found it was in Russian and kept nothing of it; no model or embedding was called.",
+    uk: "Зроблено навичкою vectorscope: скрипти завантажили сторінку, визначили, що вона російською, і нічого з неї не зберегли; жодної моделі чи ембедингів не викликано.",
   },
   footerMade: {
     en: "Made with the vectorscope skill: the scripts fetched the page and its robots.txt and sent nothing anywhere; no model or embedding was called.",

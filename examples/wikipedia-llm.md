@@ -1,6 +1,10 @@
 # Vectorscope reading: Large language model - Wikipedia
 
-> Grouped by the agent's reading, not by embeddings: the fetch, extraction, chunking and the 26-passage cap are the product's exact rules; the groups are a judgement. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.
+> **Same for everyone.** The fetch, the text extraction, the cut (at h2 headings, then 2,000-character windows), the 26-passage cap, robots.txt and the automatic checks are scripts: identical whichever model runs the skill.
+>
+> **Your model's judgement.** The groups, their names, the rewrite plan, the query test and the facts are the reading of the model that ran this skill (model not stated by the agent). Another model may group a little differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.
+>
+> **Not any assistant's pipeline.** ChatGPT, Gemini, Perplexity, Copilot and others use their own crawlers, cuts and embeddings, and do not publish them. The principle is the same (fetch → text → passages → retrieval); the details differ. This reading is a working model of a typical retriever, not a copy of any one of them; the 26-passage cap is this tool's.
 
 | | |
 |---|---|

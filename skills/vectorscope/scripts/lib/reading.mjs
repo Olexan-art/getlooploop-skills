@@ -14,19 +14,24 @@ import { fetchRobots, robotsReport } from "./robots.mjs";
 import { shortLineRuns } from "./checks.mjs";
 import { renderPage } from "./render.mjs";
 import { basename } from "node:path";
+import { declaredLanguagesFromHtml, judgeLanguage } from "./language.mjs";
+
+export const REFUSED_LANGUAGE_RU = "refused_language_ru";
 
 export const READING_SCHEMA = "getlooploop/vectorscope-skill-reading@1";
 
-/** Extract and chunk one HTML document exactly as the product does. */
-function chunkHtml(html, finalUrl, urlKey, host) {
-  const analysed = analyseHtml({
+function analyse(html, finalUrl, urlKey) {
+  return analyseHtml({
     html,
     url: finalUrl,
     requestedUrl: urlKey,
     statusCode: 200,
     contentType: "text/html",
   });
+}
 
+/** Extract and chunk one HTML document exactly as the product does. */
+function chunkHtml(html, finalUrl, urlKey, host, analysed = analyse(html, finalUrl, urlKey)) {
   const chunks = chunkPage({
     id: "public",
     url: analysed.url,
@@ -73,7 +78,26 @@ export async function readPage({ url, html, finalUrl, robots, render = false, on
   }
   if (onHtml) onHtml(fetched.html, fetched.url);
 
-  const { analysed, chunks } = chunkHtml(fetched.html, fetched.url, urlKey, host);
+  // Pages in Russian are not analysed: decided after the extraction, before any chunking. The
+  // refusal keeps no page text, title or passages, only what the decision rests on.
+  const analysed = analyse(fetched.html, fetched.url, urlKey);
+  const language = judgeLanguage({ declared: declaredLanguagesFromHtml(fetched.html, fetched.contentLanguage), text: analysed.bodyText || "" });
+  if (language.russian) {
+    return {
+      ...base,
+      ok: false,
+      reasonCode: REFUSED_LANGUAGE_RU,
+      page: { url: analysed.url, requestedUrl: urlKey },
+      language: {
+        basis: language.basis,
+        declared: language.declared,
+        cyrillicWords: language.cyrillicWords,
+        markerWords: language.markerWords,
+        otherWords: language.otherWords,
+      },
+    };
+  }
+  const { chunks } = chunkHtml(fetched.html, fetched.url, urlKey, host, analysed);
 
   if (!chunks.length) return { ...base, ok: false, reasonCode: "empty" };
 

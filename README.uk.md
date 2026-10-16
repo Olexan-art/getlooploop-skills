@@ -80,7 +80,7 @@ Agent Skills від [GetLoopLoop](https://www.getlooploop.com) для claude.ai 
 
 ## Встановлення
 
-Навичці потрібен Node 18 або новіший і **не потрібен `npm install`**: `dist/read.mjs` і `dist/lens.mjs` — це скрипти, зібрані разом з їхньою єдиною залежністю, [cheerio](https://cheerio.js.org/), тож їх запускає звичайний `node`, зокрема в пісочницях, де встановлювати пакети заборонено. Читабельний код лежить у `scripts/`; `dist/` збирається з нього (див. *Робота над навичкою*).
+Навичці потрібен Node 20.18 або новіший (цього вимагає cheerio) і **не потрібен `npm install`**: `dist/read.mjs` і `dist/lens.mjs` — це скрипти, зібрані разом з їхньою єдиною залежністю, [cheerio](https://cheerio.js.org/), тож їх запускає звичайний `node`, зокрема в пісочницях, де встановлювати пакети заборонено. Читабельний код лежить у `scripts/`; `dist/` збирається з нього (див. *Робота над навичкою*).
 
 ### claude.ai і застосунок Claude для комп’ютера
 
@@ -161,6 +161,12 @@ node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 ```
 
 Скрипти не викликають жодних моделей чи ембедингів і нікуди нічого не надсилають, окрім GET-запитів до сторінки та її robots.txt (а з `--render` сторінку ще відкриває локальний браузер). Поля, для яких потрібні вектори (згуртованість, самоподібність, проєкція), подано як `null`, а не оцінено навмання. HTML-звіт екранує кожен шматок тексту сторінки й має політику безпеки вмісту, що блокує з нього всі мережеві запити, бо уривки — це вміст третьої сторони.
+
+## Сторінки російською мовою не аналізуються
+
+Vectorscope не аналізує сторінки російською мовою. Це рішення автора інструмента через війну Росії проти України. Сторінка російською отримує звіт із причиною та висновками, на які вона спирається, і нічого з самої сторінки: [Генеральна Асамблея ООН](https://news.un.org/en/story/2022/03/1113152) ([і](https://news.un.org/en/story/2022/10/1129492)), [Європейський парламент](https://www.europarl.europa.eu/news/en/press-room/20221118IPR55707/european-parliament-declares-russia-to-be-a-state-sponsor-of-terrorism), [Міжнародний кримінальний суд](https://www.icc-cpi.int/news/situation-ukraine-icc-judges-issue-arrest-warrants-against-vladimir-vladimirovich-putin-and), [Комісія ООН з розслідування щодо України](https://news.un.org/en/story/2025/03/1161281), [Офіс Генерального прокурора України](https://gp.gov.ua/en/posts/ponad-190-tisyac-vojennix-zlociniv-ofis-genprokurora-predstaviv-komisiyi-oon-masstabi-zlociniv-rf-proti-ukrayini).
+
+![Звіт, який отримує сторінка російською](docs/report-refused-uk.png)
 
 ## Робота над навичкою
 
