@@ -34,9 +34,29 @@ export const S = {
   headingsFound: { en: (v) => `<b>${fmtN(v.n)}</b> headings found`, uk: (v) => `<b>${fmtUk(v.n)}</b> ${ukForm(v.n, "заголовок", "заголовки", "заголовків")}` },
   noindexYes: { en: "<b>noindex</b>: the page asks search engines not to index it", uk: "<b>noindex</b>: сторінка просить пошуковики її не індексувати" },
   noindexNo: { en: "noindex <b>no</b>", uk: "noindex <b>ні</b>" },
-  groupsNote: {
-    en: (v) => `The groups are the agent's reading of the passages, not an embedding clustering. The fetch, extraction, chunking and the ${v.cap}-passage cap are the tool's exact rules. For the embedding-based reading with the map, run the page at ${v.link}.`,
-    uk: (v) => `Групи — це прочитання уривків агентом, а не кластеризація ембедингів. Завантаження, видобування тексту, нарізання й ліміт у ${v.cap} ${ukForm(v.cap, "уривок", "уривки", "уривків")} — точні правила інструмента. Читання на ембедингах із картою — на ${v.link}.`,
+
+  // ── how to read this report: three different claims, kept apart
+  infoAria: { en: "How to read this report", uk: "Як читати цей звіт" },
+  infoSameTitle: { en: "Same for everyone", uk: "Однаково для всіх" },
+  infoSameBody: {
+    en: (v) => `The fetch, the text extraction, the cut (at h2 headings, then 2,000-character windows), the ${v.cap}-passage cap, robots.txt and the automatic checks are scripts: identical whichever model runs the skill.`,
+    uk: (v) => `Завантаження, видобування тексту, нарізання (за заголовками h2, далі вікнами по 2 000 символів), ліміт у ${v.cap} ${ukForm(v.cap, "уривок", "уривки", "уривків")}, robots.txt і автоматичні перевірки виконують скрипти: результат однаковий, хоч би яка модель запускала навичку.`,
+  },
+  infoJudgeTitle: { en: "Your model's judgement", uk: "Судження вашої моделі" },
+  infoJudgeBody: {
+    en: (v) => `The groups, their names, the rewrite plan, the query test and the facts are the reading of the model that ran this skill (${v.by}). Another model may group a little differently. For the embedding-based reading with the map, run the page at ${v.link}.`,
+    uk: (v) => `Групи, їхні назви, план переписування, тест запитів і факти — це прочитання моделі, яка запустила цю навичку (${v.by}). Інша модель може згрупувати трохи інакше. Читання на ембедингах із картою — на ${v.link}.`,
+  },
+  // agent and model arrive HTML-safe; either may be null, and then it is said, never guessed.
+  infoBy: {
+    en: (v) => [v.model ? `model: <b>${v.model}</b>` : "model not stated by the agent", v.agent ? `agent: <b>${v.agent}</b>` : null].filter(Boolean).join(" · "),
+    uk: (v) => [v.model ? `модель: <b>${v.model}</b>` : "агент не вказав модель", v.agent ? `агент: <b>${v.agent}</b>` : null].filter(Boolean).join(" · "),
+  },
+  infoByPage: { en: (v) => `page ${v.n}: ${v.by}`, uk: (v) => `сторінка ${v.n}: ${v.by}` },
+  infoNotTitle: { en: "Not any assistant's pipeline", uk: "Не конвеєр жодного асистента" },
+  infoNotBody: {
+    en: (v) => `ChatGPT, Gemini, Perplexity, Copilot and others use their own crawlers, cuts and embeddings, and do not publish them. The principle is the same (fetch → text → passages → retrieval); the details differ. This reading is a working model of a typical retriever, not a copy of any one of them; the ${v.cap}-passage cap is this tool's.`,
+    uk: (v) => `ChatGPT, Gemini, Perplexity, Copilot та інші мають власні краулери, власне нарізання й ембединги і не публікують їх. Принцип той самий (завантаження → текст → уривки → пошук), деталі різняться. Це читання — робоча модель типового ретривера, а не копія котрогось із них; ліміт у ${v.cap} ${ukForm(v.cap, "уривок", "уривки", "уривків")} — правило цього інструмента.`,
   },
 
   // ── blocked banner

@@ -2,7 +2,7 @@ English · [Українська](README.uk.md)
 
 # GetLoopLoop skills
 
-Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
+Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
 | Skill | What it does |
 |---|---|
@@ -78,15 +78,23 @@ Three real runs are in [`examples/`](examples), each with the files the agent wr
 
 ## Install
 
-The skill needs Node 18 or later. Its only dependency is [cheerio](https://cheerio.js.org/). Copy the folder to wherever your agent looks for skills (next section), then once:
+The skill needs Node 18 or later and **no `npm install`**: `dist/read.mjs` and `dist/lens.mjs` are the scripts bundled with their one dependency, [cheerio](https://cheerio.js.org/), so plain `node` runs them, including in sandboxes that block package installs. The readable source is in `scripts/`; `dist/` is generated from it (see *Working on the skill*).
 
-```
-cd <skills directory>/vectorscope && npm install --omit=dev
-```
+### claude.ai and the Claude desktop app
+
+1. Download **`vectorscope.zip`** from this repository's [Releases](https://github.com/Olexan-art/getlooploop-skills/releases). Do not unpack it: the upload takes the zip, with the `vectorscope` folder at its top level.
+2. Turn on code execution: **Settings > Capabilities > Code execution and file creation**. Skills need it. On Team and Enterprise plans an owner controls it in Organization settings > Capabilities.
+3. Upload the skill: **Customize > Skills**, the **+** button, **Create skill**, **Upload a skill**, then choose `vectorscope.zip`. Turn the skill on in the list. In the desktop app it is the same Customize > Skills page.
+4. Let the sandbox reach the site you want read. A run fetches the page and its `robots.txt`, and code execution only reaches what its network setting allows. On Free, Pro and Max plans that setting is **Allow network egress** in Settings > Capabilities. On Team and Enterprise plans an owner chooses in Organization settings > Capabilities: off, package managers only (the default), package managers and specific domains, or all domains. With specific domains, add the site's domain. If your plan's setting cannot allow the site, the run stops with `REFUSED unreachable` and says so; use Claude Code or another agent on your own machine for that page.
+5. In a chat, ask: **"run vectorscope on https://example.com/page"**. Claude runs the scripts in the sandbox and hands you `report.html` as a file to download and open in your browser, with a short summary in the chat.
+
+**Pasting this repository's link into a chat is not installing it.** Claude rightly will not download and run code from a link someone pasted, so it will at best imitate the steps by hand, and those numbers are not the tool's. Upload the zip as above.
+
+Sources: [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude) · [Create custom skills](https://claude.com/docs/skills/how-to) (the zip's structure, the name and description rules) · [Create and edit files with Claude](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude) (code execution and network egress) · [Agent Skills overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) (network access by surface). Checked on 2026-10-16.
 
 ## Use it with your agent
 
-The skill is one folder, `skills/vectorscope`, with a `SKILL.md` and Node scripts. Agents that support Agent Skills load it from their skills directory; any other agent can follow `SKILL.md` as instructions. Either way the agent runs the same commands from the skill folder, and the agent's own model does the reading.
+The skill is one folder, `skills/vectorscope`, with a `SKILL.md` and Node scripts. Agents that support Agent Skills load it from their skills directory; any other agent can follow `SKILL.md` as instructions. Either way the agent runs the same scripts from the skill folder, and the agent's own model does the reading. No install step: the agent runs `node dist/read.mjs` and `node dist/lens.mjs` as they are.
 
 ```
 git clone https://github.com/Olexan-art/getlooploop-skills.git
@@ -140,17 +148,31 @@ Sources: [Claude Code skills](https://code.claude.com/docs/en/skills) · [Codex 
 ## Vectorscope, in short
 
 ```
-node scripts/read.mjs https://example.com/page --out reading.json   # fetch → extract → chunk → cap, robots.txt, checks
+node dist/read.mjs https://example.com/page --out reading.json   # fetch → extract → chunk → cap, robots.txt, checks
 # the agent reads the passages and writes groups.json
-node scripts/lens.mjs reading.json groups.json --html report.html   # labels, phrases, all checks
+node dist/lens.mjs reading.json groups.json --html report.html   # labels, phrases, all checks
 # the agent writes queries.json and plan.json
-node scripts/lens.mjs reading.json groups.json --queries queries.json --plan plan.json --html report.html --md report.md --json export.json
+node dist/lens.mjs reading.json groups.json --queries queries.json --plan plan.json --html report.html --md report.md --json export.json
 
-node scripts/read.mjs <url1> <url2> --out-dir readings              # compare; then topics.json, groups-<n>.json, facts.json, queries.json
-node scripts/lens.mjs --compare readings/manifest.json --html readings/compare.html
+node dist/read.mjs <url1> <url2> --out-dir readings              # compare; then topics.json, groups-<n>.json, facts.json, queries.json
+node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 ```
 
-The scripts make no model or embedding calls and send nothing anywhere except the GETs for the page and its robots.txt (and, with `--render`, the local browser loading the page). Fields that would need vectors (cohesion, self-similarity, the projection) are reported as `null` instead of being estimated. The HTML report escapes every piece of page text and carries a content security policy that blocks all network requests from it, because the passages are third-party content. `npm test` runs the tests.
+The scripts make no model or embedding calls and send nothing anywhere except the GETs for the page and its robots.txt (and, with `--render`, the local browser loading the page). Fields that would need vectors (cohesion, self-similarity, the projection) are reported as `null` instead of being estimated. The HTML report escapes every piece of page text and carries a content security policy that blocks all network requests from it, because the passages are third-party content.
+
+## Working on the skill
+
+`scripts/` is the source; `dist/` is built from it with [esbuild](https://esbuild.github.io/) (a development dependency only) and committed, so the skill runs without an install.
+
+```
+cd skills/vectorscope
+npm install          # cheerio, and esbuild for the build
+npm run build        # scripts/ → dist/read.mjs, dist/lens.mjs (not minified, readable)
+npm test             # includes a check that dist/ equals a fresh build, so dist never drifts from scripts/
+npm run zip          # dist-release/vectorscope.zip, the file to attach to a release for claude.ai
+```
+
+Change `scripts/`, run `npm run build`, and commit both.
 
 ## Licence
 

@@ -238,6 +238,25 @@ function closingLine(page) {
   return `A page contributes at most ${cap} passages; this one needed ${page.chunksIndexed}, so none of its extracted text fell past the cap.`;
 }
 
+/** Who did the reading, as groups.json states it; "model not stated by the agent" otherwise. */
+function byMarkdown(judgements) {
+  const one = (j) => [j?.model ? `model: ${cell(j.model)}` : "model not stated by the agent", j?.agent ? `agent: ${cell(j.agent)}` : null].filter(Boolean).join(" · ");
+  const keys = judgements.map((x) => JSON.stringify([x.j?.agent ?? null, x.j?.model ?? null]));
+  return new Set(keys).size <= 1 ? one(judgements[0]?.j) : judgements.map((x) => `page ${x.n}: ${one(x.j)}`).join("; ");
+}
+
+/** The report's three claims, kept apart, as the HTML report's info panel states them. */
+function infoMarkdown(cap, judgements) {
+  return [
+    `> **Same for everyone.** The fetch, the text extraction, the cut (at h2 headings, then 2,000-character windows), the ${cap}-passage cap, robots.txt and the automatic checks are scripts: identical whichever model runs the skill.`,
+    ">",
+    `> **Your model's judgement.** The groups, their names, the rewrite plan, the query test and the facts are the reading of the model that ran this skill (${byMarkdown(judgements)}). Another model may group a little differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.`,
+    ">",
+    `> **Not any assistant's pipeline.** ChatGPT, Gemini, Perplexity, Copilot and others use their own crawlers, cuts and embeddings, and do not publish them. The principle is the same (fetch → text → passages → retrieval); the details differ. This reading is a working model of a typical retriever, not a copy of any one of them; the ${cap}-passage cap is this tool's.`,
+    "",
+  ];
+}
+
 export function renderMarkdown(reading, lens, extras = {}) {
   const { page } = reading;
   const cap = page.chunkCap;
@@ -249,11 +268,7 @@ export function renderMarkdown(reading, lens, extras = {}) {
 
   out.push(`# Vectorscope reading: ${cell(page.title || host || page.url)}`);
   out.push("");
-  out.push(
-    "> Grouped by the agent's reading, not by embeddings: the fetch, extraction, chunking and the " +
-      `${cap}-passage cap are the product's exact rules; the groups are a judgement. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.`
-  );
-  out.push("");
+  out.push(...infoMarkdown(cap, [{ n: 1, j: lens.judgement }]));
   out.push(...blockedBanner(reading.robots));
   out.push("| | |");
   out.push("|---|---|");
@@ -382,10 +397,8 @@ export function renderCompareMarkdown(data) {
   const { pages, topicCmp, facts, factCmp, queries, plan, topics } = data;
   const name = new Map(topics.map((t) => [t.id, t.name]));
   const out = [`# Vectorscope comparison: ${pages.length} pages, one topic dictionary`, ""];
-  out.push(
-    "> Each page was read with the product's exact fetch, extraction, chunking and 26-passage cap. The agent grouped every page against one shared topic dictionary, so the topics line up across pages; the grouping, the facts and the query verdicts are a judgement.",
-    ""
-  );
+  out.push(...infoMarkdown(pages[0].reading.page.chunkCap, pages.map((p) => ({ n: p.n, j: p.lens.judgement }))));
+  out.push("> The agent grouped every page against one shared topic dictionary, so the topics line up across pages.", "");
   for (const p of pages) out.push(...blockedBanner(p.reading.robots, `Page ${p.n}: `));
   out.push("## The pages", "");
   out.push("| Page | URL | Words | Passages | Past cap | AI crawlers blocked | Findings (high/medium/low) |", "|---|---|---|---|---|---|---|");
@@ -449,11 +462,18 @@ function exportChecks(checks) {
   return checks.map((f) => ({ ...f, message: checkCopy(f.code, "en", plainEvidence(f.evidence)).what }));
 }
 
+function sharedJudgement(list) {
+  const same = (key) => (new Set(list.map((j) => j?.[key] ?? null)).size === 1 ? list[0]?.[key] ?? null : null);
+  return { agent: same("agent"), model: same("model") };
+}
+
 function singleExport(reading, lens, extras) {
   return {
     ...buildVectorscopeExport(reading.page, lens),
     // v2, additive. None of the v1 fields above changed meaning, so the schema id is unchanged.
     skillVersion: SKILL_VERSION,
+    // Who did the reading (groups.json "agent" and "model"), null when the agent did not say.
+    judgement: lens.judgement ?? { agent: null, model: null },
     checks: exportChecks(extras.checks),
     technical: reading.technical ?? null,
     robots: reading.robots ?? null,
@@ -605,6 +625,8 @@ function runCompare(args) {
     producedBy: { tool: "vectorscope-skill (local, no embeddings)", url: "https://www.getlooploop.com/vectorscope" },
     howToRead:
       "Each page is a full single-page export under pages[]. topics is the one dictionary every page was grouped against; topicTable gives passages and characters per topic per page; topicGaps lists, per page, topics the others cover and it does not; facts and factGaps are the agent's list of citable facts and where each is stated; queries carry a verdict per page and the winner. Grouping, facts and verdicts are judgements; chunking and the cap are the product's exact rules.",
+    // Who did the reading: the value every page's groups file states, null where they differ or say nothing.
+    judgement: sharedJudgement(pages.map((p) => p.lens.judgement)),
     pages: pages.map((p) => ({ n: p.n, ...singleExport(p.reading, p.lens, { checks: p.checks }) })),
     topics,
     topicTable: topicCmp.table,

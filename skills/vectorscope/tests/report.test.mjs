@@ -82,3 +82,29 @@ test("compare: topic table, gaps, facts", () => {
   const html = renderCompareHtml({ pages, topics, topicCmp: cmp, facts, factCmp: fc, queries: null, plan: null });
   assert.ok(html.includes("Topics × pages") && html.includes("Теми × сторінки"));
 });
+
+test("info panel: the three claims, and the model named only when the agent said it", () => {
+  const r = reading(["First passage about caching rules in full.", "Second passage about freshness and revalidation."]);
+  const unstated = renderHtml(r, lensOf(r, [[0, 1]]));
+  assert.ok(unstated.includes('class="info"'));
+  for (const text of ["Same for everyone", "Your model's judgement", "Not any assistant's pipeline", "Однаково для всіх", "model not stated by the agent", "агент не вказав модель"]) {
+    assert.ok(unstated.includes(text), text);
+  }
+  // The panel sits under the header, before the results.
+  assert.ok(unstated.indexOf('class="info"') > unstated.indexOf("</header>"));
+  assert.ok(unstated.indexOf('class="info"') < unstated.indexOf('id="h-result"'));
+
+  const grouping = validateGrouping({ groups: [[0, 1]], agent: "Claude Code", model: "Claude Opus" }, 2);
+  assert.deepEqual(grouping.judgement, { agent: "Claude Code", model: "Claude Opus" });
+  const named = renderHtml(r, buildJudgedLens(r, grouping));
+  assert.ok(named.includes("model: <b>Claude Opus</b> · agent: <b>Claude Code</b>"));
+  assert.ok(!named.includes("model not stated by the agent"));
+});
+
+test("groups.json agent and model: optional, short plain strings", () => {
+  assert.deepEqual(validateGrouping({ groups: [[0]] }, 1).judgement, { agent: null, model: null });
+  assert.deepEqual(validateGrouping({ groups: [[0]], agent: "  Codex  " }, 1).judgement, { agent: "Codex", model: null });
+  assert.throws(() => validateGrouping({ groups: [[0]], model: 5 }, 1), /"model" must be a string/);
+  assert.throws(() => validateGrouping({ groups: [[0]], agent: "x".repeat(61) }, 1), /1–60 characters/);
+  assert.throws(() => validateGrouping({ groups: [[0]], agent: "<b>x</b>" }, 1), /angle brackets/);
+});

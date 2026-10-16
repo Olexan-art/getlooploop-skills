@@ -55,6 +55,8 @@ export function buildJudgedLens(reading, grouping) {
     keywords: flattenVocabulary(vocabulary),
     phrases: vocabulary.phrases,
     narrative: vocabulary.narrative,
+    // Who did the reading, as stated in groups.json; null fields when not stated.
+    judgement: grouping.judgement ?? { agent: null, model: null },
   };
 }
 

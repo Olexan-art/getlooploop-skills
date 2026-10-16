@@ -2,7 +2,7 @@
 
 # Навички GetLoopLoop
 
-Agent Skills від [GetLoopLoop](https://www.getlooploop.com) для Claude Code, Codex, opencode, Hermes Agent та інших агентів, які завантажують навички у форматі `SKILL.md`.
+Agent Skills від [GetLoopLoop](https://www.getlooploop.com) для claude.ai і застосунку Claude для комп’ютера, Claude Code, Codex, opencode, Hermes Agent та інших агентів, які завантажують навички у форматі `SKILL.md`.
 
 | Навичка | Що робить |
 |---|---|
@@ -80,15 +80,23 @@ Agent Skills від [GetLoopLoop](https://www.getlooploop.com) для Claude Cod
 
 ## Встановлення
 
-Навичці потрібен Node 18 або новіший. Єдина залежність — [cheerio](https://cheerio.js.org/). Скопіюйте теку туди, де ваш агент шукає навички (наступний розділ), а потім один раз:
+Навичці потрібен Node 18 або новіший і **не потрібен `npm install`**: `dist/read.mjs` і `dist/lens.mjs` — це скрипти, зібрані разом з їхньою єдиною залежністю, [cheerio](https://cheerio.js.org/), тож їх запускає звичайний `node`, зокрема в пісочницях, де встановлювати пакети заборонено. Читабельний код лежить у `scripts/`; `dist/` збирається з нього (див. *Робота над навичкою*).
 
-```
-cd <тека навичок>/vectorscope && npm install --omit=dev
-```
+### claude.ai і застосунок Claude для комп’ютера
+
+1. Завантажте **`vectorscope.zip`** з розділу [Releases](https://github.com/Olexan-art/getlooploop-skills/releases) цього репозиторію. Не розпаковуйте його: завантажується сам zip, у якому на верхньому рівні лежить тека `vectorscope`.
+2. Увімкніть виконання коду: **Settings > Capabilities > Code execution and file creation**. Без нього навички не працюють. У планах Team і Enterprise цим керує власник організації в Organization settings > Capabilities.
+3. Завантажте навичку: **Customize > Skills**, кнопка **+**, **Create skill**, **Upload a skill**, далі виберіть `vectorscope.zip`. Увімкніть навичку в списку. У застосунку для комп’ютера це та сама сторінка Customize > Skills.
+4. Дозвольте пісочниці доступ до сайту, який треба прочитати. Запуск завантажує сторінку та її `robots.txt`, а виконання коду бачить лише те, що дозволяє його мережеве налаштування. У планах Free, Pro і Max це **Allow network egress** у Settings > Capabilities. У планах Team і Enterprise власник вибирає в Organization settings > Capabilities: вимкнено, лише менеджери пакетів (за замовчуванням), менеджери пакетів і вказані домени або всі домени. Якщо вибрано вказані домени, додайте домен сайту. Якщо налаштування вашого плану не дозволяє цей сайт, запуск зупиниться з `REFUSED unreachable` і скаже про це; для такої сторінки скористайтеся Claude Code чи іншим агентом на своєму комп’ютері.
+5. У чаті попросіть: **«прожени vectorscope для https://example.com/page»**. Claude запустить скрипти в пісочниці й віддасть `report.html` файлом, який можна завантажити й відкрити в браузері, а в чаті напише коротке резюме.
+
+**Вставити посилання на цей репозиторій у чат — не те саме, що встановити навичку.** Claude слушно не завантажує й не запускає код за посиланням, яке хтось вставив, тож щонайбільше відтворить кроки вручну, а такі числа — не результат інструмента. Завантажте zip, як описано вище.
+
+Джерела: [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude) · [Create custom skills](https://claude.com/docs/skills/how-to) (структура zip, правила для назви й опису) · [Create and edit files with Claude](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude) (виконання коду й мережевий доступ) · [Agent Skills overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) (мережевий доступ на різних платформах). Перевірено 16.10.2026.
 
 ## Використання з вашим агентом
 
-Навичка — це одна тека, `skills/vectorscope`, з файлом `SKILL.md` і скриптами на Node. Агенти з підтримкою Agent Skills завантажують її зі своєї теки навичок; будь-який інший агент може виконувати `SKILL.md` як інструкцію. В обох випадках агент запускає ті самі команди з теки навички, а читає уривки модель самого агента.
+Навичка — це одна тека, `skills/vectorscope`, з файлом `SKILL.md` і скриптами на Node. Агенти з підтримкою Agent Skills завантажують її зі своєї теки навичок; будь-який інший агент може виконувати `SKILL.md` як інструкцію. В обох випадках агент запускає ті самі скрипти з теки навички, а читає уривки модель самого агента. Нічого встановлювати не треба: агент запускає `node dist/read.mjs` і `node dist/lens.mjs` як є.
 
 ```
 git clone https://github.com/Olexan-art/getlooploop-skills.git
@@ -142,17 +150,31 @@ For questions about how AI assistants read a web page, follow skills/vectorscope
 ## Vectorscope коротко
 
 ```
-node scripts/read.mjs https://example.com/page --out reading.json   # завантаження → текст → уривки → ліміт, robots.txt, перевірки
+node dist/read.mjs https://example.com/page --out reading.json   # завантаження → текст → уривки → ліміт, robots.txt, перевірки
 # агент читає уривки й пише groups.json
-node scripts/lens.mjs reading.json groups.json --html report.html   # мітки, фрази, усі перевірки
+node dist/lens.mjs reading.json groups.json --html report.html   # мітки, фрази, усі перевірки
 # агент пише queries.json і plan.json
-node scripts/lens.mjs reading.json groups.json --queries queries.json --plan plan.json --html report.html --md report.md --json export.json
+node dist/lens.mjs reading.json groups.json --queries queries.json --plan plan.json --html report.html --md report.md --json export.json
 
-node scripts/read.mjs <url1> <url2> --out-dir readings              # порівняння; далі topics.json, groups-<n>.json, facts.json, queries.json
-node scripts/lens.mjs --compare readings/manifest.json --html readings/compare.html
+node dist/read.mjs <url1> <url2> --out-dir readings              # порівняння; далі topics.json, groups-<n>.json, facts.json, queries.json
+node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 ```
 
-Скрипти не викликають жодних моделей чи ембедингів і нікуди нічого не надсилають, окрім GET-запитів до сторінки та її robots.txt (а з `--render` сторінку ще відкриває локальний браузер). Поля, для яких потрібні вектори (згуртованість, самоподібність, проєкція), подано як `null`, а не оцінено навмання. HTML-звіт екранує кожен шматок тексту сторінки й має політику безпеки вмісту, що блокує з нього всі мережеві запити, бо уривки — це вміст третьої сторони. `npm test` запускає тести.
+Скрипти не викликають жодних моделей чи ембедингів і нікуди нічого не надсилають, окрім GET-запитів до сторінки та її robots.txt (а з `--render` сторінку ще відкриває локальний браузер). Поля, для яких потрібні вектори (згуртованість, самоподібність, проєкція), подано як `null`, а не оцінено навмання. HTML-звіт екранує кожен шматок тексту сторінки й має політику безпеки вмісту, що блокує з нього всі мережеві запити, бо уривки — це вміст третьої сторони.
+
+## Робота над навичкою
+
+`scripts/` — це вихідний код; `dist/` збирається з нього за допомогою [esbuild](https://esbuild.github.io/) (лише залежність для розробки) і лежить у репозиторії, тож навичка працює без встановлення.
+
+```
+cd skills/vectorscope
+npm install          # cheerio і esbuild для збирання
+npm run build        # scripts/ → dist/read.mjs, dist/lens.mjs (без мініфікації, читабельно)
+npm test             # серед іншого перевіряє, що dist/ збігається зі свіжим збиранням, тож dist не розходиться зі scripts/
+npm run zip          # dist-release/vectorscope.zip — файл, який додають до релізу для claude.ai
+```
+
+Змінили `scripts/` — запустіть `npm run build` і закомітьте обидва.
 
 ## Ліцензія
 

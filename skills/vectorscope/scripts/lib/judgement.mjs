@@ -8,6 +8,8 @@ import { CHECK_CODES } from "./checks.mjs";
 export const MAX_GROUPS = 6;
 export const MAX_LABEL_CHARS = 80;
 export const MAX_NOTE_CHARS = 240;
+/** "agent" and "model" in groups.json: who did the reading, as the agent states it about itself. */
+export const MAX_IDENTITY_CHARS = 60;
 export const MAX_TOPICS = 12;
 export const MAX_QUERIES = 10;
 export const MIN_QUERIES = 5;
@@ -110,7 +112,27 @@ export function validateGrouping(input, passageCount, { topicIds = null, require
     meta: ordered.map(({ label, note, topic }) => ({ label, note, topic })),
     duplicates,
     reordered,
+    judgement: validateIdentity(input),
   };
+}
+
+/**
+ * The optional top-level "agent" and "model" of groups.json: what the agent that did the reading
+ * says about itself ("Claude Code", "Claude Opus 5.5"). Absent stays null, and the report then says
+ * the model was not stated; nothing is ever inferred.
+ */
+export function validateIdentity(input) {
+  const one = (key) => {
+    const value = input[key];
+    if (value === undefined || value === null) return null;
+    if (typeof value !== "string") throw new Error(`"${key}" must be a string, e.g. ${key === "agent" ? '"Claude Code"' : '"Claude Opus 5.5"'}, or left out.`);
+    const text = value.replace(/\s+/g, " ").trim();
+    if (!text || text.length > MAX_IDENTITY_CHARS) throw new Error(`"${key}" must be 1–${MAX_IDENTITY_CHARS} characters, or left out.`);
+    // eslint-disable-next-line no-control-regex
+    if (/[\u0000-\u001f\u007f<>]/.test(text)) throw new Error(`"${key}" holds control characters or angle brackets; give a plain name.`);
+    return text;
+  };
+  return { agent: one("agent"), model: one("model") };
 }
 
 // ── topics.json ──────────────────────────────────────────────────────────────

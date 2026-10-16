@@ -1,6 +1,6 @@
 ---
 name: vectorscope
-description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для AI-ботів». No embeddings - the agent groups the passages by reading them.
+description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для ШІ-ботів». No embeddings.
 ---
 
 # Vectorscope (local, no embeddings)
@@ -11,30 +11,38 @@ description: Show how an AI assistant's retriever or a RAG pipeline reads public
 
 **Answer the user in the language they wrote in.** The report itself has an EN | UK switch; English is the default.
 
-Steps marked *script* run the product's exact rules and are deterministic. Steps marked *judgement* are yours: you write a small JSON file, and the next script validates it and refuses with a message naming what to fix. Run every command from this skill's folder.
+Steps marked *script* run the product's exact rules and are deterministic. Steps marked *judgement* are yours: you write a small JSON file, and the next script validates it and refuses with a message naming what to fix.
 
-**First run:** if `node_modules/` is missing here, run `npm install --omit=dev` (it installs cheerio and nothing else). Requires Node 18 or later.
+## Before you start
+
+- **`$SKILL` below is this skill's folder**, the one this SKILL.md is in. In Claude Code it is `${CLAUDE_SKILL_DIR}`. On claude.ai the skill's whole folder is copied into the code-execution sandbox; use the path you read this file from. Work in a writable directory of your own (the files you and the scripts write go there) and call the scripts by their path. They do not depend on the current directory.
+- **No install.** `dist/read.mjs` and `dist/lens.mjs` are the scripts bundled with everything they need, so plain `node` runs them: no `npm install`, no network for packages. They are generated from the readable source in `scripts/` and do exactly the same thing. Only if `dist/` is missing (a checkout without it) run `npm install --omit=dev` in `$SKILL` and use `scripts/read.mjs` and `scripts/lens.mjs` instead.
+- **Node 18 or later.** Check with `node --version`. If there is no Node, say so and stop.
+- **Network:** a run makes GET requests to the page and to its site's `/robots.txt`, and to nothing else. On claude.ai the code-execution sandbox must be allowed to reach that site (see *If the page cannot be fetched* at the end).
+- **Never re-create the pipeline by hand.** If the scripts cannot run here (no Node, no code execution, the network blocked), say so, say what would make them run, and stop. Do not fetch the page another way and count, cut or check it yourself: numbers made by hand are not the tool's, however close they look, and the report would present them as if they were.
 
 ## Single page
 
-1. *script* `node scripts/read.mjs <url> --out reading.json` (add `--render` to compare with a JavaScript render, see Limits).
+1. *script* `node "$SKILL/dist/read.mjs" <url> --out reading.json` (add `--render` to compare with a JavaScript render, see Limits).
    It prints the counts, the robots.txt verdict, the technical markup and the first checks. If it prints `REFUSED <code>` (exit code 2), stop and explain the code (table at the end). Do not retry with another URL unless asked.
 2. *judgement* Read the `text` of **every** passage in `reading.json`, in full, and write `groups.json` (rules below).
-3. *script* `node scripts/lens.mjs reading.json groups.json --html report.html --md report.md --json export.json`
+3. *script* `node "$SKILL/dist/lens.mjs" reading.json groups.json --html report.html --md report.md --json export.json`
    This validates the grouping, computes labels, the page vocabulary (phrases, then narrative words) and all checks, and prints the findings with their passage ids.
 4. *judgement* Write `queries.json` (5 to 10 typical queries, each answered from the passages) and `plan.json` (the rewrite plan). Write `facts.json` too if the user wants the citable facts listed.
 5. *script* Run lens again with everything:
-   `node scripts/lens.mjs reading.json groups.json --plan plan.json --queries queries.json [--facts facts.json] --html report.html --md report.md --json export.json`
+   `node "$SKILL/dist/lens.mjs" reading.json groups.json --plan plan.json --queries queries.json [--facts facts.json] --html report.html --md report.md --json export.json`
    A `REFUSED` names the file and the item; fix it and rerun. A `warning` (for example a plan item citing a check that did not fire) is kept, but deserves a sentence in your answer.
+6. **Show the report** (required; see *Show the report*). A chat summary goes with it, never instead of it.
 
 **Before / after:** keep the old `reading.json` (and its `groups.json`). After the page changes, read it again and add `--baseline old-reading.json [--baseline-groups old-groups.json]` to lens. The report gains a diff: passages unchanged, changed, added and removed; the cap status before and now; and, with the old groups, which old groups each new group's passages came from.
 
 ## Compare (2 to 5 pages)
 
-1. *script* `node scripts/read.mjs <url1> <url2> [… <url5>] --out-dir readings`
+1. *script* `node "$SKILL/dist/read.mjs" <url1> <url2> [… <url5>] --out-dir readings`
    One reading per URL (`readings/reading-1.json` …) and `readings/manifest.json`. Pages are numbered 1…N in the order given. A refused page is left out of the comparison; at least two must read.
 2. *judgement* Read every passage of every page. Write **one** shared `readings/topics.json`, then `readings/groups-<n>.json` for each page, where every group names a topic from that dictionary. Then `readings/facts.json`, `readings/queries.json` and (optional) `readings/plan.json`.
-3. *script* `node scripts/lens.mjs --compare readings/manifest.json --html readings/compare.html --md readings/compare.md --json readings/compare.json`
+3. *script* `node "$SKILL/dist/lens.mjs" --compare readings/manifest.json --html readings/compare.html --md readings/compare.md --json readings/compare.json`
+4. **Show the report**, `readings/compare.html` (required; see *Show the report*).
 
 The comparison report shows each page's counts and blocked crawlers, the topic × page table (passages and characters per topic), topic gaps (topics the others cover and a page does not), fact gaps (facts only one page states), who wins each query, the plan, the crawler table by page, every page's findings, and each page's strip and groups.
 
@@ -52,9 +60,13 @@ Page numbers are 1-based (as in the manifest; single mode is page 1). Passage id
     { "members": [0, 1, 2], "label": "What the HTTP cache is", "note": "optional, up to 240 characters", "topic": "what" },
     { "members": [3, 4] }
   ],
-  "duplicates": { "7": 2 }
+  "duplicates": { "7": 2 },
+  "agent": "Claude Code",
+  "model": "Claude Opus 5.5"
 }
 ```
+
+`agent` and `model` (optional, up to 60 characters each) say who did the reading; the report's info panel shows them next to the groups, the plan and the query test, because another model may group a little differently. Fill them in honestly with what you know about yourself: `agent` is the product you are running in (for example "Claude Code", "claude.ai", "Codex", "opencode", "Hermes"), `model` is your model's name as you know it (for example "Claude Opus 5.5", "GPT-5"). If you do not know one, leave it out: the report then says "model not stated by the agent". Never guess or invent either. In compare mode, put the same two fields in every `groups-<n>.json`.
 
 The v1 shape, `{"groups": [[0, 1, 2], [3, 4]]}`, still works, and the two shapes can be mixed. `label` (up to 80 characters) is your name for the group; the report shows it first and keeps the computed label (a heading most of the group's passages share, or else its two most distinctive words) as the "label source". `topic` is required in compare mode and must be an id from `topics.json`.
 
@@ -181,9 +193,20 @@ The robots.txt check reads `/robots.txt` on the page's own origin and follows RF
 
 RFC 9309: https://www.rfc-editor.org/rfc/rfc9309. A user-fetch crawler that ignores robots.txt can still be blocked at the server; say so if the user wants to block it.
 
-## Presenting the result
+## Show the report
 
-- **The visual report first.** If this session has a tool for publishing HTML artifacts or pages, publish `report.html` (or `compare.html`) with it and give the user the link. Otherwise tell the user the file's absolute path, and on a desktop offer to open it in their browser. The report has an EN | UK switch (`#lang=uk` opens it in Ukrainian) and a light and a dark theme.
+This step is required. The HTML report is the result; a run that ends with only a chat message has not delivered it. Mentioning the file name is not showing it. Show `report.html` (or `compare.html`) the way your environment allows:
+
+- **claude.ai or the Claude desktop app, with code execution:** files you create there reach the user as files they can download from the conversation. Save `report.html` (and `report.md`, `export.json`) where your environment's own instructions say files for the user go (use the outputs folder they name, if they name one), and present it as a file in your reply, so the user gets the download in the chat and can open it in a browser. A file left in a scratch folder the user cannot see has not been shown. Do not retype the report into an artifact by hand: it is large, and a copy is not the tool's output.
+- **Claude Code:** if the session has a tool for publishing HTML pages or artifacts, publish `report.html` with it and give the link. Otherwise open it in the user's default browser: `start "" "<absolute path>"` on Windows, `open "<absolute path>"` on macOS, `xdg-open "<absolute path>"` on Linux. Then give the absolute path as well.
+- **Codex, opencode, Hermes Agent or any other agent:** give the report's absolute path, and offer to open it in the default browser with the command above (or the agent's own preview or browser tool, if it has one).
+
+The report has an EN | UK switch (`#lang=uk` opens it in Ukrainian) and a light and a dark theme. It is one self-contained file and makes no network requests, so it opens offline.
+
+## The chat summary
+
+Short, alongside the report and never instead of it:
+
 - **If an answering crawler is blocked (`ai_search_blocked`, `robots_unreachable`) or the page is noindex, say that before anything else.**
 - Then the pipeline line and the counters: passages read, slots used of 26, characters past the cap.
 - The findings, high first, each with its passage ids and what to do.
@@ -199,7 +222,7 @@ RFC 9309: https://www.rfc-editor.org/rfc/rfc9309. A user-fetch crawler that igno
 
 - `report.html`: one self-contained page (no external fonts, scripts or images; a content security policy blocks all network requests; every piece of page text is escaped), in the look of the live tool, safe down to 375 px.
 - `report.md`: the same reading in Markdown, in English.
-- `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. `phrases` and `narrativeWords` (each entry: `term`, `count`, `passages`, `groups`, `spread`, `describesWholePage`) are the page vocabulary exactly as the product computes it; `keywords` is the two as one list, phrases first, in the shape earlier exports had. v2 only **adds** fields, so the schema id is unchanged: `skillVersion`, `checks` (each with an English `message`), `technical`, `robots`, `render`, `plan`, `queries`, `facts`, `diff`, and on each group `agentLabel`, `note` and `topic`. `label` and `labelSource` keep their v1 meaning (the computed label). Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
+- `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. `phrases` and `narrativeWords` (each entry: `term`, `count`, `passages`, `groups`, `spread`, `describesWholePage`) are the page vocabulary exactly as the product computes it; `keywords` is the two as one list, phrases first, in the shape earlier exports had. v2 only **adds** fields, so the schema id is unchanged: `skillVersion`, `judgement` (`agent` and `model` from groups.json, `null` when not stated), `checks` (each with an English `message`), `technical`, `robots`, `render`, `plan`, `queries`, `facts`, `diff`, and on each group `agentLabel`, `note` and `topic`. `label` and `labelSource` keep their v1 meaning (the computed label). Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
 - Compare mode writes `compare.json` (`getlooploop/vectorscope-compare@1`): every page's export under `pages[]`, plus `topics`, `topicTable`, `topicGaps`, `facts`, `factGaps`, `queries` (each with its `winner`) and `plan`.
 - `reading.json` (`getlooploop/vectorscope-skill-reading@1`) gains `technical`, `robots`, `layout` and, with `--render`, `render`. Its passages are unchanged from v1, and lens still accepts a v1 reading (as a baseline, for example); the checks that need the new fields are then skipped.
 
@@ -210,7 +233,7 @@ RFC 9309: https://www.rfc-editor.org/rfc/rfc9309. A user-fetch crawler that igno
 - No JavaScript in the reading. The product parses the fetched HTML with cheerio, and so does this skill. `--render` also runs the page in a local Chrome, Chromium or Edge (`CHROME_PATH`, else the usual install paths) with a fresh throwaway profile and `--dump-dom`, and reports words and passages with JavaScript against the plain fetch; the reading itself stays the plain one. With no browser it says so and continues.
 - 12-second timeout, 3,000,000-character ceiling, HTML only (`text/html` or `application/xhtml+xml`). robots.txt is read up to 500 KiB.
 - The fetch sends `User-Agent: GetLoopLoop/1.0 SEO Crawler`, as the product does. `--html saved.html` reads a saved copy instead (robots.txt is then not checked unless `--robots saved.txt` is given); `--save-html page.html` keeps the fetched copy.
-- Tests: `npm test` (Node's built-in runner, no network).
+- Tests: `npm test` in `$SKILL` (Node's built-in runner, no network; it needs `npm install` for the check that `dist/` matches `scripts/`).
 
 ## Refusal codes
 
@@ -225,3 +248,13 @@ RFC 9309: https://www.rfc-editor.org/rfc/rfc9309. A user-fetch crawler that igno
 | `not_html` | The URL is a file such as a PDF or an image, not an HTML page. |
 | `too_large` | The page is over the 3 MB ceiling. |
 | `empty` | The page answered, but no readable text was left once navigation and boilerplate were removed, or the URL is a feed, sitemap or file. |
+
+## If the page cannot be fetched
+
+The run fetches the page and `/robots.txt` on the same site with Node's own `fetch`. When that fails, read.mjs prints `REFUSED unreachable` (or another code from the table above) and writes the refusal into the reading. Say what the code means, and in a sandbox say what to change:
+
+- **claude.ai or the Claude desktop app:** code execution reaches only what its network setting allows, and the page's site has to be among it. On Free, Pro and Max plans the setting is **Allow network egress**, under Settings > Capabilities with **Code execution and file creation**; by default it lets code reach approved package sources. On Team and Enterprise plans an owner sets it in Organization settings > Capabilities: off, package managers only (the default), package managers and specific domains, or all domains; with specific domains, the page's domain must be on the list. Tell the user which setting decides it. If their plan's setting cannot allow the site, say that this page cannot be read from claude.ai, and that the same skill runs in Claude Code or another agent on their own machine. Then stop; do not fetch the page some other way.
+- **Behind a proxy:** if the environment sets `HTTPS_PROXY` or `HTTP_PROXY` and the fetch is `unreachable`, run read.mjs once more with `NODE_USE_ENV_PROXY=1` in front of the command (Node 22.21 or later, or 24 or later). Node's `fetch` ignores those variables otherwise.
+- **Anywhere else:** the site may be down, the name may not resolve, or the machine has no internet. Say which code came back and stop.
+
+Whatever the cause, do not fill in for the scripts. A count, a cut or a check made by hand is not this tool's result.

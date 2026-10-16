@@ -77,6 +77,7 @@ function safeEvidence(evidence) {
 
 const CHECK = '<svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const ARROW = '<span class="arrow" aria-hidden="true">→</span>';
+const INFO = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.2" r="1.35" fill="currentColor"/></svg>';
 
 // Brand marks for the footer, drawn inline (no external images under this CSP).
 const ICONS = {
@@ -156,6 +157,13 @@ h3{font-size:16px;margin:0}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:22px;box-shadow:var(--glow)}
 .panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px 12px;flex-wrap:wrap;margin-bottom:14px}
 .panel-head .sub{color:var(--muted);font-size:13px}
+.info{display:flex;gap:12px;align-items:flex-start;margin-top:18px;border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--panel);border-radius:12px;padding:14px 18px}
+.info>svg{width:20px;height:20px;color:var(--accent);flex:none;margin-top:1px}
+.info-items{display:grid;gap:10px;min-width:0}
+.info h2{font-size:14.5px;margin:0 0 2px}
+.info p{margin:0;font-size:14px;color:var(--muted);max-width:860px;overflow-wrap:anywhere}
+.info p b{color:var(--text);font-weight:600}
+@media (max-width:480px){.info{padding:12px 14px;gap:10px}}
 .banner{margin-top:18px;border:1.5px solid var(--red);background:var(--red-soft);border-radius:14px;padding:14px 18px}
 .banner h2{color:var(--red);font-size:17px;margin-bottom:4px}
 .banner p{margin:0;font-size:14.5px}
@@ -434,6 +442,31 @@ function bannerFor(robots, prefix = "") {
   if (!blocked.length) return [];
   const bots = blocked.map((b) => `<b class="mono">${esc(b.token)}</b>`).join(", ");
   return [`<section class="banner" role="alert"><h2>${prefix}${L("bannerTitle")}</h2><p>${L("bannerBody", { bots })}</p></section>`];
+}
+
+/** Who did the reading, in one language: groups.json's agent and model, or "not stated". */
+function byLine(judgements, lang) {
+  const one = (j) => tr("infoBy", lang, { agent: j?.agent ? esc(j.agent) : null, model: j?.model ? esc(j.model) : null });
+  const keys = judgements.map((x) => JSON.stringify([x.j?.agent ?? null, x.j?.model ?? null]));
+  if (new Set(keys).size <= 1) return one(judgements[0]?.j);
+  return judgements.map((x) => tr("infoByPage", lang, { n: x.n, by: one(x.j) })).join("; ");
+}
+
+/**
+ * The three claims a reader has to keep apart, under the header: what the scripts fix, what the
+ * model judged (and which model, when the agent said), and that this is no assistant's own pipeline.
+ * judgements: [{ n, j: { agent, model } }], one per page.
+ */
+function infoPanel(cap, judgements) {
+  const link = `<a href="${VECTORSCOPE_URL}" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>`;
+  const judge = pair(tr("infoJudgeBody", "en", { by: byLine(judgements, "en"), link }), tr("infoJudgeBody", "uk", { by: byLine(judgements, "uk"), link }));
+  return [
+    `<section class="info" ${attr("aria-label", "infoAria")}>${INFO}<div class="info-items">`,
+    `<div><h2>${L("infoSameTitle")}</h2><p>${L("infoSameBody", { cap })}</p></div>`,
+    `<div><h2>${L("infoJudgeTitle")}</h2><p>${judge}</p></div>`,
+    `<div><h2>${L("infoNotTitle")}</h2><p>${L("infoNotBody", { cap })}</p></div>`,
+    "</div></section>",
+  ];
 }
 
 /** Links to passages: #3 #4 … (anchors are p-3 in single mode, p2-3 for page 2 in compare). */
@@ -792,8 +825,8 @@ export function renderHtml(reading, lens, extras = {}) {
   out.push(`<li class="tag">${L("headingsFound", { n: page.headings })}</li>`);
   out.push(page.noindex ? `<li class="tag warn">${L("noindexYes")}</li>` : `<li class="tag">${L("noindexNo")}</li>`);
   out.push("</ul>");
-  out.push(`<p class="note">${L("groupsNote", { cap, link: `<a href="${VECTORSCOPE_URL}" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>` })}</p>`);
   out.push("</header>");
+  out.push(...infoPanel(cap, [{ n: 1, j: lens.judgement }]));
   // If the AI crawlers that answer people are blocked, that is said first.
   out.push(...bannerFor(reading.robots));
 
@@ -929,8 +962,8 @@ export function renderCompareHtml(data) {
     out.push(`<li class="tag"><b>${p.n}</b> ${href ? `<a href="${esc(href)}" rel="noopener noreferrer" target="_blank">${esc(clip(hostOf(p.reading.page.url), 60))}</a>` : esc(p.reading.page.url)}</li>`);
   }
   out.push("</ul>");
-  out.push(`<p class="note">${L("groupsNote", { cap: pages[0].reading.page.chunkCap, link: `<a href="${VECTORSCOPE_URL}" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>` })}</p>`);
   out.push("</header>");
+  out.push(...infoPanel(pages[0].reading.page.chunkCap, pages.map((p) => ({ n: p.n, j: p.lens.judgement }))));
   for (const p of pages) out.push(...bannerFor(p.reading.robots, `${L("pageN", { n: p.n })} · `));
 
   // ── pages overview
