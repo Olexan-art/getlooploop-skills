@@ -36,7 +36,7 @@ export { validateGrouping, buildJudgedLens };
 export const COMPARE_SCHEMA = "getlooploop/vectorscope-compare@1";
 export const REFUSAL_SCHEMA = "getlooploop/vectorscope-refusal@1";
 /** Versions count in thousandths (2.101, 2.102, …) so the first number moves only on a real break. Mirrors package.json. */
-export const SKILL_VERSION = "2.102";
+export const SKILL_VERSION = "2.103";
 
 const USAGE = [
   "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json]",
@@ -452,7 +452,6 @@ export function renderMarkdown(reading, lens, extras = {}) {
     out.push(`- **${fmt(page.charsIndexed)}** characters in passages, overlap and intro included ${M("measured")}`);
   }
   out.push("");
-  out.push(...lossesMarkdown(reading));
 
   out.push(...diffMarkdown(extras.diff));
 
@@ -538,6 +537,9 @@ export function renderMarkdown(reading, lens, extras = {}) {
     out.push("");
   }
 
+  // 2.103: the loss detail is the last section, as in the HTML report, where it is folded.
+  out.push(...lossesMarkdown(reading));
+
   out.push("---");
   out.push("");
   out.push(closingLine(reading));
@@ -570,7 +572,6 @@ export function renderCompareMarkdown(data) {
     out.push(`| ${p.n} | ${cell(pg.url)} | ${fmt(pg.wordCount)} | ${pg.chunksIndexed}/${pg.chunkCap} | ${fmt(charsPastCap(p.reading))} | ${blocked.length ? blocked.join(", ") : "none"} | ${count("high")}/${count("medium")}/${count("low")} |`);
   }
   out.push("");
-  out.push(...lossTableMarkdown(pages));
   out.push(`## Topics × pages ${M("judgement", "derived")}`, "", "Passages and characters each page spends on each shared topic.", "");
   out.push(`| Topic | ${pages.map((p) => `Page ${p.n}`).join(" | ")} |`, `|---|${pages.map(() => "---").join("|")}|`);
   for (const row of topicCmp.table) {
@@ -608,11 +609,16 @@ export function renderCompareMarkdown(data) {
     out.push(...technicalMarkdown(p.reading.technical, p.reading.render, p.reading.page));
     out.push(...findingsMarkdown(p.checks));
   }
-  out.push(`## Each page's groups and losses ${M("judgement", "measured")}`, "");
+  out.push(`## Each page's groups ${M("judgement", "measured")}`, "");
   for (const p of pages) {
     out.push(`### Page ${p.n}`, "");
     out.push(...groupsTable(p.lens, name));
     out.push("", closingLine(p.reading), "");
+  }
+  // 2.103: the loss detail is the last section, as in the HTML report, where it is folded.
+  out.push(...lossTableMarkdown(pages));
+  for (const p of pages) {
+    out.push(`### Page ${p.n}`, "");
     out.push(...lossesMarkdown(p.reading, { heading: "####", removalsLimit: 5 }));
   }
   out.push("---", "", "This is a preview of the machine's view, not a guarantee of what any assistant does with it.", "");

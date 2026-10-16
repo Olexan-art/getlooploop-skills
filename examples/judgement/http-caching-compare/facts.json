@@ -9,7 +9,7 @@
     { "id": "f7", "topic": "freshness", "fact": "Expires was HTTP/1.0's freshness header; when both are present, max-age wins.", "pages": { "1": [7] } },
     { "id": "f8", "topic": "freshness", "fact": "Vary keys stored responses by request headers such as Accept-Language.", "pages": { "1": [8] } },
     { "id": "f9", "topic": "types", "fact": "A private cache belongs to one client; a shared cache sits between client and server and serves many users.", "pages": { "1": [2] } },
-    { "id": "f10", "topic": "patterns", "fact": "The immutable directive stops revalidation on reload for content that never changes.", "pages": { "1": [16, 22] } },
+    { "id": "f10", "topic": "patterns", "fact": "The immutable directive stops revalidation on reload for content that never changes.", "pages": { "1": [16, 21] } },
     { "id": "f11", "topic": "patterns", "fact": "QPACK predefines one-week, one-month and one-year max-age values that compress to one byte in HTTP/3.", "pages": { "1": [20] } },
     { "id": "f12", "topic": "directives", "fact": "Clear-Site-Data: cache clears browser caches but has no effect on intermediate caches.", "pages": { "1": [17] } },
     { "id": "f13", "topic": "validation", "fact": "ETag is recommended over Last-Modified because it is more accurate.", "pages": { "2": [8] } },

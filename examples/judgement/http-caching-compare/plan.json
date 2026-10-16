@@ -6,8 +6,8 @@
       "fix": "Serve the canonical URL in its default language to clients that send no Accept-Language, and keep the language variants on hreflang alternates."
     },
     {
-      "priority": 2, "page": 1, "passages": [22, 23, 24], "check": "dominant_heading",
-      "problem": "Under \"Common caching patterns\" an h3 reads \"Validation\", the same text as the earlier h2. The chunker matches heading lines by text, so #22 to #24 are filed under the wrong section and \"Validation\" ends up holding 31% of the page.",
+      "priority": 2, "page": 1, "passages": [21], "check": null,
+      "problem": "Under \"Common caching patterns\" an h3 reads \"Validation\", the same text as the earlier h2. Up to 2.102 this chunker took it for that h2 and filed the rest of the section under \"Validation\"; 2.103 follows the h2 order and keeps it in #21, but any splitter that matches headings by their text alone still makes that cut, and a passage that says \"Validation\" with no subject is ambiguous to a retriever either way.",
       "fix": "Give the h3 its own name, such as \"Validating cache-busted files\", and open the passage with its subject.",
       "before": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading.",
       "after": "For cache-busted static files, also set Last-Modified and ETag, so that a reload revalidates the file instead of re-transmitting it."

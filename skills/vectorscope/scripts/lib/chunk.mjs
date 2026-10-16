@@ -147,7 +147,89 @@ function mergeSlivers(chunks, maxChars) {
   return out.map((chunk, index) => ({ ...chunk, chunkIndex: index }));
 }
 
-// Exported in 2.102 so the loss measurement reads the chunker's own sections; the body is unchanged.
+// How a body line and an h2 are compared: whitespace folded, case ignored.
+function headingKey(text) {
+  return text.replace(/\s+/g, " ").trim().toLocaleLowerCase();
+}
+
+/**
+ * Which body lines start a section (2.103).
+ *
+ * The body is plain text, so an h2 is recognised by a line that reads the same, and any line can
+ * read the same: an h3, a table cell, a card label. MDN's HTTP caching guide has an h2
+ * "Validation" and, eight sections later under "Common caching patterns", an h3 "Validation";
+ * up to 2.102 every line with the text started a section, so the h3 closed "Common caching
+ * patterns" halfway and filed the rest of it under the earlier heading.
+ *
+ * What the extractor does know is the order: the h2 list and the body come from the same cleaned
+ * document, so the real h2 lines appear in the body in the list's order. The longest run of
+ * matching lines that follows that order is the outline (an LCS of the h2 list against the
+ * matching lines, taking the latest line when two would do, so a contents list above the article
+ * does not stand in for the headings below it). A matching line is refused only when the outline
+ * has already moved past every h2 it could be: it comes after the real line of a later h2, and
+ * reopening an earlier section there is the one reading that cannot be true. Every other matching
+ * line still starts a section, as before, so pages without such a line chunk byte for byte as
+ * they did.
+ *
+ * Not covered: a line that repeats a later h2 before that h2 is reached still cuts there, since
+ * order alone cannot tell it from a contents entry; and when the order allows two lines for one
+ * h2, the later one is taken.
+ */
+function sectionStartLines(lines, h2) {
+  const keys = h2.map(headingKey);
+  const known = new Set(keys);
+  const lineAt = [];
+  const lineKey = [];
+  lines.forEach((line, index) => {
+    const key = headingKey(line);
+    if (known.has(key)) {
+      lineAt.push(index);
+      lineKey.push(key);
+    }
+  });
+
+  const n = keys.length;
+  const m = lineAt.length;
+  const best = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+  for (let a = 1; a <= n; a++) {
+    for (let b = 1; b <= m; b++) {
+      best[a][b] = keys[a - 1] === lineKey[b - 1]
+        ? best[a - 1][b - 1] + 1
+        : Math.max(best[a - 1][b], best[a][b - 1]);
+    }
+  }
+  // The line each h2 is read at, walked back from the end so each h2 takes the latest line it can.
+  const at = new Array(n).fill(-1);
+  for (let a = n, b = m; a > 0 && b > 0; ) {
+    if (keys[a - 1] === lineKey[b - 1]) {
+      at[a - 1] = lineAt[b - 1];
+      a--;
+      b--;
+    } else if (best[a][b - 1] >= best[a - 1][b]) {
+      b--;
+    } else {
+      a--;
+    }
+  }
+
+  const lastOf = new Map();
+  keys.forEach((key, index) => lastOf.set(key, index));
+  const starts = new Set();
+  let reached = -1;
+  let next = 0;
+  for (let c = 0; c < m; c++) {
+    // The furthest h2 of the outline whose line lies before this one.
+    while (next < n && (at[next] === -1 || at[next] < lineAt[c])) {
+      if (at[next] !== -1) reached = next;
+      next++;
+    }
+    if ((lastOf.get(lineKey[c]) ?? -1) >= reached) starts.add(lineAt[c]);
+  }
+  return starts;
+}
+
+// Exported in 2.102 so the loss measurement reads the chunker's own sections. 2.103: a section
+// starts only at a line that sectionStartLines accepts.
 export function extractSections(page) {
   const sections = [];
   const h1 = toStringArray(page.h1);
@@ -165,10 +247,9 @@ export function extractSections(page) {
   // Split only on h2 headings that occupy their own line.
   const introCount = sections.length;
   if (h2.length >= 2) {
-    const headingByLine = new Map(
-      h2.map((heading) => [heading.replace(/\s+/g, " ").trim().toLocaleLowerCase(), heading.trim()])
-    );
+    const headingByLine = new Map(h2.map((heading) => [headingKey(heading), heading.trim()]));
     const lines = body.split(/\n+/);
+    const starts = sectionStartLines(lines, h2);
     let currentHeading = null;
     let current = [];
     let found = 0;
@@ -177,8 +258,9 @@ export function extractSections(page) {
       if (text) sections.push({ heading: currentHeading, text });
       current = [];
     };
-    for (const line of lines) {
-      const heading = headingByLine.get(line.replace(/\s+/g, " ").trim().toLocaleLowerCase());
+    for (let index = 0; index < lines.length; index++) {
+      const line = lines[index];
+      const heading = starts.has(index) ? headingByLine.get(headingKey(line)) : undefined;
       if (heading) {
         flush();
         currentHeading = heading;

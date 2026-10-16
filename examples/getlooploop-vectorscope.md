@@ -26,72 +26,6 @@
 - **13,547** characters of unique text in passages `derived`
 - **14,211** characters in passages, overlap and intro included `measured`
 
-## Where the text goes `measured` `derived`
-
-Characters, whitespace runs folded to one space. "Text in the raw HTML" is the kept text plus every removal, so the stages sum exactly.
-
-| Stage | Characters | Share | Layer |
-|---|---|---|---|
-| Text in the raw HTML (estimate) | 48,098 | 100% of raw | `derived` |
-| Removed by the cleaner | 34,177 | 71.1% of raw | `measured` |
-| Kept: the chunker's input | 13,921 | 28.9% of raw | `measured` |
-| In passages, unique | 13,547 | 97.3% of kept | `derived` |
-| Kept, in no passage text | 374 | 2.7% of kept | `derived` |
-| Past the cap | 0 | 0% of kept | `derived` |
-
-The passages hold 14,211 characters in all: 13,547 unique, plus 378 of overlap between neighbours and 286 of intro (title, h1, description) in passage #0. Of the kept text in no passage: 298 in h2 heading lines, 76 spaces between sections.
-
-### What the cleaner removed `measured`
-
-45 elements with text, 34,177 characters. By reason: script, style, noscript, template 32,534 (27) · svg, canvas, iframe, embed 33 (1) · head (title, meta) 54 (1) · [hidden] or aria-hidden 284 (7) · page header (site banner) 68 (1) · navigation (nav, role=navigation) 16 (1) · footer 749 (1) · aside, role=complementary 339 (1) · form, button, select, input 100 (5).
-
-| Reason | Element | Path | Chars | Its text begins |
-|---|---|---|---|---|
-| script, style, noscript, template | `script` | script | 3,689 | “self.__next_f.push([1,"17:[[\"$\",\"title\",\"0\",{\"children\":\"Semantic Chunk…” |
-| script, style, noscript, template | `script` | script | 2,939 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\…” |
-| script, style, noscript, template | `script` | script | 2,769 | “{"@context":"https://schema.org","@type":"FAQPage","@id":"https://www.getlooploo…” |
-| script, style, noscript, template | `script` | script | 2,396 | “self.__next_f.push([1,"2:[\"$\",\"html\",null,{\"lang\":\"en\",\"suppressHydrati…” |
-| script, style, noscript, template | `script` | script | 2,292 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@type\":\"DefinedT…” |
-| script, style, noscript, template | `script` | script | 2,148 | “{"@context":"https://schema.org","@type":"DefinedTermSet","@id":"https://www.get…” |
-| script, style, noscript, template | `script` | script | 1,849 | “self.__next_f.push([1,"11:I[24431,[],\"OutletBoundary\"]\n14:I[24431,[],\"Viewpo…” |
-| script, style, noscript, template | `script` | script | 1,653 | “self.__next_f.push([1,"0:{\"P\":null,\"b\":\"L-uh39B74nD4XsnIRp5Gc\",\"p\":\"\",…” |
-| script, style, noscript, template | `script` | script | 1,269 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@type\":\"HowTo\",…” |
-| script, style, noscript, template | `script` | script | 1,255 | “self.__next_f.push([1,"7:[\"$\",\"script\",\"5\",{\"type\":\"application/ld+json…” |
-| script, style, noscript, template | `script` | script | 1,251 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@type\":\"Software…” |
-| script, style, noscript, template | `script` | script | 1,226 | “self.__next_f.push([1,"10:I[78297,[\"2619\",\"static/chunks/2619-3285f830dd579a0…” |
-| script, style, noscript, template | `script` | script | 1,184 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type…” |
-| script, style, noscript, template | `script` | script | 1,153 | “{"@context":"https://schema.org","@type":"HowTo","@id":"https://www.getlooploop.…” |
-| script, style, noscript, template | `script` | script | 1,143 | “{"@context":"https://schema.org","@type":"SoftwareApplication","@id":"https://ww…” |
-| script, style, noscript, template | `script` | script | 1,136 | “self.__next_f.push([1,"8:[\"$\",\"$Ld\",null,{\"parallelRouterKey\":\"children\"…” |
-| script, style, noscript, template | `script` | script | 1,070 | “{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https:…” |
-| script, style, noscript, template | `script` | script | 856 | “{"@context":"https://schema.org","@type":"WebPage","@id":"https://www.getlooploo…” |
-| footer | `footer.border-t.border-white/10` | div.marketing-root > footer.border-t.border-white/10 | 749 | “GetLoopLoop Find where a brand loses AI-search conversations. Close the gap. Pro…” |
-| aside, role=complementary | `div.pt-card.pt-card--active` | … > div.pt-16 > div.pt > div.mx-auto > div.pt-card.pt-card--active | 339 | “New · free · open source Run Vectorscope inside your coding agent The Vectorscop…” |
-
-25 more elements, 1,811 characters, not listed here (export.json lists up to 200 and sums the rest).
-
-85 more matched elements held no text.
-
-### How much of each section reached a passage `derived`
-
-| Section | Reached a passage | Of | Share |
-|---|---|---|---|
-| *Intro: title, h1, description* | 286 | 286 | 100% |
-| *Before the first h2* | 804 | 804 | 100% |
-| What does this mean? | 259 | 259 | 100% |
-| Important passage outside the cap? | 139 | 139 | 100% |
-| Models and retrieval caps vary. | 246 | 246 | 100% |
-| How to read your result | 2,257 | 2,257 | 100% |
-| What is semantic chunking? | 1,994 | 1,994 | 100% |
-| Is my content ready for AI search? | 1,126 | 1,126 | 100% |
-| Using Vectorscope to test a RAG pipeline | 863 | 863 | 100% |
-| Who is Vectorscope for? | 890 | 890 | 100% |
-| Words used on this page | 1,400 | 1,400 | 100% |
-| Keep reading | 437 | 437 | 100% |
-| Questions people ask about this | 2,107 | 2,107 | 100% |
-| Other free AI search tools | 746 | 746 | 100% |
-| What this cannot show you | 279 | 279 | 100% |
-
 ## Checks `measured` `derived`
 
 ### AI crawlers and robots.txt `measured`
@@ -299,6 +233,72 @@ The agent's list of the concrete facts, figures and claims the passages state.
 - The grouping embeds each passage after the cut; the cut itself is not semantic. (#7 #13)
 - A test of one URL takes about twenty seconds. (#9)
 - Free with a rate limit, no account; the fetched page is not retained. (#13 #14)
+
+## Where the text goes `measured` `derived`
+
+Characters, whitespace runs folded to one space. "Text in the raw HTML" is the kept text plus every removal, so the stages sum exactly.
+
+| Stage | Characters | Share | Layer |
+|---|---|---|---|
+| Text in the raw HTML (estimate) | 48,098 | 100% of raw | `derived` |
+| Removed by the cleaner | 34,177 | 71.1% of raw | `measured` |
+| Kept: the chunker's input | 13,921 | 28.9% of raw | `measured` |
+| In passages, unique | 13,547 | 97.3% of kept | `derived` |
+| Kept, in no passage text | 374 | 2.7% of kept | `derived` |
+| Past the cap | 0 | 0% of kept | `derived` |
+
+The passages hold 14,211 characters in all: 13,547 unique, plus 378 of overlap between neighbours and 286 of intro (title, h1, description) in passage #0. Of the kept text in no passage: 298 in h2 heading lines, 76 spaces between sections.
+
+### What the cleaner removed `measured`
+
+45 elements with text, 34,177 characters. By reason: script, style, noscript, template 32,534 (27) · svg, canvas, iframe, embed 33 (1) · head (title, meta) 54 (1) · [hidden] or aria-hidden 284 (7) · page header (site banner) 68 (1) · navigation (nav, role=navigation) 16 (1) · footer 749 (1) · aside, role=complementary 339 (1) · form, button, select, input 100 (5).
+
+| Reason | Element | Path | Chars | Its text begins |
+|---|---|---|---|---|
+| script, style, noscript, template | `script` | script | 3,689 | “self.__next_f.push([1,"17:[[\"$\",\"title\",\"0\",{\"children\":\"Semantic Chunk…” |
+| script, style, noscript, template | `script` | script | 2,939 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@type\":\"FAQPage\…” |
+| script, style, noscript, template | `script` | script | 2,769 | “{"@context":"https://schema.org","@type":"FAQPage","@id":"https://www.getlooploo…” |
+| script, style, noscript, template | `script` | script | 2,396 | “self.__next_f.push([1,"2:[\"$\",\"html\",null,{\"lang\":\"en\",\"suppressHydrati…” |
+| script, style, noscript, template | `script` | script | 2,292 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@type\":\"DefinedT…” |
+| script, style, noscript, template | `script` | script | 2,148 | “{"@context":"https://schema.org","@type":"DefinedTermSet","@id":"https://www.get…” |
+| script, style, noscript, template | `script` | script | 1,849 | “self.__next_f.push([1,"11:I[24431,[],\"OutletBoundary\"]\n14:I[24431,[],\"Viewpo…” |
+| script, style, noscript, template | `script` | script | 1,653 | “self.__next_f.push([1,"0:{\"P\":null,\"b\":\"L-uh39B74nD4XsnIRp5Gc\",\"p\":\"\",…” |
+| script, style, noscript, template | `script` | script | 1,269 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@type\":\"HowTo\",…” |
+| script, style, noscript, template | `script` | script | 1,255 | “self.__next_f.push([1,"7:[\"$\",\"script\",\"5\",{\"type\":\"application/ld+json…” |
+| script, style, noscript, template | `script` | script | 1,251 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@type\":\"Software…” |
+| script, style, noscript, template | `script` | script | 1,226 | “self.__next_f.push([1,"10:I[78297,[\"2619\",\"static/chunks/2619-3285f830dd579a0…” |
+| script, style, noscript, template | `script` | script | 1,184 | “self.__next_f.push([1,"{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type…” |
+| script, style, noscript, template | `script` | script | 1,153 | “{"@context":"https://schema.org","@type":"HowTo","@id":"https://www.getlooploop.…” |
+| script, style, noscript, template | `script` | script | 1,143 | “{"@context":"https://schema.org","@type":"SoftwareApplication","@id":"https://ww…” |
+| script, style, noscript, template | `script` | script | 1,136 | “self.__next_f.push([1,"8:[\"$\",\"$Ld\",null,{\"parallelRouterKey\":\"children\"…” |
+| script, style, noscript, template | `script` | script | 1,070 | “{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https:…” |
+| script, style, noscript, template | `script` | script | 856 | “{"@context":"https://schema.org","@type":"WebPage","@id":"https://www.getlooploo…” |
+| footer | `footer.border-t.border-white/10` | div.marketing-root > footer.border-t.border-white/10 | 749 | “GetLoopLoop Find where a brand loses AI-search conversations. Close the gap. Pro…” |
+| aside, role=complementary | `div.pt-card.pt-card--active` | … > div.pt-16 > div.pt > div.mx-auto > div.pt-card.pt-card--active | 339 | “New · free · open source Run Vectorscope inside your coding agent The Vectorscop…” |
+
+25 more elements, 1,811 characters, not listed here (export.json lists up to 200 and sums the rest).
+
+85 more matched elements held no text.
+
+### How much of each section reached a passage `derived`
+
+| Section | Reached a passage | Of | Share |
+|---|---|---|---|
+| *Intro: title, h1, description* | 286 | 286 | 100% |
+| *Before the first h2* | 804 | 804 | 100% |
+| What does this mean? | 259 | 259 | 100% |
+| Important passage outside the cap? | 139 | 139 | 100% |
+| Models and retrieval caps vary. | 246 | 246 | 100% |
+| How to read your result | 2,257 | 2,257 | 100% |
+| What is semantic chunking? | 1,994 | 1,994 | 100% |
+| Is my content ready for AI search? | 1,126 | 1,126 | 100% |
+| Using Vectorscope to test a RAG pipeline | 863 | 863 | 100% |
+| Who is Vectorscope for? | 890 | 890 | 100% |
+| Words used on this page | 1,400 | 1,400 | 100% |
+| Keep reading | 437 | 437 | 100% |
+| Questions people ask about this | 2,107 | 2,107 | 100% |
+| Other free AI search tools | 746 | 746 | 100% |
+| What this cannot show you | 279 | 279 | 100% |
 
 ---
 

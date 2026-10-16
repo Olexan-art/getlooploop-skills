@@ -2,7 +2,7 @@ English · [Українська](README.uk.md)
 
 # GetLoopLoop skills
 
-Vectorscope skill **2.102**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
+Vectorscope skill **2.103**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
 
 Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
@@ -22,7 +22,7 @@ It does not rank your page, give it a score, detect AI-written text, or predict 
 
 - **The machine's reading:** the exact fetch, extraction, chunking and 26-passage cap of the live tool; how many words survive, how many passages they become, what falls past the cap.
 - **Measured, derived, judgement:** every section and number carries a tag saying whether the parser measured it, a fixed formula derived it, or the agent judged it; the export splits into `measured` and `judgement` the same way.
-- **Where the text goes:** a character waterfall from the raw HTML to the passages (removed by the cleaner, kept, in passages without double-counting the overlap, past the cap), a table of what the cleaner removed and why (the element, its CSS path, its characters, how its text begins), and a map of how much of each section reached a passage.
+- **Where the text goes** (at the end of the report, folded under a line that gives the characters past the cap): a character waterfall from the raw HTML to the passages (removed by the cleaner, kept, in passages without double-counting the overlap, past the cap), a table of what the cleaner removed and why (the element, its CSS path, its characters, how its text begins), and a map of how much of each section reached a passage.
 - **Every number explained:** a "?" beside each number opens its formula, unit, threshold and known limits, in English or Ukrainian; the Markdown ends with the same list and the export carries it as a `metrics` dictionary.
 - **An honest past-the-cap count:** characters past the cap are counted from the unique text in passages, so a page whose cap cut a tail no longer reads 0; the 2.101 number stays in the export as `charsUnread`.
 - **AI crawlers first:** robots.txt checked for GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, Google-Extended, Googlebot, Bingbot and CCBot, with RFC 9309 matching. If the crawlers that answer people are blocked, the report says so before anything else.
@@ -98,7 +98,7 @@ Three real runs are in [`examples/`](examples), each with the files the agent wr
 
 - the Vectorscope page itself, which needs 17 passages and loses nothing to the cap ([HTML](examples/getlooploop-vectorscope.html), [Markdown](examples/getlooploop-vectorscope.md), [JSON](examples/getlooploop-vectorscope.json));
 - the Wikipedia article on large language models, which fills every slot and leaves 55,001 characters past the cap, six sections reaching no passage at all ([HTML](examples/wikipedia-llm.html), [Markdown](examples/wikipedia-llm.md), [JSON](examples/wikipedia-llm.json));
-- MDN's HTTP caching guide against web.dev's HTTP cache article; MDN fills every slot and loses its last 167 characters, which 2.101 counted as 0 ([HTML](examples/http-caching-compare.html), [Markdown](examples/http-caching-compare.md), [JSON](examples/http-caching-compare.json)).
+- MDN's HTTP caching guide against web.dev's HTTP cache article; MDN fills every slot and, since 2.103, loses nothing past the cap: its h3 "Validation" no longer cuts "Common caching patterns", and the slot that cut used now holds the page's last section ([HTML](examples/http-caching-compare.html), [Markdown](examples/http-caching-compare.md), [JSON](examples/http-caching-compare.json)).
 
 ## Install
 

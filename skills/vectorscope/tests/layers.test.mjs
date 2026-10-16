@@ -13,7 +13,7 @@ import { readPage } from "../scripts/lib/reading.mjs";
 import { buildJudgedLens, diffReadings, pageChecks, compareTopics } from "../scripts/lib/analysis.mjs";
 import { validateGrouping } from "../scripts/lib/judgement.mjs";
 import { renderHtml, renderCompareHtml, renderRefusalHtml } from "../scripts/lib/html.mjs";
-import { renderMarkdown } from "../scripts/lens.mjs";
+import { renderMarkdown, renderCompareMarkdown } from "../scripts/lens.mjs";
 import { REMOVAL_REASONS } from "../scripts/lib/losses.mjs";
 import { S } from "../scripts/lib/i18n.mjs";
 
@@ -64,7 +64,22 @@ test("html: the waterfall chart, the removals table and the section map", async 
   assert.match(html, /<rect class="b-cap" x="[^"]+" y="\d+" width="2" height="20"\/>/);
   assert.ok(html.includes("div.cookie-banner"), "the element is named");
   assert.ok(html.includes('class="secmap"'));
-  assert.ok(html.indexOf('id="losses"') > html.indexOf('id="h-strip"') && html.indexOf('id="losses"') < html.indexOf('id="checks"'));
+  // 2.103: the panel is the last one before the closing sentence, folded shut, and its summary
+  // line names what is inside and the past-the-cap count in both languages.
+  const at = html.indexOf('id="losses"');
+  for (const before of ['id="h-strip"', 'id="checks"', 'id="h-groups"', 'id="h-passages"', 'id="h-side"']) {
+    assert.ok(html.indexOf(before) > 0 && html.indexOf(before) < at, `${before} comes before the losses panel`);
+  }
+  assert.ok(at < html.indexOf('aria-label="Closing"'));
+  const fold = html.slice(at, html.indexOf("</summary>", at));
+  assert.match(fold, /<details class="fold"><summary>/, "a native <details>, closed: no open attribute");
+  assert.ok(fold.includes("Where the text goes") && fold.includes("Куди дівається текст"));
+  assert.ok(fold.includes("what the cleaner removed and what reached the passages") && fold.includes("що прибрав очищувач і що дійшло до уривків"));
+  assert.ok(fold.includes("0 characters past the cap") && fold.includes("0 символів за лімітом"));
+  // The counters stay where they were, in the result panel above the strip.
+  assert.ok(html.indexOf('<div class="counters">') > html.indexOf('id="h-result"') && html.indexOf('<div class="counters">') < html.indexOf('id="h-strip"'));
+  // A #help link to a metric inside the fold unfolds every <details> around it first.
+  assert.ok(html.includes('function unfold(el)') && /if\(d\)\{unfold\(d\);d\.open=true/.test(html));
 });
 
 test("html: removed text in the new panels is escaped", async () => {
@@ -108,6 +123,13 @@ test("export: measured and judgement sections, the metrics dictionary, and every
   for (const m of Object.values(METRICS)) assert.ok(md.includes(`**${m.label.en}**`), m.label.en);
   assert.ok(md.includes("## Where the text goes `measured` `derived`"));
   assert.ok(md.includes("## The groups this page falls into `judgement`"));
+  // 2.103: "Where the text goes" is the last section, after every other one and before the closing
+  // line and "How each number is computed".
+  const where = md.indexOf("## Where the text goes");
+  const sections = [...md.matchAll(/^## .+$/gm)].map((m) => [m.index, m[0]]);
+  const after = sections.filter(([i]) => i > where).map(([, h]) => h);
+  assert.deepEqual(after, ["## How each number is computed"]);
+  assert.ok(md.indexOf("\n---\n", where) > where && md.indexOf("\n---\n", where) < md.indexOf("## How each number is computed"));
   assert.ok(md.includes("div.cookie-banner"));
 });
 
@@ -143,6 +165,17 @@ test("compare: the cross-page loss table and each page's waterfall", async () =>
   const html = renderCompareHtml({ pages, topics, topicCmp: compareTopics(pages, topics), facts: null, factCmp: null, queries: null, plan: null });
   assert.ok(html.includes("Losses by page") && html.includes("Втрати за сторінками"));
   assert.equal((html.match(/<svg class="wf"/g) || []).length, 2);
+  // 2.103: the table and both pages' waterfalls sit in one folded panel at the end, each page folded too.
+  const at = html.indexOf('id="losses"');
+  assert.ok(at > html.indexOf('id="h-each"') && at > html.indexOf('id="topics"') && at < html.indexOf('aria-label="Closing"'));
+  assert.match(html.slice(at, at + 400), /<details class="fold"><summary>/);
+  assert.ok(html.slice(at).includes("characters past the cap across the pages"));
+  assert.equal((html.match(/<details class="fold-page">/g) || []).length, 2);
+  assert.ok(html.indexOf('<svg class="wf"') > at, "no waterfall above the fold");
+  const md = renderCompareMarkdown({ pages, topics, topicCmp: compareTopics(pages, topics), facts: null, factCmp: null, queries: null, plan: null });
+  const losses = md.indexOf("## Losses by page");
+  assert.ok(losses > md.indexOf("## Each page's groups") && losses < md.indexOf("## How each number is computed"));
+  assert.ok(md.indexOf("#### Where the text goes") > losses, "each page's waterfall comes after the table");
 });
 
 test("the refusal report has no waterfall: nothing was kept", () => {

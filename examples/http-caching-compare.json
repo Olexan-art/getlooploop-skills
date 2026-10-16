@@ -1,7 +1,7 @@
 {
   "schema": "getlooploop/vectorscope-compare@1",
-  "generatedAt": "2026-10-16T19:04:28.802Z",
-  "skillVersion": "2.102",
+  "generatedAt": "2026-10-16T19:29:46.483Z",
+  "skillVersion": "2.103",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "url": "https://www.getlooploop.com/vectorscope"
@@ -163,7 +163,7 @@
         "pages": {
           "1": [
             16,
-            22
+            21
           ]
         }
       },
@@ -438,12 +438,10 @@
         "priority": 2,
         "page": 1,
         "passages": [
-          22,
-          23,
-          24
+          21
         ],
-        "check": "dominant_heading",
-        "problem": "Under \"Common caching patterns\" an h3 reads \"Validation\", the same text as the earlier h2. The chunker matches heading lines by text, so #22 to #24 are filed under the wrong section and \"Validation\" ends up holding 31% of the page.",
+        "check": null,
+        "problem": "Under \"Common caching patterns\" an h3 reads \"Validation\", the same text as the earlier h2. Up to 2.102 this chunker took it for that h2 and filed the rest of the section under \"Validation\"; 2.103 follows the h2 order and keeps it in #21, but any splitter that matches headings by their text alone still makes that cut, and a passage that says \"Validation\" with no subject is ambiguous to a retriever either way.",
         "fix": "Give the h3 its own name, such as \"Validating cache-busted files\", and open the passage with its subject.",
         "before": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading.",
         "after": "For cache-busted static files, also set Last-Modified and ETag, so that a reload revalidates the file instead of re-transmitting it."
@@ -502,7 +500,7 @@
     {
       "n": 1,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T19:04:28.803Z",
+      "generatedAt": "2026-10-16T19:29:46.484Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -511,7 +509,7 @@
       "howToRead": {
         "grouping": "Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
         "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
-        "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 5992 of 34460 indexed characters, about 17%, and always the opening of each passage rather than a sample spread through it.",
+        "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 5941 of 34619 indexed characters, about 17%, and always the opening of each passage rather than a sample spread through it.",
         "phrases": "Counted over the page's whole text, not the excerpts below. A phrase is two to four content words the page writes side by side — never across a stopword, punctuation or a number — at least twice and in at least two passages (or three times in one), and cohesive enough that the words are not merely neighbours. A shorter phrase nearly always inside a longer one is folded into it. Ranked by `passages` (how many distinct passages use it), then `count`. `groups` is how many of the page's groups it reaches and `describesWholePage` is true when it reaches most of them. These are what the page says, not search demand: nothing here measures how often anybody searches or asks for them. The group counts rest on the grouping above, which is a judgement.",
         "narrativeWords": "Single words, counted only where none of the listed phrases already used them, so the occurrences still add up. Reporting verbs, connectives and markup residue ([edit] links, TeX) are left out. They say what the page talks about; they are rarely what anybody types or asks.",
         "keywords": "`phrases` followed by `narrativeWords` as one list, in the shape earlier exports had. Prefer the two lists above.",
@@ -548,18 +546,18 @@
         "dimensions": null,
         "chunkCap": 26,
         "chunksIndexed": 26,
-        "charsIndexed": 34460,
+        "charsIndexed": 34619,
         "charsUnread": 0,
         "capReached": true,
         "duplicateChunks": 0,
         "groupsMergedByPaletteLimit": null,
-        "charsPastCap": 167,
-        "charsInPassagesUnique": 32204
+        "charsPastCap": 0,
+        "charsInPassagesUnique": 32366
       },
       "textCoverage": {
-        "exportedChars": 5992,
-        "indexedChars": 34460,
-        "share": 0.174
+        "exportedChars": 5941,
+        "indexedChars": 34619,
+        "share": 0.172
       },
       "geometry": {
         "selfSimilarity": null,
@@ -571,7 +569,7 @@
         {
           "term": "cache control",
           "count": 48,
-          "passages": 21,
+          "passages": 20,
           "groups": 5,
           "spread": 0.833,
           "describesWholePage": true
@@ -579,7 +577,7 @@
         {
           "term": "max age",
           "count": 42,
-          "passages": 17,
+          "passages": 16,
           "groups": 5,
           "spread": 0.833,
           "describesWholePage": true
@@ -609,6 +607,14 @@
           "describesWholePage": true
         },
         {
+          "term": "managed cache",
+          "count": 10,
+          "passages": 5,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
           "term": "origin server",
           "count": 7,
           "passages": 5,
@@ -622,14 +628,6 @@
           "passages": 5,
           "groups": 3,
           "spread": 0.5,
-          "describesWholePage": false
-        },
-        {
-          "term": "managed cache",
-          "count": 10,
-          "passages": 4,
-          "groups": 2,
-          "spread": 0.333,
           "describesWholePage": false
         },
         {
@@ -693,7 +691,7 @@
         {
           "term": "response",
           "count": 100,
-          "passages": 19,
+          "passages": 18,
           "groups": 6,
           "spread": 1,
           "describesWholePage": true
@@ -724,16 +722,16 @@
         },
         {
           "term": "content",
-          "count": 31,
-          "passages": 12,
+          "count": 32,
+          "passages": 14,
           "groups": 5,
           "spread": 0.833,
           "describesWholePage": true
         },
         {
           "term": "modified",
-          "count": 29,
-          "passages": 7,
+          "count": 30,
+          "passages": 8,
           "groups": 4,
           "spread": 0.667,
           "describesWholePage": true
@@ -741,7 +739,7 @@
         {
           "term": "caching",
           "count": 28,
-          "passages": 11,
+          "passages": 12,
           "groups": 6,
           "spread": 1,
           "describesWholePage": true
@@ -757,7 +755,7 @@
         {
           "term": "value",
           "count": 25,
-          "passages": 8,
+          "passages": 7,
           "groups": 4,
           "spread": 0.667,
           "describesWholePage": true
@@ -808,6 +806,13 @@
           "describesWholePage": true
         },
         {
+          "term": "managed cache",
+          "count": 10,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
           "term": "origin server",
           "count": 7,
           "groups": 4,
@@ -819,13 +824,6 @@
           "count": 5,
           "groups": 3,
           "spread": 0.5,
-          "describesWholePage": false
-        },
-        {
-          "term": "managed cache",
-          "count": 10,
-          "groups": 2,
-          "spread": 0.333,
           "describesWholePage": false
         },
         {
@@ -907,14 +905,14 @@
         },
         {
           "term": "content",
-          "count": 31,
+          "count": 32,
           "groups": 5,
           "spread": 0.833,
           "describesWholePage": true
         },
         {
           "term": "modified",
-          "count": 29,
+          "count": 30,
           "groups": 4,
           "spread": 0.667,
           "describesWholePage": true
@@ -955,7 +953,7 @@
           "labelSource": "keywords",
           "chunkCount": 2,
           "charCount": 914,
-          "shareOfIndexedChars": 0.027,
+          "shareOfIndexedChars": 0.026,
           "cohesion": null,
           "agentLabel": "What the HTTP cache is",
           "note": null,
@@ -967,7 +965,7 @@
           "labelSource": "heading",
           "chunkCount": 3,
           "charCount": 5059,
-          "shareOfIndexedChars": 0.147,
+          "shareOfIndexedChars": 0.146,
           "cohesion": null,
           "agentLabel": "Private, proxy and managed caches",
           "note": null,
@@ -991,7 +989,7 @@
           "labelSource": "heading",
           "chunkCount": 4,
           "charCount": 6522,
-          "shareOfIndexedChars": 0.189,
+          "shareOfIndexedChars": 0.188,
           "cohesion": null,
           "agentLabel": "Revalidation with If-Modified-Since and ETag",
           "note": null,
@@ -1003,7 +1001,7 @@
           "labelSource": "keywords",
           "chunkCount": 6,
           "charCount": 7883,
-          "shareOfIndexedChars": 0.229,
+          "shareOfIndexedChars": 0.228,
           "cohesion": null,
           "agentLabel": "no-cache, no-store, reloads, deletion and request collapse",
           "note": null,
@@ -1011,14 +1009,14 @@
         },
         {
           "id": 5,
-          "label": "Resources · Bundle",
-          "labelSource": "keywords",
+          "label": "Common caching patterns",
+          "labelSource": "heading",
           "chunkCount": 7,
-          "charCount": 8801,
-          "shareOfIndexedChars": 0.255,
+          "charCount": 8960,
+          "shareOfIndexedChars": 0.259,
           "cohesion": null,
           "agentLabel": "Common caching patterns and cache busting",
-          "note": "#22 to #24 sit under a second \"Validation\" heading, an h3 the chunker takes for the h2 of the same name.",
+          "note": "#24 (See also) and #25 (MDN's footer) are filed here for want of a topic. Since 2.103 the h3 \"Validation\" stays in this section (#21); the slot the false cut used now holds #25.",
           "topic": "patterns"
         }
       ],
@@ -1195,44 +1193,44 @@
           "index": 21,
           "group": 5,
           "heading": "Common caching patterns",
-          "charCount": 525,
+          "charCount": 1993,
           "duplicateOf": null,
           "textHead": "the Authorization header is set. It is not required otherwise, because a response will be stored in the shared cache as long as max-age is given. So if the response is personalized with basic authentication, the presence of public may cause"
         },
         {
           "index": 22,
           "group": 5,
-          "heading": "Validation",
-          "charCount": 1997,
+          "heading": "Common caching patterns",
+          "charCount": 1998,
           "duplicateOf": null,
-          "textHead": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading. It's easy to generate those headers for pre-built static files. The ETag value here may be a hash of the file. http # r"
+          "textHead": "Cache-Control: immutable Main resources Unlike subresources, main resources cannot be cache busted because their URLs can't be decorated in the same way that subresource URLs can be. If the following HTML itself is stored, the latest versio"
         },
         {
           "index": 23,
           "group": 5,
-          "heading": "Validation",
-          "charCount": 1990,
+          "heading": "Common caching patterns",
+          "charCount": 731,
           "duplicateOf": null,
-          "textHead": "instead just want it to always be up-to-date. Furthermore, adding Last-Modified and ETag will allow clients to send conditional requests, and a 304 Not Modified can be returned if there have been no updates to the HTML: http HTTP/1.1 200 OK"
+          "textHead": "is difficult because, using just standard directives from the HTTP Caching specification, there's no way to actively delete cache contents when content is updated on the server. However, it is possible by deploying a managed cache such as a"
         },
         {
           "index": 24,
-          "group": 5,
-          "heading": "Validation",
-          "charCount": 201,
-          "duplicateOf": null,
-          "textHead": "do the same if it could delete the contents in the Cache API when an update occurs on the server. For more information, see the documentation for your CDN, and consult the service worker documentation."
-        },
-        {
-          "index": 25,
           "group": 5,
           "heading": "See also",
           "charCount": 118,
           "duplicateOf": null,
           "textHead": "Cache-Control HTTP header\nRFC 9111: Hypertext Transfer Protocol (HTTP/1.1): Caching\nCaching Tutorial - Mark Nottingham"
+        },
+        {
+          "index": 25,
+          "group": 5,
+          "heading": "Help improve MDN",
+          "charCount": 150,
+          "duplicateOf": null,
+          "textHead": "Learn how to contribute\nThis page was last modified on Aug 14, 2026 by MDN contributors.\nView this page on GitHub • Report a problem with this content"
         }
       ],
-      "skillVersion": "2.102",
+      "skillVersion": "2.103",
       "layers": {
         "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
         "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
@@ -1250,8 +1248,8 @@
           "chunkCap": 26,
           "chunksIndexed": 26,
           "capReached": true,
-          "charsInPassagesTotal": 34460,
-          "charsInPassagesUnique": 32204
+          "charsInPassagesTotal": 34619,
+          "charsInPassagesUnique": 32366
         },
         "passages": [
           {
@@ -1404,37 +1402,37 @@
           {
             "index": 21,
             "heading": "Common caching patterns",
-            "charCount": 525,
+            "charCount": 1993,
             "contentRole": "main",
             "textHead": "the Authorization header is set. It is not required otherwise, because a response will be stored in the shared cache as long as max-age is given. So if the response is personalized with basic authentication, the presence of public may cause"
           },
           {
             "index": 22,
-            "heading": "Validation",
-            "charCount": 1997,
+            "heading": "Common caching patterns",
+            "charCount": 1998,
             "contentRole": "main",
-            "textHead": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading. It's easy to generate those headers for pre-built static files. The ETag value here may be a hash of the file. http # r"
+            "textHead": "Cache-Control: immutable Main resources Unlike subresources, main resources cannot be cache busted because their URLs can't be decorated in the same way that subresource URLs can be. If the following HTML itself is stored, the latest versio"
           },
           {
             "index": 23,
-            "heading": "Validation",
-            "charCount": 1990,
+            "heading": "Common caching patterns",
+            "charCount": 731,
             "contentRole": "main",
-            "textHead": "instead just want it to always be up-to-date. Furthermore, adding Last-Modified and ETag will allow clients to send conditional requests, and a 304 Not Modified can be returned if there have been no updates to the HTML: http HTTP/1.1 200 OK"
+            "textHead": "is difficult because, using just standard directives from the HTTP Caching specification, there's no way to actively delete cache contents when content is updated on the server. However, it is possible by deploying a managed cache such as a"
           },
           {
             "index": 24,
-            "heading": "Validation",
-            "charCount": 201,
-            "contentRole": "main",
-            "textHead": "do the same if it could delete the contents in the Cache API when an update occurs on the server. For more information, see the documentation for your CDN, and consult the service worker documentation."
-          },
-          {
-            "index": 25,
             "heading": "See also",
             "charCount": 118,
             "contentRole": "related",
             "textHead": "Cache-Control HTTP header\nRFC 9111: Hypertext Transfer Protocol (HTTP/1.1): Caching\nCaching Tutorial - Mark Nottingham"
+          },
+          {
+            "index": 25,
+            "heading": "Help improve MDN",
+            "charCount": 150,
+            "contentRole": "main",
+            "textHead": "Learn how to contribute\nThis page was last modified on Aug 14, 2026 by MDN contributors.\nView this page on GitHub • Report a problem with this content"
           }
         ],
         "losses": {
@@ -1444,20 +1442,20 @@
             "raw": 93570,
             "removed": 60964,
             "kept": 32606,
-            "inPassagesUnique": 32204,
-            "notInPassages": 235,
-            "pastCap": 167
+            "inPassagesUnique": 32366,
+            "notInPassages": 240,
+            "pastCap": 0
           },
           "passages": {
-            "unique": 32204,
-            "total": 34460,
-            "overlap": 2103,
+            "unique": 32366,
+            "total": 34619,
+            "overlap": 2100,
             "intro": 153,
             "unlocated": 0
           },
           "notInPassages": {
-            "headingLines": 188,
-            "whitespace": 47,
+            "headingLines": 192,
+            "whitespace": 48,
             "other": 0
           },
           "removals": {
@@ -1861,15 +1859,8 @@
               {
                 "kind": "h2",
                 "heading": "Common caching patterns",
-                "chars": 4128,
-                "inPassages": 4128,
-                "located": true
-              },
-              {
-                "kind": "h2",
-                "heading": "Validation",
-                "chars": 3807,
-                "inPassages": 3807,
+                "chars": 7947,
+                "inPassages": 7947,
                 "located": true
               },
               {
@@ -1883,7 +1874,7 @@
                 "kind": "h2",
                 "heading": "Help improve MDN",
                 "chars": 150,
-                "inPassages": 0,
+                "inPassages": 150,
                 "located": true
               }
             ]
@@ -2018,31 +2009,31 @@
             {
               "index": 21,
               "start": 27966,
-              "end": 28491,
+              "end": 29959,
               "intro": 0
             },
             {
               "index": 22,
-              "start": 28503,
-              "end": 30500,
+              "start": 29770,
+              "end": 31768,
               "intro": 0
             },
             {
               "index": 23,
-              "start": 30305,
-              "end": 32295,
-              "intro": 0
-            },
-            {
-              "index": 24,
-              "start": 32109,
+              "start": 31579,
               "end": 32310,
               "intro": 0
             },
             {
-              "index": 25,
+              "index": 24,
               "start": 32320,
               "end": 32438,
+              "intro": 0
+            },
+            {
+              "index": 25,
+              "start": 32456,
+              "end": 32606,
               "intro": 0
             }
           ]
@@ -2184,13 +2175,13 @@
         },
         "render": null,
         "derived": {
-          "charsPastCap": 167,
+          "charsPastCap": 0,
           "charsUnread": 0,
           "phrases": [
             {
               "term": "cache control",
               "count": 48,
-              "passages": 21,
+              "passages": 20,
               "groups": 5,
               "spread": 0.833,
               "describesWholePage": true
@@ -2198,7 +2189,7 @@
             {
               "term": "max age",
               "count": 42,
-              "passages": 17,
+              "passages": 16,
               "groups": 5,
               "spread": 0.833,
               "describesWholePage": true
@@ -2228,6 +2219,14 @@
               "describesWholePage": true
             },
             {
+              "term": "managed cache",
+              "count": 10,
+              "passages": 5,
+              "groups": 2,
+              "spread": 0.333,
+              "describesWholePage": false
+            },
+            {
               "term": "origin server",
               "count": 7,
               "passages": 5,
@@ -2241,14 +2240,6 @@
               "passages": 5,
               "groups": 3,
               "spread": 0.5,
-              "describesWholePage": false
-            },
-            {
-              "term": "managed cache",
-              "count": 10,
-              "passages": 4,
-              "groups": 2,
-              "spread": 0.333,
               "describesWholePage": false
             },
             {
@@ -2312,7 +2303,7 @@
             {
               "term": "response",
               "count": 100,
-              "passages": 19,
+              "passages": 18,
               "groups": 6,
               "spread": 1,
               "describesWholePage": true
@@ -2343,16 +2334,16 @@
             },
             {
               "term": "content",
-              "count": 31,
-              "passages": 12,
+              "count": 32,
+              "passages": 14,
               "groups": 5,
               "spread": 0.833,
               "describesWholePage": true
             },
             {
               "term": "modified",
-              "count": 29,
-              "passages": 7,
+              "count": 30,
+              "passages": 8,
               "groups": 4,
               "spread": 0.667,
               "describesWholePage": true
@@ -2360,7 +2351,7 @@
             {
               "term": "caching",
               "count": 28,
-              "passages": 11,
+              "passages": 12,
               "groups": 6,
               "spread": 1,
               "describesWholePage": true
@@ -2376,7 +2367,7 @@
             {
               "term": "value",
               "count": 25,
-              "passages": 8,
+              "passages": 7,
               "groups": 4,
               "spread": 0.667,
               "describesWholePage": true
@@ -2392,39 +2383,6 @@
           ],
           "checks": [
             {
-              "code": "cap_overflow",
-              "severity": "high",
-              "passages": [
-                25
-              ],
-              "evidence": {
-                "charsPastCap": 167,
-                "charsUnread": 0,
-                "cap": 26,
-                "last": 25
-              },
-              "message": "167 characters after passage #25 are never stored."
-            },
-            {
-              "code": "dominant_heading",
-              "severity": "medium",
-              "passages": [
-                9,
-                10,
-                11,
-                12,
-                22,
-                23,
-                24
-              ],
-              "evidence": {
-                "heading": "Validation",
-                "share": 0.311,
-                "chars": 10710
-              },
-              "message": "“Validation” holds 31.1% of the indexed text."
-            },
-            {
               "code": "mid_sentence_start",
               "severity": "medium",
               "passages": [
@@ -2436,8 +2394,7 @@
                 16,
                 20,
                 21,
-                23,
-                24
+                23
               ],
               "evidence": {
                 "samples": [
@@ -2466,9 +2423,9 @@
                     "text": "with no-cache, you can be sure you'll get a 200 OK from the origin server. That…"
                   }
                 ],
-                "count": 10
+                "count": 9
               },
-              "message": "10 passage(s) open on a lowercase word or a punctuation mark."
+              "message": "9 passage(s) open on a lowercase word or a punctuation mark."
             },
             {
               "code": "nav_in_content",
@@ -2528,7 +2485,7 @@
             "labelSource": "keywords",
             "chunkCount": 2,
             "charCount": 914,
-            "shareOfIndexedChars": 0.027,
+            "shareOfIndexedChars": 0.026,
             "cohesion": null,
             "agentLabel": "What the HTTP cache is",
             "note": null,
@@ -2540,7 +2497,7 @@
             "labelSource": "heading",
             "chunkCount": 3,
             "charCount": 5059,
-            "shareOfIndexedChars": 0.147,
+            "shareOfIndexedChars": 0.146,
             "cohesion": null,
             "agentLabel": "Private, proxy and managed caches",
             "note": null,
@@ -2564,7 +2521,7 @@
             "labelSource": "heading",
             "chunkCount": 4,
             "charCount": 6522,
-            "shareOfIndexedChars": 0.189,
+            "shareOfIndexedChars": 0.188,
             "cohesion": null,
             "agentLabel": "Revalidation with If-Modified-Since and ETag",
             "note": null,
@@ -2576,7 +2533,7 @@
             "labelSource": "keywords",
             "chunkCount": 6,
             "charCount": 7883,
-            "shareOfIndexedChars": 0.229,
+            "shareOfIndexedChars": 0.228,
             "cohesion": null,
             "agentLabel": "no-cache, no-store, reloads, deletion and request collapse",
             "note": null,
@@ -2584,14 +2541,14 @@
           },
           {
             "id": 5,
-            "label": "Resources · Bundle",
-            "labelSource": "keywords",
+            "label": "Common caching patterns",
+            "labelSource": "heading",
             "chunkCount": 7,
-            "charCount": 8801,
-            "shareOfIndexedChars": 0.255,
+            "charCount": 8960,
+            "shareOfIndexedChars": 0.259,
             "cohesion": null,
             "agentLabel": "Common caching patterns and cache busting",
-            "note": "#22 to #24 sit under a second \"Validation\" heading, an h3 the chunker takes for the h2 of the same name.",
+            "note": "#24 (See also) and #25 (MDN's footer) are filed here for want of a topic. Since 2.103 the h3 \"Validation\" stays in this section (#21); the slot the false cut used now holds #25.",
             "topic": "patterns"
           }
         ],
@@ -2984,39 +2941,6 @@
       },
       "checks": [
         {
-          "code": "cap_overflow",
-          "severity": "high",
-          "passages": [
-            25
-          ],
-          "evidence": {
-            "charsPastCap": 167,
-            "charsUnread": 0,
-            "cap": 26,
-            "last": 25
-          },
-          "message": "167 characters after passage #25 are never stored."
-        },
-        {
-          "code": "dominant_heading",
-          "severity": "medium",
-          "passages": [
-            9,
-            10,
-            11,
-            12,
-            22,
-            23,
-            24
-          ],
-          "evidence": {
-            "heading": "Validation",
-            "share": 0.311,
-            "chars": 10710
-          },
-          "message": "“Validation” holds 31.1% of the indexed text."
-        },
-        {
           "code": "mid_sentence_start",
           "severity": "medium",
           "passages": [
@@ -3028,8 +2952,7 @@
             16,
             20,
             21,
-            23,
-            24
+            23
           ],
           "evidence": {
             "samples": [
@@ -3058,9 +2981,9 @@
                 "text": "with no-cache, you can be sure you'll get a 200 OK from the origin server. That…"
               }
             ],
-            "count": 10
+            "count": 9
           },
-          "message": "10 passage(s) open on a lowercase word or a punctuation mark."
+          "message": "9 passage(s) open on a lowercase word or a punctuation mark."
         },
         {
           "code": "nav_in_content",
@@ -3252,7 +3175,7 @@
     {
       "n": 2,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T19:04:28.809Z",
+      "generatedAt": "2026-10-16T19:29:46.485Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -3894,7 +3817,7 @@
           "textHead": "Cache-Control value\nExplanation\nmax-age=86400\nThe response can be cached by browsers and intermediary caches for up to 1 day (60 seconds x 60 minutes x 24 hours).\nprivate, max-age=600\nThe response can be cached by the browser (but not inter"
         }
       ],
-      "skillVersion": "2.102",
+      "skillVersion": "2.103",
       "layers": {
         "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
         "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
@@ -5901,12 +5824,12 @@
           "raw": 93570,
           "removed": 60964,
           "kept": 32606,
-          "inPassagesUnique": 32204,
-          "notInPassages": 235,
-          "pastCap": 167
+          "inPassagesUnique": 32366,
+          "notInPassages": 240,
+          "pastCap": 0
         },
-        "sectionsCut": 1,
-        "sections": 16
+        "sectionsCut": 0,
+        "sections": 15
       },
       {
         "n": 2,
@@ -6215,7 +6138,7 @@
         "1": {
           "passages": 2,
           "chars": 914,
-          "share": 0.027
+          "share": 0.026
         },
         "2": {
           "passages": 3,
@@ -6231,7 +6154,7 @@
         "1": {
           "passages": 3,
           "chars": 5059,
-          "share": 0.147
+          "share": 0.146
         },
         "2": {
           "passages": 0,
@@ -6263,7 +6186,7 @@
         "1": {
           "passages": 4,
           "chars": 6522,
-          "share": 0.189
+          "share": 0.188
         },
         "2": {
           "passages": 2,
@@ -6279,7 +6202,7 @@
         "1": {
           "passages": 6,
           "chars": 7883,
-          "share": 0.229
+          "share": 0.228
         },
         "2": {
           "passages": 0,
@@ -6294,8 +6217,8 @@
       "cells": {
         "1": {
           "passages": 7,
-          "chars": 8801,
-          "share": 0.255
+          "chars": 8960,
+          "share": 0.259
         },
         "2": {
           "passages": 7,
@@ -6467,7 +6390,7 @@
       "pages": {
         "1": [
           16,
-          22
+          21
         ]
       }
     },
@@ -6776,12 +6699,10 @@
       "priority": 2,
       "page": 1,
       "passages": [
-        22,
-        23,
-        24
+        21
       ],
-      "check": "dominant_heading",
-      "problem": "Under \"Common caching patterns\" an h3 reads \"Validation\", the same text as the earlier h2. The chunker matches heading lines by text, so #22 to #24 are filed under the wrong section and \"Validation\" ends up holding 31% of the page.",
+      "check": null,
+      "problem": "Under \"Common caching patterns\" an h3 reads \"Validation\", the same text as the earlier h2. Up to 2.102 this chunker took it for that h2 and filed the rest of the section under \"Validation\"; 2.103 follows the h2 order and keeps it in #21, but any splitter that matches headings by their text alone still makes that cut, and a passage that says \"Validation\" with no subject is ambiguous to a retriever either way.",
       "fix": "Give the h3 its own name, such as \"Validating cache-busted files\", and open the passage with its subject.",
       "before": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading.",
       "after": "For cache-busted static files, also set Last-Modified and ETag, so that a reload revalidates the file instead of re-transmitting it."

@@ -14,15 +14,8 @@
 
 | Page | URL | Words | Passages | Past cap | AI crawlers blocked | Findings (high/medium/low) |
 |---|---|---|---|---|---|---|
-| 1 | https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching | 5,153 | 26/26 | 167 | none | 1/3/1 |
+| 1 | https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching | 5,153 | 26/26 | 0 | none | 0/2/1 |
 | 2 | https://web.dev/articles/http-cache?hl=en | 2,060 | 15/26 | 0 | none | 0/4/2 |
-
-## Losses by page `measured` `derived`
-
-| Page | Raw (est.) | Removed | Kept | In passages, unique | Past cap | Sections cut |
-|---|---|---|---|---|---|---|
-| 1 | 93,570 | 60,964 | 32,606 | 32,204 | 167 | 1 / 16 |
-| 2 | 25,226 | 12,426 | 12,800 | 12,497 | 0 | 0 / 12 |
 
 ## Topics × pages `judgement` `derived`
 
@@ -35,7 +28,7 @@ Passages and characters each page spends on each shared topic.
 | Freshness: max-age, Expires, heuristics, Vary | 4 · 5,281 chars | — |
 | Revalidation: ETag, Last-Modified, 304 | 4 · 6,522 chars | 2 · 2,732 chars |
 | Preventing reuse: no-cache, no-store, reloads | 6 · 7,883 chars | — |
-| Recommended settings and cache busting | 7 · 8,801 chars | 7 · 6,373 chars |
+| Recommended settings and cache busting | 7 · 8,960 chars | 7 · 6,373 chars |
 | Browser support and request headers | — | 2 · 831 chars |
 | Configuring response headers on a server | — | 1 · 1,606 chars |
 
@@ -72,7 +65,7 @@ Which page states a fact the others lack.
 | Expires was HTTP/1.0's freshness header; when both are present, max-age wins. | ✓ #7 | — |
 | Vary keys stored responses by request headers such as Accept-Language. | ✓ #8 | — |
 | A private cache belongs to one client; a shared cache sits between client and server and serves many users. | ✓ #2 | — |
-| The immutable directive stops revalidation on reload for content that never changes. | ✓ #16 #22 | — |
+| The immutable directive stops revalidation on reload for content that never changes. | ✓ #16 #21 | — |
 | QPACK predefines one-week, one-month and one-year max-age values that compress to one byte in HTTP/3. | ✓ #20 | — |
 | Clear-Site-Data: cache clears browser caches but has no effect on intermediate caches. | ✓ #17 | — |
 | ETag is recommended over Last-Modified because it is more accurate. | — | ✓ #8 |
@@ -89,8 +82,8 @@ The agent's judgement, in priority order. Every passage must stand on its own, b
 1. **Page 2** · `canonical_other` · page-wide  
    **Problem:** The page's canonical is https://web.dev/articles/http-cache, and in this run a plain fetch of that URL (no Accept-Language) was redirected to the French ?hl=fr version. A crawler that follows the canonical may store the page in a language the reader did not ask for.  
    **Fix:** Serve the canonical URL in its default language to clients that send no Accept-Language, and keep the language variants on hreflang alternates.
-2. **Page 1** · `dominant_heading` · passages #22 #23 #24  
-   **Problem:** Under "Common caching patterns" an h3 reads "Validation", the same text as the earlier h2. The chunker matches heading lines by text, so #22 to #24 are filed under the wrong section and "Validation" ends up holding 31% of the page.  
+2. **Page 1** · passages #21  
+   **Problem:** Under "Common caching patterns" an h3 reads "Validation", the same text as the earlier h2. Up to 2.102 this chunker took it for that h2 and filed the rest of the section under "Validation"; 2.103 follows the h2 order and keeps it in #21, but any splitter that matches headings by their text alone still makes that cut, and a passage that says "Validation" with no subject is ambiguous to a retriever either way.  
    **Fix:** Give the h3 its own name, such as "Validating cache-busted files", and open the passage with its subject.
    - *Before:* Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading.
    - *After:* For cache-busted static files, also set Last-Modified and ETag, so that a reload revalidates the file instead of re-transmitting it.
@@ -138,14 +131,8 @@ The agent's judgement, in priority order. Every passage must stand on its own, b
 - **Canonical:** https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching (this page)
 - **Meta description:** 114 characters
 
-- **[high] Text fell past the 26-passage cap** `cap_overflow` · passages #25  
-  167 characters after passage #25 are never stored.  
-  *What to do:* Move what matters earlier, cut repetition, or split the page so each part has its own 26 slots.
-- **[medium] One heading carries too much of the page** `dominant_heading` · passages #9 #10 #11 #12 #22 #23 #24  
-  “Validation” holds 31.1% of the indexed text.  
-  *What to do:* The chunker splits only at h2. If this part has subtopics, they are h3s or styled text; make them real h2 headings so each becomes its own passage.
-- **[medium] Passages that start mid-sentence** `mid_sentence_start` · passages #3 #10 #11 #12 #14 #16 #20 #21 #23 #24  
-  10 passage(s) open on a lowercase word or a punctuation mark.  
+- **[medium] Passages that start mid-sentence** `mid_sentence_start` · passages #3 #10 #11 #12 #14 #16 #20 #21 #23  
+  9 passage(s) open on a lowercase word or a punctuation mark.  
   - #3 “proxy-revalidate However, in recent years, as HTTPS has become more common and …”
   - #10 “to parse, and distributed servers have difficulty synchronizing file-update tim…”
   - #11 “for caching; it is a standard HTTP header that is also used by content-manageme…”
@@ -209,20 +196,42 @@ The agent's judgement, in priority order. Every passage must stand on its own, b
   - “supported in all browsers (3 groups)”
   *What to do:* Repetition spends passages on what was already said and blurs the groups. Say it once, where it belongs.
 
-## Each page's groups and losses `judgement` `measured`
+## Each page's groups `judgement` `measured`
 
 ### Page 1
 
 | Group | Label | Topic | Label source | Passages | Chars | Share |
 |---|---|---|---|---|---|---|
-| 0 | What the HTTP cache is | What the HTTP cache is and why it helps | keywords: Associated · Subsequent | 2 | 914 | 2.7% |
-| 1 | Private, proxy and managed caches | Private, shared and managed caches | heading: Types of caches | 3 | 5,059 | 14.7% |
+| 0 | What the HTTP cache is | What the HTTP cache is and why it helps | keywords: Associated · Subsequent | 2 | 914 | 2.6% |
+| 1 | Private, proxy and managed caches | Private, shared and managed caches | heading: Types of caches | 3 | 5,059 | 14.6% |
 | 2 | Freshness, Expires, heuristic caching and Vary | Freshness: max-age, Expires, heuristics, Vary | keywords: Possible · Specifying | 4 | 5,281 | 15.3% |
-| 3 | Revalidation with If-Modified-Since and ETag | Revalidation: ETag, Last-Modified, 304 | heading: Validation | 4 | 6,522 | 18.9% |
-| 4 | no-cache, no-store, reloads, deletion and request collapse | Preventing reuse: no-cache, no-store, reloads | keywords: Force · Right | 6 | 7,883 | 22.9% |
-| 5 | Common caching patterns and cache busting | Recommended settings and cache busting | keywords: Resources · Bundle | 7 | 8,801 | 25.5% |
+| 3 | Revalidation with If-Modified-Since and ETag | Revalidation: ETag, Last-Modified, 304 | heading: Validation | 4 | 6,522 | 18.8% |
+| 4 | no-cache, no-store, reloads, deletion and request collapse | Preventing reuse: no-cache, no-store, reloads | keywords: Force · Right | 6 | 7,883 | 22.8% |
+| 5 | Common caching patterns and cache busting | Recommended settings and cache busting | heading: Common caching patterns | 7 | 8,960 | 25.9% |
 
-A page contributes at most 26 passages, and this one filled every slot: 167 characters at the end of it are not indexed and cannot be retrieved to answer anything.
+A page contributes at most 26 passages, and this one filled every slot; the last passage reaches the end of the kept text, so nothing fell past the cap.
+
+### Page 2
+
+| Group | Label | Topic | Label source | Passages | Chars | Share |
+|---|---|---|---|---|---|---|
+| 0 | Why the HTTP cache matters and how it works | What the HTTP cache is and why it helps | keywords: First · Defense | 3 | 1,766 | 13.3% |
+| 1 | Browser support and request headers | Browser support and request headers | keywords: Automatically · Understanding | 2 | 831 | 6.2% |
+| 2 | Response headers to configure on the server | Configuring response headers on a server | heading: Response headers: configure your web server | 1 | 1,606 | 12.1% |
+| 3 | Versioned and unversioned URLs | Recommended settings and cache busting | heading: Which response header values should you use? | 2 | 3,986 | 30% |
+| 4 | ETag revalidation and 304 | Revalidation: ETag, Last-Modified, 304 | heading: Which response header values should you use? | 2 | 2,732 | 20.5% |
+| 5 | Summary and appendix: recommended values | Recommended settings and cache busting | keywords: Optimize · Usage | 5 | 2,387 | 17.9% |
+
+A page contributes at most 26 passages; this one needed 15, so none of its extracted text fell past the cap.
+
+## Losses by page `measured` `derived`
+
+| Page | Raw (est.) | Removed | Kept | In passages, unique | Past cap | Sections cut |
+|---|---|---|---|---|---|---|
+| 1 | 93,570 | 60,964 | 32,606 | 32,366 | 0 | 0 / 15 |
+| 2 | 25,226 | 12,426 | 12,800 | 12,497 | 0 | 0 / 12 |
+
+### Page 1
 
 #### Where the text goes `measured` `derived`
 
@@ -233,11 +242,11 @@ Characters, whitespace runs folded to one space. "Text in the raw HTML" is the k
 | Text in the raw HTML (estimate) | 93,570 | 100% of raw | `derived` |
 | Removed by the cleaner | 60,964 | 65.2% of raw | `measured` |
 | Kept: the chunker's input | 32,606 | 34.8% of raw | `measured` |
-| In passages, unique | 32,204 | 98.8% of kept | `derived` |
-| Kept, in no passage text | 235 | 0.7% of kept | `derived` |
-| Past the cap | 167 | 0.5% of kept | `derived` |
+| In passages, unique | 32,366 | 99.3% of kept | `derived` |
+| Kept, in no passage text | 240 | 0.7% of kept | `derived` |
+| Past the cap | 0 | 0% of kept | `derived` |
 
-The passages hold 34,460 characters in all: 32,204 unique, plus 2,103 of overlap between neighbours and 153 of intro (title, h1, description) in passage #0. Of the kept text in no passage: 188 in h2 heading lines, 47 spaces between sections.
+The passages hold 34,619 characters in all: 32,366 unique, plus 2,100 of overlap between neighbours and 153 of intro (title, h1, description) in passage #0. Of the kept text in no passage: 192 in h2 heading lines, 48 spaces between sections.
 
 ##### What the cleaner removed `measured`
 
@@ -271,23 +280,11 @@ The passages hold 34,460 characters in all: 32,204 unique, plus 2,103 of overlap
 | Reload and force reload | 2,886 | 2,886 | 100% |
 | Deleting stored responses | 1,271 | 1,271 | 100% |
 | Request collapse | 655 | 655 | 100% |
-| Common caching patterns | 4,128 | 4,128 | 100% |
-| Validation | 3,807 | 3,807 | 100% |
+| Common caching patterns | 7,947 | 7,947 | 100% |
 | See also | 118 | 118 | 100% |
-| Help improve MDN | **0** | 150 | 0% |
+| Help improve MDN | 150 | 150 | 100% |
 
 ### Page 2
-
-| Group | Label | Topic | Label source | Passages | Chars | Share |
-|---|---|---|---|---|---|---|
-| 0 | Why the HTTP cache matters and how it works | What the HTTP cache is and why it helps | keywords: First · Defense | 3 | 1,766 | 13.3% |
-| 1 | Browser support and request headers | Browser support and request headers | keywords: Automatically · Understanding | 2 | 831 | 6.2% |
-| 2 | Response headers to configure on the server | Configuring response headers on a server | heading: Response headers: configure your web server | 1 | 1,606 | 12.1% |
-| 3 | Versioned and unversioned URLs | Recommended settings and cache busting | heading: Which response header values should you use? | 2 | 3,986 | 30% |
-| 4 | ETag revalidation and 304 | Revalidation: ETag, Last-Modified, 304 | heading: Which response header values should you use? | 2 | 2,732 | 20.5% |
-| 5 | Summary and appendix: recommended values | Recommended settings and cache busting | keywords: Optimize · Usage | 5 | 2,387 | 17.9% |
-
-A page contributes at most 26 passages; this one needed 15, so none of its extracted text fell past the cap.
 
 #### Where the text goes `measured` `derived`
 

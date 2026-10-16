@@ -205,16 +205,16 @@
     },
     {
       "reading": "examples/judgement/http-caching-compare/reading-1.json",
-      "passagesSha256": "2719b77f2ad7086618776ab78abffe37fde1b47c6bb05fb052adf03c48f4f9db",
+      "passagesSha256": "0aff74ef1e29169945148f88c8f124f740cf42295e597614e9f2f3b563b53e81",
       "phrases": [
         "cache control",
         "max age",
         "ok content type",
         "content length",
         "shared cache",
+        "managed cache",
         "origin server",
         "cached response",
-        "managed cache",
         "gmt etag",
         "cache busting",
         "latest version",
@@ -235,9 +235,33 @@
         "value",
         "store"
       ],
-      "phrasesSha256": "5b39e96aff8b00833eaffd8c128fe141e3a8d30433d310aa0641515ef32c1e25",
-      "narrativeSha256": "34c510ebf16dc4ae0a14be1d3a624a4485f1755e6f6b350649a47af435c47855",
-      "keywordsSha256": "4d949c3572ee673d0493842e04a333d0008da60fd45abdb04e4dfb20a07548d5"
+      "phrasesSha256": "dfc6eda6d1c8534d997c86d897b848c32c3b59214d02ba103f3c76316f93b65c",
+      "narrativeSha256": "856f2ee37f5e9efe86eb1f20fdaa5faa999a9a54982bbc1776d2b1c43d25e27f",
+      "keywordsSha256": "a57f14fc4a3a9112a1abc052c2efbed27ef7d2980334821034a52045da8e524e",
+      "changedIn": "2.103",
+      "before2103": {
+        "passagesSha256": "2719b77f2ad7086618776ab78abffe37fde1b47c6bb05fb052adf03c48f4f9db",
+        "phrases": [
+          "cache control",
+          "max age",
+          "ok content type",
+          "content length",
+          "shared cache",
+          "origin server",
+          "cached response",
+          "managed cache",
+          "gmt etag",
+          "cache busting",
+          "latest version",
+          "conditional request",
+          "none match",
+          "private cache",
+          "force reload"
+        ],
+        "phrasesSha256": "5b39e96aff8b00833eaffd8c128fe141e3a8d30433d310aa0641515ef32c1e25",
+        "narrativeSha256": "34c510ebf16dc4ae0a14be1d3a624a4485f1755e6f6b350649a47af435c47855",
+        "keywordsSha256": "4d949c3572ee673d0493842e04a333d0008da60fd45abdb04e4dfb20a07548d5"
+      }
     },
     {
       "reading": "examples/judgement/http-caching-compare/reading-2.json",

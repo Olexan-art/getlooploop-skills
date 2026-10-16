@@ -1,0 +1,7 @@
+mdn-http-caching.html is the page https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching
+("HTTP caching") as it was served on 2026-10-16, saved unmodified as test input.
+
+Content by Mozilla Contributors (https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching/contributors.txt),
+licensed under CC BY-SA 2.5 (https://creativecommons.org/licenses/by-sa/2.5/).
+Code samples on MDN are public domain (CC0). MDN Web Docs is a Mozilla project; this repository
+is not affiliated with or endorsed by Mozilla.

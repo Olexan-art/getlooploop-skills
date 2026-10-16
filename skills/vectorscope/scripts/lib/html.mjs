@@ -267,6 +267,18 @@ h3{font-size:16px;margin:0}
 .role.dup{color:var(--muted)}
 .opening{margin:6px 0 0;font-size:14px}
 details{margin-top:6px}
+/* 2.103: the losses panel, folded at the end of the report */
+details.fold{margin-top:0}
+.fold>summary{width:auto;list-style:none;color:var(--text);font-size:inherit}
+.fold>summary::-webkit-details-marker{display:none}
+.fold-head{display:flex;align-items:baseline;gap:6px 12px;flex-wrap:wrap}
+.fold-title{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.fold-title::before{content:"▸ ";color:var(--accent)}
+.fold[open]>summary .fold-title::before{content:"▾ "}
+.fold-head .sub{color:var(--muted);font-size:13px}
+.fold-body{margin-top:14px}
+.fold-page{margin-top:14px}
+.fold-page>summary{width:auto;color:var(--text);font-weight:600}
 summary{cursor:pointer;color:var(--accent);font-size:13px;width:max-content;max-width:100%}
 .full-text{white-space:pre-wrap;margin:8px 0 0;padding:10px 12px;border-radius:8px;background:var(--panel);border:1px solid var(--line);font-size:13.5px;max-height:420px;overflow:auto}
 .cut{margin-top:12px;border:1.5px dashed var(--amber);background:var(--amber-soft);color:var(--text);border-radius:10px;padding:10px 14px;font-size:14px}
@@ -469,7 +481,11 @@ const JS = `
     function closeAll(except){for(var k=0;k<hs.length;k++)if(hs[k]!==except&&hs[k].open)hs[k].open=false}
     document.addEventListener("click",function(e){var t=e.target;while(t&&t!==document&&!(t.tagName==="DETAILS"&&t.classList.contains("mh")))t=t.parentNode;closeAll(t&&t!==document?t:null)});
     document.addEventListener("keydown",function(e){if(e.key==="Escape")closeAll(null)});
-    var hm=/[#&]help=([a-z_]+)/.exec(location.hash);if(hm){var d=document.querySelector('details.mh[data-metric="'+hm[1]+'"]');if(d){d.open=true;fit(d);try{d.scrollIntoView({block:"center"})}catch(e){}}}
+    // 2.103: the losses panel is folded; whatever a link points into is unfolded first.
+    function unfold(el){for(var u=el.parentElement;u;u=u.parentElement)if(u.tagName==="DETAILS")u.open=true;var f=el.querySelector?el.querySelector("details.fold"):null;if(f&&f.parentElement===el)f.open=true}
+    function toAnchor(){var id=location.hash.slice(1);if(!id||id.indexOf("=")>=0)return;var t=document.getElementById(id);if(t){unfold(t);try{t.scrollIntoView()}catch(e){}}}
+    toAnchor();window.addEventListener("hashchange",toAnchor);
+    var hm=/[#&]help=([a-z_]+)/.exec(location.hash);if(hm){var d=document.querySelector('details.mh[data-metric="'+hm[1]+'"]');if(d){unfold(d);d.open=true;fit(d);try{d.scrollIntoView({block:"center"})}catch(e){}}}
     var outs=document.querySelectorAll(".readout");
     for(var o=0;o<outs.length;o++)(function(out){
       var scope=out.parentNode,cells=scope.querySelectorAll(".cell"),idle=null;
@@ -797,12 +813,25 @@ function sectionsBlock(losses) {
   return out;
 }
 
+/**
+ * 2.103: a panel folded shut at the end of the report. The summary line is the panel's title, what
+ * it holds and how much fell past the cap, so the number is visible without opening it.
+ */
+function foldStart(id, titleKey, subKey, pastLine) {
+  return [
+    `<section class="panel" id="${id}" aria-labelledby="h-${id}">`,
+    `<details class="fold"><summary><span class="fold-head"><span class="fold-title" role="heading" aria-level="2" id="h-${id}">${L(titleKey)}</span>${layerBadges("measured", "derived")}<span class="sub">— ${L(subKey)}${pastLine ? ` · ${pastLine}` : ""}</span></span></summary>`,
+    '<div class="fold-body">',
+  ];
+}
+const FOLD_END = ["</div>", "</details>", "</section>"];
+
 /** The whole "where the text goes" panel; compact (compare mode) keeps the waterfall and the section map. */
 function lossesPanel(reading, { compact = false } = {}) {
   const out = [];
   if (!compact) {
-    out.push('<section class="panel" id="losses" aria-labelledby="h-losses">');
-    out.push(`<div class="panel-head"><h2 id="h-losses">${L("lossesTitle")}</h2>${layerBadges("measured", "derived")}<span class="sub">${L("lossesSub")}</span></div>`);
+    out.push(...foldStart("losses", "lossesTitle", "lossesFold", hasLosses(reading) ? L("foldPastCap", { n: charsPastCap(reading) }) : ""));
+    out.push(`<p class="small" style="margin:0 0 10px">${L("lossesSub")}</p>`);
   }
   if (!hasLosses(reading)) {
     out.push(`<p class="note">${L("noLosses")}</p>`);
@@ -812,7 +841,7 @@ function lossesPanel(reading, { compact = false } = {}) {
     out.push(...removalsBlock(reading.losses, compact ? 5 : 12));
     out.push(...sectionsBlock(reading.losses));
   }
-  if (!compact) out.push("</section>");
+  if (!compact) out.push(...FOLD_END);
   return out;
 }
 
@@ -1256,9 +1285,6 @@ export function renderHtml(reading, lens, extras = {}) {
   out.push(...stripBlock(reading, lens, anchor));
   out.push("</section>");
 
-  // ── 2.102: where the text goes
-  out.push(...lossesPanel(reading));
-
   out.push(...diffPanel(extras.diff));
   out.push(...checksPanel(reading, checks, anchor));
   out.push(...planPanel(extras.plan, () => anchor, false));
@@ -1323,6 +1349,9 @@ export function renderHtml(reading, lens, extras = {}) {
 
   out.push(...factsPanelSingle(extras.facts, 1, anchor));
 
+  // ── 2.102: where the text goes; 2.103: last, folded
+  out.push(...lossesPanel(reading));
+
   // ── closing
   out.push('<section class="panel" aria-label="Closing">');
   out.push(`<p class="closing${capCut ? " full" : ""}">${closingSentence(reading)}</p>`);
@@ -1335,11 +1364,16 @@ export function renderHtml(reading, lens, extras = {}) {
 
 // ── compare ──────────────────────────────────────────────────────────────────
 
-/** Compare mode: one row per page, the waterfall's stages as columns. */
+/**
+ * Compare mode: one row per page, the waterfall's stages as columns, then each page's waterfall,
+ * removals and section map. 2.103: all of it in one panel, folded, at the end of the report.
+ */
 function lossTablePanel(pages, short) {
   const out = [];
-  out.push('<section class="panel" id="losses" aria-labelledby="h-losses">');
-  out.push(`<div class="panel-head"><h2 id="h-losses">${L("lossTable")}</h2>${layerBadges("measured", "derived")}<span class="sub">${L("lossTableSub")}</span></div>`);
+  const measured = pages.filter((p) => hasLosses(p.reading));
+  const past = measured.reduce((sum, p) => sum + charsPastCap(p.reading), 0);
+  out.push(...foldStart("losses", "lossTable", "lossTableFold", measured.length ? L("foldPastCapAll", { n: past }) : ""));
+  out.push(`<p class="small" style="margin:0 0 10px">${L("lossTableSub")}</p>`);
   out.push('<div class="tablewrap"><table>');
   out.push(`<thead><tr><th>${L("colPage")}</th><th>${L("colRaw")}</th><th>${L("colRemoved")}</th><th>${L("colKept")}</th><th>${L("colUnique")}</th><th>${L("colPastCap")}</th><th>${L("colSectionsCut")}</th></tr></thead><tbody>`);
   for (const p of pages) {
@@ -1358,7 +1392,13 @@ function lossTablePanel(pages, short) {
   }
   out.push("</tbody></table></div>");
   out.push(helpLine([["colRaw", "text_raw"], ["colRemoved", "text_removed"], ["colKept", "text_kept"], ["colUnique", "chars_unique"], ["colPastCap", "chars_past_cap"], ["colSectionsCut", "section_reached"]]));
-  out.push("</section>");
+  for (const p of pages) {
+    const pastLine = hasLosses(p.reading) ? ` · ${L("foldPastCap", { n: charsPastCap(p.reading) })}` : "";
+    out.push(`<details class="fold-page"><summary>${short(p)} · ${L("lossesTitle")}${pastLine}</summary>`);
+    out.push(...lossesPanel(p.reading, { compact: true }));
+    out.push("</details>");
+  }
+  out.push(...FOLD_END);
   return out;
 }
 
@@ -1419,9 +1459,6 @@ export function renderCompareHtml(data) {
   }
   out.push("</tbody></table></div>");
   out.push("</section>");
-
-  // ── 2.102: the same waterfall for every page, side by side
-  out.push(...lossTablePanel(pages, short));
 
   // ── topic table
   out.push('<section class="panel" id="topics" aria-labelledby="h-topics">');
@@ -1546,8 +1583,6 @@ export function renderCompareHtml(data) {
     out.push(`<div class="pagesec"><h3>${short(p)}</h3>`);
     out.push(`<p class="small" style="margin:0 0 6px">${closingSentence(p.reading)}</p>`);
     out.push(...stripBlock(p.reading, p.lens, anchor, true));
-    out.push(`<h3 class="subhead">${L("lossesTitle")} ${layerBadges("measured", "derived")}</h3>`);
-    out.push(...lossesPanel(p.reading, { compact: true }));
     out.push('<div style="margin-top:12px"></div>');
     out.push(...groupCards(p.lens, topicsById));
     out.push(`<details><summary>${L("passagesTitle")}</summary><ol class="plist" style="margin-top:8px">`);
@@ -1565,6 +1600,9 @@ export function renderCompareHtml(data) {
     out.push("</div>");
   }
   out.push("</section>");
+
+  // ── 2.102: the same waterfall for every page; 2.103: last, folded
+  out.push(...lossTablePanel(pages, short));
 
   out.push('<section class="panel" aria-label="Closing">');
   out.push(`<p class="fine" style="margin:0">${L("fine")}</p>`);

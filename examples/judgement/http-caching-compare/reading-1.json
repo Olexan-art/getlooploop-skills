@@ -9,7 +9,7 @@
     "title": "HTTP caching - HTTP | MDN",
     "wordCount": 5153,
     "chunksIndexed": 26,
-    "charsIndexed": 34460,
+    "charsIndexed": 34619,
     "charsUnread": 0,
     "capReached": true,
     "noindex": false,
@@ -195,40 +195,40 @@
       "heading": "Common caching patterns",
       "rawHeading": "Common caching patterns",
       "contentRole": "main",
-      "charCount": 525,
-      "text": "the Authorization header is set. It is not required otherwise, because a response will be stored in the shared cache as long as max-age is given. So if the response is personalized with basic authentication, the presence of public may cause problems. If you are concerned about that, you can choose the second-longest value, 38 (1 month). http # response for bundle.v123.js # If you never personalize responses via Authorization Cache-Control: public, max-age=31536000 # If you can't be certain Cache-Control: max-age=2592000"
+      "charCount": 1993,
+      "text": "the Authorization header is set. It is not required otherwise, because a response will be stored in the shared cache as long as max-age is given. So if the response is personalized with basic authentication, the presence of public may cause problems. If you are concerned about that, you can choose the second-longest value, 38 (1 month). http # response for bundle.v123.js # If you never personalize responses via Authorization Cache-Control: public, max-age=31536000 # If you can't be certain Cache-Control: max-age=2592000 Validation Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading. It's easy to generate those headers for pre-built static files. The ETag value here may be a hash of the file. http # response for bundle.v123.js Last-Modified: Tue, 22 Feb 2022 20:20:20 GMT ETag: \"YsAIAAAA-QG4G6kCMAMBAAAAAAAoK\" In addition, immutable can be added to prevent validation on reload. The combined result is shown below. http # bundle.v123.js HTTP/1.1 200 OK Content-Type: text/javascript Content-Length: 1024 Cache-Control: public, max-age=31536000, immutable Last-Modified: Tue, 22 Feb 2022 20:20:20 GMT ETag: \"YsAIAAAA-QG4G6kCMAMBAAAAAAAoK\" Cache busting is a technique to make a response cacheable over a long period by changing the URL when the content changes. The technique can be applied to all subresources, such as images. Note: When evaluating the use of immutable and QPACK: If you're concerned that immutable changes the predefined value provided by QPACK, consider that in this case, the immutable part can be encoded separately by splitting the Cache-Control value into two lines — though this is dependent on the encoding algorithm a particular QPACK implementation uses. http Cache-Control: public, max-age=31536000 Cache-Control: immutable Main resources Unlike subresources, main resources cannot be cache busted because their URLs can't be decorated in the same way that subresource URLs can be. If the"
     },
     {
       "index": 22,
-      "heading": "Validation",
-      "rawHeading": "Validation",
+      "heading": "Common caching patterns",
+      "rawHeading": "Common caching patterns",
       "contentRole": "main",
-      "charCount": 1997,
-      "text": "Don't forget to set the Last-Modified and ETag headers, so that you don't have to re-transmit a resource when reloading. It's easy to generate those headers for pre-built static files. The ETag value here may be a hash of the file. http # response for bundle.v123.js Last-Modified: Tue, 22 Feb 2022 20:20:20 GMT ETag: \"YsAIAAAA-QG4G6kCMAMBAAAAAAAoK\" In addition, immutable can be added to prevent validation on reload. The combined result is shown below. http # bundle.v123.js HTTP/1.1 200 OK Content-Type: text/javascript Content-Length: 1024 Cache-Control: public, max-age=31536000, immutable Last-Modified: Tue, 22 Feb 2022 20:20:20 GMT ETag: \"YsAIAAAA-QG4G6kCMAMBAAAAAAAoK\" Cache busting is a technique to make a response cacheable over a long period by changing the URL when the content changes. The technique can be applied to all subresources, such as images. Note: When evaluating the use of immutable and QPACK: If you're concerned that immutable changes the predefined value provided by QPACK, consider that in this case, the immutable part can be encoded separately by splitting the Cache-Control value into two lines — though this is dependent on the encoding algorithm a particular QPACK implementation uses. http Cache-Control: public, max-age=31536000 Cache-Control: immutable Main resources Unlike subresources, main resources cannot be cache busted because their URLs can't be decorated in the same way that subresource URLs can be. If the following HTML itself is stored, the latest version cannot be displayed even if the content is updated on the server side. html <script src=\"bundle.v123.js\"></script> <link rel=\"stylesheet\" href=\"build.v123.css\" /> <body> hello </body> For that case, no-cache would be appropriate — rather than no-store — since we don't want to store HTML, but instead just want it to always be up-to-date. Furthermore, adding Last-Modified and ETag will allow clients to send conditional requests, and a 304 Not Modified can be returned if there have been"
+      "charCount": 1998,
+      "text": "Cache-Control: immutable Main resources Unlike subresources, main resources cannot be cache busted because their URLs can't be decorated in the same way that subresource URLs can be. If the following HTML itself is stored, the latest version cannot be displayed even if the content is updated on the server side. html <script src=\"bundle.v123.js\"></script> <link rel=\"stylesheet\" href=\"build.v123.css\" /> <body> hello </body> For that case, no-cache would be appropriate — rather than no-store — since we don't want to store HTML, but instead just want it to always be up-to-date. Furthermore, adding Last-Modified and ETag will allow clients to send conditional requests, and a 304 Not Modified can be returned if there have been no updates to the HTML: http HTTP/1.1 200 OK Content-Type: text/html Content-Length: 1024 Cache-Control: no-cache Last-Modified: Tue, 22 Feb 2022 20:20:20 GMT ETag: \"AAPuIbAOdvAGEETbgAAAAAAABAAE\" That setting is appropriate for non-personalized HTML, but for a response that gets personalized using cookies — for example, after a login — don't forget to also specify private: http HTTP/1.1 200 OK Content-Type: text/html Content-Length: 1024 Cache-Control: no-cache, private Last-Modified: Tue, 22 Feb 2022 20:20:20 GMT ETag: \"AAPuIbAOdvAGEETbgAAAAAAABAAE\" Set-Cookie: __Host-SID=AHNtAyt3fvJrUL5g5tnGwER; Secure; Path=/; HttpOnly The same can be used for favicon.ico, manifest.json, .well-known, and API endpoints whose URLs cannot be changed using cache busting. Most web content can be covered by a combination of the two patterns described above. More about managed caches With the method described in previous sections, subresources can be cached for a long time by using cache busting, but main resources (which are usually HTML documents) can't be. Caching main resources is difficult because, using just standard directives from the HTTP Caching specification, there's no way to actively delete cache contents when content is updated on the server. However, it"
     },
     {
       "index": 23,
-      "heading": "Validation",
-      "rawHeading": "Validation",
+      "heading": "Common caching patterns",
+      "rawHeading": "Common caching patterns",
       "contentRole": "main",
-      "charCount": 1990,
-      "text": "instead just want it to always be up-to-date. Furthermore, adding Last-Modified and ETag will allow clients to send conditional requests, and a 304 Not Modified can be returned if there have been no updates to the HTML: http HTTP/1.1 200 OK Content-Type: text/html Content-Length: 1024 Cache-Control: no-cache Last-Modified: Tue, 22 Feb 2022 20:20:20 GMT ETag: \"AAPuIbAOdvAGEETbgAAAAAAABAAE\" That setting is appropriate for non-personalized HTML, but for a response that gets personalized using cookies — for example, after a login — don't forget to also specify private: http HTTP/1.1 200 OK Content-Type: text/html Content-Length: 1024 Cache-Control: no-cache, private Last-Modified: Tue, 22 Feb 2022 20:20:20 GMT ETag: \"AAPuIbAOdvAGEETbgAAAAAAABAAE\" Set-Cookie: __Host-SID=AHNtAyt3fvJrUL5g5tnGwER; Secure; Path=/; HttpOnly The same can be used for favicon.ico, manifest.json, .well-known, and API endpoints whose URLs cannot be changed using cache busting. Most web content can be covered by a combination of the two patterns described above. More about managed caches With the method described in previous sections, subresources can be cached for a long time by using cache busting, but main resources (which are usually HTML documents) can't be. Caching main resources is difficult because, using just standard directives from the HTTP Caching specification, there's no way to actively delete cache contents when content is updated on the server. However, it is possible by deploying a managed cache such as a CDN or service worker. For example, a CDN that allows cache purging via an API or dashboard operation would allow for a more aggressive caching strategy by storing the main resource and explicitly purging the relevant cache only when an update occurs on the server. A service worker could do the same if it could delete the contents in the Cache API when an update occurs on the server. For more information, see the documentation for your CDN, and consult the service worker"
+      "charCount": 731,
+      "text": "is difficult because, using just standard directives from the HTTP Caching specification, there's no way to actively delete cache contents when content is updated on the server. However, it is possible by deploying a managed cache such as a CDN or service worker. For example, a CDN that allows cache purging via an API or dashboard operation would allow for a more aggressive caching strategy by storing the main resource and explicitly purging the relevant cache only when an update occurs on the server. A service worker could do the same if it could delete the contents in the Cache API when an update occurs on the server. For more information, see the documentation for your CDN, and consult the service worker documentation."
     },
     {
       "index": 24,
-      "heading": "Validation",
-      "rawHeading": "Validation",
-      "contentRole": "main",
-      "charCount": 201,
-      "text": "do the same if it could delete the contents in the Cache API when an update occurs on the server. For more information, see the documentation for your CDN, and consult the service worker documentation."
-    },
-    {
-      "index": 25,
       "heading": "See also",
       "rawHeading": "See also",
       "contentRole": "related",
       "charCount": 118,
       "text": "Cache-Control HTTP header\nRFC 9111: Hypertext Transfer Protocol (HTTP/1.1): Caching\nCaching Tutorial - Mark Nottingham"
+    },
+    {
+      "index": 25,
+      "heading": "Help improve MDN",
+      "rawHeading": "Help improve MDN",
+      "contentRole": "main",
+      "charCount": 150,
+      "text": "Learn how to contribute\nThis page was last modified on Aug 14, 2026 by MDN contributors.\nView this page on GitHub • Report a problem with this content"
     }
   ],
   "technical": {
@@ -409,20 +409,20 @@
       "raw": 93570,
       "removed": 60964,
       "kept": 32606,
-      "inPassagesUnique": 32204,
-      "notInPassages": 235,
-      "pastCap": 167
+      "inPassagesUnique": 32366,
+      "notInPassages": 240,
+      "pastCap": 0
     },
     "passages": {
-      "unique": 32204,
-      "total": 34460,
-      "overlap": 2103,
+      "unique": 32366,
+      "total": 34619,
+      "overlap": 2100,
       "intro": 153,
       "unlocated": 0
     },
     "notInPassages": {
-      "headingLines": 188,
-      "whitespace": 47,
+      "headingLines": 192,
+      "whitespace": 48,
       "other": 0
     },
     "removals": {
@@ -826,15 +826,8 @@
         {
           "kind": "h2",
           "heading": "Common caching patterns",
-          "chars": 4128,
-          "inPassages": 4128,
-          "located": true
-        },
-        {
-          "kind": "h2",
-          "heading": "Validation",
-          "chars": 3807,
-          "inPassages": 3807,
+          "chars": 7947,
+          "inPassages": 7947,
           "located": true
         },
         {
@@ -848,7 +841,7 @@
           "kind": "h2",
           "heading": "Help improve MDN",
           "chars": 150,
-          "inPassages": 0,
+          "inPassages": 150,
           "located": true
         }
       ]
@@ -983,31 +976,31 @@
       {
         "index": 21,
         "start": 27966,
-        "end": 28491,
+        "end": 29959,
         "intro": 0
       },
       {
         "index": 22,
-        "start": 28503,
-        "end": 30500,
+        "start": 29770,
+        "end": 31768,
         "intro": 0
       },
       {
         "index": 23,
-        "start": 30305,
-        "end": 32295,
-        "intro": 0
-      },
-      {
-        "index": 24,
-        "start": 32109,
+        "start": 31579,
         "end": 32310,
         "intro": 0
       },
       {
-        "index": 25,
+        "index": 24,
         "start": 32320,
         "end": 32438,
+        "intro": 0
+      },
+      {
+        "index": 25,
+        "start": 32456,
+        "end": 32606,
         "intro": 0
       }
     ]

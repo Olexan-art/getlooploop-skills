@@ -27,75 +27,6 @@
 - **41,850** characters in passages, overlap and intro included `measured`
 - The 2.101 estimate, `charsUnread` = 52,973, subtracted the overlapping total and undercounts; it stays in the export for compatibility.
 
-## Where the text goes `measured` `derived`
-
-Characters, whitespace runs folded to one space. "Text in the raw HTML" is the kept text plus every removal, so the stages sum exactly.
-
-| Stage | Characters | Share | Layer |
-|---|---|---|---|
-| Text in the raw HTML (estimate) | 139,071 | 100% of raw | `derived` |
-| Removed by the cleaner | 44,809 | 32.2% of raw | `measured` |
-| Kept: the chunker's input | 94,262 | 67.8% of raw | `measured` |
-| In passages, unique | 39,111 | 41.5% of kept | `derived` |
-| Kept, in no passage text | 150 | 0.2% of kept | `derived` |
-| Past the cap | 55,001 | 58.3% of kept | `derived` |
-
-The passages hold 41,850 characters in all: 39,111 unique, plus 2,686 of overlap between neighbours and 53 of intro (title, h1, description) in passage #0. Of the kept text in no passage: 124 in h2 heading lines, 26 spaces between sections.
-
-### What the cleaner removed `measured`
-
-41 elements with text, 44,809 characters. By reason: script, style, noscript, template 28,933 (14) · head (title, meta) 34 (1) · [hidden] or aria-hidden 161 (11) · page header (site banner) 277 (1) · controls inside a kept header 652 (1) · navigation (nav, role=navigation) 14,208 (10) · footer 523 (1) · form, button, select, input 6 (1) · outside the chosen main region 15 (1).
-
-| Reason | Element | Path | Chars | Its text begins |
-|---|---|---|---|---|
-| script, style, noscript, template | `script` | script | 8,187 | “(RLQ=window.RLQ\|\|[]).push(function(){mw.config.set({"wgHostname":"mw-web.eqiad.c…” |
-| script, style, noscript, template | `script` | head > script | 6,252 | “(function(){var className="client-js vector-feature-language-in-header-enabled v…” |
-| navigation (nav, role=navigation) | `div#mwDmY.navbox` | … > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmY.navbox | 4,118 | “v t e Artificial intelligence (AI) History timeline Glossary Lists Algorithms Co…” |
-| script, style, noscript, template | `style` | … > div.mw-content-ltr > section#mwAQ > span#mwDQ > style | 3,237 | “.mw-parser-output .sidebar{width:22em;float:right;clear:right;margin:0.5em 0 1em…” |
-| navigation (nav, role=navigation) | `div#mwDmI.navbox` | … > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmI.navbox | 3,042 | “v t e Large language models (LLMs) List of LLMs AI Companies Benchmarks List of…” |
-| navigation (nav, role=navigation) | `table#mwDg.sidebar.sidebar-collapse` | … > div#mw-content-text > div.mw-content-ltr > section#mwAQ > table#mwDg.sidebar.sidebar-collapse | 2,515 | “Part of a series on Machine learning and data mining Paradigms Supervised learni…” |
-| navigation (nav, role=navigation) | `div#mwDmQ.navbox` | … > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmQ.navbox | 2,444 | “v t e Natural language processing General terms AI-complete Bag-of-words n-gram…” |
-| script, style, noscript, template | `style` | … > div.mw-content-ltr > section#mwAQ > span#mwDQ > style | 2,340 | “.mw-parser-output .hlist dl,.mw-parser-output .hlist ol,.mw-parser-output .hlist…” |
-| script, style, noscript, template | `style` | … > section#mwDlI > div#mwDmE > span.mw-empty-elt > style | 2,158 | “.mw-parser-output .navbox{box-sizing:border-box;border:1px solid #a2a9b1;width:1…” |
-| script, style, noscript, template | `style#mwBdQ` | … > ol#mwBcw > li#cite_note-few-shot-learners2-1 > span#mw-reference-text-cite_note-few-shot-learners2-1 > style#mwBdQ | 2,100 | “.mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-pars…” |
-| navigation (nav, role=navigation) | `nav#mw-panel-toc.mw-table-of-contents-container.vector-toc-landmark` | … > div.mw-page-container-inner > div.vector-column-start > div.vector-sticky-pinned-container > nav#mw-panel-toc.mw-table-of-contents-container.vector-toc-land | 1,627 | “Contents move to sidebar hide (Top) 1 History 2 Dataset preprocessing Toggle Dat…” |
-| script, style, noscript, template | `style` | … > div.mw-content-ltr > section#mwBcg > span#mwBck > style | 1,151 | “.mw-parser-output .reflist-columns-2{column-width:30em}.mw-parser-output .reflis…” |
-| script, style, noscript, template | `style` | … > tr > td.sidebar-navbar > span.mw-empty-elt > style | 1,109 | “.mw-parser-output .navbar{display:inline;font-size:88%;font-weight:normal}.mw-pa…” |
-| script, style, noscript, template | `script` | script | 867 | “{"@context":"https:\/\/schema.org","@type":"Article","name":"Large language mode…” |
-| script, style, noscript, template | `style#mwBaE` | … > div#mw-content-text > div.mw-content-ltr > section#mwBaA > style#mwBaE | 783 | “.mw-parser-output .portalbox{padding:0;margin:0.5em 0;display:table;box-sizing:b…” |
-| controls inside a kept header | `header.mw-body-header.vector-page-titlebar` | … > div.mw-page-container-inner > div.mw-content-container > main#content > header.mw-body-header.vector-page-titlebar | 652 | “Afrikaans Aragonés العربية Azərbaycanca Boarisch Беларуская भोजपुरी বাংলা Bosans…” |
-| footer | `footer#footer.mw-footer` | div.mw-page-container > div.mw-page-container-inner > div.mw-footer-container > footer#footer.mw-footer | 523 | “This page was last edited on 15 October 2026, at 18:18 (UTC). Page was rendered…” |
-| navigation (nav, role=navigation) | `nav.vector-page-tools-landmark` | … > div.vector-page-toolbar > div.vector-page-toolbar-container > div#right-navigation > nav.vector-page-tools-landmark | 314 | “Tools move to sidebar hide Actions Read Edit View history General What links her…” |
-| script, style, noscript, template | `style` | … > div.mw-content-ltr > section#mwAQ > span#mwAw > style | 303 | “.mw-parser-output .hatnote{font-style:italic}.mw-parser-output div.hatnote{paddi…” |
-| page header (site banner) | `header.vector-header.mw-header` | div.vector-header-container > header.vector-header.mw-header | 277 | “Main menu move to sidebar hide Navigation Main page Contents Current events Rand…” |
-
-21 more elements, 810 characters, not listed here (export.json lists up to 200 and sums the rest).
-
-299 more matched elements held no text.
-
-### How much of each section reached a passage `derived`
-
-| Section | Reached a passage | Of | Share |
-|---|---|---|---|
-| *Intro: title, h1, description* | 53 | 53 | 100% |
-| *Before the first h2* | 1,157 | 1,157 | 100% |
-| History | 4,782 | 4,782 | 100% |
-| Dataset preprocessing | 2,931 | 2,931 | 100% |
-| Training | 1,535 | 1,535 | 100% |
-| Inference | 561 | 561 | 100% |
-| Architecture | 4,109 | 4,109 | 100% |
-| Extensibility | 7,169 | 7,169 | 100% |
-| Forms of input and output | 3,636 | 3,636 | 100% |
-| Properties | 4,273 | 4,273 | 100% |
-| Interpretation | 5,157 | 5,157 | 100% |
-| Evaluation | **3,801** | 4,952 | 76.8% |
-| Limitations and challenges | **0** | 3,747 | 0% |
-| Safety | **0** | 3,579 | 0% |
-| Societal concerns | **0** | 6,122 | 0% |
-| See also | **0** | 1,007 | 0% |
-| References | **0** | 37,385 | 0% |
-| Further reading | **0** | 1,917 | 0% |
-
 ## Checks `measured` `derived`
 
 ### AI crawlers and robots.txt `measured`
@@ -321,6 +252,75 @@ Two to four words the page writes together, in at least two passages (or three t
 Single words, counted only where no phrase above already used them. They say what the page talks about; they are rarely what anybody types or asks.
 
 model (100; 21 passages; 6 of 6 groups; describes the page), llm (98; 21 passages; 6 of 6 groups; describes the page), token (38; 11 passages; 5 of 6 groups; describes the page), text (29; 13 passages; 6 of 6 groups; describes the page), gpt (28; 12 passages; 6 of 6 groups; describes the page), trained (27; 15 passages; 6 of 6 groups; describes the page), input (22; 9 passages; 4 of 6 groups; describes the page), training (22; 11 passages; 6 of 6 groups; describes the page), data (20; 11 passages; 6 of 6 groups; describes the page), dataset (19; 9 passages; 5 of 6 groups; describes the page)
+
+## Where the text goes `measured` `derived`
+
+Characters, whitespace runs folded to one space. "Text in the raw HTML" is the kept text plus every removal, so the stages sum exactly.
+
+| Stage | Characters | Share | Layer |
+|---|---|---|---|
+| Text in the raw HTML (estimate) | 139,071 | 100% of raw | `derived` |
+| Removed by the cleaner | 44,809 | 32.2% of raw | `measured` |
+| Kept: the chunker's input | 94,262 | 67.8% of raw | `measured` |
+| In passages, unique | 39,111 | 41.5% of kept | `derived` |
+| Kept, in no passage text | 150 | 0.2% of kept | `derived` |
+| Past the cap | 55,001 | 58.3% of kept | `derived` |
+
+The passages hold 41,850 characters in all: 39,111 unique, plus 2,686 of overlap between neighbours and 53 of intro (title, h1, description) in passage #0. Of the kept text in no passage: 124 in h2 heading lines, 26 spaces between sections.
+
+### What the cleaner removed `measured`
+
+41 elements with text, 44,809 characters. By reason: script, style, noscript, template 28,933 (14) · head (title, meta) 34 (1) · [hidden] or aria-hidden 161 (11) · page header (site banner) 277 (1) · controls inside a kept header 652 (1) · navigation (nav, role=navigation) 14,208 (10) · footer 523 (1) · form, button, select, input 6 (1) · outside the chosen main region 15 (1).
+
+| Reason | Element | Path | Chars | Its text begins |
+|---|---|---|---|---|
+| script, style, noscript, template | `script` | script | 8,187 | “(RLQ=window.RLQ\|\|[]).push(function(){mw.config.set({"wgHostname":"mw-web.eqiad.c…” |
+| script, style, noscript, template | `script` | head > script | 6,252 | “(function(){var className="client-js vector-feature-language-in-header-enabled v…” |
+| navigation (nav, role=navigation) | `div#mwDmY.navbox` | … > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmY.navbox | 4,118 | “v t e Artificial intelligence (AI) History timeline Glossary Lists Algorithms Co…” |
+| script, style, noscript, template | `style` | … > div.mw-content-ltr > section#mwAQ > span#mwDQ > style | 3,237 | “.mw-parser-output .sidebar{width:22em;float:right;clear:right;margin:0.5em 0 1em…” |
+| navigation (nav, role=navigation) | `div#mwDmI.navbox` | … > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmI.navbox | 3,042 | “v t e Large language models (LLMs) List of LLMs AI Companies Benchmarks List of…” |
+| navigation (nav, role=navigation) | `table#mwDg.sidebar.sidebar-collapse` | … > div#mw-content-text > div.mw-content-ltr > section#mwAQ > table#mwDg.sidebar.sidebar-collapse | 2,515 | “Part of a series on Machine learning and data mining Paradigms Supervised learni…” |
+| navigation (nav, role=navigation) | `div#mwDmQ.navbox` | … > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmQ.navbox | 2,444 | “v t e Natural language processing General terms AI-complete Bag-of-words n-gram…” |
+| script, style, noscript, template | `style` | … > div.mw-content-ltr > section#mwAQ > span#mwDQ > style | 2,340 | “.mw-parser-output .hlist dl,.mw-parser-output .hlist ol,.mw-parser-output .hlist…” |
+| script, style, noscript, template | `style` | … > section#mwDlI > div#mwDmE > span.mw-empty-elt > style | 2,158 | “.mw-parser-output .navbox{box-sizing:border-box;border:1px solid #a2a9b1;width:1…” |
+| script, style, noscript, template | `style#mwBdQ` | … > ol#mwBcw > li#cite_note-few-shot-learners2-1 > span#mw-reference-text-cite_note-few-shot-learners2-1 > style#mwBdQ | 2,100 | “.mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-pars…” |
+| navigation (nav, role=navigation) | `nav#mw-panel-toc.mw-table-of-contents-container.vector-toc-landmark` | … > div.mw-page-container-inner > div.vector-column-start > div.vector-sticky-pinned-container > nav#mw-panel-toc.mw-table-of-contents-container.vector-toc-land | 1,627 | “Contents move to sidebar hide (Top) 1 History 2 Dataset preprocessing Toggle Dat…” |
+| script, style, noscript, template | `style` | … > div.mw-content-ltr > section#mwBcg > span#mwBck > style | 1,151 | “.mw-parser-output .reflist-columns-2{column-width:30em}.mw-parser-output .reflis…” |
+| script, style, noscript, template | `style` | … > tr > td.sidebar-navbar > span.mw-empty-elt > style | 1,109 | “.mw-parser-output .navbar{display:inline;font-size:88%;font-weight:normal}.mw-pa…” |
+| script, style, noscript, template | `script` | script | 867 | “{"@context":"https:\/\/schema.org","@type":"Article","name":"Large language mode…” |
+| script, style, noscript, template | `style#mwBaE` | … > div#mw-content-text > div.mw-content-ltr > section#mwBaA > style#mwBaE | 783 | “.mw-parser-output .portalbox{padding:0;margin:0.5em 0;display:table;box-sizing:b…” |
+| controls inside a kept header | `header.mw-body-header.vector-page-titlebar` | … > div.mw-page-container-inner > div.mw-content-container > main#content > header.mw-body-header.vector-page-titlebar | 652 | “Afrikaans Aragonés العربية Azərbaycanca Boarisch Беларуская भोजपुरी বাংলা Bosans…” |
+| footer | `footer#footer.mw-footer` | div.mw-page-container > div.mw-page-container-inner > div.mw-footer-container > footer#footer.mw-footer | 523 | “This page was last edited on 15 October 2026, at 18:18 (UTC). Page was rendered…” |
+| navigation (nav, role=navigation) | `nav.vector-page-tools-landmark` | … > div.vector-page-toolbar > div.vector-page-toolbar-container > div#right-navigation > nav.vector-page-tools-landmark | 314 | “Tools move to sidebar hide Actions Read Edit View history General What links her…” |
+| script, style, noscript, template | `style` | … > div.mw-content-ltr > section#mwAQ > span#mwAw > style | 303 | “.mw-parser-output .hatnote{font-style:italic}.mw-parser-output div.hatnote{paddi…” |
+| page header (site banner) | `header.vector-header.mw-header` | div.vector-header-container > header.vector-header.mw-header | 277 | “Main menu move to sidebar hide Navigation Main page Contents Current events Rand…” |
+
+21 more elements, 810 characters, not listed here (export.json lists up to 200 and sums the rest).
+
+299 more matched elements held no text.
+
+### How much of each section reached a passage `derived`
+
+| Section | Reached a passage | Of | Share |
+|---|---|---|---|
+| *Intro: title, h1, description* | 53 | 53 | 100% |
+| *Before the first h2* | 1,157 | 1,157 | 100% |
+| History | 4,782 | 4,782 | 100% |
+| Dataset preprocessing | 2,931 | 2,931 | 100% |
+| Training | 1,535 | 1,535 | 100% |
+| Inference | 561 | 561 | 100% |
+| Architecture | 4,109 | 4,109 | 100% |
+| Extensibility | 7,169 | 7,169 | 100% |
+| Forms of input and output | 3,636 | 3,636 | 100% |
+| Properties | 4,273 | 4,273 | 100% |
+| Interpretation | 5,157 | 5,157 | 100% |
+| Evaluation | **3,801** | 4,952 | 76.8% |
+| Limitations and challenges | **0** | 3,747 | 0% |
+| Safety | **0** | 3,579 | 0% |
+| Societal concerns | **0** | 6,122 | 0% |
+| See also | **0** | 1,007 | 0% |
+| References | **0** | 37,385 | 0% |
+| Further reading | **0** | 1,917 | 0% |
 
 ---
 

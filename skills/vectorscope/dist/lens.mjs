@@ -6477,6 +6477,17 @@ var S = {
   // ── 2.102: where the text goes
   lossesTitle: { en: "Where the text goes", uk: "Куди дівається текст" },
   lossesSub: { en: "every stage from the raw HTML to the passages, in characters", uk: "кожен етап від сирого HTML до уривків, у символах" },
+  // 2.103: the panel is folded at the end of the report; its summary line says what is inside.
+  lossesFold: { en: "what the cleaner removed and what reached the passages", uk: "що прибрав очищувач і що дійшло до уривків" },
+  lossTableFold: { en: "what the cleaner removed and what reached the passages, page by page", uk: "що прибрав очищувач і що дійшло до уривків, сторінка за сторінкою" },
+  foldPastCap: {
+    en: /* @__PURE__ */ __name((v) => en(v.n, "character past the cap", "characters past the cap"), "en"),
+    uk: /* @__PURE__ */ __name((v) => `${uk(v.n, "символ", "символи", "символів")} за лімітом`, "uk")
+  },
+  foldPastCapAll: {
+    en: /* @__PURE__ */ __name((v) => `${en(v.n, "character", "characters")} past the cap across the pages`, "en"),
+    uk: /* @__PURE__ */ __name((v) => `${uk(v.n, "символ", "символи", "символів")} за лімітом на всіх сторінках`, "uk")
+  },
   wfRaw: { en: "Text in the raw HTML (estimate)", uk: "Текст у сирому HTML (оцінка)" },
   wfRemoved: { en: "Removed by the cleaner", uk: "Видалено очищувачем" },
   wfKept: { en: "Kept: the chunker's input", uk: "Збережено: вхід нарізувача" },
@@ -23194,6 +23205,18 @@ h3{font-size:16px;margin:0}
 .role.dup{color:var(--muted)}
 .opening{margin:6px 0 0;font-size:14px}
 details{margin-top:6px}
+/* 2.103: the losses panel, folded at the end of the report */
+details.fold{margin-top:0}
+.fold>summary{width:auto;list-style:none;color:var(--text);font-size:inherit}
+.fold>summary::-webkit-details-marker{display:none}
+.fold-head{display:flex;align-items:baseline;gap:6px 12px;flex-wrap:wrap}
+.fold-title{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.fold-title::before{content:"▸ ";color:var(--accent)}
+.fold[open]>summary .fold-title::before{content:"▾ "}
+.fold-head .sub{color:var(--muted);font-size:13px}
+.fold-body{margin-top:14px}
+.fold-page{margin-top:14px}
+.fold-page>summary{width:auto;color:var(--text);font-weight:600}
 summary{cursor:pointer;color:var(--accent);font-size:13px;width:max-content;max-width:100%}
 .full-text{white-space:pre-wrap;margin:8px 0 0;padding:10px 12px;border-radius:8px;background:var(--panel);border:1px solid var(--line);font-size:13.5px;max-height:420px;overflow:auto}
 .cut{margin-top:12px;border:1.5px dashed var(--amber);background:var(--amber-soft);color:var(--text);border-radius:10px;padding:10px 14px;font-size:14px}
@@ -23392,7 +23415,11 @@ var JS = `
     function closeAll(except){for(var k=0;k<hs.length;k++)if(hs[k]!==except&&hs[k].open)hs[k].open=false}
     document.addEventListener("click",function(e){var t=e.target;while(t&&t!==document&&!(t.tagName==="DETAILS"&&t.classList.contains("mh")))t=t.parentNode;closeAll(t&&t!==document?t:null)});
     document.addEventListener("keydown",function(e){if(e.key==="Escape")closeAll(null)});
-    var hm=/[#&]help=([a-z_]+)/.exec(location.hash);if(hm){var d=document.querySelector('details.mh[data-metric="'+hm[1]+'"]');if(d){d.open=true;fit(d);try{d.scrollIntoView({block:"center"})}catch(e){}}}
+    // 2.103: the losses panel is folded; whatever a link points into is unfolded first.
+    function unfold(el){for(var u=el.parentElement;u;u=u.parentElement)if(u.tagName==="DETAILS")u.open=true;var f=el.querySelector?el.querySelector("details.fold"):null;if(f&&f.parentElement===el)f.open=true}
+    function toAnchor(){var id=location.hash.slice(1);if(!id||id.indexOf("=")>=0)return;var t=document.getElementById(id);if(t){unfold(t);try{t.scrollIntoView()}catch(e){}}}
+    toAnchor();window.addEventListener("hashchange",toAnchor);
+    var hm=/[#&]help=([a-z_]+)/.exec(location.hash);if(hm){var d=document.querySelector('details.mh[data-metric="'+hm[1]+'"]');if(d){unfold(d);d.open=true;fit(d);try{d.scrollIntoView({block:"center"})}catch(e){}}}
     var outs=document.querySelectorAll(".readout");
     for(var o=0;o<outs.length;o++)(function(out){
       var scope=out.parentNode,cells=scope.querySelectorAll(".cell"),idle=null;
@@ -23680,11 +23707,20 @@ function sectionsBlock(losses) {
   return out;
 }
 __name(sectionsBlock, "sectionsBlock");
+function foldStart(id, titleKey, subKey, pastLine) {
+  return [
+    `<section class="panel" id="${id}" aria-labelledby="h-${id}">`,
+    `<details class="fold"><summary><span class="fold-head"><span class="fold-title" role="heading" aria-level="2" id="h-${id}">${L(titleKey)}</span>${layerBadges("measured", "derived")}<span class="sub">— ${L(subKey)}${pastLine ? ` · ${pastLine}` : ""}</span></span></summary>`,
+    '<div class="fold-body">'
+  ];
+}
+__name(foldStart, "foldStart");
+var FOLD_END = ["</div>", "</details>", "</section>"];
 function lossesPanel(reading, { compact = false } = {}) {
   const out = [];
   if (!compact) {
-    out.push('<section class="panel" id="losses" aria-labelledby="h-losses">');
-    out.push(`<div class="panel-head"><h2 id="h-losses">${L("lossesTitle")}</h2>${layerBadges("measured", "derived")}<span class="sub">${L("lossesSub")}</span></div>`);
+    out.push(...foldStart("losses", "lossesTitle", "lossesFold", hasLosses(reading) ? L("foldPastCap", { n: charsPastCap(reading) }) : ""));
+    out.push(`<p class="small" style="margin:0 0 10px">${L("lossesSub")}</p>`);
   }
   if (!hasLosses(reading)) {
     out.push(`<p class="note">${L("noLosses")}</p>`);
@@ -23694,7 +23730,7 @@ function lossesPanel(reading, { compact = false } = {}) {
     out.push(...removalsBlock(reading.losses, compact ? 5 : 12));
     out.push(...sectionsBlock(reading.losses));
   }
-  if (!compact) out.push("</section>");
+  if (!compact) out.push(...FOLD_END);
   return out;
 }
 __name(lossesPanel, "lossesPanel");
@@ -24110,7 +24146,6 @@ function renderHtml(reading, lens, extras = {}) {
   out.push(`<div class="panel-head"><h2 id="h-strip">${L("strip")}</h2>${layerBadges("measured", "judgement")}<span class="sub">${L("stripSub", { cap: cap2 })}</span></div>`);
   out.push(...stripBlock(reading, lens, anchor));
   out.push("</section>");
-  out.push(...lossesPanel(reading));
   out.push(...diffPanel(extras.diff));
   out.push(...checksPanel(reading, checks, anchor));
   out.push(...planPanel(extras.plan, () => anchor, false));
@@ -24166,6 +24201,7 @@ function renderHtml(reading, lens, extras = {}) {
   out.push("</section>");
   out.push(...vocabularyPanel(lens, groupCount));
   out.push(...factsPanelSingle(extras.facts, 1, anchor));
+  out.push(...lossesPanel(reading));
   out.push('<section class="panel" aria-label="Closing">');
   out.push(`<p class="closing${capCut ? " full" : ""}">${closingSentence(reading)}</p>`);
   out.push(`<p class="fine">${L("fine")}</p>`);
@@ -24177,8 +24213,10 @@ function renderHtml(reading, lens, extras = {}) {
 __name(renderHtml, "renderHtml");
 function lossTablePanel(pages, short) {
   const out = [];
-  out.push('<section class="panel" id="losses" aria-labelledby="h-losses">');
-  out.push(`<div class="panel-head"><h2 id="h-losses">${L("lossTable")}</h2>${layerBadges("measured", "derived")}<span class="sub">${L("lossTableSub")}</span></div>`);
+  const measured = pages.filter((p) => hasLosses(p.reading));
+  const past = measured.reduce((sum, p) => sum + charsPastCap(p.reading), 0);
+  out.push(...foldStart("losses", "lossTable", "lossTableFold", measured.length ? L("foldPastCapAll", { n: past }) : ""));
+  out.push(`<p class="small" style="margin:0 0 10px">${L("lossTableSub")}</p>`);
   out.push('<div class="tablewrap"><table>');
   out.push(`<thead><tr><th>${L("colPage")}</th><th>${L("colRaw")}</th><th>${L("colRemoved")}</th><th>${L("colKept")}</th><th>${L("colUnique")}</th><th>${L("colPastCap")}</th><th>${L("colSectionsCut")}</th></tr></thead><tbody>`);
   for (const p of pages) {
@@ -24197,7 +24235,13 @@ function lossTablePanel(pages, short) {
   }
   out.push("</tbody></table></div>");
   out.push(helpLine([["colRaw", "text_raw"], ["colRemoved", "text_removed"], ["colKept", "text_kept"], ["colUnique", "chars_unique"], ["colPastCap", "chars_past_cap"], ["colSectionsCut", "section_reached"]]));
-  out.push("</section>");
+  for (const p of pages) {
+    const pastLine = hasLosses(p.reading) ? ` · ${L("foldPastCap", { n: charsPastCap(p.reading) })}` : "";
+    out.push(`<details class="fold-page"><summary>${short(p)} · ${L("lossesTitle")}${pastLine}</summary>`);
+    out.push(...lossesPanel(p.reading, { compact: true }));
+    out.push("</details>");
+  }
+  out.push(...FOLD_END);
   return out;
 }
 __name(lossTablePanel, "lossTablePanel");
@@ -24251,7 +24295,6 @@ function renderCompareHtml(data2) {
   }
   out.push("</tbody></table></div>");
   out.push("</section>");
-  out.push(...lossTablePanel(pages, short));
   out.push('<section class="panel" id="topics" aria-labelledby="h-topics">');
   out.push(`<div class="panel-head"><h2 id="h-topics">${L("topicTable")}</h2>${layerBadges("judgement", "derived")}${metricHelp("topic_cells")}<span class="sub">${L("topicTableSub")}</span></div>`);
   out.push('<div class="tablewrap"><table>');
@@ -24357,8 +24400,6 @@ function renderCompareHtml(data2) {
     out.push(`<div class="pagesec"><h3>${short(p)}</h3>`);
     out.push(`<p class="small" style="margin:0 0 6px">${closingSentence(p.reading)}</p>`);
     out.push(...stripBlock(p.reading, p.lens, anchor, true));
-    out.push(`<h3 class="subhead">${L("lossesTitle")} ${layerBadges("measured", "derived")}</h3>`);
-    out.push(...lossesPanel(p.reading, { compact: true }));
     out.push('<div style="margin-top:12px"></div>');
     out.push(...groupCards(p.lens, topicsById));
     out.push(`<details><summary>${L("passagesTitle")}</summary><ol class="plist" style="margin-top:8px">`);
@@ -24376,6 +24417,7 @@ function renderCompareHtml(data2) {
     out.push("</div>");
   }
   out.push("</section>");
+  out.push(...lossTablePanel(pages, short));
   out.push('<section class="panel" aria-label="Closing">');
   out.push(`<p class="fine" style="margin:0">${L("fine")}</p>`);
   out.push("</section>");
@@ -24388,7 +24430,7 @@ __name(renderCompareHtml, "renderCompareHtml");
 // scripts/lens.mjs
 var COMPARE_SCHEMA = "getlooploop/vectorscope-compare@1";
 var REFUSAL_SCHEMA = "getlooploop/vectorscope-refusal@1";
-var SKILL_VERSION = "2.102";
+var SKILL_VERSION = "2.103";
 var USAGE = [
   "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json]",
   "         [--topics topics.json] [--baseline old-reading.json [--baseline-groups old-groups.json]] [--json out.json] [--md out.md] [--html out.html]",
@@ -24779,7 +24821,6 @@ function renderMarkdown(reading, lens, extras = {}) {
     out.push(`- **${fmt2(page.charsIndexed)}** characters in passages, overlap and intro included ${M("measured")}`);
   }
   out.push("");
-  out.push(...lossesMarkdown(reading));
   out.push(...diffMarkdown(extras.diff));
   out.push(`## Checks ${M("measured", "derived")}`, "", `### AI crawlers and robots.txt ${M("measured")}`, "");
   out.push(...robotsMarkdown(reading.robots));
@@ -24856,6 +24897,7 @@ function renderMarkdown(reading, lens, extras = {}) {
     for (const f of extras.facts) out.push(`- ${cell(f.fact)} (${(f.pages[1] || []).map((i) => `#${i}`).join(" ")})`);
     out.push("");
   }
+  out.push(...lossesMarkdown(reading));
   out.push("---");
   out.push("");
   out.push(closingLine(reading));
@@ -24888,7 +24930,6 @@ function renderCompareMarkdown(data2) {
     out.push(`| ${p.n} | ${cell(pg.url)} | ${fmt2(pg.wordCount)} | ${pg.chunksIndexed}/${pg.chunkCap} | ${fmt2(charsPastCap(p.reading))} | ${blocked.length ? blocked.join(", ") : "none"} | ${count("high")}/${count("medium")}/${count("low")} |`);
   }
   out.push("");
-  out.push(...lossTableMarkdown(pages));
   out.push(`## Topics × pages ${M("judgement", "derived")}`, "", "Passages and characters each page spends on each shared topic.", "");
   out.push(`| Topic | ${pages.map((p) => `Page ${p.n}`).join(" | ")} |`, `|---|${pages.map(() => "---").join("|")}|`);
   for (const row of topicCmp.table) {
@@ -24926,11 +24967,15 @@ function renderCompareMarkdown(data2) {
     out.push(...technicalMarkdown(p.reading.technical, p.reading.render, p.reading.page));
     out.push(...findingsMarkdown(p.checks));
   }
-  out.push(`## Each page's groups and losses ${M("judgement", "measured")}`, "");
+  out.push(`## Each page's groups ${M("judgement", "measured")}`, "");
   for (const p of pages) {
     out.push(`### Page ${p.n}`, "");
     out.push(...groupsTable(p.lens, name));
     out.push("", closingLine(p.reading), "");
+  }
+  out.push(...lossTableMarkdown(pages));
+  for (const p of pages) {
+    out.push(`### Page ${p.n}`, "");
     out.push(...lossesMarkdown(p.reading, { heading: "####", removalsLimit: 5 }));
   }
   out.push("---", "", "This is a preview of the machine's view, not a guarantee of what any assistant does with it.", "");

@@ -115,6 +115,17 @@ export const S = {
   // ── 2.102: where the text goes
   lossesTitle: { en: "Where the text goes", uk: "Куди дівається текст" },
   lossesSub: { en: "every stage from the raw HTML to the passages, in characters", uk: "кожен етап від сирого HTML до уривків, у символах" },
+  // 2.103: the panel is folded at the end of the report; its summary line says what is inside.
+  lossesFold: { en: "what the cleaner removed and what reached the passages", uk: "що прибрав очищувач і що дійшло до уривків" },
+  lossTableFold: { en: "what the cleaner removed and what reached the passages, page by page", uk: "що прибрав очищувач і що дійшло до уривків, сторінка за сторінкою" },
+  foldPastCap: {
+    en: (v) => en(v.n, "character past the cap", "characters past the cap"),
+    uk: (v) => `${uk(v.n, "символ", "символи", "символів")} за лімітом`,
+  },
+  foldPastCapAll: {
+    en: (v) => `${en(v.n, "character", "characters")} past the cap across the pages`,
+    uk: (v) => `${uk(v.n, "символ", "символи", "символів")} за лімітом на всіх сторінках`,
+  },
   wfRaw: { en: "Text in the raw HTML (estimate)", uk: "Текст у сирому HTML (оцінка)" },
   wfRemoved: { en: "Removed by the cleaner", uk: "Видалено очищувачем" },
   wfKept: { en: "Kept: the chunker's input", uk: "Збережено: вхід нарізувача" },

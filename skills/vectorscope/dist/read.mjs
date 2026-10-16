@@ -20414,6 +20414,57 @@ ${chunk.chunkText}`.replace(/\n{2,}/g, "\n") : "";
   return out.map((chunk, index2) => ({ ...chunk, chunkIndex: index2 }));
 }
 __name(mergeSlivers, "mergeSlivers");
+function headingKey(text3) {
+  return text3.replace(/\s+/g, " ").trim().toLocaleLowerCase();
+}
+__name(headingKey, "headingKey");
+function sectionStartLines(lines, h2) {
+  const keys = h2.map(headingKey);
+  const known = new Set(keys);
+  const lineAt = [];
+  const lineKey = [];
+  lines.forEach((line, index2) => {
+    const key = headingKey(line);
+    if (known.has(key)) {
+      lineAt.push(index2);
+      lineKey.push(key);
+    }
+  });
+  const n = keys.length;
+  const m = lineAt.length;
+  const best = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+  for (let a = 1; a <= n; a++) {
+    for (let b = 1; b <= m; b++) {
+      best[a][b] = keys[a - 1] === lineKey[b - 1] ? best[a - 1][b - 1] + 1 : Math.max(best[a - 1][b], best[a][b - 1]);
+    }
+  }
+  const at = new Array(n).fill(-1);
+  for (let a = n, b = m; a > 0 && b > 0; ) {
+    if (keys[a - 1] === lineKey[b - 1]) {
+      at[a - 1] = lineAt[b - 1];
+      a--;
+      b--;
+    } else if (best[a][b - 1] >= best[a - 1][b]) {
+      b--;
+    } else {
+      a--;
+    }
+  }
+  const lastOf = /* @__PURE__ */ new Map();
+  keys.forEach((key, index2) => lastOf.set(key, index2));
+  const starts = /* @__PURE__ */ new Set();
+  let reached = -1;
+  let next2 = 0;
+  for (let c = 0; c < m; c++) {
+    while (next2 < n && (at[next2] === -1 || at[next2] < lineAt[c])) {
+      if (at[next2] !== -1) reached = next2;
+      next2++;
+    }
+    if ((lastOf.get(lineKey[c]) ?? -1) >= reached) starts.add(lineAt[c]);
+  }
+  return starts;
+}
+__name(sectionStartLines, "sectionStartLines");
 function extractSections(page) {
   const sections = [];
   const h1 = toStringArray(page.h1);
@@ -20426,10 +20477,9 @@ function extractSections(page) {
   if (!body) return sections;
   const introCount = sections.length;
   if (h2.length >= 2) {
-    const headingByLine = new Map(
-      h2.map((heading) => [heading.replace(/\s+/g, " ").trim().toLocaleLowerCase(), heading.trim()])
-    );
+    const headingByLine = new Map(h2.map((heading) => [headingKey(heading), heading.trim()]));
     const lines = body.split(/\n+/);
+    const starts = sectionStartLines(lines, h2);
     let currentHeading = null;
     let current = [];
     let found = 0;
@@ -20438,8 +20488,9 @@ function extractSections(page) {
       if (text3) sections.push({ heading: currentHeading, text: text3 });
       current = [];
     }, "flush");
-    for (const line of lines) {
-      const heading = headingByLine.get(line.replace(/\s+/g, " ").trim().toLocaleLowerCase());
+    for (let index2 = 0; index2 < lines.length; index2++) {
+      const line = lines[index2];
+      const heading = starts.has(index2) ? headingByLine.get(headingKey(line)) : void 0;
       if (heading) {
         flush();
         currentHeading = heading;

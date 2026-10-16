@@ -5,7 +5,7 @@
     { "members": [5, 6, 7, 8], "label": "Freshness, Expires, heuristic caching and Vary", "topic": "freshness", "note": "Vary is about the cache key, filed here because it decides which stored response is fresh for a request." },
     { "members": [9, 10, 11, 12], "label": "Revalidation with If-Modified-Since and ETag", "topic": "validation" },
     { "members": [13, 14, 15, 16, 17, 18], "label": "no-cache, no-store, reloads, deletion and request collapse", "topic": "directives" },
-    { "members": [19, 20, 21, 22, 23, 24, 25], "label": "Common caching patterns and cache busting", "topic": "patterns", "note": "#22 to #24 sit under a second \"Validation\" heading, an h3 the chunker takes for the h2 of the same name." }
+    { "members": [19, 20, 21, 22, 23, 24, 25], "label": "Common caching patterns and cache busting", "topic": "patterns", "note": "#24 (See also) and #25 (MDN's footer) are filed here for want of a topic. Since 2.103 the h3 \"Validation\" stays in this section (#21); the slot the false cut used now holds #25." }
   ],
   "duplicates": {}
 }
