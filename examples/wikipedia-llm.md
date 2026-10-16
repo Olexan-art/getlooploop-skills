@@ -215,13 +215,35 @@ In reading order inside each group. Each line shows how the passage opens (its f
 - #21 · Interpretation · related link (group 5)
 - #24 · Evaluation · related link (group 4)
 
-## The words and phrases this page keeps using
+## The page's vocabulary
 
-Counted across the whole page, as single words and as the two-word phrases it writes often enough to be saying the phrase. A term reaching most groups describes the page; one confined to fewer is a section's own vocabulary. Group counts rest on the grouping above.
+*What the page says, not search demand — for how people ask, use the query test or https://www.getlooploop.com/voicescope.*
 
-**Describes the page:** model (127; 6 of 6 groups), llm (102; 6 of 6 groups), token (44; 5 of 6 groups), edit (42; 6 of 6 groups), text (39; 6 of 6 groups), language (33; 6 of 6 groups), gpt (28; 6 of 6 groups), trained (25; 6 of 6 groups), input (24; 4 of 6 groups), training (22; 6 of 6 groups), example (20; 5 of 6 groups), based (19; 6 of 6 groups), dataset (19; 5 of 6 groups), step (19; 4 of 6 groups), task (18; 4 of 6 groups), data (17; 6 of 6 groups), performance (17; 5 of 6 groups), reasoning (16; 4 of 6 groups)
+### Phrases this page owns
 
-**Belongs to one section:** displaystyle (30; 2 of 6 groups), log (24; 1 of 6 groups)
+Two to four words the page writes together, in at least two passages (or three times in one), never across punctuation or a stopword. Ranked by passages covered, then uses.
+
+1. language model (23; 10 passages; 6 of 6 groups; describes the page)
+2. fine tuned (11; 7 passages; 3 of 6 groups)
+3. large language model (10; 6 passages; 4 of 6 groups; describes the page)
+4. neural network (8; 5 passages; 4 of 6 groups; describes the page)
+5. natural language (7; 5 passages; 4 of 6 groups; describes the page)
+6. open weight (8; 4 passages; 3 of 6 groups)
+7. fine tuning (7; 4 passages; 3 of 6 groups)
+8. machine learning (6; 4 passages; 3 of 6 groups)
+9. billion parameter (6; 4 passages; 4 of 6 groups; describes the page)
+10. larger models (4; 4 passages; 3 of 6 groups)
+11. final answer (4; 3 passages; 2 of 6 groups)
+12. openai o1 (3; 3 passages; 2 of 6 groups)
+13. follow instructions (3; 3 passages; 3 of 6 groups)
+14. next word (3; 3 passages; 3 of 6 groups)
+15. parameter count (3; 3 passages; 3 of 6 groups)
+
+### Narrative words
+
+Single words, counted only where no phrase above already used them. They say what the page talks about; they are rarely what anybody types or asks.
+
+model (100; 21 passages; 6 of 6 groups; describes the page), llm (98; 21 passages; 6 of 6 groups; describes the page), token (38; 11 passages; 5 of 6 groups; describes the page), text (29; 13 passages; 6 of 6 groups; describes the page), gpt (28; 12 passages; 6 of 6 groups; describes the page), trained (27; 15 passages; 6 of 6 groups; describes the page), input (22; 9 passages; 4 of 6 groups; describes the page), training (22; 11 passages; 6 of 6 groups; describes the page), data (20; 11 passages; 6 of 6 groups; describes the page), dataset (19; 9 passages; 5 of 6 groups; describes the page)
 
 ---
 

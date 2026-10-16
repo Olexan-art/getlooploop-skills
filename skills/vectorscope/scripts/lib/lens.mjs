@@ -1,6 +1,10 @@
 // The deterministic half of the Vectorscope read-out: side-path roles, group labels, page keywords.
 // None of this needs vectors; the grouping it is applied to is supplied by the caller.
 
+import { LABEL_STOP, pageStopLanguage } from "./vocabulary.mjs";
+
+export { pageStopLanguage };
+
 // Words that carry no subject of their own. English and Ukrainian always (no English token
 // is written in Cyrillic); Ukrainian only, never Russian.
 export const STOP = new Set([
@@ -154,11 +158,7 @@ export function contentRole(text, heading) {
 
 // ── labels ───────────────────────────────────────────────────────────────────
 
-const LABEL_STOP = new Set([
-  "the", "and", "for", "with", "you", "your", "our", "can", "will", "are", "that",
-  "this", "from", "have", "has", "not", "all", "any", "how", "what", "more",
-  "one", "use", "using", "used", "get", "make", "also", "than", "then", "when",
-]);
+// LABEL_STOP and pageStopLanguage are defined once, beside the vocabulary that also uses them.
 
 export const UNTITLED_LABEL = "Untitled section";
 
@@ -243,134 +243,6 @@ export function labelSourceOf(label, heading) {
 }
 
 // ── keywords ─────────────────────────────────────────────────────────────────
-
-export const KEYWORD_LIMIT = 20;
-const SCOPE_SPREAD = 0.6;
-const MIN_KEYWORD_COUNT = 2;
-const MIN_PHRASE_COUNT = 3;
-const PHRASE_SHARE = 0.5;
-
-/** The page's language for stop words, decided once for all of its passages. */
-export function pageStopLanguage(texts) {
-  return detectStopLanguage(texts.join("\n"));
-}
-
-function usableKeyword(token, language) {
-  if (token.length < 2) return false;
-  if (LABEL_STOP.has(token) || isStopword(token, language)) return false;
-  return /\p{L}/u.test(token);
-}
-
-// runs of directly adjacent content words.
-function contentRuns(text, language) {
-  const runs = [];
-  let run = [];
-  const end = () => {
-    if (run.length) runs.push(run);
-    run = [];
-  };
-
-  const parts = text.toLowerCase().replace(/https?:\/\/\S+/g, " ").split(/([^\p{L}\p{N}]+)/u);
-  parts.forEach((part, index) => {
-    if (index % 2 === 1) {
-      if (!/^[\s-]+$/.test(part)) end();
-      return;
-    }
-    if (!part) return;
-    if (!usableKeyword(part, language) || /^\d+$/.test(part)) {
-      end();
-      return;
-    }
-    run.push(part);
-  });
-  end();
-  return runs;
-}
-
-function pairsOf(run) {
-  const out = [];
-  for (let i = 0; i + 1 < run.length; i++) out.push(`${run[i]} ${run[i + 1]}`);
-  return out;
-}
-
-/**
- * The page's vocabulary: one- and two-word terms, counted by occurrence, with how many groups each reaches.
- * `assignment[i]` is the group id of passage i.
- */
-export function pageKeywords(texts, assignment, groupCount, limit = KEYWORD_LIMIT, language) {
-  if (!texts.length) return [];
-
-  const stopLanguage = language === undefined ? pageStopLanguage(texts) : language;
-  const runsByChunk = texts.map((text) => contentRuns(text, stopLanguage));
-
-  // Plurals folded into the singular, only when the singular is used on this page.
-  const rawCounts = new Map();
-  for (const runs of runsByChunk) {
-    for (const run of runs) for (const token of run) rawCounts.set(token, (rawCounts.get(token) ?? 0) + 1);
-  }
-  const singularOf = new Map();
-  for (const token of rawCounts.keys()) {
-    if (!token.endsWith("s") || token.length < 4) continue;
-    const singular = token.slice(0, -1);
-    if (rawCounts.has(singular)) singularOf.set(token, singular);
-  }
-  const fold = (token) => singularOf.get(token) ?? token;
-  const folded = runsByChunk.map((runs) => runs.map((run) => run.map(fold)));
-
-  // Which pairs are phrases: said at least 3 times, and at least half of the rarer word's uses.
-  const wordTotals = new Map();
-  const pairTotals = new Map();
-  for (const runs of folded) {
-    for (const run of runs) {
-      for (const token of run) wordTotals.set(token, (wordTotals.get(token) ?? 0) + 1);
-      for (const pair of pairsOf(run)) pairTotals.set(pair, (pairTotals.get(pair) ?? 0) + 1);
-    }
-  }
-  const phrases = new Map();
-  for (const [pair, total] of pairTotals) {
-    if (total < MIN_PHRASE_COUNT) continue;
-    const [a, b] = pair.split(" ");
-    const rarer = Math.min(wordTotals.get(a) ?? 0, wordTotals.get(b) ?? 0);
-    if (rarer && total / rarer >= PHRASE_SHARE) phrases.set(pair, total);
-  }
-
-  // Spend each occurrence once, left to right; where two phrases overlap the stronger wins.
-  const counts = new Map();
-  const groupsSeen = new Map();
-  const record = (term, group) => {
-    counts.set(term, (counts.get(term) ?? 0) + 1);
-    const set = groupsSeen.get(term) ?? new Set();
-    set.add(group);
-    groupsSeen.set(term, set);
-  };
-
-  folded.forEach((runs, index) => {
-    const group = assignment[index] ?? 0;
-    for (const run of runs) {
-      for (let i = 0; i < run.length; ) {
-        const here = i + 1 < run.length ? phrases.get(`${run[i]} ${run[i + 1]}`) ?? 0 : 0;
-        const next = i + 2 < run.length ? phrases.get(`${run[i + 1]} ${run[i + 2]}`) ?? 0 : 0;
-        if (here && here >= next) {
-          record(`${run[i]} ${run[i + 1]}`, group);
-          i += 2;
-        } else {
-          record(run[i], group);
-          i += 1;
-        }
-      }
-    }
-  });
-
-  const denominator = Math.max(1, groupCount);
-  return [...counts.entries()]
-    .map(([term, count]) => {
-      const groups = groupsSeen.get(term)?.size ?? 0;
-      const spread = round(groups / denominator);
-      return { term, count, groups, spread, scope: spread >= SCOPE_SPREAD };
-    })
-    .filter((entry) => entry.count >= MIN_KEYWORD_COUNT)
-    .sort((a, b) => b.count - a.count || a.term.localeCompare(b.term))
-    .slice(0, limit);
-}
+// The page vocabulary (phrases, then narrative words) lives in vocabulary.mjs.
 
 export const PREVIEW_CHARS = 240;

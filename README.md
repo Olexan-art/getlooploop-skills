@@ -21,6 +21,7 @@ It does not rank your page, give it a score, detect AI-written text, or predict 
 - **The machine's reading:** the exact fetch, extraction, chunking and 26-passage cap of the live tool; how many words survive, how many passages they become, what falls past the cap.
 - **AI crawlers first:** robots.txt checked for GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, Google-Extended, Googlebot, Bingbot and CCBot, with RFC 9309 matching. If the crawlers that answer people are blocked, the report says so before anything else.
 - **Automatic checks**, each with a code, the passages it rests on and the evidence: FAQ answers that lost their questions, one heading carrying too much of the page, passages cut mid-sentence, navigation inside the content, thin sections, truncated teasers, the same claim in every section, canonical, JSON-LD and meta description.
+- **The page's vocabulary, phrases first:** the two-to-four-word phrases the page owns, ranked by how many passages use them, then its narrative words. What the page says, not search demand.
 - **Grouping by the agent's reading:** the passages grouped by subject and named, with the page's own heading or keywords kept as the label source.
 - **Query test:** 5 to 10 typical questions (yours or the agent's), the best passage for each, whether it answers completely, and the exact words a retriever could quote.
 - **Rewrite plan:** prioritised fixes tied to the checks, with before → after rewrites for the weakest passages.
@@ -54,6 +55,10 @@ The rewrite plan, with before → after:
 The query test:
 
 ![Query test](docs/report-queries.png)
+
+The page's vocabulary: the phrases it owns first, its narrative words second:
+
+![Phrases this page owns, then narrative words](docs/report-vocabulary.png)
 
 Comparing two pages: topics × pages, topic gaps, and who wins each query:
 
@@ -137,7 +142,7 @@ Sources: [Claude Code skills](https://code.claude.com/docs/en/skills) · [Codex 
 ```
 node scripts/read.mjs https://example.com/page --out reading.json   # fetch → extract → chunk → cap, robots.txt, checks
 # the agent reads the passages and writes groups.json
-node scripts/lens.mjs reading.json groups.json --html report.html   # labels, keywords, all checks
+node scripts/lens.mjs reading.json groups.json --html report.html   # labels, phrases, all checks
 # the agent writes queries.json and plan.json
 node scripts/lens.mjs reading.json groups.json --queries queries.json --plan plan.json --html report.html --md report.md --json export.json
 

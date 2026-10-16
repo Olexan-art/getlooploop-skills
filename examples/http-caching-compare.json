@@ -1,6 +1,6 @@
 {
   "schema": "getlooploop/vectorscope-compare@1",
-  "generatedAt": "2026-10-16T16:23:21.461Z",
+  "generatedAt": "2026-10-16T16:31:42.581Z",
   "skillVersion": 2,
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
@@ -11,7 +11,7 @@
     {
       "n": 1,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T16:23:21.462Z",
+      "generatedAt": "2026-10-16T16:31:42.581Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -21,7 +21,9 @@
         "grouping": "Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
         "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
         "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 5992 of 34460 indexed characters, about 17%, and always the opening of each passage rather than a sample spread through it.",
-        "keywords": "Counted over the page's whole text, not the excerpts below. A term is one word or two: a two-word term is a pair the page writes side by side often enough that the pair is what it is saying, and where it is counted neither of its words is counted separately, so the occurrences still add up to the page. `count` is occurrences; `groups` is how many of the page's groups the term reaches, and `scope` is true when it reaches most of them. A term with `scope` true describes the page; one with it false is a single section's vocabulary — useful, but not a summary. Plurals were folded into the singular where the page uses both. The group counts rest on the grouping above, which is a judgement.",
+        "phrases": "Counted over the page's whole text, not the excerpts below. A phrase is two to four content words the page writes side by side — never across a stopword, punctuation or a number — at least twice and in at least two passages (or three times in one), and cohesive enough that the words are not merely neighbours. A shorter phrase nearly always inside a longer one is folded into it. Ranked by `passages` (how many distinct passages use it), then `count`. `groups` is how many of the page's groups it reaches and `describesWholePage` is true when it reaches most of them. These are what the page says, not search demand: nothing here measures how often anybody searches or asks for them. The group counts rest on the grouping above, which is a judgement.",
+        "narrativeWords": "Single words, counted only where none of the listed phrases already used them, so the occurrences still add up. Reporting verbs, connectives and markup residue ([edit] links, TeX) are left out. They say what the page talks about; they are rarely what anybody types or asks.",
+        "keywords": "`phrases` followed by `narrativeWords` as one list, in the shape earlier exports had. Prefer the two lists above.",
         "agentLabel": "v2: the name the agent gave the group after reading it, or null. It is a judgement, like the grouping; `label` and `labelSource` are the computed label as in v1.",
         "groupLabels": "`labelSource` says where each name came from. \"heading\" is the page's own section heading and can be quoted. \"keywords\" is a computed guess — the group's most distinctive words — and is a hint, not a topic; do not quote it back as what the section is called.",
         "cohesion": "null: cohesion is the mean cosine between a group's passage embeddings, and no embeddings were computed.",
@@ -36,11 +38,12 @@
         "Sentiment or tone of the page. Only about 17% of the text is here, taken from the opening of each passage — enough to produce a confident-sounding verdict from an unrepresentative sample. If asked, say what the sample supports and that it is a sample.",
         "Anything about competitors, or how this page compares to another. One page was read; no other page was fetched.",
         "Which search or assistant prompts this page ranks or gets cited for. That needs a query inventory and measurement over time, neither of which is in this export.",
+        "How often people search for or ask about any phrase listed here. The counts are how often the page says them, not demand.",
         "Whether the page is factually correct, current, or original. Nothing here checked any claim on it.",
         "How the page renders for a browser running JavaScript. This is a plain fetch, which is also what an assistant that does not run JavaScript sees.",
         "How close any two passages are in an embedding space, or whether any assistant has indexed this page. No embeddings were computed, and this is a preview of the machine's view, not a guarantee of what any assistant does with it."
       ],
-      "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `keywords` where `describesWholePage` is true, since those are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
+      "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `phrases` first, and on those where `describesWholePage` is true most, since they are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
       "page": {
         "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
         "requestedUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
@@ -71,145 +74,384 @@
         "projectionExplained": null,
         "projectionBasis": null
       },
-      "keywords": [
-        {
-          "term": "response",
-          "count": 109,
-          "groups": 6,
-          "spread": 1,
-          "describesWholePage": true
-        },
-        {
-          "term": "cache",
-          "count": 99,
-          "groups": 6,
-          "spread": 1,
-          "describesWholePage": true
-        },
+      "phrases": [
         {
           "term": "cache control",
-          "count": 50,
+          "count": 48,
+          "passages": 21,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
           "term": "max age",
-          "count": 46,
+          "count": 42,
+          "passages": 17,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "ok content type",
+          "count": 7,
+          "passages": 6,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "content length",
+          "count": 7,
+          "passages": 6,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "shared cache",
+          "count": 11,
+          "passages": 5,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "origin server",
+          "count": 7,
+          "passages": 5,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "cached response",
+          "count": 5,
+          "passages": 5,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "managed cache",
+          "count": 10,
+          "passages": 4,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "gmt etag",
+          "count": 6,
+          "passages": 4,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "cache busting",
+          "count": 5,
+          "passages": 4,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "latest version",
+          "count": 4,
+          "passages": 4,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "conditional request",
+          "count": 4,
+          "passages": 4,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "none match",
+          "count": 9,
+          "passages": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "private cache",
+          "count": 8,
+          "passages": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "force reload",
+          "count": 7,
+          "passages": 3,
+          "groups": 1,
+          "spread": 0.167,
+          "describesWholePage": false
+        }
+      ],
+      "narrativeWords": [
+        {
+          "term": "response",
+          "count": 100,
+          "passages": 19,
+          "groups": 6,
+          "spread": 1,
           "describesWholePage": true
         },
         {
           "term": "request",
-          "count": 44,
+          "count": 42,
+          "passages": 13,
           "groups": 4,
-          "spread": 0.6667,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "header",
+          "count": 36,
+          "passages": 14,
+          "groups": 5,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
           "term": "server",
-          "count": 37,
+          "count": 34,
+          "passages": 13,
           "groups": 6,
           "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "content",
+          "count": 31,
+          "passages": 12,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "modified",
+          "count": 29,
+          "passages": 7,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "caching",
+          "count": 28,
+          "passages": 11,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "stored",
+          "count": 25,
+          "passages": 11,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "value",
+          "count": 25,
+          "passages": 8,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "store",
+          "count": 24,
+          "passages": 9,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        }
+      ],
+      "keywords": [
+        {
+          "term": "cache control",
+          "count": 48,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "max age",
+          "count": 42,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "ok content type",
+          "count": 7,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "content length",
+          "count": 7,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "shared cache",
+          "count": 11,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "origin server",
+          "count": 7,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "cached response",
+          "count": 5,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "managed cache",
+          "count": 10,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "gmt etag",
+          "count": 6,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "cache busting",
+          "count": 5,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "latest version",
+          "count": 4,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "conditional request",
+          "count": 4,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "none match",
+          "count": 9,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "private cache",
+          "count": 8,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "force reload",
+          "count": 7,
+          "groups": 1,
+          "spread": 0.167,
+          "describesWholePage": false
+        },
+        {
+          "term": "response",
+          "count": 100,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "request",
+          "count": 42,
+          "groups": 4,
+          "spread": 0.667,
           "describesWholePage": true
         },
         {
           "term": "header",
           "count": 36,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
-          "term": "content",
-          "count": 32,
-          "groups": 5,
-          "spread": 0.8333,
-          "describesWholePage": true
-        },
-        {
-          "term": "stored",
-          "count": 27,
+          "term": "server",
+          "count": 34,
           "groups": 6,
           "spread": 1,
           "describesWholePage": true
         },
         {
-          "term": "store",
-          "count": 26,
+          "term": "content",
+          "count": 31,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
-          "term": "example",
+          "term": "modified",
+          "count": 29,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "caching",
+          "count": 28,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "stored",
           "count": 25,
           "groups": 6,
           "spread": 1,
           "describesWholePage": true
         },
         {
-          "term": "time",
+          "term": "value",
+          "count": 25,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "store",
           "count": 24,
           "groups": 5,
-          "spread": 0.8333,
-          "describesWholePage": true
-        },
-        {
-          "term": "caching",
-          "count": 23,
-          "groups": 6,
-          "spread": 1,
-          "describesWholePage": true
-        },
-        {
-          "term": "private",
-          "count": 23,
-          "groups": 4,
-          "spread": 0.6667,
-          "describesWholePage": true
-        },
-        {
-          "term": "etag",
-          "count": 22,
-          "groups": 2,
-          "spread": 0.3333,
-          "describesWholePage": false
-        },
-        {
-          "term": "client",
-          "count": 21,
-          "groups": 6,
-          "spread": 1,
-          "describesWholePage": true
-        },
-        {
-          "term": "url",
-          "count": 21,
-          "groups": 3,
-          "spread": 0.5,
-          "describesWholePage": false
-        },
-        {
-          "term": "value",
-          "count": 21,
-          "groups": 4,
-          "spread": 0.6667,
-          "describesWholePage": true
-        },
-        {
-          "term": "since",
-          "count": 20,
-          "groups": 6,
-          "spread": 1,
-          "describesWholePage": true
-        },
-        {
-          "term": "directive",
-          "count": 19,
-          "groups": 4,
-          "spread": 0.6667,
+          "spread": 0.833,
           "describesWholePage": true
         }
       ],
@@ -761,7 +1003,7 @@
     {
       "n": 2,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T16:23:21.462Z",
+      "generatedAt": "2026-10-16T16:31:42.582Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -771,7 +1013,9 @@
         "grouping": "Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
         "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
         "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 3415 of 13308 indexed characters, about 26%, and always the opening of each passage rather than a sample spread through it.",
-        "keywords": "Counted over the page's whole text, not the excerpts below. A term is one word or two: a two-word term is a pair the page writes side by side often enough that the pair is what it is saying, and where it is counted neither of its words is counted separately, so the occurrences still add up to the page. `count` is occurrences; `groups` is how many of the page's groups the term reaches, and `scope` is true when it reaches most of them. A term with `scope` true describes the page; one with it false is a single section's vocabulary — useful, but not a summary. Plurals were folded into the singular where the page uses both. The group counts rest on the grouping above, which is a judgement.",
+        "phrases": "Counted over the page's whole text, not the excerpts below. A phrase is two to four content words the page writes side by side — never across a stopword, punctuation or a number — at least twice and in at least two passages (or three times in one), and cohesive enough that the words are not merely neighbours. A shorter phrase nearly always inside a longer one is folded into it. Ranked by `passages` (how many distinct passages use it), then `count`. `groups` is how many of the page's groups it reaches and `describesWholePage` is true when it reaches most of them. These are what the page says, not search demand: nothing here measures how often anybody searches or asks for them. The group counts rest on the grouping above, which is a judgement.",
+        "narrativeWords": "Single words, counted only where none of the listed phrases already used them, so the occurrences still add up. Reporting verbs, connectives and markup residue ([edit] links, TeX) are left out. They say what the page talks about; they are rarely what anybody types or asks.",
+        "keywords": "`phrases` followed by `narrativeWords` as one list, in the shape earlier exports had. Prefer the two lists above.",
         "agentLabel": "v2: the name the agent gave the group after reading it, or null. It is a judgement, like the grouping; `label` and `labelSource` are the computed label as in v1.",
         "groupLabels": "`labelSource` says where each name came from. \"heading\" is the page's own section heading and can be quoted. \"keywords\" is a computed guess — the group's most distinctive words — and is a hint, not a topic; do not quote it back as what the section is called.",
         "cohesion": "null: cohesion is the mean cosine between a group's passage embeddings, and no embeddings were computed.",
@@ -786,11 +1030,12 @@
         "Sentiment or tone of the page. Only about 26% of the text is here, taken from the opening of each passage — enough to produce a confident-sounding verdict from an unrepresentative sample. If asked, say what the sample supports and that it is a sample.",
         "Anything about competitors, or how this page compares to another. One page was read; no other page was fetched.",
         "Which search or assistant prompts this page ranks or gets cited for. That needs a query inventory and measurement over time, neither of which is in this export.",
+        "How often people search for or ask about any phrase listed here. The counts are how often the page says them, not demand.",
         "Whether the page is factually correct, current, or original. Nothing here checked any claim on it.",
         "How the page renders for a browser running JavaScript. This is a plain fetch, which is also what an assistant that does not run JavaScript sees.",
         "How close any two passages are in an embedding space, or whether any assistant has indexed this page. No embeddings were computed, and this is a preview of the machine's view, not a guarantee of what any assistant does with it."
       ],
-      "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `keywords` where `describesWholePage` is true, since those are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
+      "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `phrases` first, and on those where `describesWholePage` is true most, since they are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
       "page": {
         "url": "https://web.dev/articles/http-cache?hl=en",
         "requestedUrl": "https://web.dev/articles/http-cache?hl=en",
@@ -821,124 +1066,216 @@
         "projectionExplained": null,
         "projectionBasis": null
       },
-      "keywords": [
+      "phrases": [
         {
-          "term": "browser",
-          "count": 34,
-          "groups": 6,
-          "spread": 1,
+          "term": "cache control",
+          "count": 19,
+          "passages": 10,
+          "groups": 5,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
-          "term": "cache",
-          "count": 32,
+          "term": "max age",
+          "count": 9,
+          "passages": 5,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "network request",
+          "count": 8,
+          "passages": 5,
+          "groups": 3,
+          "spread": 0.5,
+          "describesWholePage": false
+        },
+        {
+          "term": "web server",
+          "count": 9,
+          "passages": 4,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "unnecessary network request",
+          "count": 6,
+          "passages": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "none match",
+          "count": 4,
+          "passages": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "cache control value",
+          "count": 3,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "web app",
+          "count": 3,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "intermediate caches",
+          "count": 3,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "following cache control",
+          "count": 2,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "versioning information",
+          "count": 2,
+          "passages": 2,
+          "groups": 1,
+          "spread": 0.167,
+          "describesWholePage": false
+        },
+        {
+          "term": "re download",
+          "count": 2,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "web application",
+          "count": 2,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "caching strategy",
+          "count": 2,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "css file",
+          "count": 2,
+          "passages": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        }
+      ],
+      "narrativeWords": [
+        {
+          "term": "browser",
+          "count": 35,
+          "passages": 12,
           "groups": 6,
           "spread": 1,
           "describesWholePage": true
         },
         {
           "term": "response",
-          "count": 32,
+          "count": 30,
+          "passages": 8,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
           "term": "header",
-          "count": 25,
+          "count": 24,
+          "passages": 10,
           "groups": 6,
           "spread": 1,
           "describesWholePage": true
         },
         {
-          "term": "cache control",
-          "count": 21,
-          "groups": 5,
-          "spread": 0.8333,
-          "describesWholePage": true
-        },
-        {
           "term": "file",
-          "count": 20,
+          "count": 18,
+          "passages": 6,
           "groups": 4,
-          "spread": 0.6667,
+          "spread": 0.667,
           "describesWholePage": true
         },
         {
           "term": "request",
           "count": 17,
+          "passages": 6,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
-          "term": "server",
+          "term": "url",
           "count": 17,
-          "groups": 5,
-          "spread": 0.8333,
-          "describesWholePage": true
+          "passages": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
         },
         {
           "term": "resource",
           "count": 16,
+          "passages": 7,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
           "term": "cached",
           "count": 15,
+          "passages": 9,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
           "term": "caching",
-          "count": 14,
+          "count": 12,
+          "passages": 8,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
           "term": "etag",
-          "count": 14,
+          "count": 11,
+          "passages": 6,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
           "describesWholePage": true
-        },
+        }
+      ],
+      "keywords": [
         {
-          "term": "url",
-          "count": 14,
-          "groups": 2,
-          "spread": 0.3333,
-          "describesWholePage": false
-        },
-        {
-          "term": "network request",
-          "count": 10,
-          "groups": 3,
-          "spread": 0.5,
-          "describesWholePage": false
-        },
-        {
-          "term": "value",
-          "count": 10,
-          "groups": 4,
-          "spread": 0.6667,
-          "describesWholePage": true
-        },
-        {
-          "term": "web server",
-          "count": 10,
-          "groups": 4,
-          "spread": 0.6667,
-          "describesWholePage": true
-        },
-        {
-          "term": "content",
-          "count": 9,
-          "groups": 4,
-          "spread": 0.6667,
+          "term": "cache control",
+          "count": 19,
+          "groups": 5,
+          "spread": 0.833,
           "describesWholePage": true
         },
         {
@@ -949,17 +1286,164 @@
           "describesWholePage": false
         },
         {
-          "term": "version",
-          "count": 9,
-          "groups": 2,
-          "spread": 0.3333,
+          "term": "network request",
+          "count": 8,
+          "groups": 3,
+          "spread": 0.5,
           "describesWholePage": false
         },
         {
-          "term": "last modified",
-          "count": 7,
+          "term": "web server",
+          "count": 9,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "unnecessary network request",
+          "count": 6,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "none match",
+          "count": 4,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "cache control value",
+          "count": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "web app",
+          "count": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "intermediate caches",
+          "count": 3,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "following cache control",
+          "count": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "versioning information",
+          "count": 2,
+          "groups": 1,
+          "spread": 0.167,
+          "describesWholePage": false
+        },
+        {
+          "term": "re download",
+          "count": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "web application",
+          "count": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "caching strategy",
+          "count": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "css file",
+          "count": 2,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "browser",
+          "count": 35,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "response",
+          "count": 30,
           "groups": 5,
-          "spread": 0.8333,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "header",
+          "count": 24,
+          "groups": 6,
+          "spread": 1,
+          "describesWholePage": true
+        },
+        {
+          "term": "file",
+          "count": 18,
+          "groups": 4,
+          "spread": 0.667,
+          "describesWholePage": true
+        },
+        {
+          "term": "request",
+          "count": 17,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "url",
+          "count": 17,
+          "groups": 2,
+          "spread": 0.333,
+          "describesWholePage": false
+        },
+        {
+          "term": "resource",
+          "count": 16,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "cached",
+          "count": 15,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "caching",
+          "count": 12,
+          "groups": 5,
+          "spread": 0.833,
+          "describesWholePage": true
+        },
+        {
+          "term": "etag",
+          "count": 11,
+          "groups": 5,
+          "spread": 0.833,
           "describesWholePage": true
         }
       ],

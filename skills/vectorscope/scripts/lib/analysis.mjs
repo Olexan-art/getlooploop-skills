@@ -1,7 +1,8 @@
 // The read-out over a judged grouping, and the v2 layers built on it: checks, the baseline
 // diff and the cross-page comparison. Deterministic; the judgement arrives as validated input.
 
-import { dominantHeading, labelGroup, labelSourceOf, KEYWORD_LIMIT, pageKeywords, pageStopLanguage, PREVIEW_CHARS } from "./lens.mjs";
+import { dominantHeading, labelGroup, labelSourceOf, pageStopLanguage, PREVIEW_CHARS } from "./lens.mjs";
+import { flattenVocabulary, pageVocabulary } from "./vocabulary.mjs";
 import { runChecks } from "./checks.mjs";
 
 /** The read-out over a judged grouping. */
@@ -43,12 +44,17 @@ export function buildJudgedLens(reading, grouping) {
     };
   });
 
+  // The page vocabulary as the product computes it: phrases first, then narrative words;
+  // `keywords` is the two as one list, the shape earlier readings had.
+  const vocabulary = pageVocabulary(passages.map((p) => p.text), assignment, groups.length, stopLanguage);
   return {
     chunks,
     groups,
     assignment,
     duplicates: grouping.duplicates.size,
-    keywords: pageKeywords(passages.map((p) => p.text), assignment, groups.length, KEYWORD_LIMIT, stopLanguage),
+    keywords: flattenVocabulary(vocabulary),
+    phrases: vocabulary.phrases,
+    narrative: vocabulary.narrative,
   };
 }
 

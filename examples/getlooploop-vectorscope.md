@@ -186,13 +186,35 @@ In reading order inside each group. Each line shows how the passage opens (its f
 
 No passage looks like related links or utility copy.
 
-## The words and phrases this page keeps using
+## The page's vocabulary
 
-Counted across the whole page, as single words and as the two-word phrases it writes often enough to be saying the phrase. A term reaching most groups describes the page; one confined to fewer is a section's own vocabulary. Group counts rest on the grouping above.
+*What the page says, not search demand — for how people ask, use the query test or https://www.getlooploop.com/voicescope.*
 
-**Describes the page:** page (73; 6 of 6 groups), passage (62; 6 of 6 groups), cut (30; 5 of 6 groups), semantic chunking (24; 6 of 6 groups), heading (22; 5 of 6 groups), question (20; 6 of 6 groups), answer (17; 5 of 6 groups), cap (14; 4 of 6 groups), group (13; 5 of 6 groups), meaning (13; 5 of 6 groups), ask (12; 5 of 6 groups), read (12; 5 of 6 groups), reading (12; 5 of 6 groups), vectorscope (12; 5 of 6 groups), see (11; 6 of 6 groups), assistant (9; 4 of 6 groups), embedding (9; 4 of 6 groups)
+### Phrases this page owns
 
-**Belongs to one section:** whether (11; 3 of 6 groups), ai (10; 3 of 6 groups), url (9; 3 of 6 groups)
+Two to four words the page writes together, in at least two passages (or three times in one), never across punctuation or a stopword. Ranked by passages covered, then uses.
+
+1. semantic chunking (23; 12 passages; 6 of 6 groups; describes the page)
+2. fixed window (5; 5 passages; 4 of 6 groups; describes the page)
+3. retrieval system (4; 3 passages; 3 of 6 groups)
+4. stand alone (3; 3 passages; 3 of 6 groups)
+5. readable text (3; 3 passages; 3 of 6 groups)
+6. meaning changes (3; 3 passages; 2 of 6 groups)
+7. heading aware (4; 2 passages; 2 of 6 groups)
+8. heading aware chunking (3; 2 passages; 2 of 6 groups)
+9. semantic chunking visualizer (3; 2 passages; 1 of 6 groups)
+10. extraction ratio (3; 2 passages; 2 of 6 groups)
+11. fixed length (3; 2 passages; 1 of 6 groups)
+12. long section (3; 2 passages; 2 of 6 groups)
+13. free semantic chunking visualizer (2; 2 passages; 1 of 6 groups)
+14. repeated sentence shapes (2; 2 passages; 2 of 6 groups)
+15. reader reacts (2; 2 passages; 2 of 6 groups)
+
+### Narrative words
+
+Single words, counted only where no phrase above already used them. They say what the page talks about; they are rarely what anybody types or asks.
+
+page (71; 16 passages; 6 of 6 groups; describes the page), passage (60; 13 passages; 6 of 6 groups; describes the page), cut (30; 9 passages; 5 of 6 groups; describes the page), heading (22; 9 passages; 5 of 6 groups; describes the page), question (18; 12 passages; 6 of 6 groups; describes the page), answer (16; 10 passages; 5 of 6 groups; describes the page), cap (14; 8 passages; 4 of 6 groups; describes the page), group (13; 7 passages; 5 of 6 groups; describes the page), meaning (13; 8 passages; 5 of 6 groups; describes the page), vectorscope (12; 6 passages; 5 of 6 groups; describes the page)
 
 ## Citable facts
 

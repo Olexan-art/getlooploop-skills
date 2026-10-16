@@ -1,6 +1,6 @@
 {
   "schema": "getlooploop/vectorscope-reading@1",
-  "generatedAt": "2026-10-16T16:23:21.162Z",
+  "generatedAt": "2026-10-16T16:31:42.245Z",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -10,7 +10,9 @@
     "grouping": "Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules. The product groups passages by average-link clustering over embedding similarity; here the passages were read and grouped by subject instead, so two runs can group the same page differently. For the embedding-based reading with the map, run the page at https://www.getlooploop.com/vectorscope.",
     "unitOfAnalysis": "A chunk is one passage as the pipeline split it — roughly 2000 characters, following the page's own headings where it has them. Chunks overlap by about 200 characters, so their lengths sum to more than the page.",
     "textHead": "Only the first 240 characters of each chunk are included. Across this page that is 3979 of 14109 indexed characters, about 28%, and always the opening of each passage rather than a sample spread through it.",
-    "keywords": "Counted over the page's whole text, not the excerpts below. A term is one word or two: a two-word term is a pair the page writes side by side often enough that the pair is what it is saying, and where it is counted neither of its words is counted separately, so the occurrences still add up to the page. `count` is occurrences; `groups` is how many of the page's groups the term reaches, and `scope` is true when it reaches most of them. A term with `scope` true describes the page; one with it false is a single section's vocabulary — useful, but not a summary. Plurals were folded into the singular where the page uses both. The group counts rest on the grouping above, which is a judgement.",
+    "phrases": "Counted over the page's whole text, not the excerpts below. A phrase is two to four content words the page writes side by side — never across a stopword, punctuation or a number — at least twice and in at least two passages (or three times in one), and cohesive enough that the words are not merely neighbours. A shorter phrase nearly always inside a longer one is folded into it. Ranked by `passages` (how many distinct passages use it), then `count`. `groups` is how many of the page's groups it reaches and `describesWholePage` is true when it reaches most of them. These are what the page says, not search demand: nothing here measures how often anybody searches or asks for them. The group counts rest on the grouping above, which is a judgement.",
+    "narrativeWords": "Single words, counted only where none of the listed phrases already used them, so the occurrences still add up. Reporting verbs, connectives and markup residue ([edit] links, TeX) are left out. They say what the page talks about; they are rarely what anybody types or asks.",
+    "keywords": "`phrases` followed by `narrativeWords` as one list, in the shape earlier exports had. Prefer the two lists above.",
     "agentLabel": "v2: the name the agent gave the group after reading it, or null. It is a judgement, like the grouping; `label` and `labelSource` are the computed label as in v1.",
     "groupLabels": "`labelSource` says where each name came from. \"heading\" is the page's own section heading and can be quoted. \"keywords\" is a computed guess — the group's most distinctive words — and is a hint, not a topic; do not quote it back as what the section is called.",
     "cohesion": "null: cohesion is the mean cosine between a group's passage embeddings, and no embeddings were computed.",
@@ -25,11 +27,12 @@
     "Sentiment or tone of the page. Only about 28% of the text is here, taken from the opening of each passage — enough to produce a confident-sounding verdict from an unrepresentative sample. If asked, say what the sample supports and that it is a sample.",
     "Anything about competitors, or how this page compares to another. One page was read; no other page was fetched.",
     "Which search or assistant prompts this page ranks or gets cited for. That needs a query inventory and measurement over time, neither of which is in this export.",
+    "How often people search for or ask about any phrase listed here. The counts are how often the page says them, not demand.",
     "Whether the page is factually correct, current, or original. Nothing here checked any claim on it.",
     "How the page renders for a browser running JavaScript. This is a plain fetch, which is also what an assistant that does not run JavaScript sees.",
     "How close any two passages are in an embedding space, or whether any assistant has indexed this page. No embeddings were computed, and this is a preview of the machine's view, not a guarantee of what any assistant does with it."
   ],
-  "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `keywords` where `describesWholePage` is true, since those are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
+  "suggestedPrompt": "This is a retrieval read-out of one web page. Using it, tell me: (1) what this page is about — lean on `phrases` first, and on those where `describesWholePage` is true most, since they are counted over the full text rather than the excerpts — group by group, naming groups only where labelSource is \"heading\"; (2) what someone asking an assistant about this subject would find here, and what they would not; (3) what to change first, ordered by how much it would change what an assistant retrieves — cite the chunk indexes or group ids your answer rests on. Where the payload's cannotAnswer list says the data does not support a claim, say so instead of estimating.",
   "page": {
     "url": "https://www.getlooploop.com/vectorscope",
     "requestedUrl": "https://www.getlooploop.com/vectorscope",
@@ -60,17 +63,326 @@
     "projectionExplained": null,
     "projectionBasis": null
   },
-  "keywords": [
+  "phrases": [
+    {
+      "term": "semantic chunking",
+      "count": 23,
+      "passages": 12,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "fixed window",
+      "count": 5,
+      "passages": 5,
+      "groups": 4,
+      "spread": 0.667,
+      "describesWholePage": true
+    },
+    {
+      "term": "retrieval system",
+      "count": 4,
+      "passages": 3,
+      "groups": 3,
+      "spread": 0.5,
+      "describesWholePage": false
+    },
+    {
+      "term": "stand alone",
+      "count": 3,
+      "passages": 3,
+      "groups": 3,
+      "spread": 0.5,
+      "describesWholePage": false
+    },
+    {
+      "term": "readable text",
+      "count": 3,
+      "passages": 3,
+      "groups": 3,
+      "spread": 0.5,
+      "describesWholePage": false
+    },
+    {
+      "term": "meaning changes",
+      "count": 3,
+      "passages": 3,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "heading aware",
+      "count": 4,
+      "passages": 2,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "heading aware chunking",
+      "count": 3,
+      "passages": 2,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "semantic chunking visualizer",
+      "count": 3,
+      "passages": 2,
+      "groups": 1,
+      "spread": 0.167,
+      "describesWholePage": false
+    },
+    {
+      "term": "extraction ratio",
+      "count": 3,
+      "passages": 2,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "fixed length",
+      "count": 3,
+      "passages": 2,
+      "groups": 1,
+      "spread": 0.167,
+      "describesWholePage": false
+    },
+    {
+      "term": "long section",
+      "count": 3,
+      "passages": 2,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "free semantic chunking visualizer",
+      "count": 2,
+      "passages": 2,
+      "groups": 1,
+      "spread": 0.167,
+      "describesWholePage": false
+    },
+    {
+      "term": "repeated sentence shapes",
+      "count": 2,
+      "passages": 2,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "reader reacts",
+      "count": 2,
+      "passages": 2,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    }
+  ],
+  "narrativeWords": [
     {
       "term": "page",
-      "count": 73,
+      "count": 71,
+      "passages": 16,
       "groups": 6,
       "spread": 1,
       "describesWholePage": true
     },
     {
       "term": "passage",
-      "count": 62,
+      "count": 60,
+      "passages": 13,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "cut",
+      "count": 30,
+      "passages": 9,
+      "groups": 5,
+      "spread": 0.833,
+      "describesWholePage": true
+    },
+    {
+      "term": "heading",
+      "count": 22,
+      "passages": 9,
+      "groups": 5,
+      "spread": 0.833,
+      "describesWholePage": true
+    },
+    {
+      "term": "question",
+      "count": 18,
+      "passages": 12,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "answer",
+      "count": 16,
+      "passages": 10,
+      "groups": 5,
+      "spread": 0.833,
+      "describesWholePage": true
+    },
+    {
+      "term": "cap",
+      "count": 14,
+      "passages": 8,
+      "groups": 4,
+      "spread": 0.667,
+      "describesWholePage": true
+    },
+    {
+      "term": "group",
+      "count": 13,
+      "passages": 7,
+      "groups": 5,
+      "spread": 0.833,
+      "describesWholePage": true
+    },
+    {
+      "term": "meaning",
+      "count": 13,
+      "passages": 8,
+      "groups": 5,
+      "spread": 0.833,
+      "describesWholePage": true
+    },
+    {
+      "term": "vectorscope",
+      "count": 12,
+      "passages": 6,
+      "groups": 5,
+      "spread": 0.833,
+      "describesWholePage": true
+    }
+  ],
+  "keywords": [
+    {
+      "term": "semantic chunking",
+      "count": 23,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "fixed window",
+      "count": 5,
+      "groups": 4,
+      "spread": 0.667,
+      "describesWholePage": true
+    },
+    {
+      "term": "retrieval system",
+      "count": 4,
+      "groups": 3,
+      "spread": 0.5,
+      "describesWholePage": false
+    },
+    {
+      "term": "stand alone",
+      "count": 3,
+      "groups": 3,
+      "spread": 0.5,
+      "describesWholePage": false
+    },
+    {
+      "term": "readable text",
+      "count": 3,
+      "groups": 3,
+      "spread": 0.5,
+      "describesWholePage": false
+    },
+    {
+      "term": "meaning changes",
+      "count": 3,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "heading aware",
+      "count": 4,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "heading aware chunking",
+      "count": 3,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "semantic chunking visualizer",
+      "count": 3,
+      "groups": 1,
+      "spread": 0.167,
+      "describesWholePage": false
+    },
+    {
+      "term": "extraction ratio",
+      "count": 3,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "fixed length",
+      "count": 3,
+      "groups": 1,
+      "spread": 0.167,
+      "describesWholePage": false
+    },
+    {
+      "term": "long section",
+      "count": 3,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "free semantic chunking visualizer",
+      "count": 2,
+      "groups": 1,
+      "spread": 0.167,
+      "describesWholePage": false
+    },
+    {
+      "term": "repeated sentence shapes",
+      "count": 2,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "reader reacts",
+      "count": 2,
+      "groups": 2,
+      "spread": 0.333,
+      "describesWholePage": false
+    },
+    {
+      "term": "page",
+      "count": 71,
+      "groups": 6,
+      "spread": 1,
+      "describesWholePage": true
+    },
+    {
+      "term": "passage",
+      "count": 60,
       "groups": 6,
       "spread": 1,
       "describesWholePage": true
@@ -79,127 +391,57 @@
       "term": "cut",
       "count": 30,
       "groups": 5,
-      "spread": 0.8333,
-      "describesWholePage": true
-    },
-    {
-      "term": "semantic chunking",
-      "count": 24,
-      "groups": 6,
-      "spread": 1,
+      "spread": 0.833,
       "describesWholePage": true
     },
     {
       "term": "heading",
       "count": 22,
       "groups": 5,
-      "spread": 0.8333,
+      "spread": 0.833,
       "describesWholePage": true
     },
     {
       "term": "question",
-      "count": 20,
+      "count": 18,
       "groups": 6,
       "spread": 1,
       "describesWholePage": true
     },
     {
       "term": "answer",
-      "count": 17,
+      "count": 16,
       "groups": 5,
-      "spread": 0.8333,
+      "spread": 0.833,
       "describesWholePage": true
     },
     {
       "term": "cap",
       "count": 14,
       "groups": 4,
-      "spread": 0.6667,
+      "spread": 0.667,
       "describesWholePage": true
     },
     {
       "term": "group",
       "count": 13,
       "groups": 5,
-      "spread": 0.8333,
+      "spread": 0.833,
       "describesWholePage": true
     },
     {
       "term": "meaning",
       "count": 13,
       "groups": 5,
-      "spread": 0.8333,
-      "describesWholePage": true
-    },
-    {
-      "term": "ask",
-      "count": 12,
-      "groups": 5,
-      "spread": 0.8333,
-      "describesWholePage": true
-    },
-    {
-      "term": "read",
-      "count": 12,
-      "groups": 5,
-      "spread": 0.8333,
-      "describesWholePage": true
-    },
-    {
-      "term": "reading",
-      "count": 12,
-      "groups": 5,
-      "spread": 0.8333,
+      "spread": 0.833,
       "describesWholePage": true
     },
     {
       "term": "vectorscope",
       "count": 12,
       "groups": 5,
-      "spread": 0.8333,
+      "spread": 0.833,
       "describesWholePage": true
-    },
-    {
-      "term": "see",
-      "count": 11,
-      "groups": 6,
-      "spread": 1,
-      "describesWholePage": true
-    },
-    {
-      "term": "whether",
-      "count": 11,
-      "groups": 3,
-      "spread": 0.5,
-      "describesWholePage": false
-    },
-    {
-      "term": "ai",
-      "count": 10,
-      "groups": 3,
-      "spread": 0.5,
-      "describesWholePage": false
-    },
-    {
-      "term": "assistant",
-      "count": 9,
-      "groups": 4,
-      "spread": 0.6667,
-      "describesWholePage": true
-    },
-    {
-      "term": "embedding",
-      "count": 9,
-      "groups": 4,
-      "spread": 0.6667,
-      "describesWholePage": true
-    },
-    {
-      "term": "url",
-      "count": 9,
-      "groups": 3,
-      "spread": 0.5,
-      "describesWholePage": false
     }
   ],
   "groups": [

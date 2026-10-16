@@ -211,16 +211,27 @@ export const S = {
   sideNone: { en: "No passage looks like related links or utility copy.", uk: "Жоден уривок не схожий на пов’язані посилання чи службовий текст." },
   relatedLink: { en: "related link", uk: "пов’язане посилання" },
   utilityCopy: { en: "utility copy", uk: "службовий текст" },
-  kwTitle: { en: "The words and phrases this page keeps using", uk: "Слова й фрази, які сторінка повторює" },
-  kwNote: {
-    en: "Counted across the whole page, as single words and as the two-word phrases it writes often enough to be saying the phrase. A term reaching most groups describes the page; one confined to fewer is a section's own vocabulary. Group counts rest on the grouping above. Each chip shows uses and groups reached.",
-    uk: "Пораховано по всій сторінці: окремі слова і двослівні фрази, які сторінка пише достатньо часто. Термін, що є в більшості груп, описує сторінку; той, що в меншій кількості, — словник окремого розділу. Підрахунок груп спирається на групування вище. На кожній позначці — кількість вживань і охоплених груп.",
+  kwTitle: { en: "The page's vocabulary", uk: "Словник сторінки" },
+  kwHonest: {
+    en: (v) => `What the page says, not search demand — for how people ask, use the query test or ${v.link}.`,
+    uk: (v) => `Це те, що каже сторінка, а не пошуковий попит. Як питають люди — покаже тест запитів або ${v.link}.`,
   },
-  kwScope: { en: "Describes the page", uk: "Описує сторінку" },
-  kwSection: { en: "Belongs to one section", uk: "Належить одному розділу" },
-  kwNoScope: { en: "No term reaches enough of this page to describe it as a whole.", uk: "Жоден термін не охоплює достатньо сторінки, щоб описати її загалом." },
+  phrasesTitle: { en: "Phrases this page owns", uk: "Фрази, що належать цій сторінці" },
+  phrasesNote: {
+    en: "Two to four words the page writes together, in at least two passages (or three times in one), never across punctuation or a stopword. Ranked by passages covered, then uses. A highlighted phrase reaches most of the page's groups.",
+    uk: "Від двох до чотирьох слів, які сторінка пише разом, щонайменше у двох уривках (або тричі в одному), ніколи через розділовий знак чи службове слово. Порядок — за кількістю уривків, далі за вживаннями. Виділена фраза охоплює більшість груп сторінки.",
+  },
+  narrativeTitle: { en: "Narrative words", uk: "Слова розповіді" },
+  narrativeNote: {
+    en: "Single words, counted only where no phrase above already used them. They say what the page talks about; they are rarely what anybody types or asks.",
+    uk: "Окремі слова, пораховані лише там, де їх не використала жодна фраза вище. Вони кажуть, про що говорить сторінка; але люди рідко саме так пишуть чи питають.",
+  },
+  noPhrases: { en: "No phrase is written often enough to count.", uk: "Жодну фразу не написано достатньо часто, щоб її врахувати." },
   none: { en: "None.", uk: "Немає." },
-  kwTitleAttr: { en: (v) => `${v.count} uses, in ${v.groups} of ${v.total} groups`, uk: (v) => `вживань: ${v.count}, у ${v.groups} з ${v.total} груп` },
+  kwTitleAttr: {
+    en: (v) => `${v.count} uses, in ${v.passages} passages and ${v.groups} of ${v.total} groups`,
+    uk: (v) => `вживань: ${v.count}, уривків: ${v.passages}, груп: ${v.groups} з ${v.total}`,
+  },
 
   // ── facts
   facts: { en: "Citable facts", uk: "Факти для цитування" },

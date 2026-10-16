@@ -340,18 +340,25 @@ export function renderMarkdown(reading, lens, extras = {}) {
   }
   out.push("");
 
-  out.push("## The words and phrases this page keeps using");
+  out.push("## The page's vocabulary");
   out.push("");
-  out.push(
-    "Counted across the whole page, as single words and as the two-word phrases it writes often enough to be saying the phrase. A term reaching most groups describes the page; one confined to fewer is a section's own vocabulary. Group counts rest on the grouping above."
-  );
+  out.push("*What the page says, not search demand — for how people ask, use the query test or https://www.getlooploop.com/voicescope.*");
   out.push("");
-  const term = (k) => `${k.term} (${k.count}; ${k.groups} of ${lens.groups.length} groups)`;
-  const scope = lens.keywords.filter((k) => k.scope);
-  const section = lens.keywords.filter((k) => !k.scope);
-  out.push(`**Describes the page:** ${scope.length ? scope.map(term).join(", ") : "no term reaches enough of this page to describe it as a whole."}`);
+  const groupCount = lens.groups.length;
+  const term = (k) => `${k.term} (${k.count}${k.passages !== undefined ? `; ${k.passages} passages` : ""}; ${k.groups} of ${groupCount} groups${k.scope ? "; describes the page" : ""})`;
+  const phrases = lens.phrases ?? [];
+  const narrative = lens.narrative ?? (lens.phrases ? [] : lens.keywords ?? []);
+  out.push("### Phrases this page owns");
   out.push("");
-  out.push(`**Belongs to one section:** ${section.length ? section.map(term).join(", ") : "none."}`);
+  out.push("Two to four words the page writes together, in at least two passages (or three times in one), never across punctuation or a stopword. Ranked by passages covered, then uses.");
+  out.push("");
+  out.push(phrases.length ? phrases.map((k, i) => `${i + 1}. ${term(k)}`).join("\n") : "No phrase is written often enough to count.");
+  out.push("");
+  out.push("### Narrative words");
+  out.push("");
+  out.push("Single words, counted only where no phrase above already used them. They say what the page talks about; they are rarely what anybody types or asks.");
+  out.push("");
+  out.push(narrative.length ? narrative.map(term).join(", ") : "None.");
   out.push("");
 
   if (extras.facts?.length) {
@@ -527,7 +534,8 @@ function runSingle(args) {
   for (const g of lens.groups) {
     console.log(`group ${g.id}   ${displayLabel(g)} [${g.labelSource}${g.agentLabel ? `: ${g.label}` : ""}] · ${plural(g.chunkCount, "passage", "passages")} · ${fmt(g.charCount)} chars`);
   }
-  console.log(`keywords  ${lens.keywords.slice(0, 8).map((k) => k.term).join(", ")}${lens.keywords.length > 8 ? ", …" : ""}`);
+  console.log(`phrases   ${lens.phrases.slice(0, 8).map((k) => k.term).join(", ")}${lens.phrases.length > 8 ? ", …" : ""}`);
+  console.log(`narrative ${lens.narrative.map((k) => k.term).join(", ")}`);
   printChecks(checks);
   if (extras.diff) console.log(`diff      ${extras.diff.counts.same} same · ${extras.diff.counts.changed} changed · ${extras.diff.counts.added} added · ${extras.diff.counts.removed} removed`);
   writeOutputs(args, singleExport(reading, lens, extras), renderMarkdown(reading, lens, extras), renderHtml(reading, lens, extras), vectorscopeExportName(reading.page));

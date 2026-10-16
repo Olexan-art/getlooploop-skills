@@ -238,6 +238,7 @@ summary{cursor:pointer;color:var(--accent);font-size:13px;width:max-content;max-
 .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-2);border-radius:999px;padding:3px 10px;font-size:13.5px;background:var(--panel-2)}
 .chip.scope{border-color:var(--accent);background:var(--accent-soft)}
 .chip-n{font-size:11.5px;color:var(--muted)}
+.chips.phrases .chip{font-size:14.5px;font-weight:600;padding:4px 12px}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel-2)}
 table{border-collapse:collapse;width:100%;font-size:13.5px}
 th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -733,6 +734,27 @@ function groupCards(lens, topicsById = null) {
   return out;
 }
 
+/** The page vocabulary: phrases the page owns first, narrative words second. */
+function vocabularyPanel(lens, groupCount) {
+  // A v1-shaped lens has only `keywords`: show them as narrative words rather than nothing.
+  const phrases = lens.phrases ?? [];
+  const narrative = lens.narrative ?? (lens.phrases ? [] : lens.keywords ?? []);
+  const chip = (k) =>
+    `<li class="chip${k.scope ? " scope" : ""}" ${attr("title", "kwTitleAttr", { count: k.count, passages: k.passages ?? "?", groups: k.groups, total: groupCount })}>${esc(k.term)} <span class="chip-n">×${fmt(k.count)}${k.passages !== undefined ? ` · ${k.passages}p` : ""} · ${k.groups}/${groupCount}</span></li>`;
+  const out = [];
+  out.push('<section class="panel" id="vocabulary" aria-labelledby="h-kw">');
+  out.push(`<div class="panel-head"><h2 id="h-kw">${L("kwTitle")}</h2></div>`);
+  out.push(`<p class="note honest" style="margin-bottom:14px">${L("kwHonest", { link: `<a href="https://www.getlooploop.com/voicescope" rel="noopener noreferrer" target="_blank">getlooploop.com/voicescope</a>` })}</p>`);
+  out.push(`<h3 class="subhead" style="margin-top:0">${L("phrasesTitle")}</h3>`);
+  out.push(`<p class="small" style="margin:0 0 8px">${L("phrasesNote")}</p>`);
+  out.push(phrases.length ? `<ul class="chips phrases">${phrases.map(chip).join("")}</ul>` : `<p class="note">${L("noPhrases")}</p>`);
+  out.push(`<h3 class="subhead">${L("narrativeTitle")}</h3>`);
+  out.push(`<p class="small" style="margin:0 0 8px">${L("narrativeNote")}</p>`);
+  out.push(narrative.length ? `<ul class="chips">${narrative.map(chip).join("")}</ul>` : `<p class="note">${L("none")}</p>`);
+  out.push("</section>");
+  return out;
+}
+
 // ── single page ──────────────────────────────────────────────────────────────
 
 /**
@@ -862,19 +884,7 @@ export function renderHtml(reading, lens, extras = {}) {
   }
   out.push("</section>");
 
-  // ── keywords
-  const scope = lens.keywords.filter((k) => k.scope);
-  const section = lens.keywords.filter((k) => !k.scope);
-  const chip = (k) =>
-    `<li class="chip${k.scope ? " scope" : ""}" ${attr("title", "kwTitleAttr", { count: k.count, groups: k.groups, total: groupCount })}>${esc(k.term)} <span class="chip-n">×${fmt(k.count)} · ${k.groups}/${groupCount}</span></li>`;
-  out.push('<section class="panel" aria-labelledby="h-kw">');
-  out.push(`<div class="panel-head"><h2 id="h-kw">${L("kwTitle")}</h2></div>`);
-  out.push(`<p class="note" style="margin-bottom:14px">${L("kwNote")}</p>`);
-  out.push('<div class="kw">');
-  out.push(`<div><h3>${L("kwScope")}</h3>${scope.length ? `<ul class="chips">${scope.map(chip).join("")}</ul>` : `<p class="note">${L("kwNoScope")}</p>`}</div>`);
-  out.push(`<div><h3>${L("kwSection")}</h3>${section.length ? `<ul class="chips">${section.map(chip).join("")}</ul>` : `<p class="note">${L("none")}</p>`}</div>`);
-  out.push("</div>");
-  out.push("</section>");
+  out.push(...vocabularyPanel(lens, groupCount));
 
   out.push(...factsPanelSingle(extras.facts, 1, anchor));
 

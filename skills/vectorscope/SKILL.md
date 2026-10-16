@@ -21,7 +21,7 @@ Steps marked *script* run the product's exact rules and are deterministic. Steps
    It prints the counts, the robots.txt verdict, the technical markup and the first checks. If it prints `REFUSED <code>` (exit code 2), stop and explain the code (table at the end). Do not retry with another URL unless asked.
 2. *judgement* Read the `text` of **every** passage in `reading.json`, in full, and write `groups.json` (rules below).
 3. *script* `node scripts/lens.mjs reading.json groups.json --html report.html --md report.md --json export.json`
-   This validates the grouping, computes labels, keywords and all checks, and prints the findings with their passage ids.
+   This validates the grouping, computes labels, the page vocabulary (phrases, then narrative words) and all checks, and prints the findings with their passage ids.
 4. *judgement* Write `queries.json` (5 to 10 typical queries, each answered from the passages) and `plan.json` (the rewrite plan). Write `facts.json` too if the user wants the citable facts listed.
 5. *script* Run lens again with everything:
    `node scripts/lens.mjs reading.json groups.json --plan plan.json --queries queries.json [--facts facts.json] --html report.html --md report.md --json export.json`
@@ -190,6 +190,7 @@ RFC 9309: https://www.rfc-editor.org/rfc/rfc9309. A user-fetch crawler that igno
 - The plan's top three items, with one before → after.
 - The query test: how many queries were answered completely, and which found nothing. In compare mode: the topic gaps, the facts only one page has, and who wins each query.
 - The groups, briefly. Your label first; quote the computed label as the section's name only when its source is `heading`.
+- The page vocabulary: the **phrases this page owns** first (two to four words it writes together, ranked by how many passages use them), then the **narrative words** (single words not already inside a listed phrase). Say, with it, that these are what the page says, not search demand; for how people actually ask, point to the query test or https://www.getlooploop.com/voicescope.
 - Say, once, that the groups, the queries and the plan are the agent's reading of the passages, not an embedding clustering; the chunking, the cap and the checks are deterministic. For the embedding-based reading with the map, point to https://www.getlooploop.com/vectorscope.
 - Do not claim that any assistant has indexed the page, ranks it or will cite it.
 - A very low word count on a page that looks rich in a browser usually means its content is drawn by JavaScript. Suggest `--render` to measure it.
@@ -198,7 +199,7 @@ RFC 9309: https://www.rfc-editor.org/rfc/rfc9309. A user-fetch crawler that igno
 
 - `report.html`: one self-contained page (no external fonts, scripts or images; a content security policy blocks all network requests; every piece of page text is escaped), in the look of the live tool, safe down to 375 px.
 - `report.md`: the same reading in Markdown, in English.
-- `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. v2 only **adds** fields, so the schema id is unchanged: `skillVersion`, `checks` (each with an English `message`), `technical`, `robots`, `render`, `plan`, `queries`, `facts`, `diff`, and on each group `agentLabel`, `note` and `topic`. `label` and `labelSource` keep their v1 meaning (the computed label). Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
+- `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. `phrases` and `narrativeWords` (each entry: `term`, `count`, `passages`, `groups`, `spread`, `describesWholePage`) are the page vocabulary exactly as the product computes it; `keywords` is the two as one list, phrases first, in the shape earlier exports had. v2 only **adds** fields, so the schema id is unchanged: `skillVersion`, `checks` (each with an English `message`), `technical`, `robots`, `render`, `plan`, `queries`, `facts`, `diff`, and on each group `agentLabel`, `note` and `topic`. `label` and `labelSource` keep their v1 meaning (the computed label). Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
 - Compare mode writes `compare.json` (`getlooploop/vectorscope-compare@1`): every page's export under `pages[]`, plus `topics`, `topicTable`, `topicGaps`, `facts`, `factGaps`, `queries` (each with its `winner`) and `plan`.
 - `reading.json` (`getlooploop/vectorscope-skill-reading@1`) gains `technical`, `robots`, `layout` and, with `--render`, `render`. Its passages are unchanged from v1, and lens still accepts a v1 reading (as a baseline, for example); the checks that need the new fields are then skipped.
 
