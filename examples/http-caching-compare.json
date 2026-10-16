@@ -1,6 +1,6 @@
 {
   "schema": "getlooploop/vectorscope-compare@1",
-  "generatedAt": "2026-10-16T18:53:26.599Z",
+  "generatedAt": "2026-10-16T19:04:28.802Z",
   "skillVersion": "2.102",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
@@ -502,7 +502,7 @@
     {
       "n": 1,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T18:53:26.602Z",
+      "generatedAt": "2026-10-16T19:04:28.803Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -3252,7 +3252,7 @@
     {
       "n": 2,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-16T18:53:26.632Z",
+      "generatedAt": "2026-10-16T19:04:28.809Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",

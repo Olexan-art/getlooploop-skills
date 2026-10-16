@@ -12,7 +12,7 @@ import { pathOf } from "./robots.mjs";
 import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS } from "./refusal.mjs";
 import { LAYER_COPY, METRICS } from "./metrics.mjs";
 import { charsPastCap, hasLosses } from "./losses.mjs";
-import { MOTANKA, ORNAMENT } from "./sprites.mjs";
+import { CORNER, MOTANKA, ORNAMENT } from "./sprites.mjs";
 
 const VECTORSCOPE_URL = "https://www.getlooploop.com/vectorscope";
 
@@ -147,7 +147,11 @@ body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 ui-sans-serif
 a{color:var(--accent)}
 a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 .mono,.eyebrow,.tag,.chip-n,.code{font-family:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace}
-.wrap{max-width:1120px;margin:0 auto;padding:28px 16px 32px}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 16px 32px;position:relative}
+.corner{position:absolute;width:132px;height:134px;background:url("${CORNER}") center/contain no-repeat;opacity:var(--deco);filter:var(--deco-filter);pointer-events:none}
+.corner--br{right:0;bottom:0}
+.corner--tl{left:0;top:0;transform:rotate(180deg)}
+@media (max-width:640px){.corner{display:none}}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
 .toggles{display:flex;gap:8px;flex-wrap:wrap}
 .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
@@ -513,6 +517,7 @@ function topBar(eyebrowKey) {
     "</div>",
     "</div>",
     '<div class="deco" aria-hidden="true"></div>',
+    '<div class="corner corner--tl" aria-hidden="true"></div>',
   ];
 }
 
@@ -528,7 +533,7 @@ function footer(madeKey = "footerMade") {
 }
 
 function documentEnd() {
-  return ["</main>", "</body>", "</html>"];
+  return ['<div class="corner corner--br" aria-hidden="true"></div>', "</main>", "</body>", "</html>"];
 }
 
 const SEV_KEY = { high: "sevHigh", medium: "sevMedium", low: "sevLow", info: "sevInfo" };

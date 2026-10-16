@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { spritesModule } from "../tools/sprites.mjs";
-import { MOTANKA, ORNAMENT } from "../scripts/lib/sprites.mjs";
+import { CORNER, MOTANKA, ORNAMENT } from "../scripts/lib/sprites.mjs";
 
 test("sprites.mjs matches the assets", () => {
   const committed = readFileSync(new URL("../scripts/lib/sprites.mjs", import.meta.url), "utf8");
@@ -12,5 +12,5 @@ test("sprites.mjs matches the assets", () => {
 });
 
 test("the decorations stay small", () => {
-  assert.ok(ORNAMENT.length + MOTANKA.length < 80_000);
+  assert.ok(ORNAMENT.length + MOTANKA.length + CORNER.length < 110_000);
 });

@@ -16,6 +16,8 @@ export function spritesModule() {
     `export const ORNAMENT = ${JSON.stringify(uri("ornament"))};`,
     "/** A motanka, the footer's mark. */",
     `export const MOTANKA = ${JSON.stringify(uri("motanka"))};`,
+    "/** A corner of the same stitch, in the report's bottom-right corner and, turned, its top-left. */",
+    `export const CORNER = ${JSON.stringify(uri("corner"))};`,
     "",
   ].join("\n");
 }
