@@ -12,6 +12,7 @@ import { pathOf } from "./robots.mjs";
 import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS } from "./refusal.mjs";
 import { LAYER_COPY, METRICS } from "./metrics.mjs";
 import { charsPastCap, hasLosses } from "./losses.mjs";
+import { MOTANKA, ORNAMENT } from "./sprites.mjs";
 
 const VECTORSCOPE_URL = "https://www.getlooploop.com/vectorscope";
 
@@ -110,6 +111,7 @@ const CSS = `
   --red:#f87171;--red-soft:rgba(248,113,113,.13);--green:#34d399;--green-soft:rgba(52,211,153,.12);
   --empty:#0f1d33;--shadow:0 1px 0 rgba(255,255,255,.03) inset;
   --lm:#22d3ee;--lm-soft:rgba(34,211,238,.10);--ld:#a78bfa;--ld-soft:rgba(167,139,250,.12);--lj:#f472b6;--lj-soft:rgba(244,114,182,.12);--gone:#4a5d78;
+  --deco:.15;--deco-filter:brightness(2.6) saturate(.55);--deco-mark:.42;
   color-scheme:dark;
 }
 @media (prefers-color-scheme: light){
@@ -121,6 +123,7 @@ const CSS = `
     --red:#b91c1c;--red-soft:rgba(185,28,28,.08);--green:#047857;--green-soft:rgba(4,120,87,.09);
     --empty:#eef3f8;--shadow:none;
     --lm:#0e7490;--lm-soft:rgba(14,116,144,.08);--ld:#6d28d9;--ld-soft:rgba(109,40,217,.07);--lj:#be185d;--lj-soft:rgba(190,24,93,.07);--gone:#a3b1c2;
+    --deco:.2;--deco-filter:none;--deco-mark:.5;
     color-scheme:light;
   }
 }
@@ -132,6 +135,7 @@ const CSS = `
   --red:#b91c1c;--red-soft:rgba(185,28,28,.08);--green:#047857;--green-soft:rgba(4,120,87,.09);
   --empty:#eef3f8;--shadow:none;
     --lm:#0e7490;--lm-soft:rgba(14,116,144,.08);--ld:#6d28d9;--ld-soft:rgba(109,40,217,.07);--lj:#be185d;--lj-soft:rgba(190,24,93,.07);--gone:#a3b1c2;
+  --deco:.2;--deco-filter:none;--deco-mark:.5;
   color-scheme:light;
 }
 .l-uk{display:none}
@@ -332,6 +336,10 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .closing{font-size:16px;font-weight:600;margin:0}
 .closing.full{color:var(--amber)}
 .fine{color:var(--muted);font-size:13px;margin:10px 0 0}
+.deco{height:26px;margin:10px 0 2px;background:url("${ORNAMENT}") center/contain no-repeat;opacity:var(--deco);filter:var(--deco-filter);pointer-events:none}
+.deco--foot{margin:30px 0 -14px}
+.motanka{width:30px;height:auto;opacity:var(--deco-mark);filter:var(--deco-filter);flex:none}
+.foot-made{display:flex;align-items:center;gap:12px;max-width:600px}
 .foot{margin-top:28px;border-top:1px solid var(--line);padding:18px 0 4px;color:var(--faint);font-size:12.5px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;align-items:center}
 .foot p{margin:0;max-width:560px}
 .links{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
@@ -504,6 +512,7 @@ function topBar(eyebrowKey) {
     `<div class="toggle" role="group" ${attr("aria-label", "themeGroup")}><button type="button" data-set-theme="dark" aria-pressed="false">${L("dark")}</button><button type="button" data-set-theme="light" aria-pressed="false">${L("light")}</button></div>`,
     "</div>",
     "</div>",
+    '<div class="deco" aria-hidden="true"></div>',
   ];
 }
 
@@ -512,7 +521,10 @@ function footer(madeKey = "footerMade") {
     const label = link.key ? `${esc(link.name)} · ${L(link.key)}` : esc(link.name);
     return `<li><a href="${esc(link.href)}" rel="noopener noreferrer" target="_blank">${ICONS[link.id]}<span>${label}</span></a></li>`;
   }).join("");
-  return [`<footer class="foot"><p>${L(madeKey)}</p><ul class="links">${links}</ul></footer>`];
+  return [
+    '<div class="deco deco--foot" aria-hidden="true"></div>',
+    `<footer class="foot"><div class="foot-made"><img class="motanka" src="${MOTANKA}" alt="" width="30" height="39"><p>${L(madeKey)}</p></div><ul class="links">${links}</ul></footer>`,
+  ];
 }
 
 function documentEnd() {
