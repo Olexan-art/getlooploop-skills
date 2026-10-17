@@ -94,8 +94,6 @@ Agent Skills від [GetLoopLoop](https://www.getlooploop.com) для claude.ai 
 
 ![Футер](docs/report-footer.png)
 
-![Звіт на вузькому екрані](docs/report-mobile.png)
-
 У теці [`examples/`](examples) лежать три справжні запуски, а файли, які написав агент, — у [`examples/judgement/`](examples/judgement):
 
 - сама сторінка Vectorscope: їй вистачає 17 уривків, і за ліміт нічого не виходить ([HTML](examples/getlooploop-vectorscope.html), [Markdown](examples/getlooploop-vectorscope.md), [JSON](examples/getlooploop-vectorscope.json));

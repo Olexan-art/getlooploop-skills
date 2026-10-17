@@ -94,8 +94,6 @@ The footer, and the report on a phone:
 
 ![Footer](docs/report-footer.png)
 
-![The report on a narrow screen](docs/report-mobile.png)
-
 Three real runs are in [`examples/`](examples), each with the files the agent wrote in [`examples/judgement/`](examples/judgement):
 
 - the Vectorscope page itself, which needs 17 passages and loses nothing to the cap ([HTML](examples/getlooploop-vectorscope.html), [Markdown](examples/getlooploop-vectorscope.md), [JSON](examples/getlooploop-vectorscope.json));
