@@ -1,6 +1,6 @@
 {
   "name": "getlooploop-vectorscope-skill",
-  "version": "2.106.0",
+  "version": "2.107.0",
   "description": "The GetLoopLoop Vectorscope, run locally: the product's fetch, extraction, chunking and 26-passage cap, with automatic checks, robots.txt for AI crawlers, and the grouping done by the agent's reading instead of embeddings.",
   "type": "module",
   "private": true,
