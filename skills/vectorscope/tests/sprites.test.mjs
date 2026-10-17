@@ -14,3 +14,10 @@ test("sprites.mjs matches the assets", () => {
 test("the decorations stay small", () => {
   assert.ok(ORNAMENT.length + MOTANKA.length + CORNER.length < 110_000);
 });
+
+test("brandmark.mjs matches the GetLoopLoop mark asset, and stays small", async () => {
+  const { brandmarkModule } = await import("../tools/brandmark.mjs");
+  const { GLL_MARK } = await import("../scripts/lib/brandmark.mjs");
+  assert.equal(readFileSync(new URL("../scripts/lib/brandmark.mjs", import.meta.url), "utf8"), brandmarkModule(), "out of date — run node tools/brandmark.mjs");
+  assert.ok(GLL_MARK.startsWith("data:image/webp;base64,") && GLL_MARK.length < 12000, String(GLL_MARK.length));
+});

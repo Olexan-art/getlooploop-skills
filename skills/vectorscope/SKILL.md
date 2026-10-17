@@ -3,7 +3,7 @@ name: vectorscope
 description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для ШІ-ботів». No embeddings.
 ---
 
-Version 2.105. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, 2.105, …): the first number moves only on a breaking change.
+Version 2.106. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, 2.105, 2.106, …): the first number moves only on a breaking change.
 
 # Vectorscope (local, no embeddings)
 

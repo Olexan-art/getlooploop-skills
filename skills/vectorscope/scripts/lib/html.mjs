@@ -13,6 +13,7 @@ import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS } from "./refusal.mjs";
 import { LAYER_COPY, METRICS } from "./metrics.mjs";
 import { charsPastCap, hasLosses } from "./losses.mjs";
 import { CORNER, MOTANKA, ORNAMENT } from "./sprites.mjs";
+import { GLL_MARK } from "./brandmark.mjs";
 
 const VECTORSCOPE_URL = "https://www.getlooploop.com/vectorscope";
 
@@ -99,8 +100,8 @@ const SV = {
 
 // Brand marks for the footer, drawn inline (no external images under this CSP).
 const ICONS = {
-  getlooploop:
-    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 7.5a4.5 4.5 0 1 0 0 9c2.4 0 3.4-1.9 4.5-4.5s2.1-4.5 4.5-4.5a4.5 4.5 0 1 1 0 9c-2.4 0-3.4-1.9-4.5-4.5S9.9 7.5 7.5 7.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>',
+  // The real mark, not a drawn stand-in: a brand is shown by its own logo.
+  getlooploop: `<img class="gll-ico" src="${GLL_MARK}" alt="" width="28" height="15">`,
   x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
   bluesky:
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5.2 3.3C8 5.4 11 9.6 12 11.8c1-2.2 4-6.4 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6-.6 6.9-.8 3-3.8 3.7-6.5 3.3 4.7.8 5.9 3.4 3.3 6.1-4.9 5-7-1.3-7.6-2.9l-.6-1.7-.6 1.7c-.6 1.6-2.7 7.9-7.6 2.9-2.6-2.7-1.4-5.3 3.3-6.1-2.7.4-5.7-.3-6.5-3.3C.4 10.3 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg>',
@@ -370,6 +371,7 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .links a{display:inline-flex;align-items:center;gap:7px;color:var(--text);text-decoration:none;border:1px solid var(--control);border-radius:999px;padding:6px 13px 6px 10px;background:var(--panel);font-size:14px}
 .links a:hover{color:var(--text);border-color:var(--line-2)}
 .links svg{width:15px;height:15px;flex:none}
+.links .gll-ico{width:28px;height:15px;flex:none}
 .pagesec{border-top:1px solid var(--line);margin-top:18px;padding-top:16px}
 .pagesec:first-of-type{border-top:0;margin-top:0;padding-top:0}
 .pagesec h3{font-size:17px;margin-bottom:6px}

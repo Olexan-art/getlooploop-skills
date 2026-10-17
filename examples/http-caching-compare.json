@@ -1,7 +1,7 @@
 {
   "schema": "getlooploop/vectorscope-compare@1",
-  "generatedAt": "2026-10-17T12:07:12.781Z",
-  "skillVersion": "2.104",
+  "generatedAt": "2026-10-17T15:31:35.954Z",
+  "skillVersion": "2.106",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "url": "https://www.getlooploop.com/vectorscope"
@@ -500,7 +500,7 @@
     {
       "n": 1,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-17T12:07:12.782Z",
+      "generatedAt": "2026-10-17T15:31:35.955Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -1230,7 +1230,7 @@
           "textHead": "Learn how to contribute\nThis page was last modified on Aug 14, 2026 by MDN contributors.\nView this page on GitHub • Report a problem with this content"
         }
       ],
-      "skillVersion": "2.104",
+      "skillVersion": "2.106",
       "layers": {
         "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
         "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
@@ -3175,7 +3175,7 @@
     {
       "n": 2,
       "schema": "getlooploop/vectorscope-reading@1",
-      "generatedAt": "2026-10-17T12:07:12.783Z",
+      "generatedAt": "2026-10-17T15:31:35.956Z",
       "producedBy": {
         "tool": "vectorscope-skill (local, no embeddings)",
         "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -3817,7 +3817,7 @@
           "textHead": "Cache-Control value\nExplanation\nmax-age=86400\nThe response can be cached by browsers and intermediary caches for up to 1 day (60 seconds x 60 minutes x 24 hours).\nprivate, max-age=600\nThe response can be cached by the browser (but not inter"
         }
       ],
-      "skillVersion": "2.104",
+      "skillVersion": "2.106",
       "layers": {
         "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
         "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
