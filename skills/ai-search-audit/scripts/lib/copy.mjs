@@ -12,6 +12,11 @@ export const fmtUk = (n) => Number(n ?? 0).toLocaleString("en-US").replace(/,/g,
 const en = (n, one, many) => `${fmtEn(n)} ${n === 1 ? one : many}`;
 const uk = (n, one, few, many) => `${fmtUk(n)} ${ukForm(n, one, few, many)}`;
 const kb = (bytes) => Math.round(bytes / 1024);
+const dec = (n, sep) => String(Number(n ?? 0)).replace(".", sep);
+const q = (t, n = 38) => {
+  const x = String(t ?? "").replace(/\s+/g, " ").trim();
+  return `“${x.length > n ? `${x.slice(0, n - 1)}…` : x}”`;
+};
 const list = (xs, n = 2) => (xs.length > n ? `${xs.slice(0, n).join(", ")} +${xs.length - n}` : xs.join(", "));
 
 /** Short labels, three to six words, for the map, the chips and the Markdown. */
@@ -81,6 +86,52 @@ export const LABELS = {
   hreflang_lang_mismatch: () => ["html lang ≠ hreflang", "html lang ≠ hreflang"],
   hreflang_no_x_default: () => ["No x-default", "Немає x-default"],
   llms_txt_one_language: () => ["llms.txt: one language only", "llms.txt: лише одна мова"],
+  locale_facts_differ: (e) => {
+    const d = e.items[0];
+    const more = e.count > 1 ? ` +${e.count - 1}` : "";
+    return [`${d.values[0]} or ${d.values[1]}? · ${d.hreflang}${more}`, `${d.values[0]} чи ${d.values[1]}? · ${d.hreflang}${more}`];
+  },
+  question_missing: (e) => [`No answer: ${q(e.question)}`, `Без відповіді: ${q(e.question)}`],
+  question_partial: (e) => [`Answered in part: ${q(e.question)}`, `Частково: ${q(e.question)}`],
+  stock_phrases: (e) => [`Stock phrases · ${dec(e.per1k, ".")} per 1,000 words`, `Шаблонні фрази · ${dec(e.per1k, ",")} на 1 000 слів`],
+  repeated_sentence_shape: (e) => [en(e.count, "sentence of one shape", "sentences of one shape"), `${uk(e.count, "речення", "речення", "речень")} однієї форми`],
+  uniform_openings: (e) => [e.count === 1 ? "A run of sentences opens alike" : `${e.count} runs of sentences open alike`, e.count === 1 ? "Речення поспіль починаються однаково" : `${uk(e.count, "низка речень", "низки речень", "низок речень")} з однаковим початком`],
+  unchecked_claims: (e) => [en(e.count, "claim with nothing to check", "claims with nothing to check"), `${uk(e.count, "твердження", "твердження", "тверджень")} без фактів для перевірки`],
+  keyword_not_in_title: () => ["Main phrase not in title or h1", "Головної фрази немає в title чи h1"],
+  keyword_variant_split: () => ["Main phrase written two ways", "Головну фразу написано двома способами"],
+  keyword_one_section: (e) => [`Main phrase in ${e.sectionsReached} of ${e.sections} sections`, `Головна фраза в ${e.sectionsReached} із ${e.sections} розділів`],
+  off_keyword_share: (e) => [`${Math.round(e.offShare * 100)}% of the text off the phrase`, `${Math.round(e.offShare * 100)}% тексту без головної фрази`],
+  promise_without_number: () => ["A promise with no figure", "Обіцянка без числа"],
+  brand_contradiction: (e) => (e.count === 1 ? ["AI contradicts the page", "ШІ суперечить сторінці"] : [`AI contradicts the page · ${e.count}`, `ШІ суперечить сторінці · ${e.count}`]),
+  brand_fact_absent: (e) => [`AI knows, the page lacks · ${e.count}`, `ШІ знає, на сторінці немає · ${e.count}`],
+  brand_unknown: () => ["AI doesn't know the brand", "ШІ не знає бренду"],
+  review_rating_unbacked: (e) => (e.count === 1 ? [`${e.items[0].platform} rating, no source`, `Рейтинг ${e.items[0].platform} без джерела`] : [`${e.count} ratings with no source`, `${uk(e.count, "рейтинг", "рейтинги", "рейтингів")} без джерела`]),
+  review_control_hallucination: () => ["AI rated a platform that doesn't exist", "ШІ оцінив платформу, якої немає"],
+  reviews_without_markup: () => ["Ratings shown without markup", "Оцінки без розмітки"],
+  rich_result_retired: (e) => (e.items.length === 1 ? [`${e.items[0].feature}: no rich result any more`, `${e.items[0].feature}: розширеного результату більше немає`] : [`${e.items.length} retired rich results`, `${uk(e.items.length, "розширений результат", "розширені результати", "розширених результатів")} більше немає`]),
+  image_dimensions_missing: (e) => [en(e.count, "image without width and height", "images without width and height"), `${uk(e.count, "зображення", "зображення", "зображень")} без width і height`],
+  image_lcp_lazy: () => ["First image lazy-loaded", "Перше зображення з lazy"],
+  image_not_lazy: (e) => [en(e.count, "image below the fold loads eagerly", "images below the fold load eagerly"), `${uk(e.count, "зображення", "зображення", "зображень")} нижче екрана без lazy`],
+  image_legacy_format: (e) => [en(e.count, "image in JPEG or PNG only", "images in JPEG or PNG only"), `${uk(e.count, "зображення", "зображення", "зображень")} лише в JPEG чи PNG`],
+  image_oversized: (e) => [en(e.count, "image over 200 KB", "images over 200 KB"), `${uk(e.count, "зображення", "зображення", "зображень")} понад 200 КБ`],
+  image_no_srcset: (e) => [en(e.count, "large image without srcset", "large images without srcset"), `${uk(e.count, "велике зображення", "великі зображення", "великих зображень")} без srcset`],
+  favicon_missing: () => ["Favicon does not load", "Favicon не завантажується"],
+  site_name_missing: () => ["No WebSite name markup", "Немає назви сайту в розмітці"],
+  mixed_content: (e) => [en(e.count, "http:// resource on an https page", "http:// resources on an https page"), `${uk(e.count, "ресурс", "ресурси", "ресурсів")} http:// на https-сторінці`],
+  soft_404: () => ["A missing page answers 200", "Неіснуюча сторінка відповідає 200"],
+  url_variants_inconsistent: (e) => [e.count === 1 ? "A URL variant ends elsewhere" : `${e.count} URL variants end elsewhere`, e.count === 1 ? "Варіант адреси веде деінде" : `${uk(e.count, "варіант адреси веде", "варіанти адреси ведуть", "варіантів адреси ведуть")} деінде`],
+  hsts_missing: () => ["No HSTS header", "Немає заголовка HSTS"],
+  author_missing: () => ["Article without an author", "Стаття без автора"],
+  about_contact_missing: (e) => [`No ${e.missing.join(" or ")} link`, `Немає посилання ${e.missing.map((k) => (k === "about" ? "«Про нас»" : "«Контакти»")).join(" чи ")}`],
+  organization_details_missing: (e) => (e.found ? [`Organization lacks ${e.missing.join(", ")}`, `В Organization бракує ${e.missing.join(", ")}`] : ["No Organization markup", "Немає розмітки Organization"]),
+  article_date_missing: () => ["Article without a visible date", "Стаття без видимої дати"],
+  privacy_terms_missing: (e) => [`No ${e.missing.join(" or ")} link`, `Немає посилання на ${e.missing.map((k) => (k === "privacy" ? "конфіденційність" : "умови")).join(" чи ")}`],
+  date_mismatch: () => ["Markup date ≠ visible date", "Дата в розмітці ≠ видима дата"],
+  snippet_blocked: () => ["Snippets blocked", "Сніпети заборонено"],
+  markdown_alternate_broken: () => ["Markdown version does not load", "Markdown-версія не завантажується"],
+  ai_catalog_invalid: () => ["ai-catalog.json does not parse", "ai-catalog.json не розбирається"],
+  indexnow_key_broken: () => ["IndexNow key file missing", "Немає файлу ключа IndexNow"],
+  spa_shell: (e) => [`Empty app shell · ${e.words} words without JavaScript`, `Порожня оболонка застосунку · ${uk(e.words, "слово", "слова", "слів")} без JavaScript`],
 };
 
 export const label = (f) => {
@@ -98,21 +149,29 @@ export const SEV = {
 
 export const OWNERS = { dev: ["Developer", "Розробник"], content: ["Content", "Контент"], seo: ["SEO", "SEO"] };
 
-/** The six status tiles. In Lite the quote tile covers FAQ, schema and visible-text issues; the question tests are not part of it. */
+/** The six status tiles, as the approved Lite prototype draws them. Markup sits in "Shown well in search?"; the questions, the writing patterns and the keyword in "AI quotes it right?"; brand and reviews in their own tile. */
 export const AREAS = [
   { id: "classic", q: ["Shown well in search?", "Добре видно в пошуку?"] },
   { id: "find", q: ["AI finds it?", "ШІ знаходить?"] },
   { id: "read", q: ["AI reads all of it?", "ШІ читає все?"] },
   { id: "quote", q: ["AI quotes it right?", "ШІ цитує правильно?"] },
-  { id: "markup", q: ["Rich results & markup", "Розширені результати й розмітка"] },
+  { id: "brand", q: ["AI gets the brand right?", "ШІ правильно описує бренд?"] },
   { id: "lang", q: ["Languages in order?", "Мови гаразд?"] },
 ];
+
+/** The layer a finding comes from; a judgement carries the model that judged. */
+export const LAYER = {
+  measured: ["Measured", "Виміряно"],
+  derived: ["Derived", "Обчислено"],
+  judgement: ["Agent's judgement", "Судження агента"],
+};
 
 export const STATE = {
   ok: ["OK", "Гаразд"],
   prob: ["Problems", "Є проблеми"],
   block: ["Blocking", "Блокує"],
   na: ["One version", "Одна версія"],
+  unchecked: ["Not checked", "Не перевірено"],
 };
 
 export const MARK = {
@@ -144,6 +203,12 @@ export const UI = {
   statusAria: ["Status by question", "Стан за запитаннями"],
   nothingFound: ["nothing found", "нічого не знайдено"],
   oneVersion: ["no hreflang", "без hreflang"],
+  noBrandFiles: ["no brand.json or reviews.json", "без brand.json і reviews.json"],
+  modelNotStated: ["model not stated", "модель не вказано"],
+  oneModel: [
+    (m) => `Brand, reviews and questions: one model's view (${m}), from its own knowledge, not ChatGPT, Gemini or Perplexity. The web Brandscope and Reviewscope ask three assistants.`,
+    (m) => `Бренд, відгуки й запитання: погляд однієї моделі (${m}), з її власних знань, а не ChatGPT, Gemini чи Perplexity. Вебверсії Brandscope і Reviewscope питають трьох асистентів.`,
+  ],
   pageMap: ["Page map", "Мапа сторінки"],
   marked: [(n) => `${en(n, "problem", "problems")} marked`, (n) => `позначено ${uk(n, "проблему", "проблеми", "проблем")}`],
   mapAria: ["Map of the audited page, top to bottom, with numbered problem markers", "Мапа перевіреної сторінки згори донизу з пронумерованими маркерами проблем"],
@@ -169,6 +234,11 @@ export const UI = {
   robotsNone: ["no robots.txt: all allowed", "robots.txt немає: усе дозволено"],
   robotsUnreachable: ["robots.txt does not answer: assume all blocked", "robots.txt не відповідає: вважається, що все заборонено"],
   robotsNotChecked: ["robots.txt not measured", "robots.txt не виміряно"],
+  llmsNote: [
+    "Google documents no use of llms.txt: “You don't need to create new machine readable files, AI text files, or markup to appear in these features.”",
+    "Google не документує використання llms.txt: «You don't need to create new machine readable files, AI text files, or markup to appear in these features.»",
+  ],
+  llmsNoteSource: ["Google Search Central: AI features and your website", "Google Search Central: AI features and your website", "https://developers.google.com/search/docs/appearance/ai-features"],
   kind: { search: ["search", "пошук"], user: ["a user's question", "запит користувача"], training: ["training", "навчання"], index: ["web index", "вебіндекс"] },
   classic: ["Google and Bing checks", "Перевірки Google і Bing"],
   checksUnit: [(n) => `${n} checks`, (n) => `${uk(n, "перевірка", "перевірки", "перевірок")}`],
@@ -181,7 +251,7 @@ export const UI = {
   },
   langs: ["Language versions", "Мовні версії"],
   versionsUnit: [(n) => en(n, "version", "versions"), (n) => uk(n, "версія", "версії", "версій")],
-  langCols: [["Title", "Title"], ["Description", "Опис"], ["hreflang", "hreflang"], ["html lang", "html lang"]],
+  langCols: [["Title", "Title"], ["Description", "Опис"], ["hreflang", "hreflang"], ["Same facts", "Ті самі факти"]],
   langCol: ["Lang", "Мова"],
   langOne: ["One language version: the page declares no hreflang.", "Одна мовна версія: сторінка не оголошує hreflang."],
   langUnread: [(n, cap) => `+${n} not read (cap ${cap})`, (n, cap) => `+${n} не прочитано (ліміт ${cap})`],
@@ -189,11 +259,11 @@ export const UI = {
   thisPage: ["this page", "ця сторінка"],
   xDefault: ["x-default", "x-default"],
   cannot: ["What this check cannot see", "Чого ця перевірка не бачить"],
-  full: ["A full version with explanations is available from GetLoopLoop →", "Повна версія з поясненнями — у GetLoopLoop →"],
+  full: ["Full report with explanations →", "Повний звіт із поясненнями →"],
   caps: ["Not checked", "Не перевірено"],
   footer: [
-    "Made with the ai-search-audit skill (Lite) by GetLoopLoop: the scripts fetched the page, its robots.txt, sitemap, llms.txt and language versions, and up to 30 of its links, and sent nothing anywhere. No model wrote any part of this report.",
-    "Зроблено навичкою ai-search-audit (Lite) від GetLoopLoop: скрипти завантажили сторінку, її robots.txt, sitemap, llms.txt і мовні версії та до 30 її посилань і нікуди нічого не надсилали. Жодна модель не писала цього звіту.",
+    "Made with the ai-search-audit skill (Lite) by GetLoopLoop: the scripts fetched the page, its robots.txt, sitemap, llms.txt and language versions, and up to 30 of its links, and sent nothing anywhere; the judgement parts are the agent's model.",
+    "Зроблено навичкою ai-search-audit (Lite) від GetLoopLoop: скрипти завантажили сторінку, її robots.txt, sitemap, llms.txt і мовні версії та до 30 її посилань і нікуди нічого не надсилали; частини із судженнями — це модель агента.",
   ],
   footerRefused: [
     "Made with the ai-search-audit skill (Lite) by GetLoopLoop: the scripts fetched the page once and kept nothing of it.",
@@ -203,14 +273,13 @@ export const UI = {
   refusedEyebrow: ["AI search audit · Lite", "Аудит для ШІ-пошуку · Lite"],
 };
 
-/** "What this check cannot see": one line each, with where to get it. */
+/** "What this check cannot see": one line each, with where to get it. Brand, reviews and questions are in Lite as one model's view; several assistants are the web tools. */
 export const CANNOT = [
-  { t: ["Descriptions of each problem and directions to fix it", "Опис кожної проблеми й напрям виправлення"], links: [["Full version", "Повна версія", "https://www.getlooploop.com"]] },
-  { t: ["What AI says about your brand and reviews, the questions people ask, a target keyword", "Що ШІ каже про ваш бренд і відгуки, які запитання ставлять люди, цільова ключова фраза"], links: [["Full version", "Повна версія", "https://www.getlooploop.com"]] },
-  { t: ["Several real assistants side by side", "Кілька справжніх асистентів поруч"], links: [["Brandscope", "Brandscope", "https://www.getlooploop.com/brandscope"]] },
-  { t: ["How their answers change over time", "Як їхні відповіді змінюються з часом"], links: [["AI answer volatility", "Мінливість відповідей ШІ", "https://www.getlooploop.com/ai-volatility"]] },
-  { t: ["How AI groups your text by meaning (embeddings map)", "Як ШІ групує ваш текст за змістом (мапа ембедингів)"], links: [["Vectorscope", "Vectorscope", "https://www.getlooploop.com/vectorscope"]] },
-  { t: ["Search Console data, real-user Core Web Vitals, sites beyond one page", "Дані Search Console, Core Web Vitals реальних користувачів, сайти понад одну сторінку"], links: [["GetLoopLoop", "GetLoopLoop", "https://www.getlooploop.com"]] },
+  { t: ["Descriptions of each problem and directions to fix it", "Опис кожної проблеми й напрям виправлення"], links: [["Full version from GetLoopLoop", "Повна версія від GetLoopLoop", "https://www.getlooploop.com"]] },
+  { t: ["What real assistants (ChatGPT, Gemini, Perplexity) say about your brand and reviews", "Що справжні асистенти (ChatGPT, Gemini, Perplexity) кажуть про ваш бренд і відгуки"], links: [["Brandscope", "Brandscope", "https://www.getlooploop.com/brandscope"], ["Reviewscope", "Reviewscope", "https://www.getlooploop.com/reviewscope"]] },
+  { t: ["How their answers change from day to day", "Як їхні відповіді змінюються з дня на день"], links: [["AI answer volatility", "Мінливість відповідей ШІ", "https://www.getlooploop.com/ai-volatility"]] },
+  { t: ["How AI groups your text by meaning (embeddings)", "Як ШІ групує ваш текст за змістом (ембединги)"], links: [["Vectorscope", "Vectorscope", "https://www.getlooploop.com/vectorscope"]] },
+  { t: ["Search Console data, real-user speed, sites over 50 pages, tracking over time", "Дані Search Console, швидкість у реальних користувачів, сайти понад 50 сторінок, відстеження в часі"], links: [["GetLoopLoop", "GetLoopLoop", "https://www.getlooploop.com"]] },
 ];
 
 /** The verdict line at the top. */

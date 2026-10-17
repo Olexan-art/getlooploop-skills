@@ -1,7 +1,7 @@
 {
   "name": "getlooploop-ai-search-audit-skill",
   "version": "2.101.0",
-  "description": "AI Search Audit Lite, run locally: standard search and AI-search checks that rest on published rules (access, robots.txt for search and AI crawlers, the classic SEO checklist, structured data, language versions, and the Vectorscope reading), as a visual report. Deterministic, no model calls.",
+  "description": "AI Search Audit Lite, run locally: standard search and AI-search checks that rest on published rules (access, robots.txt for search and AI crawlers, the Google and Bing checklist, images, structured data, trust signals, language versions and their facts, and the Vectorscope reading), writing patterns and the target keyword, plus the agent's own judgement of the questions people ask, the brand and its reviews, as a visual report. The scripts call no model.",
   "type": "module",
   "private": true,
   "license": "MIT",
@@ -13,7 +13,7 @@
     "audit": "node dist/audit.mjs",
     "build": "node tools/build.mjs",
     "zip": "node tools/zip.mjs",
-    "test": "node --test tests/assets.test.mjs tests/checks.test.mjs tests/dist.test.mjs tests/fixtures.test.mjs tests/languages.test.mjs tests/map.test.mjs tests/network.test.mjs tests/refusal.test.mjs tests/report.test.mjs tests/robots.test.mjs tests/version.test.mjs",
+    "test": "node --test tests/assets.test.mjs tests/checks.test.mjs tests/dist.test.mjs tests/fixtures.test.mjs tests/judgement.test.mjs tests/keyword.test.mjs tests/languages.test.mjs tests/locales.test.mjs tests/map.test.mjs tests/network.test.mjs tests/patterns.test.mjs tests/refusal.test.mjs tests/report.test.mjs tests/robots.test.mjs tests/site.test.mjs tests/version.test.mjs",
     "favicons": "node tools/favicons.mjs"
   },
   "dependencies": {

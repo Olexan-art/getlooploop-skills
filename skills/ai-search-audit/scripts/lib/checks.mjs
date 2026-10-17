@@ -12,6 +12,12 @@ import { primaryTag } from "../../../vectorscope/scripts/lib/language.mjs";
 import { samePage } from "../../../vectorscope/scripts/lib/technical.mjs";
 import { headingKey, typedNodes } from "./facts.mjs";
 import { source } from "./rules.mjs";
+import { analysePatterns, STOCK_DENSITY_MEDIUM } from "./patterns.mjs";
+import { keywordFromHeading, keywordReport, isUsableKeyword, normaliseKeyword } from "./keyword.mjs";
+import { questionFindings } from "./questions.mjs";
+import { brandFindings } from "./brand.mjs";
+import { reviewFindings } from "./reviews.mjs";
+import { compareLocales, sectionNumbers } from "./localeFacts.mjs";
 
 // ── thresholds (each is the skill's rule unless a source says otherwise; README lists them) ──
 
@@ -48,6 +54,10 @@ export const CODES = {
   noindex: { severity: "blocking", area: "find", owner: "dev", rules: ["gNoindex", "gRobotsMeta"] },
   ai_training_blocked: { severity: "low", area: "find", owner: "seo", rules: ["openai", "anthropic", "gCrawlers", "ccbot"], info: true },
   llms_txt_missing: { severity: "low", area: "find", owner: "seo", rules: ["llms"], info: true },
+  snippet_blocked: { severity: "high", area: "find", owner: "seo", rules: ["gAi", "gRobotsMeta"] },
+  markdown_alternate_broken: { severity: "low", area: "find", owner: "dev", rules: ["llms"] },
+  ai_catalog_invalid: { severity: "low", area: "find", owner: "dev", rules: ["skill"] },
+  indexnow_key_broken: { severity: "low", area: "find", owner: "dev", rules: ["indexnow"] },
   // Classic SEO
   not_https: { severity: "high", area: "classic", owner: "dev", rules: ["gPageExp"] },
   redirect_chain: { severity: "low", area: "classic", owner: "dev", rules: ["gRedirects", "skill"] },
@@ -72,29 +82,70 @@ export const CODES = {
   viewport_missing: { severity: "medium", area: "classic", owner: "dev", rules: ["gMobile"] },
   html_lang_missing: { severity: "low", area: "classic", owner: "dev", rules: ["i18n"] },
   social_tags_missing: { severity: "low", area: "classic", owner: "seo", rules: ["ogp"] },
-  page_weight_heavy: { severity: "low", area: "classic", owner: "dev", rules: ["skill"] },
+  page_weight_heavy: { severity: "low", area: "classic", owner: "dev", rules: ["skill"], layer: "derived" },
   url_unreadable: { severity: "low", area: "classic", owner: "seo", rules: ["gUrl", "skill"] },
   // Rich results and markup
-  jsonld_invalid: { severity: "medium", area: "markup", owner: "dev", rules: ["gSdIntro"] },
-  structured_data_none: { severity: "low", area: "markup", owner: "seo", rules: ["gSdIntro"], info: true },
-  schema_required_missing: { severity: "medium", area: "markup", owner: "dev", rules: ["gSdIntro"] },
-  schema_recommended_missing: { severity: "low", area: "markup", owner: "dev", rules: ["gSdIntro"] },
-  faq_rich_result_retired: { severity: "low", area: "markup", owner: "seo", rules: ["gUpdates"], info: true },
-  // AI quotes it right (FAQ, schema and visible-text issues; the question tests are not in Lite)
+  jsonld_invalid: { severity: "medium", area: "classic", owner: "dev", rules: ["gSdIntro"] },
+  structured_data_none: { severity: "low", area: "classic", owner: "seo", rules: ["gSdIntro"], info: true },
+  schema_required_missing: { severity: "medium", area: "classic", owner: "dev", rules: ["gSdIntro"] },
+  schema_recommended_missing: { severity: "low", area: "classic", owner: "dev", rules: ["gSdIntro"] },
+  faq_rich_result_retired: { severity: "low", area: "classic", owner: "seo", rules: ["gUpdates"], info: true },
+  rich_result_retired: { severity: "low", area: "classic", owner: "seo", rules: ["gUpdates"], info: true },
+  // Images (a HEAD of up to 20 for their size)
+  image_dimensions_missing: { severity: "low", area: "classic", owner: "dev", rules: ["wCls"] },
+  image_lcp_lazy: { severity: "medium", area: "classic", owner: "dev", rules: ["wLcpLazy", "skill"] },
+  image_not_lazy: { severity: "low", area: "classic", owner: "dev", rules: ["wLcpLazy", "skill"] },
+  image_legacy_format: { severity: "low", area: "classic", owner: "dev", rules: ["gImages", "skill"] },
+  image_oversized: { severity: "medium", area: "classic", owner: "dev", rules: ["gImages", "skill"] },
+  image_no_srcset: { severity: "low", area: "classic", owner: "dev", rules: ["gImages", "skill"] },
+  // The site around the page
+  favicon_missing: { severity: "low", area: "classic", owner: "dev", rules: ["gFavicon"] },
+  site_name_missing: { severity: "low", area: "classic", owner: "seo", rules: ["gSiteName"] },
+  mixed_content: { severity: "medium", area: "classic", owner: "dev", rules: ["mixed"] },
+  soft_404: { severity: "medium", area: "classic", owner: "dev", rules: ["gHttp"] },
+  url_variants_inconsistent: { severity: "medium", area: "classic", owner: "seo", rules: ["gCanon", "gRedirects"] },
+  hsts_missing: { severity: "low", area: "classic", owner: "dev", rules: ["hsts", "skill"] },
+  // Trust (E-E-A-T presence, no score)
+  author_missing: { severity: "low", area: "classic", owner: "content", rules: ["gHelpful"] },
+  about_contact_missing: { severity: "low", area: "classic", owner: "content", rules: ["gHelpful", "skill"] },
+  organization_details_missing: { severity: "low", area: "classic", owner: "seo", rules: ["gOrg"] },
+  article_date_missing: { severity: "low", area: "classic", owner: "content", rules: ["gArticle", "skill"] },
+  privacy_terms_missing: { severity: "low", area: "classic", owner: "content", rules: ["skill"] },
+  date_mismatch: { severity: "low", area: "classic", owner: "content", rules: ["gArticle", "skill"] },
+  // AI quotes it right: FAQ and visible text, the questions people ask, writing patterns, the keyword
   faq_schema_not_visible: { severity: "high", area: "quote", owner: "content", rules: ["gSdPol", "sFaq"] },
   lost_faq_questions: { severity: "high", area: "quote", owner: "content", rules: ["apgAcc", "vs"] },
-  mid_sentence_start: { severity: "medium", area: "quote", owner: "content", rules: ["vs"] },
+  mid_sentence_start: { severity: "medium", area: "quote", owner: "content", rules: ["vs"], layer: "derived" },
   truncated_teaser: { severity: "low", area: "quote", owner: "content", rules: ["vs"] },
-  repeated_claim: { severity: "low", area: "quote", owner: "content", rules: ["vs"] },
+  repeated_claim: { severity: "low", area: "quote", owner: "content", rules: ["vs"], layer: "derived" },
+  question_missing: { severity: "medium", area: "quote", owner: "content", rules: ["gAi", "skill"], layer: "judgement" },
+  question_partial: { severity: "low", area: "quote", owner: "content", rules: ["gAi", "skill"], layer: "judgement" },
+  stock_phrases: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"], layer: "derived" },
+  repeated_sentence_shape: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"] },
+  uniform_openings: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"] },
+  unchecked_claims: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"] },
+  keyword_not_in_title: { severity: "medium", area: "quote", owner: "seo", rules: ["gTitle", "gStarter"] },
+  keyword_variant_split: { severity: "medium", area: "quote", owner: "seo", rules: ["gStarter", "skill"] },
+  keyword_one_section: { severity: "medium", area: "quote", owner: "content", rules: ["gStarter", "skill"], layer: "derived" },
+  off_keyword_share: { severity: "low", area: "quote", owner: "content", rules: ["skill"], layer: "derived" },
+  promise_without_number: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"] },
+  // AI gets the brand right: one model's answers from its own knowledge, compared with the page
+  brand_contradiction: { severity: "high", area: "brand", owner: "seo", rules: ["gAi", "skill"], layer: "judgement" },
+  brand_fact_absent: { severity: "medium", area: "brand", owner: "content", rules: ["gAi", "skill"], layer: "judgement" },
+  brand_unknown: { severity: "medium", area: "brand", owner: "seo", rules: ["gAi", "skill"], layer: "judgement" },
+  review_rating_unbacked: { severity: "high", area: "brand", owner: "seo", rules: ["gReview", "sRating", "skill"], layer: "judgement" },
+  review_control_hallucination: { severity: "high", area: "brand", owner: "seo", rules: ["skill"], layer: "judgement" },
+  reviews_without_markup: { severity: "medium", area: "brand", owner: "dev", rules: ["gReview", "sRating"] },
   // AI reads all of it
-  cap_overflow: { severity: "high", area: "read", owner: "content", rules: ["vs"], hides: true },
+  cap_overflow: { severity: "high", area: "read", owner: "content", rules: ["vs"], hides: true, layer: "derived" },
   js_dependent: { severity: "high", area: "read", owner: "dev", rules: ["gJs"], hides: true },
   hero_lede_dropped: { severity: "high", area: "read", owner: "dev", rules: ["header", "vs"], hides: true },
   hidden_headings: { severity: "high", area: "read", owner: "dev", rules: ["hidden"], hides: true },
   ssr_placeholder_text: { severity: "medium", area: "read", owner: "dev", rules: ["gJs"] },
+  spa_shell: { severity: "high", area: "read", owner: "dev", rules: ["gJs", "skill"], hides: true },
   h1_glued_words: { severity: "medium", area: "read", owner: "dev", rules: ["dom", "cssText"] },
   nav_in_content: { severity: "medium", area: "read", owner: "dev", rules: ["nav", "vs"] },
-  dominant_heading: { severity: "medium", area: "read", owner: "content", rules: ["wHead", "vs"] },
+  dominant_heading: { severity: "medium", area: "read", owner: "content", rules: ["wHead", "vs"], layer: "derived" },
   thin_section: { severity: "low", area: "read", owner: "content", rules: ["vs"] },
   // Languages
   hreflang_no_return: { severity: "high", area: "lang", owner: "dev", rules: ["gHreflang"] },
@@ -106,10 +157,16 @@ export const CODES = {
   hreflang_lang_mismatch: { severity: "low", area: "lang", owner: "dev", rules: ["gHreflang", "i18n"] },
   hreflang_no_x_default: { severity: "low", area: "lang", owner: "seo", rules: ["gHreflang"], info: true },
   llms_txt_one_language: { severity: "low", area: "lang", owner: "seo", rules: ["llms"], info: true },
+  locale_facts_differ: { severity: "medium", area: "lang", owner: "content", rules: ["gMulti", "skill"] },
 };
 export const CODE_ORDER = Object.keys(CODES);
 
-/** Required and recommended properties per type, with the source that names them. */
+/**
+ * Required and recommended properties per type, with the source that names them (each list as
+ * Google's structured data page states it). A dotted name ("location.address") is a property of a
+ * property; "a | b" means one of them. `top`: checked only on a top-level entity, because nested
+ * inside another the parent supplies it.
+ */
 export const SCHEMA_RULES = {
   FAQPage: { source: "sFaq", required: ["mainEntity"] },
   Product: { source: "gProduct", required: ["name"], oneOf: ["offers", "review", "aggregateRating"] },
@@ -117,16 +174,58 @@ export const SCHEMA_RULES = {
   WebApplication: { source: "gSoftware", required: ["name", "offers"], oneOf: ["aggregateRating", "review"] },
   MobileApplication: { source: "gSoftware", required: ["name", "offers"], oneOf: ["aggregateRating", "review"] },
   BreadcrumbList: { source: "gBread", required: ["itemListElement"] },
-  HowTo: { source: "sHowTo", required: ["name", "step"] },
+  Event: { source: "gEvent", required: ["name", "startDate", "location", "location.address"], recommended: ["description", "endDate", "eventStatus", "image", "offers", "organizer", "performer"] },
+  JobPosting: { source: "gJob", required: ["datePosted", "description", "hiringOrganization", "title"], recommended: ["baseSalary", "employmentType", "jobLocation", "validThrough", "identifier"] },
+  LocalBusiness: { source: "gLocal", required: ["name", "address"], recommended: ["telephone", "url", "openingHoursSpecification", "geo", "priceRange"] },
+  VideoObject: { source: "gVideo", required: ["name", "thumbnailUrl", "uploadDate"], recommended: ["description", "duration", "contentUrl | embedUrl"] },
+  QAPage: { source: "gQa", required: ["mainEntity", "mainEntity.name", "mainEntity.answerCount", "mainEntity.acceptedAnswer | mainEntity.suggestedAnswer"] },
+  WebSite: { source: "gSiteName", required: ["name", "url"] },
+  ProductGroup: { source: "gVariants", required: ["name"], recommended: ["hasVariant", "variesBy", "productGroupID", "brand", "description", "url"] },
+  Offer: { source: "gProduct", oneOf: ["price", "priceSpecification", "lowPrice"], recommended: ["priceCurrency", "availability"] },
+  AggregateOffer: { source: "gProduct", required: ["lowPrice", "priceCurrency"] },
+  Review: { source: "gReview", required: ["author", "reviewRating", "reviewRating.ratingValue"], top: ["itemReviewed"], recommended: ["datePublished"] },
+  AggregateRating: { source: "gReview", required: ["ratingValue", "ratingCount | reviewCount"], top: ["itemReviewed"], recommended: ["bestRating", "worstRating"] },
+  Person: { source: "sPerson", recommended: ["name"] },
   Article: { source: "gArticle", recommended: ["headline", "image", "datePublished", "author"] },
   NewsArticle: { source: "gArticle", recommended: ["headline", "image", "datePublished", "author"] },
   BlogPosting: { source: "gArticle", recommended: ["headline", "image", "datePublished", "author"] },
   Organization: { source: "gOrg", recommended: ["name", "url", "logo"] },
 };
 
+/**
+ * Google rich results that no longer appear in Search, with the date and the entry on Google's
+ * documentation updates page that says so. Markup of these types is reported as informational:
+ * no Google rich result any more, not an error. FAQPage has its own code (faq_rich_result_retired).
+ */
+export const RETIRED = {
+  HowTo: { feature: "How-to", date: "2023-09-14" },
+  Course: { feature: "Course info", date: "2025-09-09" },
+  ClaimReview: { feature: "ClaimReview (fact check)", date: "2025-06-12" },
+  SpecialAnnouncement: { feature: "Special announcement", date: "2025-07-31" },
+  Occupation: { feature: "Estimated salary", date: "2025-09-09" },
+  Quiz: { feature: "Practice problem", date: "2026-01-06" },
+  Vehicle: { feature: "Vehicle listing", date: "2025-09-09" },
+  Car: { feature: "Vehicle listing", date: "2025-09-09" },
+};
+/** WebSite + SearchAction: the sitelinks search box, removed from Search. */
+export const RETIRED_SEARCHBOX = { feature: "Sitelinks search box", date: "2024-11-29" };
+
 const fold = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
 const norm = (s) => fold(s).toLowerCase().replace(/[“”«»"'’‘]/g, "").replace(/[?!.:;,]+$/g, "");
-const has = (node, key) => node[key] !== undefined && node[key] !== null && node[key] !== "" && !(Array.isArray(node[key]) && node[key].length === 0);
+const has1 = (node, key) => node && typeof node === "object" && node[key] !== undefined && node[key] !== null && node[key] !== "" && !(Array.isArray(node[key]) && node[key].length === 0);
+/** A property present: "a.b" reads b on a (any item when a is a list); "a | b" is either. */
+const has = (node, key) =>
+  key.split("|").some((alt) => {
+    const parts = alt.trim().split(".");
+    let cur = [node];
+    for (const p of parts) {
+      cur = cur.flatMap((c) => (Array.isArray(c) ? c : [c])).filter((c) => has1(c, p)).map((c) => c[p]);
+      if (!cur.length) return false;
+    }
+    return true;
+  });
+const isTop = (path) => path === "$" || /^(?:@graph)?\[\d+\]$/.test(path);
+const typeList2 = (v) => (Array.isArray(v) ? v : [v]).filter((t) => typeof t === "string").map((t) => t.replace(/^https?:\/\/schema\.org\//i, ""));
 const asList = (v) => (Array.isArray(v) ? v : v === undefined || v === null ? [] : [v]);
 
 // ── where things are on the map ──────────────────────────────────────────────
@@ -219,12 +318,16 @@ function structuredChecks(r, out) {
   const recommended = [];
   let faqQuestions = [];
   let faqBlock = null;
+  const retired = new Map();
   for (const block of jsonLd.filter((b) => b.ok)) {
     for (const { types, node, path } of typedNodes(block.value)) {
       for (const type of types) {
+        if (RETIRED[type]) retired.set(type, { type, ...RETIRED[type], block: block.index });
+        if (type === "WebSite" && asList(node.potentialAction).some((a) => a && typeList2(a["@type"]).includes("SearchAction"))) retired.set("SearchAction", { type: "WebSite · SearchAction", ...RETIRED_SEARCHBOX, block: block.index });
         const rule = SCHEMA_RULES[type];
         if (!rule) continue;
         const missing = (rule.required || []).filter((k) => !has(node, k));
+        if (rule.top && isTop(path)) missing.push(...rule.top.filter((k) => !has(node, k)));
         if (rule.oneOf && !rule.oneOf.some((k) => has(node, k))) missing.push(rule.oneOf.join(" | "));
         if (type === "FAQPage" && has(node, "mainEntity")) {
           const qs = asList(node.mainEntity);
@@ -249,6 +352,7 @@ function structuredChecks(r, out) {
     }
   }
   if (required.length) out.push({ code: "schema_required_missing", evidence: { types: [...new Set(required.map((x) => x.type))], items: required.slice(0, 8).map((x) => `${x.type}: ${x.missing.join(", ")}`) }, rulesExtra: [...new Set(required.map((x) => x.source))], strip: { side: "head", rows: ["jsonld"] }, where: required.slice(0, 3).map((x) => `JSON-LD #${x.block} ${x.path}`).join(", ") });
+  if (retired.size) out.push({ code: "rich_result_retired", evidence: { items: [...retired.values()] }, strip: { side: "head", rows: ["jsonld"] }, where: [...retired.values()].map((x) => x.type).join(", ") });
   if (recommended.length) out.push({ code: "schema_recommended_missing", evidence: { types: [...new Set(recommended.map((x) => x.type))], items: recommended.slice(0, 8).map((x) => `${x.type}: ${x.missing.join(", ")}`) }, rulesExtra: [...new Set(recommended.map((x) => x.source))], strip: { side: "head", rows: ["jsonld"] }, where: recommended.slice(0, 3).map((x) => `JSON-LD #${x.block} ${x.path}`).join(", ") });
   const hasFaq = jsonLd.some((b) => b.types.includes("FAQPage")) || microdata.includes("FAQPage");
   if (hasFaq) {
@@ -380,12 +484,248 @@ function languageChecks(r, out) {
   }
 }
 
+// ── images, the site around the page, snippet controls, trust signals ───────
+
+/** This skill's rule: an image over 200 KB is heavy for one picture on a page. */
+export const IMAGE_HEAVY_BYTES = 200 * 1024;
+/** This skill's rule: an image over 100 KB, or declared 800 px wide or more, is worth a srcset. */
+export const IMAGE_SRCSET_BYTES = 100 * 1024;
+export const IMAGE_SRCSET_WIDTH = 800;
+/** This skill's rule: above the fold is the hero (the h1 up to the first h2, or the top of the content), and at most its first two images; the first of them is the LCP candidate. */
+export const ABOVE_FOLD_IMAGES = 2;
+/** data-nosnippet covering this share of the visible text or more hides the main text from snippets. */
+export const NOSNIPPET_SHARE = 0.5;
+
+const LEGACY_EXT = /\.(?:jpe?g|png|gif|bmp)(?:$|[?#])/i;
+const MODERN_EXT = /\.(?:avif|webp|svg)(?:$|[?#])/i;
+
+function imageChecks(r, out) {
+  const furniture = new Set(r.facts.zones.filter((z) => ["header", "nav", "footer"].includes(z.kind)).map((z) => z.id));
+  const imgs = r.facts.images.filter((i) => !i.decorative && i.url);
+  const content = imgs.filter((i) => !furniture.has(i.zone));
+  const head = new Map((r.images?.results || []).map((x) => [x.index, x]));
+  const where = (list) => list.slice(0, 3).map((i) => i.path).join(", ");
+  const zones = (list) => [...new Set(list.map((i) => i.zone))];
+  const noSize = imgs.filter((i) => !i.width || !i.height);
+  if (noSize.length) out.push({ code: "image_dimensions_missing", evidence: { count: noSize.length, images: imgs.length, samples: noSize.slice(0, 6).map((i) => i.src) }, zones: zones(noSize), where: where(noSize) });
+  const topZone = r.facts.zones.find((z) => z.kind === "hero" || z.kind === "intro" || z.kind === "section")?.id;
+  const above = content.filter((i) => i.zone === topZone).slice(0, ABOVE_FOLD_IMAGES);
+  const lcp = above[0];
+  if (lcp && lcp.loading === "lazy") out.push({ code: "image_lcp_lazy", evidence: { src: lcp.src, loading: lcp.loading, fetchpriority: lcp.fetchpriority }, zones: [lcp.zone], where: lcp.path });
+  const below = content.filter((i) => !above.includes(i) && i.loading !== "lazy");
+  if (below.length) out.push({ code: "image_not_lazy", evidence: { count: below.length, aboveFold: ABOVE_FOLD_IMAGES, samples: below.slice(0, 6).map((i) => i.src) }, zones: zones(below), where: where(below) });
+  const legacy = imgs.filter((i) => {
+    if (i.modernSource || MODERN_EXT.test(i.url)) return false;
+    const t = head.get(i.index)?.type || "";
+    return LEGACY_EXT.test(i.url) || /image\/(?:jpe?g|png|gif|bmp)/i.test(t);
+  });
+  if (legacy.length) out.push({ code: "image_legacy_format", evidence: { count: legacy.length, samples: legacy.slice(0, 6).map((i) => i.src) }, zones: zones(legacy), where: where(legacy) });
+  const heavy = imgs.filter((i) => (head.get(i.index)?.bytes || 0) > IMAGE_HEAVY_BYTES);
+  if (heavy.length) out.push({ code: "image_oversized", evidence: { count: heavy.length, maxBytes: IMAGE_HEAVY_BYTES, samples: heavy.slice(0, 6).map((i) => `${Math.round(head.get(i.index).bytes / 1024)} KB ${i.src}`) }, zones: zones(heavy), where: where(heavy) });
+  const wide = imgs.filter((i) => !i.srcset && ((head.get(i.index)?.bytes || 0) > IMAGE_SRCSET_BYTES || Number(i.width) >= IMAGE_SRCSET_WIDTH) && !/\.svg(?:$|[?#])/i.test(i.url));
+  if (wide.length) out.push({ code: "image_no_srcset", evidence: { count: wide.length, samples: wide.slice(0, 6).map((i) => i.src) }, zones: zones(wide), where: where(wide) });
+}
+
+function snippetChecks(r, out) {
+  const sources = [];
+  for (const m of r.facts.head.robotsMeta) if (/\bnosnippet\b|\bmax-snippet\s*:\s*0\b/i.test(m.content)) sources.push(`meta ${m.name}: ${m.content}`);
+  if (/\bnosnippet\b|\bmax-snippet\s*:\s*0\b/i.test(r.fetch.xRobotsTag || "")) sources.push(`X-Robots-Tag: ${fold(r.fetch.xRobotsTag)}`);
+  const ns = r.facts.extras?.nosnippet;
+  const visible = fold(r.facts.visibleText).length;
+  if (ns && ns.chars && visible && ns.chars / visible >= NOSNIPPET_SHARE) sources.push(`data-nosnippet on ${ns.elements} element(s), ${Math.round((ns.chars / visible) * 100)}% of the visible text`);
+  if (sources.length) out.push({ code: "snippet_blocked", evidence: { sources }, strip: { side: "head", rows: ["robots"] }, where: sources.map((s) => s.split(":")[0]).join(", ") });
+}
+
+function siteChecks(r, loc, out) {
+  const s = r.site;
+  const x = r.facts.extras || {};
+  const https = /^https:/i.test(r.fetch.finalUrl || "");
+  if (s?.favicon && !s.favicon.ok) out.push({ code: "favicon_missing", evidence: { url: s.favicon.url, declared: s.favicon.declared, status: s.favicon.status }, strip: { side: "head", rows: ["favicon"] }, where: s.favicon.declared ? '<link rel="icon">' : "/favicon.ico" });
+  if (x.mixedTotal) out.push({ code: "mixed_content", evidence: { count: x.mixedTotal, samples: x.mixed.slice(0, 6).map((m) => `${m.tag} ${m.url}`) }, where: x.mixed.slice(0, 2).map((m) => m.tag).join(", ") });
+  if (s?.soft404 && s.soft404.status === 200) out.push({ code: "soft_404", evidence: { url: s.soft404.url, status: s.soft404.status, finalUrl: s.soft404.finalUrl }, where: "a path that does not exist" });
+  const bad = (s?.variants || []).filter((v) => v.status !== null && !v.ends);
+  if (bad.length) out.push({ code: "url_variants_inconsistent", evidence: { count: bad.length, checked: s.variants.length, items: bad.map((v) => `${v.kind}: ${v.url} → ${v.finalUrl ? `${v.status} ${v.finalUrl}` : v.status ?? v.reason}`) }, where: bad.map((v) => v.kind).join(", ") });
+  if (https && !r.fetch.saved && !r.fetch.hsts) out.push({ code: "hsts_missing", evidence: { url: r.fetch.finalUrl }, where: "Strict-Transport-Security" });
+  if (s?.markdown?.declared && !s.markdown.ok) out.push({ code: "markdown_alternate_broken", evidence: { url: s.markdown.url, status: s.markdown.status, contentType: s.markdown.contentType }, strip: { side: "robots", rows: ["markdown"] }, where: '<link rel="alternate" type="text/markdown">' });
+  if (s?.aiCatalog?.present && s.aiCatalog.valid === false) out.push({ code: "ai_catalog_invalid", evidence: { url: s.aiCatalog.url }, strip: { side: "robots", rows: ["ai_catalog"] }, where: new URL(s.aiCatalog.url).pathname });
+  if (s?.indexnow && !s.indexnow.ok) out.push({ code: "indexnow_key_broken", evidence: { url: s.indexnow.url, status: s.indexnow.status }, where: new URL(s.indexnow.url).pathname });
+}
+
+const ARTICLE_TYPES = ["Article", "NewsArticle", "BlogPosting", "TechArticle", "Report", "ScholarlyArticle"];
+
+/** E-E-A-T presence (no score): an author on articles, About and Contact, the organisation, a visible date, privacy and terms. */
+function trustChecks(r, out) {
+  const x = r.facts.extras;
+  if (!x) return;
+  const blocks = r.facts.structured.jsonLd.filter((b) => b.ok);
+  const nodes = blocks.flatMap((b) => typedNodes(b.value));
+  const ofType = (types) => nodes.filter((n) => n.types.some((t) => types.includes(t)));
+  const articles = ofType(ARTICLE_TYPES);
+  const isArticle = articles.length > 0;
+  if (isArticle && !x.byline && !articles.some((a) => has(a.node, "author"))) out.push({ code: "author_missing", evidence: { types: [...new Set(articles.flatMap((a) => a.types))] }, where: "byline · author" });
+  const missingTrust = ["about", "contact"].filter((k) => !x.trust[k]);
+  if (missingTrust.length) out.push({ code: "about_contact_missing", evidence: { missing: missingTrust }, where: missingTrust.map((k) => `${k} link`).join(", ") });
+  const orgs = ofType(["Organization", "Corporation", "LocalBusiness", "OnlineBusiness", "NGO", "EducationalOrganization"]);
+  const orgMissing = !orgs.length ? ["Organization"] : ["name", "logo", "sameAs"].filter((k) => !orgs.some((o) => has(o.node, k)));
+  if (orgMissing.length) out.push({ code: "organization_details_missing", evidence: { missing: orgMissing, found: orgs.length }, strip: { side: "head", rows: ["jsonld"] }, where: orgs.length ? `Organization: ${orgMissing.join(", ")}` : "no Organization markup" });
+  const dated = articles.flatMap((a) => [a.node.datePublished, a.node.dateModified]).filter((d) => typeof d === "string");
+  if (isArticle && !x.visibleDates.length) out.push({ code: "article_date_missing", evidence: { markup: dated.slice(0, 2) }, where: "visible date" });
+  const missingLegal = ["privacy", "terms"].filter((k) => !x.trust[k]);
+  if (missingLegal.length) out.push({ code: "privacy_terms_missing", evidence: { missing: missingLegal }, where: missingLegal.map((k) => `${k} link`).join(", ") });
+  // Dates: the markup's datePublished / dateModified against the dates the page shows.
+  const all = nodes.flatMap((n) => [n.node.datePublished, n.node.dateModified]).filter((d) => typeof d === "string" && /^\d{4}-\d{2}-\d{2}/.test(d)).map((d) => d.slice(0, 10));
+  if (all.length && x.visibleDates.length && !all.some((d) => x.visibleDates.includes(d))) out.push({ code: "date_mismatch", evidence: { markup: [...new Set(all)].slice(0, 3), visible: x.visibleDates.slice(0, 3) }, strip: { side: "head", rows: ["jsonld"] }, where: "datePublished / dateModified · visible date" });
+  // The site name: WebSite markup with a name, on the home page (where Google reads it).
+  let home = false;
+  try {
+    home = new URL(r.fetch.finalUrl).pathname === "/";
+  } catch {}
+  if (home && !ofType(["WebSite"]).some((n) => has(n.node, "name"))) out.push({ code: "site_name_missing", evidence: {}, strip: { side: "head", rows: ["jsonld"] }, where: "WebSite name" });
+}
+
+function shellChecks(r, out) {
+  const s = r.shell;
+  if (!s?.detected) return;
+  out.push({ code: "spa_shell", evidence: { roots: s.roots, words: s.words, scripts: s.scripts, rendered: r.render ? (r.render.ok ? "rendered" : r.render.reason) : "not rendered" }, zones: loc0(r), where: s.roots.join(", ") });
+}
+const loc0 = (r) => {
+  const z = r.facts.zones.find((x) => x.kind === "hero" || x.kind === "intro" || x.kind === "section");
+  return z ? [z.id] : [];
+};
+
+// ── the modules that read the text: writing patterns, the keyword, the language versions' facts ──
+
+/** Each passage's group: its h2 section, the same stand-in for the agent's grouping the reading checks use. */
+function sectionGroups(vs) {
+  const keys = [];
+  const assignment = vs.passages.map((p) => {
+    const k = headingKey(p.rawHeading ?? p.heading ?? "");
+    let g = keys.indexOf(k);
+    if (g < 0) g = keys.push(k) - 1;
+    return g;
+  });
+  return { assignment, count: keys.length };
+}
+
+/**
+ * The deterministic modules, computed once: writing patterns over the kept text's sections, the
+ * keyword lens (the user's keyword, else one read off the h1), and the numbers of each language
+ * version's h2 sections side by side. Each one says when it did not run, and why.
+ */
+export function textModules(reading, { keyword = null } = {}) {
+  const vs = reading.vs;
+  const sections = (reading.facts.sections || []).filter((s) => !s.intro);
+  const patterns = analysePatterns(sections, vs.passages);
+  const given = normaliseKeyword(keyword || "");
+  const h1 = (vs.page.h1 || [])[0] || reading.facts.headings.find((h) => h.level === 1 && !h.hidden)?.text || "";
+  const kw = given || keywordFromHeading(h1, reading.fetch.finalUrl);
+  const { assignment, count } = sectionGroups(vs);
+  const kwReport = isUsableKeyword(kw)
+    ? keywordReport({
+        keyword: kw,
+        source: given ? "given" : "h1",
+        fields: { title: reading.facts.head.title, h1, description: reading.facts.head.metaDescriptions[0] || "" },
+        passages: vs.passages.map((p, i) => ({ index: p.index, heading: p.heading, text: p.text, charCount: p.charCount, group: assignment[i] })),
+        groupCount: count,
+        language: reading.facts.head.lang,
+      })
+    : { keyword: kw || null, source: given ? "given" : "h1", skipped: kw ? "keyword_unusable" : "no_h1", findings: [] };
+  const alts = (reading.alternates?.results || []).filter((a) => a.ok && Array.isArray(a.sections));
+  const selfLang = reading.facts.head.hreflang.find((h) => h.href && samePage(h.href, reading.fetch.finalUrl))?.hreflang || reading.facts.head.lang || "this page";
+  const locales = alts.length ? compareLocales(selfLang, sectionNumbers(reading.facts.sections || []), alts) : null;
+  return { patterns, keyword: kwReport, locales };
+}
+
+const PATTERN_CODE = { stock: "stock_phrases", repetition: "repeated_sentence_shape", uniformity: "uniform_openings", vagueness: "unchecked_claims" };
+
+function patternChecks(mod, loc, out) {
+  const p = mod.patterns;
+  if (!p.analysed) return;
+  for (const [family, code] of Object.entries(PATTERN_CODE)) {
+    const items = p.findings.filter((f) => f.family === family);
+    if (!items.length) continue;
+    const per1k = p.wordCount ? Number(((items.length / p.wordCount) * 1000).toFixed(2)) : 0;
+    let severity = "low";
+    if (family === "stock") severity = per1k >= STOCK_DENSITY_MEDIUM ? "medium" : "low";
+    else if (items.some((f) => f.severity === "high")) severity = "medium";
+    const passages = [...new Set(items.map((f) => f.passage).filter((x) => x !== null))];
+    out.push({
+      code,
+      severity,
+      evidence: {
+        count: items.length,
+        words: p.wordCount,
+        per1k,
+        threshold: family === "stock" ? STOCK_DENSITY_MEDIUM : null,
+        language: p.language,
+        score: p.score ? { value: p.score.value, band: p.score.band, perThousand: p.score.perThousand } : null,
+        items: items.slice(0, 12).map((f) => ({ text: f.evidence.slice(0, 160), passage: f.passage, word: f.word, heading: f.heading, occurrences: f.occurrences })),
+        note: "signals about worn writing, not an AI detector",
+      },
+      passages,
+      zones: loc.passages(passages),
+      where: items.slice(0, 3).map((f) => (f.passage !== null ? `passage #${f.passage} · word ${f.word}` : `word ${f.word}`)).join(", "),
+    });
+  }
+}
+
+function keywordChecks(mod, loc, out) {
+  for (const f of mod.keyword.findings || []) {
+    const item = { code: f.code, evidence: f.evidence };
+    if (f.code === "keyword_not_in_title" || f.code === "keyword_variant_split") {
+      item.strip = { side: "head", rows: ["title"] };
+      item.zones = loc.hero !== null ? [loc.hero] : [];
+      item.where = "<title> · <h1> · description";
+    } else if (f.code === "keyword_one_section") {
+      item.passages = f.evidence.passages;
+      item.zones = loc.passages(f.evidence.passages);
+      item.where = `${f.evidence.sectionsReached} of ${f.evidence.sections} h2 sections`;
+    } else if (f.code === "off_keyword_share") {
+      item.where = `${f.evidence.offPassages.length} passages without the phrase`;
+    } else if (f.code === "promise_without_number") {
+      item.passages = [f.evidence.passage];
+      item.zones = loc.passages([f.evidence.passage]);
+      item.where = `passage #${f.evidence.passage}`;
+    }
+    out.push(item);
+  }
+}
+
+function localeChecks(mod, loc, out) {
+  for (const f of mod.locales?.findings || []) {
+    const zones = [...new Set(f.evidence.items.map((d) => loc.heading(d.heading)).filter((z) => z !== null))];
+    out.push({ ...f, zones, where: f.evidence.items.slice(0, 2).map((d) => `${d.hreflang} · h2 #${d.position}`).join(", ") });
+  }
+}
+
+/** The page as the brand and review comparisons read it: visible text, title, description, links, schema types, passages. */
+function pageForJudgement(reading, loc) {
+  const h = reading.facts.head;
+  const st = reading.facts.structured;
+  return {
+    text: [h.title, h.metaDescriptions[0] || "", reading.facts.visibleText].join("\n"),
+    passages: reading.vs.passages,
+    links: reading.facts.links.map((l) => l.url),
+    types: new Set([...st.jsonLd.flatMap((b) => b.types), ...st.microdata, ...st.rdfa]),
+    zones: reading.vs.passages.map((p) => ({ zone: loc.passage(p.index), text: p.text })).filter((z) => z.zone !== null),
+  };
+}
+
+function judgementChecks(reading, loc, extra, out) {
+  for (const f of questionFindings(extra.questions)) out.push({ ...f, zones: loc.passages(f.passages) });
+  const page = pageForJudgement(reading, loc);
+  for (const f of brandFindings(extra.brand, page)) out.push({ ...f, zones: loc.passages(f.passages || []) });
+  for (const f of reviewFindings(extra.reviews, page)) out.push(f);
+}
+
 /**
  * Every finding for one reading, ranked: severity first, then the registry's order. Each comes
- * with its id (the code), area, owner, rules, where, zones (page-map zone ids, or js0… for the
- * JavaScript-only zones) and strip rows.
+ * with its id (the code, or code-qid for one per question), area, owner, layer (measured, derived
+ * or judgement, with the agent and model that judged), rules, where, zones (page-map zone ids, or
+ * js0… for the JavaScript-only zones) and strip rows. `extra` holds the validated judgement files
+ * (questions, brand, reviews), the user's keyword, and the text modules if already computed.
  */
-export function auditFindings(reading) {
+export function auditFindings(reading, extra = {}) {
   const loc = locator(reading);
   const raw = [];
   accessChecks(reading, raw);
@@ -393,16 +733,29 @@ export function auditFindings(reading) {
   structuredChecks(reading, raw);
   readingChecks(reading, loc, raw);
   languageChecks(reading, raw);
+  imageChecks(reading, raw);
+  snippetChecks(reading, raw);
+  siteChecks(reading, loc, raw);
+  trustChecks(reading, raw);
+  shellChecks(reading, raw);
+  const mod = extra.modules || textModules(reading, extra);
+  patternChecks(mod, loc, raw);
+  keywordChecks(mod, loc, raw);
+  localeChecks(mod, loc, raw);
+  judgementChecks(reading, loc, extra, raw);
   const out = raw.map((f) => {
     const reg = CODES[f.code];
     if (!reg) throw new Error(`unregistered code ${f.code}`);
     const rules = [...new Set([...reg.rules, ...(f.rulesExtra || [])])];
+    const layer = reg.layer || "measured";
     return {
-      id: f.code,
+      id: f.id || f.code,
       code: f.code,
       severity: f.severity || reg.severity,
       area: reg.area,
       owner: reg.owner,
+      layer,
+      judgement: layer === "judgement" ? f.judgement || { agent: null, model: null } : null,
       hides: Boolean(reg.hides),
       informational: Boolean(reg.info),
       where: f.where ?? null,

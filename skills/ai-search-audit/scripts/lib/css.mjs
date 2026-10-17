@@ -277,4 +277,13 @@ export const CSS_EXTRA = `
 :root[data-lang="uk"] .lb-en{display:none}
 :root[data-lang="uk"] .lb-uk{display:block}
 @media (max-width:480px){.refusal{padding:14px 14px}.refusal ul{padding-left:16px}}
+/* the judgement badge and the one-model note */
+.lyr{display:inline-flex;align-items:center;gap:4px;font-weight:600;font-size:9.5px;line-height:1.5;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:0 7px;border:1px solid var(--c);color:var(--c);background:var(--cs);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.lyr::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c);flex:none}
+.lyr.judgement{--c:var(--lj);--cs:var(--lj-soft)}
+.pm-key li.jd{flex-wrap:wrap}
+.pm-key li.jd .lyr,.bchip .lyr{text-transform:none;letter-spacing:.02em;font-size:10.5px;white-space:normal;overflow:visible;line-height:1.35;padding:1px 8px}
+.pm-key li.jd .lyr{flex-basis:100%;margin:0 0 2px;width:fit-content;max-width:100%}
+.bchip .lyr{align-self:flex-start}
+.honest{margin:0 0 12px;font-size:13.5px;color:var(--text);border:1px solid var(--line-2);border-left:3px solid var(--lj);border-radius:10px;padding:8px 12px;background:var(--lj-soft)}
 `;

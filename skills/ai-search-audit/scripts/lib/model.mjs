@@ -2,7 +2,7 @@
 // outputs (HTML, Markdown, JSON), so they can never disagree: the pin numbers, the tiles, the
 // page map's zones and side strips, the checklist, the language grid, the bots, the waterfall.
 
-import { auditFindings, SEVERITIES, SEVERITY_RANK } from "./checks.mjs";
+import { auditFindings, textModules, SEVERITIES, SEVERITY_RANK } from "./checks.mjs";
 import { headingKey } from "./facts.mjs";
 import { AREAS, label, fmtEn, fmtUk, ukForm } from "./copy.mjs";
 import { samePage } from "../../../vectorscope/scripts/lib/technical.mjs";
@@ -47,7 +47,15 @@ function zoneSeen(reading) {
   return out;
 }
 
-/** The checklist: 24 standard checks, each one a cell. `codes` are the findings that fail or warn it. */
+function isHome(reading) {
+  try {
+    return new URL(reading.fetch.finalUrl).pathname === "/";
+  } catch {
+    return false;
+  }
+}
+
+/** The checklist: 33 standard checks, each one a cell. `codes` are the findings that fail or warn it. */
 function checklist(reading, findings) {
   const by = (codes) => findings.filter((f) => codes.includes(f.code));
   const hl = reading.facts.head.hreflang;
@@ -77,6 +85,15 @@ function checklist(reading, findings) {
     ["hreflang_pairs", ["hreflang", "hreflang"], ["hreflang versions link back", "Мовні версії hreflang посилаються взаємно"], ["hreflang_no_return", "hreflang_invalid_code", "hreflang_no_self", "hreflang_alternate_broken"], !hl.length ? "none" : !reading.alternates ? "na" : null],
     ["rich_faqpage", ["FAQ", "FAQ"], ["FAQPage markup", "Розмітка FAQPage"], ["faq_schema_not_visible", "faq_rich_result_retired"], types.has("FAQPage") ? null : "none"],
     ["rich_breadcrumb", ["Breadcrumb", "Ланцюжок"], ["BreadcrumbList markup", "Розмітка BreadcrumbList"], [], types.has("BreadcrumbList") ? null : "none"],
+    ["images", ["Images", "Зображення"], ["Image sizes, formats, lazy loading, srcset", "Розміри, формати, lazy і srcset зображень"], ["image_dimensions_missing", "image_lcp_lazy", "image_not_lazy", "image_legacy_format", "image_oversized", "image_no_srcset"], reading.facts.images.length ? null : "none"],
+    ["snippet", ["Snippet", "Сніпет"], ["Eligible for a snippet (no nosnippet, max-snippet:0)", "Може мати сніпет (без nosnippet, max-snippet:0)"], ["snippet_blocked"], null],
+    ["favicon", ["Favicon", "Favicon"], ["A favicon that loads", "Favicon завантажується"], ["favicon_missing"], !reading.site ? "na" : null],
+    ["site_name", ["Site name", "Назва сайту"], ["WebSite name markup on the home page", "Назва сайту в розмітці WebSite на головній"], ["site_name_missing"], isHome(reading) ? null : "none"],
+    ["mixed", ["Mixed", "Змішаний"], ["No http:// resources on https", "Без ресурсів http:// на https"], ["mixed_content"], null],
+    ["soft404", ["Soft 404", "Soft 404"], ["A missing page answers 404", "Неіснуюча сторінка відповідає 404"], ["soft_404"], !reading.site ? "na" : null],
+    ["variants", ["Variants", "Варіанти"], ["http, www and slash variants end at the page", "Варіанти http, www і слеш ведуть на сторінку"], ["url_variants_inconsistent"], !reading.site ? "na" : null],
+    ["hsts", ["HSTS", "HSTS"], ["Strict-Transport-Security header", "Заголовок Strict-Transport-Security"], ["hsts_missing"], reading.fetch.saved ? "na" : null],
+    ["trust", ["Trust", "Довіра"], ["Author, About, Contact, organisation, dates, privacy and terms", "Автор, «Про нас», контакти, організація, дати, конфіденційність і умови"], ["author_missing", "about_contact_missing", "organization_details_missing", "article_date_missing", "privacy_terms_missing", "date_mismatch"], null],
   ];
   return cells.map(([id, short, name, codes, fixed]) => {
     let items = by(codes);
@@ -87,7 +104,7 @@ function checklist(reading, findings) {
 }
 
 /** The language grid: this page and each alternate, by title, description, hreflang and html lang. */
-function languageGrid(reading, findings) {
+function languageGrid(reading, findings, modules) {
   const hl = reading.facts.head.hreflang;
   if (!hl.length) return null;
   const f = (code) => findings.find((x) => x.code === code);
@@ -103,8 +120,16 @@ function languageGrid(reading, findings) {
   const self = hl.find((h) => h.href && (samePage(h.href, page) || (canonical && samePage(h.href, canonical))));
   const selfLang = self?.hreflang || reading.facts.head.lang || "—";
   const rows = [];
-  const langCell = (lang, hreflang) => (!lang ? "warn" : mismatch && mismatch.evidence.items.some((s) => s.startsWith(`${hreflang}:`)) ? "warn" : "pass");
-  rows.push({ hreflang: selfLang, self: true, cells: [inGroup(dupT, selfLang) ? "fail" : "pass", inGroup(dupD, selfLang) ? "warn" : "pass", noSelf ? "fail" : "pass", langCell(reading.facts.head.lang, selfLang)] });
+  const langOff = (lang, hreflang) => !lang || Boolean(mismatch && mismatch.evidence.items.some((s) => s.startsWith(`${hreflang}:`)));
+  const locales = modules?.locales || null;
+  const drift = f("locale_facts_differ");
+  const factsCell = (hreflang) => {
+    const c = locales?.compared.find((x) => x.hreflang === hreflang);
+    if (!c || !c.aligned) return "na";
+    return drift && drift.evidence.items.some((d) => d.hreflang === hreflang) ? "fail" : "pass";
+  };
+  const selfFacts = !locales || !locales.compared.some((c) => c.aligned) ? "na" : drift ? "fail" : "pass";
+  rows.push({ hreflang: selfLang, self: true, cells: [inGroup(dupT, selfLang) ? "fail" : "pass", inGroup(dupD, selfLang) ? "warn" : "pass", noSelf ? "fail" : langOff(reading.facts.head.lang, selfLang) ? "warn" : "pass", selfFacts] });
   for (const a of reading.alternates?.results || []) {
     if (a.refused) {
       rows.push({ hreflang: a.hreflang, refused: true, cells: ["na", "na", "na", "na"] });
@@ -116,7 +141,7 @@ function languageGrid(reading, findings) {
     }
     const back = noReturn && noReturn.evidence.langs.includes(a.hreflang);
     const bad = broken && broken.evidence.langs.includes(a.hreflang);
-    rows.push({ hreflang: a.hreflang, cells: [inGroup(dupT, a.hreflang) ? "fail" : "pass", inGroup(dupD, a.hreflang) ? "warn" : "pass", back || bad ? "fail" : "pass", langCell(a.lang, a.hreflang)] });
+    rows.push({ hreflang: a.hreflang, cells: [inGroup(dupT, a.hreflang) ? "fail" : "pass", inGroup(dupD, a.hreflang) ? "warn" : "pass", back || bad ? "fail" : langOff(a.lang, a.hreflang) ? "warn" : "pass", factsCell(a.hreflang)] });
   }
   return {
     rows,
@@ -162,6 +187,7 @@ function strips(reading, findings) {
     { id: "social", k: "Open Graph", v: [`${socialHave} of 4 tags`, `${socialHave} з 4 тегів`] },
     { id: "viewport", k: "viewport", v: h.viewport ? ["set", "задано"] : none },
     { id: "scripts", k: "scripts", v: [`${h.scripts.total} · ${h.scripts.blocking} blocking`, `${h.scripts.total} · ${h.scripts.blocking} блокують`] },
+    { id: "favicon", k: "favicon", v: !reading.site ? (reading.facts.extras?.icons.length ? ["declared", "оголошено"] : ["not measured", "не виміряно"]) : reading.site.favicon.ok ? ["loads", "завантажується"] : reading.site.favicon.reason === "data_uri" ? ["data: URI", "data: URI"] : [`HTTP ${reading.site.favicon.status ?? "—"}`, `HTTP ${reading.site.favicon.status ?? "—"}`] },
   ];
   const r = reading.robots;
   const bots = r.bots || [];
@@ -173,20 +199,27 @@ function strips(reading, findings) {
   };
   const sm = reading.sitemap;
   const ll = reading.llms;
+  const site = reading.site;
   const robots = [
     { id: "search", k: "Google · Bing", v: groupVal(["index"]) },
     { id: "ai_search", k: ["AI search bots", "ШІ-пошуковики"], v: groupVal(["search", "user"]) },
     { id: "ai_training", k: ["AI training bots", "Боти навчання ШІ"], v: groupVal(["training"]) },
     { id: "sitemap", k: "sitemap.xml", v: !sm ? ["not measured", "не виміряно"] : !sm.found ? ["not found", "не знайдено"] : sm.listsPage === true ? ["lists the page", "сторінка є"] : sm.listsPage === false ? ["page not listed", "сторінки немає"] : ["not measured", "не виміряно"] },
     { id: "llms", k: "llms.txt", v: !ll ? ["not measured", "не виміряно"] : ll.present ? [`present · ${ll.links} links`, `є · ${uk(ll.links, "посилання", "посилання", "посилань")}`] : none },
+    { id: "markdown", k: ["Markdown copy", "Markdown-копія"], v: !site ? ["not measured", "не виміряно"] : site.markdown.ok ? [site.markdown.declared ? "declared · loads" : ".md · loads", site.markdown.declared ? "оголошено · є" : ".md · є"] : site.markdown.declared ? [`declared · HTTP ${site.markdown.status ?? "—"}`, `оголошено · HTTP ${site.markdown.status ?? "—"}`] : none },
+    { id: "ai_catalog", k: "ai-catalog.json", v: !site ? ["not measured", "не виміряно"] : !site.aiCatalog?.present ? none : site.aiCatalog.valid ? ["present · JSON", "є · JSON"] : ["present · not JSON", "є · не JSON"] },
   ];
   const attach = (side, rows) => rows.map((row) => ({ ...row, pins: findings.filter((f) => hasRow(f, side, row.id)) }));
   return { head: attach("head", head), robots: attach("robots", robots) };
 }
 
-/** Build the model. `reading` must be ok. */
-export function buildModel(reading) {
-  const findings = auditFindings(reading).map((f) => ({ ...f, label: label(f) }));
+/**
+ * Build the model. `reading` must be ok. `extra` holds the validated judgement files (questions,
+ * brand, reviews) and the user's keyword; each is optional, and a missing one is reported.
+ */
+export function buildModel(reading, extra = {}) {
+  const modules = textModules(reading, extra);
+  const findings = auditFindings(reading, { ...extra, modules }).map((f) => ({ ...f, label: label(f) }));
   const zones = reading.facts.zones;
   const seen = zoneSeen(reading);
   const jsZones = (reading.render?.jsZones || []).map((z, i) => ({ ...z, id: `js${i}`, kind: "js" }));
@@ -221,6 +254,7 @@ export function buildModel(reading) {
     const items = findings.filter((f) => f.area === a.id);
     let state = items.some((f) => f.severity === "blocking") ? "block" : items.some((f) => f.severity === "high" || f.severity === "medium") ? "prob" : "ok";
     if (a.id === "lang" && !reading.facts.head.hreflang.length && !items.length) state = "na";
+    if (a.id === "brand" && !extra.brand && !extra.reviews && !items.length) state = "na";
     return { id: a.id, q: a.q, state, count: items.length, minorOnly: items.length > 0 && state === "ok", worst: items.length ? worst(items) : null };
   });
   const counts = Object.fromEntries(SEVERITIES.map((s) => [s, findings.filter((f) => f.severity === s).length]));
@@ -237,23 +271,49 @@ export function buildModel(reading) {
     mappedCount: ordered.filter((f) => f.mapped).length,
     unmappedCount: ordered.filter((f) => !f.mapped).length,
     checklist: checklist(reading, findings),
-    languages: languageGrid(reading, findings),
+    languages: languageGrid(reading, findings, modules),
     bots: reading.robots.bots || [],
     robotsPath: robotsPathOf(reading.fetch.finalUrl),
     waterfall: w,
     passages: { used: reading.vs.passages.length, cap: reading.vs.page.chunkCap },
-    caps: caps(reading),
+    caps: caps(reading, modules, extra),
+    modules,
+    extra,
+    judgement: judgementSummary(extra),
+    keyword: modules.keyword.keyword ? { keyword: modules.keyword.keyword, source: modules.keyword.source } : null,
   };
 }
 
-/** Every list the reading did not finish, so nothing reads as complete when it is not. */
-function caps(r) {
+/** Who judged: the agent and model each judgement file names, and one line for the honesty note. */
+function judgementSummary(extra) {
+  const files = { questions: extra.questions?.judgement || null, brand: extra.brand?.judgement || null, reviews: extra.reviews?.judgement || null };
+  const models = [...new Set(Object.values(files).filter(Boolean).map((j) => j.model).filter(Boolean))];
+  const agents = [...new Set(Object.values(files).filter(Boolean).map((j) => j.agent).filter(Boolean))];
+  return { files, model: models.length ? models.join(", ") : null, agent: agents.length ? agents.join(", ") : null, any: Object.values(files).some(Boolean) };
+}
+
+/** Every list the reading did not finish, and every module that did not run, so nothing reads as complete when it is not. */
+function caps(r, modules = null, extra = {}) {
   const out = [];
+  const p = modules?.patterns;
+  if (p && !p.analysed) out.push({ id: "patterns", t: [`Writing patterns not analysed (${p.reason}): lexicons exist for English, Ukrainian and Spanish`, `Шаблони письма не аналізовано (${p.reason}): словники є для англійської, української й іспанської`] });
+  if (p?.analysed && p.score?.band === "insufficient_text") out.push({ id: "patterns_short", t: [`Writing patterns: ${p.wordCount} words, under the 60 the density needs; no score`, `Шаблони письма: ${p.wordCount} слів, менше за 60, потрібних для щільності; без оцінки`] });
+  if (modules?.keyword?.skipped) out.push({ id: "keyword", t: ["Keyword not checked: no --keyword and no h1 to read one from", "Ключову фразу не перевірено: немає --keyword і немає h1"] });
+  if (modules?.keyword && !modules.keyword.skipped && !modules.keyword.promiseChecked) out.push({ id: "promise", t: ["The promise-without-a-figure rule reads English only", "Правило «обіцянка без числа» читає лише англійську"] });
+  const unaligned = (modules?.locales?.compared || []).filter((c) => !c.aligned && c.reason !== "no_sections");
+  if (unaligned.length) out.push({ id: "locales", n: unaligned.length, t: [`Facts not compared for ${unaligned.map((c) => `${c.hreflang} (${c.sections[1]} sections vs ${c.sections[0]})`).join(", ")}: the sections do not line up`, `Факти не порівняно для ${unaligned.map((c) => `${c.hreflang} (${c.sections[1]} розділів проти ${c.sections[0]})`).join(", ")}: розділи не збігаються`] });
+  for (const [k, name] of [["questions", "questions.json"], ["brand", "brand.json"], ["reviews", "reviews.json"]]) if (!extra[k]) out.push({ id: `no_${k}`, t: [`${name} not given: that judgement was not made`, `${name} не надано: цього судження не зроблено`] });
   if (r.links?.unchecked) out.push({ id: "links", n: r.links.unchecked, cap: r.links.cap, t: [`${r.links.unchecked} links not checked (cap ${r.links.cap})`, `${uk(r.links.unchecked, "посилання", "посилання", "посилань")} не перевірено (ліміт ${r.links.cap})`] });
   const unverified = (r.links?.results || []).filter((x) => x.verdict === "unverified").length;
   if (unverified) out.push({ id: "links_unverified", n: unverified, t: [`${unverified} links did not answer or refused the check`, `${uk(unverified, "посилання не відповіло", "посилання не відповіли", "посилань не відповіли")} або відмовили в перевірці`] });
   if (r.alternates?.unchecked.length) out.push({ id: "alternates", n: r.alternates.unchecked.length, cap: r.alternates.cap, t: [`${r.alternates.unchecked.length} language versions not read (cap ${r.alternates.cap})`, `${uk(r.alternates.unchecked.length, "мовну версію", "мовні версії", "мовних версій")} не прочитано (ліміт ${r.alternates.cap})`] });
   if (r.sitemap?.children.unread && r.sitemap.listsPage !== true) out.push({ id: "sitemap", n: r.sitemap.children.unread, cap: r.sitemap.children.cap, t: [`${r.sitemap.children.unread} child sitemaps not read (cap ${r.sitemap.children.cap})`, `${uk(r.sitemap.children.unread, "дочірній sitemap", "дочірні sitemap", "дочірніх sitemap")} не прочитано (ліміт ${r.sitemap.children.cap})`] });
+  if (r.images?.unchecked) out.push({ id: "images", n: r.images.unchecked, cap: r.images.cap, t: [`${r.images.unchecked} images not sized (cap ${r.images.cap})`, `${uk(r.images.unchecked, "зображення", "зображення", "зображень")} без перевірки розміру (ліміт ${r.images.cap})`] });
+  if (r.shell?.detected) {
+    if (r.render?.ok) out.push({ id: "render_auto", t: [`An app shell: rendered in ${r.render.browser} on its own; ${r.render.jsZones.length} sections only with JavaScript`, `Оболонка застосунку: відрендерено в ${r.render.browser} автоматично; ${r.render.jsZones.length} розділів лише з JavaScript`] });
+    else if (r.render) out.push({ id: "render_none", t: [`An app shell, and no render: ${r.render.reason === "no_browser" ? "no Chrome or Chromium found (set CHROME_PATH)" : r.render.reason}; the JavaScript-only text is not measured`, `Оболонка застосунку без рендеру: ${r.render.reason === "no_browser" ? "не знайдено Chrome чи Chromium (задайте CHROME_PATH)" : r.render.reason}; текст лише з JavaScript не виміряно`] });
+    else out.push({ id: "render_none", t: ["An app shell in a saved page: not rendered", "Оболонка застосунку в збереженій сторінці: не відрендерено"] });
+  }
   const merged = r.facts.zones.find((z) => z.kind === "more");
   if (merged) out.push({ id: "zones", n: merged.merged, t: [`${merged.merged} sections drawn as one zone on the map`, `${uk(merged.merged, "розділ", "розділи", "розділів")} на мапі показано однією зоною`] });
   if (r.fetch.saved) out.push({ id: "saved", t: ["A saved page: robots.txt, sitemap, llms.txt, language versions and links not measured", "Збережена сторінка: robots.txt, sitemap, llms.txt, мовні версії й посилання не виміряно"] });

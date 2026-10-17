@@ -1,8 +1,8 @@
 {
   "schema": "getlooploop/ai-search-audit@1",
   "skillVersion": "2.101",
-  "producedBy": "ai-search-audit skill, Lite (local, deterministic, no model calls)",
-  "createdAt": "2026-10-16T23:25:41.758Z",
+  "producedBy": "ai-search-audit skill, Lite (local; deterministic checks, and the agent's own judgement where marked; the scripts call no model)",
+  "createdAt": "2026-10-17T10:55:20.680Z",
   "edition": "lite",
   "page": {
     "url": "https://www.getlooploop.com/es/vectorscope",
@@ -21,11 +21,11 @@
     "uk": "Ніщо не ховає текст від ШІ"
   },
   "counts": {
-    "total": 8,
+    "total": 17,
     "blocking": 0,
     "high": 0,
-    "medium": 4,
-    "low": 4
+    "medium": 7,
+    "low": 10
   },
   "tiles": [
     {
@@ -35,7 +35,7 @@
         "uk": "Добре видно в пошуку?"
       },
       "state": "prob",
-      "problems": 2
+      "problems": 6
     },
     {
       "id": "find",
@@ -62,16 +62,16 @@
         "uk": "ШІ цитує правильно?"
       },
       "state": "prob",
-      "problems": 1
+      "problems": 7
     },
     {
-      "id": "markup",
+      "id": "brand",
       "question": {
-        "en": "Rich results & markup",
-        "uk": "Розширені результати й розмітка"
+        "en": "AI gets the brand right?",
+        "uk": "ШІ правильно описує бренд?"
       },
       "state": "prob",
-      "problems": 2
+      "problems": 1
     },
     {
       "id": "lang",
@@ -94,6 +94,8 @@
       "owner": "content",
       "hidesText": false,
       "informational": false,
+      "layer": "measured",
+      "judgement": null,
       "label": {
         "en": "2 broken links",
         "uk": "2 неробочі посилання"
@@ -128,10 +130,12 @@
       "big": true,
       "code": "schema_required_missing",
       "severity": "medium",
-      "area": "markup",
+      "area": "classic",
       "owner": "dev",
       "hidesText": false,
       "informational": false,
+      "layer": "measured",
+      "judgement": null,
       "label": {
         "en": "Required schema fields missing",
         "uk": "Бракує обов’язкових полів схеми"
@@ -176,6 +180,8 @@
       "owner": "content",
       "hidesText": false,
       "informational": false,
+      "layer": "derived",
+      "judgement": null,
       "label": {
         "en": "3 passages start mid-sentence",
         "uk": "3 уривки із середини речення"
@@ -219,15 +225,112 @@
       ]
     },
     {
-      "id": "nav_in_content",
+      "id": "question_missing-q11",
       "pin": 4,
       "big": true,
+      "code": "question_missing",
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "judgement",
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      },
+      "label": {
+        "en": "No answer: “¿Puedo pegar el enlace de un PDF en l…”",
+        "uk": "Без відповіді: “¿Puedo pegar el enlace de un PDF en l…”"
+      },
+      "where": "question 11 · no passage",
+      "map": {
+        "zones": [],
+        "strip": null
+      },
+      "passages": [],
+      "evidence": {
+        "id": "q11",
+        "n": 11,
+        "question": "¿Puedo pegar el enlace de un PDF en lugar de una página web?",
+        "axes": [
+          "object"
+        ],
+        "passage": null,
+        "quote": null,
+        "citable": false
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: AI features and your website",
+          "url": "https://developers.google.com/search/docs/appearance/ai-features"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
+      "id": "question_missing-q12",
+      "pin": 5,
+      "big": true,
+      "code": "question_missing",
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "judgement",
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      },
+      "label": {
+        "en": "No answer: “La página que necesito solo se abre t…”",
+        "uk": "Без відповіді: “La página que necesito solo se abre t…”"
+      },
+      "where": "question 12 · no passage",
+      "map": {
+        "zones": [],
+        "strip": null
+      },
+      "passages": [],
+      "evidence": {
+        "id": "q12",
+        "n": 12,
+        "question": "La página que necesito solo se abre tras iniciar sesión en mi portátil. ¿La puede leer?",
+        "axes": [
+          "device",
+          "obstacle"
+        ],
+        "passage": null,
+        "quote": null,
+        "citable": false
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: AI features and your website",
+          "url": "https://developers.google.com/search/docs/appearance/ai-features"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
+      "id": "nav_in_content",
+      "pin": 6,
+      "big": false,
       "code": "nav_in_content",
       "severity": "medium",
       "area": "read",
       "owner": "dev",
       "hidesText": false,
       "informational": false,
+      "layer": "measured",
+      "judgement": null,
       "label": {
         "en": "Menu lines inside the text",
         "uk": "Рядки меню всередині тексту"
@@ -271,38 +374,91 @@
       ]
     },
     {
-      "id": "page_weight_heavy",
-      "pin": 5,
-      "big": true,
-      "code": "page_weight_heavy",
-      "severity": "low",
-      "area": "classic",
-      "owner": "dev",
+      "id": "brand_unknown",
+      "pin": 7,
+      "big": false,
+      "code": "brand_unknown",
+      "severity": "medium",
+      "area": "brand",
+      "owner": "seo",
       "hidesText": false,
       "informational": false,
-      "label": {
-        "en": "134 KB, 42 scripts",
-        "uk": "134 КБ, 42 скрипти"
+      "layer": "judgement",
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
       },
-      "where": "HTML",
+      "label": {
+        "en": "AI doesn't know the brand",
+        "uk": "ШІ не знає бренду"
+      },
+      "where": "brand questions 1–5",
       "map": {
         "zones": [],
-        "strip": {
-          "side": "head",
-          "rows": [
-            "scripts"
-          ]
-        }
+        "strip": null
       },
       "passages": [],
       "evidence": {
-        "htmlBytes": 137394,
-        "scripts": 42,
-        "blocking": 1,
-        "maxBytes": 500000,
-        "maxScripts": 30
+        "brand": "GetLoopLoop",
+        "known": 0,
+        "asked": 5
       },
       "rules": [
+        {
+          "name": "Google Search Central: AI features and your website",
+          "url": "https://developers.google.com/search/docs/appearance/ai-features"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
+      "id": "question_partial-q4",
+      "pin": 8,
+      "big": false,
+      "code": "question_partial",
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "judgement",
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      },
+      "label": {
+        "en": "Answered in part: “¿Puedo revisar una página desde el mó…”",
+        "uk": "Частково: “¿Puedo revisar una página desde el mó…”"
+      },
+      "where": "question 4 · passage #1",
+      "map": {
+        "zones": [
+          1
+        ],
+        "strip": null
+      },
+      "passages": [
+        1
+      ],
+      "evidence": {
+        "id": "q4",
+        "n": 4,
+        "question": "¿Puedo revisar una página desde el móvil sin instalar nada?",
+        "axes": [
+          "device"
+        ],
+        "passage": 1,
+        "quote": "Un límite gratuito por visitante, sin necesidad de cuenta.",
+        "citable": false
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: AI features and your website",
+          "url": "https://developers.google.com/search/docs/appearance/ai-features"
+        },
         {
           "name": "This skill's rule (README, the thresholds)",
           "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
@@ -311,7 +467,7 @@
     },
     {
       "id": "thin_section",
-      "pin": 6,
+      "pin": 9,
       "big": false,
       "code": "thin_section",
       "severity": "low",
@@ -319,6 +475,8 @@
       "owner": "content",
       "hidesText": false,
       "informational": false,
+      "layer": "measured",
+      "judgement": null,
       "label": {
         "en": "1 very short section",
         "uk": "1 надто короткий розділ"
@@ -351,15 +509,172 @@
       ]
     },
     {
+      "id": "question_partial-q1",
+      "pin": 10,
+      "big": false,
+      "code": "question_partial",
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "judgement",
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      },
+      "label": {
+        "en": "Answered in part: “Mañana publicamos la página: ¿un asis…”",
+        "uk": "Частково: “Mañana publicamos la página: ¿un asis…”"
+      },
+      "where": "question 1 · passage #5",
+      "map": {
+        "zones": [
+          6
+        ],
+        "strip": null
+      },
+      "passages": [
+        5
+      ],
+      "evidence": {
+        "id": "q1",
+        "n": 1,
+        "question": "Mañana publicamos la página: ¿un asistente llegará a ver las preguntas frecuentes del final?",
+        "axes": [
+          "urgency",
+          "object"
+        ],
+        "passage": 5,
+        "quote": "Si tu respuesta, tu diferencia o tu FAQ están por debajo del corte, la solución no es más texto",
+        "citable": false
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: AI features and your website",
+          "url": "https://developers.google.com/search/docs/appearance/ai-features"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
+      "id": "question_partial-q9",
+      "pin": 11,
+      "big": false,
+      "code": "question_partial",
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "judgement",
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      },
+      "label": {
+        "en": "Answered in part: “Nuestra web es una app de React. ¿Se …”",
+        "uk": "Частково: “Nuestra web es una app de React. ¿Se …”"
+      },
+      "where": "question 9 · passage #5",
+      "map": {
+        "zones": [
+          6
+        ],
+        "strip": null
+      },
+      "passages": [
+        5
+      ],
+      "evidence": {
+        "id": "q9",
+        "n": 9,
+        "question": "Nuestra web es una app de React. ¿Se lee el texto que carga después?",
+        "axes": [
+          "obstacle",
+          "object"
+        ],
+        "passage": 5,
+        "quote": "Causas habituales, por frecuencia: texto que solo dibuja JavaScript",
+        "citable": false
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: AI features and your website",
+          "url": "https://developers.google.com/search/docs/appearance/ai-features"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
+      "id": "question_partial-q10",
+      "pin": 12,
+      "big": false,
+      "code": "question_partial",
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "judgement",
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      },
+      "label": {
+        "en": "Answered in part: “Tengo veinte páginas que revisar ante…”",
+        "uk": "Частково: “Tengo veinte páginas que revisar ante…”"
+      },
+      "where": "question 10 · passage #15",
+      "map": {
+        "zones": [
+          12
+        ],
+        "strip": null
+      },
+      "passages": [
+        15
+      ],
+      "evidence": {
+        "id": "q10",
+        "n": 10,
+        "question": "Tengo veinte páginas que revisar antes del viernes. ¿Hay un límite?",
+        "axes": [
+          "urgency"
+        ],
+        "passage": 15,
+        "quote": "Sí, con un límite de frecuencia en lugar de un muro de pago.",
+        "citable": false
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: AI features and your website",
+          "url": "https://developers.google.com/search/docs/appearance/ai-features"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
       "id": "faq_rich_result_retired",
-      "pin": 7,
+      "pin": 13,
       "big": false,
       "code": "faq_rich_result_retired",
       "severity": "low",
-      "area": "markup",
+      "area": "classic",
       "owner": "seo",
       "hidesText": false,
       "informational": true,
+      "layer": "measured",
+      "judgement": null,
       "label": {
         "en": "FAQ rich result retired",
         "uk": "Розширеного FAQ більше немає"
@@ -386,8 +701,93 @@
       ]
     },
     {
+      "id": "rich_result_retired",
+      "pin": 14,
+      "big": false,
+      "code": "rich_result_retired",
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo",
+      "hidesText": false,
+      "informational": true,
+      "layer": "measured",
+      "judgement": null,
+      "label": {
+        "en": "How-to: no rich result any more",
+        "uk": "How-to: розширеного результату більше немає"
+      },
+      "where": "HowTo",
+      "map": {
+        "zones": [],
+        "strip": {
+          "side": "head",
+          "rows": [
+            "jsonld"
+          ]
+        }
+      },
+      "passages": [],
+      "evidence": {
+        "items": [
+          {
+            "type": "HowTo",
+            "feature": "How-to",
+            "date": "2023-09-14",
+            "block": 3
+          }
+        ]
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: documentation updates (FAQ rich result, 7 May 2026)",
+          "url": "https://developers.google.com/search/updates"
+        }
+      ]
+    },
+    {
+      "id": "page_weight_heavy",
+      "pin": 15,
+      "big": false,
+      "code": "page_weight_heavy",
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "hidesText": false,
+      "informational": false,
+      "layer": "derived",
+      "judgement": null,
+      "label": {
+        "en": "134 KB, 42 scripts",
+        "uk": "134 КБ, 42 скрипти"
+      },
+      "where": "HTML",
+      "map": {
+        "zones": [],
+        "strip": {
+          "side": "head",
+          "rows": [
+            "scripts"
+          ]
+        }
+      },
+      "passages": [],
+      "evidence": {
+        "htmlBytes": 137394,
+        "scripts": 42,
+        "blocking": 1,
+        "maxBytes": 500000,
+        "maxScripts": 30
+      },
+      "rules": [
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
       "id": "llms_txt_one_language",
-      "pin": 8,
+      "pin": 16,
       "big": false,
       "code": "llms_txt_one_language",
       "severity": "low",
@@ -395,6 +795,8 @@
       "owner": "seo",
       "hidesText": false,
       "informational": true,
+      "layer": "measured",
+      "judgement": null,
       "label": {
         "en": "llms.txt: one language only",
         "uk": "llms.txt: лише одна мова"
@@ -423,304 +825,1042 @@
           "url": "https://llmstxt.org/"
         }
       ]
+    },
+    {
+      "id": "about_contact_missing",
+      "pin": 17,
+      "big": false,
+      "code": "about_contact_missing",
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "measured",
+      "judgement": null,
+      "label": {
+        "en": "No contact link",
+        "uk": "Немає посилання «Контакти»"
+      },
+      "where": "contact link",
+      "map": {
+        "zones": [],
+        "strip": null
+      },
+      "passages": [],
+      "evidence": {
+        "missing": [
+          "contact"
+        ]
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: creating helpful, reliable, people-first content",
+          "url": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
     }
   ],
   "codes": {
     "robots_unreachable": {
       "severity": "blocking",
       "area": "find",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "search_engine_blocked": {
       "severity": "blocking",
       "area": "find",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "ai_search_blocked": {
       "severity": "blocking",
       "area": "find",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "noindex": {
       "severity": "blocking",
       "area": "find",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "ai_training_blocked": {
       "severity": "low",
       "area": "find",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "llms_txt_missing": {
       "severity": "low",
       "area": "find",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "snippet_blocked": {
+      "severity": "high",
+      "area": "find",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "markdown_alternate_broken": {
+      "severity": "low",
+      "area": "find",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "ai_catalog_invalid": {
+      "severity": "low",
+      "area": "find",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "indexnow_key_broken": {
+      "severity": "low",
+      "area": "find",
+      "owner": "dev",
+      "layer": "measured"
     },
     "not_https": {
       "severity": "high",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "redirect_chain": {
       "severity": "low",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "sitemap_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "sitemap_not_listed": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "title_missing": {
       "severity": "high",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "title_too_long": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "title_too_short": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "meta_description_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "meta_description_short": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "meta_description_long": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "h1_missing": {
       "severity": "medium",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "h1_multiple": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "heading_order_skip": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "canonical_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "canonical_relative": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "canonical_other": {
       "severity": "medium",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "canonical_multiple": {
       "severity": "medium",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "internal_links_none": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "broken_links": {
       "severity": "medium",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "image_alt_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "viewport_missing": {
       "severity": "medium",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "html_lang_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "social_tags_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "page_weight_heavy": {
       "severity": "low",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "derived"
     },
     "url_unreadable": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "jsonld_invalid": {
       "severity": "medium",
-      "area": "markup",
-      "owner": "dev"
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
     },
     "structured_data_none": {
       "severity": "low",
-      "area": "markup",
-      "owner": "seo"
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
     },
     "schema_required_missing": {
       "severity": "medium",
-      "area": "markup",
-      "owner": "dev"
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
     },
     "schema_recommended_missing": {
       "severity": "low",
-      "area": "markup",
-      "owner": "dev"
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
     },
     "faq_rich_result_retired": {
       "severity": "low",
-      "area": "markup",
-      "owner": "seo"
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "rich_result_retired": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "image_dimensions_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_lcp_lazy": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_not_lazy": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_legacy_format": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_oversized": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_no_srcset": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "favicon_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "site_name_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "mixed_content": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "soft_404": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "url_variants_inconsistent": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "hsts_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "author_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "about_contact_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "organization_details_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "article_date_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "privacy_terms_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "date_mismatch": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
     },
     "faq_schema_not_visible": {
       "severity": "high",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "lost_faq_questions": {
       "severity": "high",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "mid_sentence_start": {
       "severity": "medium",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "derived"
     },
     "truncated_teaser": {
       "severity": "low",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "repeated_claim": {
       "severity": "low",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "derived"
+    },
+    "question_missing": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content",
+      "layer": "judgement"
+    },
+    "question_partial": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "judgement"
+    },
+    "stock_phrases": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "derived"
+    },
+    "repeated_sentence_shape": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "uniform_openings": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "unchecked_claims": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "keyword_not_in_title": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "keyword_variant_split": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "keyword_one_section": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content",
+      "layer": "derived"
+    },
+    "off_keyword_share": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "derived"
+    },
+    "promise_without_number": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "brand_contradiction": {
+      "severity": "high",
+      "area": "brand",
+      "owner": "seo",
+      "layer": "judgement"
+    },
+    "brand_fact_absent": {
+      "severity": "medium",
+      "area": "brand",
+      "owner": "content",
+      "layer": "judgement"
+    },
+    "brand_unknown": {
+      "severity": "medium",
+      "area": "brand",
+      "owner": "seo",
+      "layer": "judgement"
+    },
+    "review_rating_unbacked": {
+      "severity": "high",
+      "area": "brand",
+      "owner": "seo",
+      "layer": "judgement"
+    },
+    "review_control_hallucination": {
+      "severity": "high",
+      "area": "brand",
+      "owner": "seo",
+      "layer": "judgement"
+    },
+    "reviews_without_markup": {
+      "severity": "medium",
+      "area": "brand",
+      "owner": "dev",
+      "layer": "measured"
     },
     "cap_overflow": {
       "severity": "high",
       "area": "read",
-      "owner": "content"
+      "owner": "content",
+      "layer": "derived"
     },
     "js_dependent": {
       "severity": "high",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hero_lede_dropped": {
       "severity": "high",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hidden_headings": {
       "severity": "high",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "ssr_placeholder_text": {
       "severity": "medium",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "spa_shell": {
+      "severity": "high",
+      "area": "read",
+      "owner": "dev",
+      "layer": "measured"
     },
     "h1_glued_words": {
       "severity": "medium",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "nav_in_content": {
       "severity": "medium",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "dominant_heading": {
       "severity": "medium",
       "area": "read",
-      "owner": "content"
+      "owner": "content",
+      "layer": "derived"
     },
     "thin_section": {
       "severity": "low",
       "area": "read",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "hreflang_no_return": {
       "severity": "high",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hreflang_invalid_code": {
       "severity": "medium",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hreflang_no_self": {
       "severity": "medium",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hreflang_alternate_broken": {
       "severity": "medium",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "title_duplicate_locales": {
       "severity": "medium",
       "area": "lang",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "description_duplicate_locales": {
       "severity": "low",
       "area": "lang",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "hreflang_lang_mismatch": {
       "severity": "low",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hreflang_no_x_default": {
       "severity": "low",
       "area": "lang",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "llms_txt_one_language": {
       "severity": "low",
       "area": "lang",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "locale_facts_differ": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "content",
+      "layer": "measured"
     }
+  },
+  "layers": {
+    "measured": "what a script counted on the page; any agent gets the same value",
+    "derived": "computed from measured values by a fixed formula",
+    "judgement": "the agent's model read or answered it; another model may judge differently"
+  },
+  "judgement": {
+    "files": {
+      "questions": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      },
+      "brand": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      },
+      "reviews": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      }
+    },
+    "model": "Claude Opus 5.5",
+    "agent": "Claude Code",
+    "any": true,
+    "questions": {
+      "questions": [
+        {
+          "id": "q1",
+          "question": "Mañana publicamos la página: ¿un asistente llegará a ver las preguntas frecuentes del final?",
+          "axes": [
+            "urgency",
+            "object"
+          ],
+          "passage": 5,
+          "verdict": "partial",
+          "citable": false,
+          "quote": "Si tu respuesta, tu diferencia o tu FAQ están por debajo del corte, la solución no es más texto"
+        },
+        {
+          "id": "q2",
+          "question": "¿Cuántos pasajes lee de una página?",
+          "axes": [
+            "object"
+          ],
+          "passage": 3,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "Esta lectura toma como máximo 26 pasajes de una página."
+        },
+        {
+          "id": "q3",
+          "question": "Escribí una guía larga y nadie cita las últimas secciones. ¿Por qué?",
+          "axes": [
+            "obstacle"
+          ],
+          "passage": 5,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "Un sistema de recuperación lee un número fijo de fragmentos de una página e ignora el resto, así que todo lo que queda por debajo de ese corte es invisible por bueno que sea."
+        },
+        {
+          "id": "q4",
+          "question": "¿Puedo revisar una página desde el móvil sin instalar nada?",
+          "axes": [
+            "device"
+          ],
+          "passage": 1,
+          "verdict": "partial",
+          "citable": false,
+          "quote": "Un límite gratuito por visitante, sin necesidad de cuenta."
+        },
+        {
+          "id": "q5",
+          "question": "¿Guardáis una copia de la página que pego?",
+          "axes": [
+            "obstacle",
+            "object"
+          ],
+          "passage": 15,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "la página descargada no se retiene después de producirla"
+        },
+        {
+          "id": "q6",
+          "question": "¿Qué diferencia hay entre cortar por titulares y cortar por significado?",
+          "axes": [
+            "object"
+          ],
+          "passage": 14,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "El fragmentado por titulares corta en los titulares de la página; el fragmentado semántico corta donde cambia el significado, haya titular o no."
+        },
+        {
+          "id": "q7",
+          "question": "Un cliente me pregunta ahora mismo por qué su página no sale en ChatGPT. ¿Esto me dice si está indexada?",
+          "axes": [
+            "urgency",
+            "obstacle"
+          ],
+          "passage": 4,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "Esto no demuestra que ningún asistente haya indexado la página."
+        },
+        {
+          "id": "q8",
+          "question": "Lo comparo con nuestro fragmentador RAG: ¿qué ventana y qué solapamiento usa?",
+          "axes": [
+            "device",
+            "object"
+          ],
+          "passage": 10,
+          "verdict": "complete",
+          "citable": true,
+          "quote": "El fragmentador (cortes en h2, después ventanas de 2000 caracteres con 200 de solapamiento), el modelo de embeddings y el límite aquí son los que el producto ejecuta en producción."
+        },
+        {
+          "id": "q9",
+          "question": "Nuestra web es una app de React. ¿Se lee el texto que carga después?",
+          "axes": [
+            "obstacle",
+            "object"
+          ],
+          "passage": 5,
+          "verdict": "partial",
+          "citable": false,
+          "quote": "Causas habituales, por frecuencia: texto que solo dibuja JavaScript"
+        },
+        {
+          "id": "q10",
+          "question": "Tengo veinte páginas que revisar antes del viernes. ¿Hay un límite?",
+          "axes": [
+            "urgency"
+          ],
+          "passage": 15,
+          "verdict": "partial",
+          "citable": false,
+          "quote": "Sí, con un límite de frecuencia en lugar de un muro de pago."
+        },
+        {
+          "id": "q11",
+          "question": "¿Puedo pegar el enlace de un PDF en lugar de una página web?",
+          "axes": [
+            "object"
+          ],
+          "passage": null,
+          "verdict": "missing",
+          "citable": false,
+          "quote": null
+        },
+        {
+          "id": "q12",
+          "question": "La página que necesito solo se abre tras iniciar sesión en mi portátil. ¿La puede leer?",
+          "axes": [
+            "device",
+            "obstacle"
+          ],
+          "passage": null,
+          "verdict": "missing",
+          "citable": false,
+          "quote": null
+        }
+      ],
+      "topic": "cómo corta una página en pasajes un recuperador de IA",
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      },
+      "warnings": []
+    },
+    "brand": {
+      "brand": "GetLoopLoop",
+      "answers": [
+        {
+          "question": "what_is",
+          "knows": false,
+          "text": "I don't know GetLoopLoop from my own knowledge."
+        },
+        {
+          "question": "pricing",
+          "knows": false,
+          "text": "I don't know its plans or prices."
+        },
+        {
+          "question": "integrations",
+          "knows": false,
+          "text": "I don't know what it integrates with."
+        },
+        {
+          "question": "weaknesses",
+          "knows": false,
+          "text": "I don't know of complaints about it."
+        },
+        {
+          "question": "alternatives",
+          "knows": false,
+          "text": "I don't know it well enough to name its alternatives."
+        }
+      ],
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      }
+    },
+    "reviews": {
+      "brand": "GetLoopLoop",
+      "platforms": [
+        {
+          "platform": "g2",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "capterra",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "getapp",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "software_advice",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "gartner_peer_insights",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "trustradius",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "trustpilot",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "producthunt",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "clutch",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "goodfirms",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "app_store",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "google_play",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        },
+        {
+          "platform": "vetteral",
+          "knows": false,
+          "rating": null,
+          "reviews": null
+        }
+      ],
+      "judgement": {
+        "agent": "Claude Code",
+        "model": "Claude Opus 5.5"
+      }
+    }
+  },
+  "keyword": {
+    "keyword": "El fragmentado semántico",
+    "source": "h1",
+    "exact": {
+      "count": 11,
+      "fields": [
+        "h1",
+        "description"
+      ]
+    },
+    "variants": [
+      {
+        "form": "El-fragmentado semántico",
+        "count": 0,
+        "fields": []
+      },
+      {
+        "form": "Elfragmentado semántico",
+        "count": 0,
+        "fields": []
+      },
+      {
+        "form": "El fragmentado-semántico",
+        "count": 0,
+        "fields": []
+      },
+      {
+        "form": "El fragmentadosemántico",
+        "count": 0,
+        "fields": []
+      },
+      {
+        "form": "Elfragmentadosemántico",
+        "count": 0,
+        "fields": []
+      }
+    ],
+    "sections": {
+      "reached": 6,
+      "total": 15,
+      "spread": 0.4
+    },
+    "chars": {
+      "onKeyword": 8041,
+      "indexed": 15455,
+      "share": 0.52
+    },
+    "promiseChecked": false,
+    "findings": []
+  },
+  "writingPatterns": {
+    "language": "es",
+    "wordCount": 2489,
+    "score": {
+      "scoreModelVersion": "score-1",
+      "band": "low",
+      "value": 0,
+      "wordCount": 2489,
+      "perThousand": 0,
+      "points": 0,
+      "capped": false,
+      "contributions": []
+    },
+    "detectors": "det-1",
+    "findings": [],
+    "note": "signals about worn writing, not an AI detector"
+  },
+  "localeFacts": {
+    "method": "h2 sections aligned by order when both versions have the same count; numbers compared as sets",
+    "compared": [
+      {
+        "hreflang": "en",
+        "aligned": true,
+        "sections": [
+          13,
+          13
+        ],
+        "differ": 0
+      },
+      {
+        "hreflang": "uk",
+        "aligned": true,
+        "sections": [
+          13,
+          13
+        ],
+        "differ": 0
+      }
+    ],
+    "differ": [],
+    "limits": [
+      "versions whose sections do not line up are not compared",
+      "numbers written as words are not read",
+      "a number may differ on purpose (a local price or phone number)"
+    ]
   },
   "checklist": [
     {
@@ -944,6 +2084,89 @@
       },
       "state": "pass",
       "codes": []
+    },
+    {
+      "id": "images",
+      "name": {
+        "en": "Image sizes, formats, lazy loading, srcset",
+        "uk": "Розміри, формати, lazy і srcset зображень"
+      },
+      "state": "none",
+      "codes": []
+    },
+    {
+      "id": "snippet",
+      "name": {
+        "en": "Eligible for a snippet (no nosnippet, max-snippet:0)",
+        "uk": "Може мати сніпет (без nosnippet, max-snippet:0)"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "favicon",
+      "name": {
+        "en": "A favicon that loads",
+        "uk": "Favicon завантажується"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "site_name",
+      "name": {
+        "en": "WebSite name markup on the home page",
+        "uk": "Назва сайту в розмітці WebSite на головній"
+      },
+      "state": "none",
+      "codes": []
+    },
+    {
+      "id": "mixed",
+      "name": {
+        "en": "No http:// resources on https",
+        "uk": "Без ресурсів http:// на https"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "soft404",
+      "name": {
+        "en": "A missing page answers 404",
+        "uk": "Неіснуюча сторінка відповідає 404"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "variants",
+      "name": {
+        "en": "http, www and slash variants end at the page",
+        "uk": "Варіанти http, www і слеш ведуть на сторінку"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "hsts",
+      "name": {
+        "en": "Strict-Transport-Security header",
+        "uk": "Заголовок Strict-Transport-Security"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "trust",
+      "name": {
+        "en": "Author, About, Contact, organisation, dates, privacy and terms",
+        "uk": "Автор, «Про нас», контакти, організація, дати, конфіденційність і умови"
+      },
+      "state": "warn",
+      "codes": [
+        "about_contact_missing"
+      ]
     }
   ],
   "pageMap": {
@@ -973,7 +2196,8 @@
         "seenShare": 1,
         "merged": 0,
         "problems": [
-          4
+          6,
+          8
         ]
       },
       {
@@ -1017,7 +2241,7 @@
         "seenShare": 1,
         "merged": 0,
         "problems": [
-          6
+          9
         ]
       },
       {
@@ -1047,7 +2271,9 @@
         "seenShare": 1,
         "merged": 0,
         "problems": [
-          3
+          3,
+          10,
+          11
         ]
       },
       {
@@ -1139,7 +2365,8 @@
         "merged": 4,
         "problems": [
           1,
-          3
+          3,
+          12
         ]
       },
       {
@@ -1212,7 +2439,8 @@
         },
         "problems": [
           2,
-          7
+          13,
+          14
         ]
       },
       {
@@ -1238,8 +2466,16 @@
           "uk": "42 · 1 блокують"
         },
         "problems": [
-          5
+          15
         ]
+      },
+      {
+        "id": "favicon",
+        "value": {
+          "en": "loads",
+          "uk": "завантажується"
+        },
+        "problems": []
       }
     ],
     "robots": [
@@ -1282,8 +2518,24 @@
           "uk": "є · 32 посилання"
         },
         "problems": [
-          8
+          16
         ]
+      },
+      {
+        "id": "markdown",
+        "value": {
+          "en": "none",
+          "uk": "немає"
+        },
+        "problems": []
+      },
+      {
+        "id": "ai_catalog",
+        "value": {
+          "en": "none",
+          "uk": "немає"
+        },
+        "problems": []
       }
     ]
   },
@@ -1846,6 +3098,13 @@
   },
   "notChecked": [
     {
+      "id": "promise",
+      "count": null,
+      "cap": null,
+      "en": "The promise-without-a-figure rule reads English only",
+      "uk": "Правило «обіцянка без числа» читає лише англійську"
+    },
+    {
       "id": "zones",
       "count": 4,
       "cap": null,
@@ -1863,37 +3122,31 @@
       "uk": "Опис кожної проблеми й напрям виправлення",
       "links": [
         {
-          "en": "Full version",
-          "uk": "Повна версія",
+          "en": "Full version from GetLoopLoop",
+          "uk": "Повна версія від GetLoopLoop",
           "href": "https://www.getlooploop.com"
         }
       ]
     },
     {
-      "en": "What AI says about your brand and reviews, the questions people ask, a target keyword",
-      "uk": "Що ШІ каже про ваш бренд і відгуки, які запитання ставлять люди, цільова ключова фраза",
-      "links": [
-        {
-          "en": "Full version",
-          "uk": "Повна версія",
-          "href": "https://www.getlooploop.com"
-        }
-      ]
-    },
-    {
-      "en": "Several real assistants side by side",
-      "uk": "Кілька справжніх асистентів поруч",
+      "en": "What real assistants (ChatGPT, Gemini, Perplexity) say about your brand and reviews",
+      "uk": "Що справжні асистенти (ChatGPT, Gemini, Perplexity) кажуть про ваш бренд і відгуки",
       "links": [
         {
           "en": "Brandscope",
           "uk": "Brandscope",
           "href": "https://www.getlooploop.com/brandscope"
+        },
+        {
+          "en": "Reviewscope",
+          "uk": "Reviewscope",
+          "href": "https://www.getlooploop.com/reviewscope"
         }
       ]
     },
     {
-      "en": "How their answers change over time",
-      "uk": "Як їхні відповіді змінюються з часом",
+      "en": "How their answers change from day to day",
+      "uk": "Як їхні відповіді змінюються з дня на день",
       "links": [
         {
           "en": "AI answer volatility",
@@ -1903,8 +3156,8 @@
       ]
     },
     {
-      "en": "How AI groups your text by meaning (embeddings map)",
-      "uk": "Як ШІ групує ваш текст за змістом (мапа ембедингів)",
+      "en": "How AI groups your text by meaning (embeddings)",
+      "uk": "Як ШІ групує ваш текст за змістом (ембединги)",
       "links": [
         {
           "en": "Vectorscope",
@@ -1914,8 +3167,8 @@
       ]
     },
     {
-      "en": "Search Console data, real-user Core Web Vitals, sites beyond one page",
-      "uk": "Дані Search Console, Core Web Vitals реальних користувачів, сайти понад одну сторінку",
+      "en": "Search Console data, real-user speed, sites over 50 pages, tracking over time",
+      "uk": "Дані Search Console, швидкість у реальних користувачів, сайти понад 50 сторінок, відстеження в часі",
       "links": [
         {
           "en": "GetLoopLoop",

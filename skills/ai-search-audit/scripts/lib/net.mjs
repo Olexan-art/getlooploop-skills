@@ -90,6 +90,7 @@ function headersOf(response) {
     contentLength: response.headers.get("content-length"),
     contentLanguage: response.headers.get("content-language"),
     xRobotsTag: response.headers.get("x-robots-tag"),
+    hsts: response.headers.get("strict-transport-security"),
   };
 }
 

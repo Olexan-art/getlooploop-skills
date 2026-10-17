@@ -1,0 +1,19 @@
+{
+  "agent": "Claude Code",
+  "model": "Claude Opus 5.5",
+  "topic": "seeing how an AI retriever cuts a page into passages",
+  "questions": [
+    { "id": "q1", "question": "My launch page goes live tomorrow: will an assistant even see the FAQ at the bottom?", "axes": ["urgency", "object"], "passage": 5, "verdict": "partial", "citable": false, "quote": "If your answer, your differentiator or your FAQ sits below the cut, the fix is not more words" },
+    { "id": "q2", "question": "How many passages does it read from one page?", "axes": ["object"], "passage": 3, "verdict": "complete", "citable": true, "quote": "This reading takes at most 26 passages from a page." },
+    { "id": "q3", "question": "I wrote a long guide and nobody ever quotes the last sections. Why?", "axes": ["obstacle"], "passage": 5, "verdict": "complete", "citable": true, "quote": "A retrieval system reads a fixed number of passages from a page and ignores the rest, so anything below that cut is invisible no matter how good it is." },
+    { "id": "q4", "question": "Can I check a page from my phone without installing anything?", "axes": ["device"], "passage": 1, "verdict": "partial", "citable": false, "quote": "A free allowance per visitor, no account needed." },
+    { "id": "q5", "question": "Does it keep a copy of the page I paste in?", "axes": ["obstacle", "object"], "passage": 13, "verdict": "complete", "citable": true, "quote": "The reading is kept briefly so it can be shared with a link, and the fetched page itself is not retained after the reading is produced." },
+    { "id": "q6", "question": "What's the difference between cutting at headings and cutting by meaning?", "axes": ["object"], "passage": 13, "verdict": "complete", "citable": true, "quote": "Heading-aware chunking cuts at the page's own headings; semantic chunking cuts where the meaning changes, whether or not there is a heading there." },
+    { "id": "q7", "question": "A client is asking right now why their page isn't in ChatGPT. Can this tell me if it's indexed?", "axes": ["urgency", "obstacle"], "passage": 4, "verdict": "complete", "citable": true, "quote": "This does not establish that any assistant has indexed the page." },
+    { "id": "q8", "question": "I'm comparing it with our own RAG chunker: what window size and overlap does it use?", "axes": ["device", "object"], "passage": 9, "verdict": "complete", "citable": true, "quote": "The chunker (h2 cuts, then 2,000-character windows with 200 of overlap), the embedding model and the cap here are the ones the product runs in production." },
+    { "id": "q9", "question": "Our site is a React app. Will the text that loads later be read at all?", "axes": ["obstacle", "object"], "passage": 5, "verdict": "partial", "citable": false, "quote": "Common causes, in the order we see them: text rendered only by JavaScript" },
+    { "id": "q10", "question": "I have twenty pages to check before Friday. Is there a limit?", "axes": ["urgency"], "passage": 14, "verdict": "partial", "citable": false, "quote": "Yes, with a rate limit rather than a paywall." },
+    { "id": "q11", "question": "Can I paste a link to a PDF instead of a web page?", "axes": ["object"], "passage": null, "verdict": "missing" },
+    { "id": "q12", "question": "The page I need is behind a login on my laptop. Can it read that?", "axes": ["device", "obstacle"], "passage": null, "verdict": "missing" }
+  ]
+}

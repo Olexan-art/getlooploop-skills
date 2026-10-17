@@ -5,4 +5,4 @@ export const SKILL_VERSION = "2.101";
 
 export const READING_SCHEMA = "getlooploop/ai-search-audit-reading@1";
 export const EXPORT_SCHEMA = "getlooploop/ai-search-audit@1";
-export const PRODUCED_BY = "ai-search-audit skill, Lite (local, deterministic, no model calls)";
+export const PRODUCED_BY = "ai-search-audit skill, Lite (local; deterministic checks, and the agent's own judgement where marked; the scripts call no model)";

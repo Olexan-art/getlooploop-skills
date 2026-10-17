@@ -53,9 +53,11 @@ test("the language grid marks each version's cells from the same findings", asyn
   const { r } = await audited(main, routes);
   const m = buildModel(r);
   const row = (l) => m.languages.rows.find((x) => x.hreflang === l);
-  assert.deepEqual(row("en").cells, ["fail", "pass", "pass", "pass"]);
-  assert.deepEqual(row("uk").cells, ["pass", "pass", "pass", "pass"]);
-  assert.deepEqual(row("de").cells, ["fail", "pass", "fail", "warn"]);
+  // The fourth column is the same facts; these pages have no h2 sections, so nothing is compared.
+  assert.deepEqual(row("en").cells, ["fail", "pass", "pass", "na"]);
+  assert.deepEqual(row("uk").cells, ["pass", "pass", "pass", "na"]);
+  // de: no link back; the html lang warning folds into the same cell, and the fail outranks it.
+  assert.deepEqual(row("de").cells, ["fail", "pass", "fail", "na"]);
   assert.equal(m.languages.xDefault, true);
 });
 

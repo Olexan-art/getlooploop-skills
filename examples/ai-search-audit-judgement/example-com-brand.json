@@ -1,0 +1,13 @@
+{
+  "agent": "Claude Code",
+  "model": "Claude Opus 5.5",
+  "brand": "example.com",
+  "basis": "own_knowledge",
+  "answers": [
+    { "question": "what_is", "knows": true, "answer": "example.com is a domain reserved for use in documentation and examples. It is set aside by RFC 2606 and operated by IANA." },
+    { "question": "pricing", "knows": true, "answer": "It is not a product: it has no plans and no prices, and the domain cannot be bought." },
+    { "question": "integrations", "knows": false, "answer": "" },
+    { "question": "weaknesses", "knows": false, "answer": "" },
+    { "question": "alternatives", "knows": true, "answer": "The other reserved example domains are example.net and example.org, and the .example top-level domain." }
+  ]
+}

@@ -9,6 +9,7 @@
 
 import * as cheerio from "cheerio";
 import { samePage } from "../../../vectorscope/scripts/lib/technical.mjs";
+import { pageExtras } from "./extras.mjs";
 
 // ── thresholds and caps (each with its reason) ───────────────────────────────
 
@@ -414,7 +415,9 @@ export function collectFacts(html, pageUrl) {
 
     const z = current();
     if (!never && tag === "img" && !hidden) {
-      images.push({ src: clip(attr(n, "src") || attr(n, "data-src") || "", 120), hasAlt: attr(n, "alt") !== null, decorative: ["presentation", "none"].includes(role(n)), zone: z.id, path: pathOf(n) });
+      const rawSrc = attr(n, "src") || attr(n, "data-src") || "";
+      const sources = n.parent && n.parent.name === "picture" ? n.parent.children.filter((c) => isEl(c) && c.name === "source").map((c) => (attr(c, "type") || attr(c, "srcset") || "").toLowerCase()) : [];
+      images.push({ index: images.length, src: clip(rawSrc, 120), url: rawSrc && !/^data:/i.test(rawSrc) ? resolve(rawSrc) : null, hasAlt: attr(n, "alt") !== null, decorative: ["presentation", "none"].includes(role(n)), width: attr(n, "width"), height: attr(n, "height"), loading: (attr(n, "loading") || "").trim().toLowerCase() || null, fetchpriority: (attr(n, "fetchpriority") || "").trim().toLowerCase() || null, srcset: Boolean(attr(n, "srcset") || attr(n, "data-srcset")) || sources.length > 0, modernSource: sources.some((t) => /avif|webp/.test(t)), zone: z.id, path: pathOf(n) });
     }
     if (!never && tag === "a" && attr(n, "href") !== null) {
       const raw = attr(n, "href").trim();
@@ -452,6 +455,7 @@ export function collectFacts(html, pageUrl) {
     hiddenChars: [...hiddenRootChars.values()].reduce((s, c) => s + c, 0),
     visibleText: visible.join(" "),
   };
+  facts.extras = pageExtras($, resolve, pageUrl, facts);
   facts.zones = tidyZones(zones, facts);
   return facts;
 }

@@ -1,0 +1,13 @@
+{
+  "agent": "Claude Code",
+  "model": "Claude Opus 5.5",
+  "brand": "GetLoopLoop",
+  "basis": "own_knowledge",
+  "answers": [
+    { "question": "what_is", "knows": false, "answer": "I don't know GetLoopLoop from my own knowledge." },
+    { "question": "pricing", "knows": false, "answer": "I don't know its plans or prices." },
+    { "question": "integrations", "knows": false, "answer": "I don't know what it integrates with." },
+    { "question": "weaknesses", "knows": false, "answer": "I don't know of complaints about it." },
+    { "question": "alternatives", "knows": false, "answer": "I don't know it well enough to name its alternatives." }
+  ]
+}

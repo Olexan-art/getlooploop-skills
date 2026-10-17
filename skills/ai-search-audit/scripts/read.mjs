@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 // Step 1 of the AI Search Audit (Lite): fetch the page and everything the checks need, and write
 // one reading. All the network is here: the page, its robots.txt, its sitemap, its llms.txt, its
-// hreflang alternates and a HEAD (or GET) of up to 30 of its links. Each list has a cap and the
-// reading says how much of it went unchecked.
+// hreflang alternates, a HEAD (or GET) of up to 30 of its links and 20 of its images, and one
+// request each for the favicon, a path that does not exist, up to 3 URL variants, a Markdown copy,
+// ai-catalog.json and a declared IndexNow key. Each list has a cap and the reading says how much
+// of it went unchecked. An empty single-page-app shell is rendered on its own when a browser is found.
 //   node scripts/read.mjs <url> [--out reading.json] [--render] [--save-html page.html]
 //   node scripts/read.mjs <url> --html saved.html [--final-url <url>] [--robots saved-robots.txt]
 // A refusal still writes its reading, with ok:false and the code, and exits with code 2.
@@ -54,6 +56,9 @@ function summarise(r, file) {
   if (llms) console.log(`llms.txt  ${llms.present ? `present · ${llms.links} links` : `none (HTTP ${llms.status ?? llms.reason})`}`);
   if (alternates) console.log(`hreflang  ${facts.head.hreflang.length} declared · ${alternates.checked} alternates read${alternates.unchecked.length ? ` · ${alternates.unchecked.length} not read (cap ${alternates.cap})` : ""}`);
   if (links) console.log(`links     ${links.checked} of ${links.total} checked${links.unchecked ? ` · ${links.unchecked} not checked (cap ${links.cap})` : ""} · broken ${links.results.filter((x) => x.verdict === "broken").length} · unverified ${links.results.filter((x) => x.verdict === "unverified").length}`);
+  if (r.images) console.log(`images    ${r.images.checked} of ${r.images.total} sized${r.images.unchecked ? ` · ${r.images.unchecked} not checked (cap ${r.images.cap})` : ""}`);
+  if (r.site) console.log(`site      favicon ${r.site.favicon.ok ? "ok" : r.site.favicon.status ?? r.site.favicon.reason} · missing path ${r.site.soft404.status ?? r.site.soft404.reason} · variants ${r.site.variants.map((v) => `${v.kind} ${v.ends ? "ok" : v.status ?? v.reason}`).join(", ")} · markdown ${r.site.markdown.ok ? "yes" : "no"} · ai-catalog ${r.site.aiCatalog?.present ? (r.site.aiCatalog.valid ? "valid" : "invalid") : "none"}${r.site.indexnow ? ` · IndexNow key ${r.site.indexnow.ok ? "ok" : "missing"}` : ""}`);
+  if (r.shell?.detected) console.log(`app shell ${r.shell.roots.join(", ")} · ${r.shell.words} words without JavaScript · ${r.render ? (r.render.ok ? "rendered automatically" : `not rendered: ${r.render.reason}`) : "not rendered (saved page)"}`);
   if (fetch.saved) console.log("network   none: a saved page was read; robots.txt, sitemap, llms.txt, alternates and links are not measured");
   if (render) console.log(render.ok ? `render    with JS ${fmt(render.wordCount)} words · ${render.passages} passages (without JS ${fmt(vs.page.wordCount)} · ${vs.passages.length}) · ${render.jsZones.length} sections only with JS` : `render    not done: ${render.reason === "no_browser" ? "no Chrome or Chromium found (set CHROME_PATH)" : render.reason}`);
   console.log(`reading   ${file}`);

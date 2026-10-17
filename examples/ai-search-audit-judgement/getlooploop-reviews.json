@@ -1,0 +1,60 @@
+{
+  "agent": "Claude Code",
+  "model": "Claude Opus 5.5",
+  "brand": "GetLoopLoop",
+  "basis": "own_knowledge",
+  "platforms": [
+    {
+      "platform": "g2",
+      "knows": false
+    },
+    {
+      "platform": "capterra",
+      "knows": false
+    },
+    {
+      "platform": "getapp",
+      "knows": false
+    },
+    {
+      "platform": "software_advice",
+      "knows": false
+    },
+    {
+      "platform": "gartner_peer_insights",
+      "knows": false
+    },
+    {
+      "platform": "trustradius",
+      "knows": false
+    },
+    {
+      "platform": "trustpilot",
+      "knows": false
+    },
+    {
+      "platform": "producthunt",
+      "knows": false
+    },
+    {
+      "platform": "clutch",
+      "knows": false
+    },
+    {
+      "platform": "goodfirms",
+      "knows": false
+    },
+    {
+      "platform": "app_store",
+      "knows": false
+    },
+    {
+      "platform": "google_play",
+      "knows": false
+    },
+    {
+      "platform": "vetteral",
+      "knows": false
+    }
+  ]
+}

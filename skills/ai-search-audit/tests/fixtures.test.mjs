@@ -9,10 +9,10 @@ import { renderReport } from "../scripts/lib/report.mjs";
 import { vsFixture } from "./helpers.mjs";
 
 const CASES = [
-  ["example-com.html", "https://example.com/", ["h1_missing", "meta_description_missing", "canonical_missing", "internal_links_none", "social_tags_missing", "structured_data_none"]],
-  ["mdn-http-caching.html", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching", ["mid_sentence_start", "nav_in_content", "social_tags_missing"]],
-  ["getlooploop-vectorscope.html", "https://www.getlooploop.com/vectorscope", ["schema_required_missing", "mid_sentence_start", "nav_in_content", "page_weight_heavy", "faq_rich_result_retired", "thin_section"]],
-  ["uk-vectorscope.html", "https://www.getlooploop.com/uk/vectorscope", ["schema_required_missing", "mid_sentence_start", "nav_in_content", "page_weight_heavy", "faq_rich_result_retired", "thin_section"]],
+  ["example-com.html", "https://example.com/", ["h1_missing", "meta_description_missing", "canonical_missing", "internal_links_none", "social_tags_missing", "structured_data_none", "about_contact_missing", "organization_details_missing", "privacy_terms_missing", "site_name_missing"]],
+  ["mdn-http-caching.html", "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching", ["mid_sentence_start", "nav_in_content", "social_tags_missing", "keyword_one_section", "off_keyword_share", "repeated_sentence_shape", "about_contact_missing", "image_dimensions_missing", "organization_details_missing"]],
+  ["getlooploop-vectorscope.html", "https://www.getlooploop.com/vectorscope", ["schema_required_missing", "mid_sentence_start", "nav_in_content", "page_weight_heavy", "faq_rich_result_retired", "thin_section", "repeated_sentence_shape", "about_contact_missing", "rich_result_retired"]],
+  ["uk-vectorscope.html", "https://www.getlooploop.com/uk/vectorscope", ["schema_required_missing", "mid_sentence_start", "nav_in_content", "page_weight_heavy", "faq_rich_result_retired", "thin_section", "repeated_sentence_shape", "keyword_one_section", "off_keyword_share", "about_contact_missing", "rich_result_retired"]],
 ];
 
 for (const [file, url, codes] of CASES) {

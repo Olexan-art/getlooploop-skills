@@ -56,14 +56,21 @@ test("a full read: redirects, robots.txt, a gzipped child sitemap, llms.txt, 30 
   assert.equal(reading.links.unchecked, 36 - LINK_CHECK_CAP);
   assert.deepEqual(reading.links.results.filter((x) => x.verdict === "broken").map((x) => x.url), [`${O}/l3`]);
   assert.deepEqual(reading.links.results.filter((x) => x.verdict === "unverified").map((x) => x.url), [`${O}/l5`]);
-  // Nothing outside the site, and nothing past the cap.
-  assert.ok(calls.every((u) => u.startsWith(`${O}/`)), calls.filter((u) => !u.startsWith(`${O}/`)).join(", "));
+  // Nothing outside the site (its own http and www variants are the site), and nothing past the cap.
+  const own = (u) => [`${O}/`, "http://example.org/", "https://www.example.org/"].some((p) => u.startsWith(p));
+  assert.ok(calls.every(own), calls.filter((u) => !own(u)).join(", "));
+  assert.deepEqual(reading.site.variants.map((v) => v.kind), ["http", "www", "slash"]);
+  assert.equal(reading.site.soft404.status, 404);
+  assert.equal(reading.images.total, 0);
   assert.ok(!calls.includes(`${O}/l34`));
   const m = buildModel(reading);
   const codes = m.findings.map((f) => f.code);
   assert.ok(codes.includes("redirect_chain"));
   assert.ok(codes.includes("broken_links"));
   assert.ok(codes.includes("ai_training_blocked"));
+  assert.ok(codes.includes("url_variants_inconsistent"), "the variants answer 404, not the page");
+  assert.ok(codes.includes("favicon_missing"));
+  assert.ok(!codes.includes("soft_404"));
   assert.ok(m.caps.some((c) => c.id === "links" && c.n === 6));
   assert.ok(m.caps.some((c) => c.id === "links_unverified"));
 });

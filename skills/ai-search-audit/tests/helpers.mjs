@@ -7,7 +7,8 @@ import { auditFindings } from "../scripts/lib/checks.mjs";
 
 export const URL_ = "https://example.org/page";
 
-const PARAGRAPH = "An opening paragraph that says what the page is about, in plain words. ".repeat(3);
+// Three sentences of three shapes, so the writing-pattern checks find nothing in the base page.
+const PARAGRAPH = "An opening paragraph that says what the page is about, in plain words. It names the product once, and the reader it was written for. Then it promises one thing that the rest of this page goes on to show. ";
 
 /**
  * A small page that passes every classic check. `omit` drops parts of the head (canonical,
@@ -43,15 +44,15 @@ export async function readingOf(html, patch = {}, { url = URL_, robotsText = "Us
   return r;
 }
 
-export async function codesOf(html, patch, opts) {
+export async function codesOf(html, patch, opts, extra = {}) {
   const r = await readingOf(html, patch, opts);
   if (!r.ok) throw new Error(`reading refused: ${r.reasonCode}`);
-  return auditFindings(r).map((f) => f.code);
+  return auditFindings(r, extra).map((f) => f.code);
 }
 
-export async function findingOf(html, code, patch, opts) {
+export async function findingOf(html, code, patch, opts, extra = {}) {
   const r = await readingOf(html, patch, opts);
-  return auditFindings(r).find((f) => f.code === code);
+  return auditFindings(r, extra).find((f) => f.code === code);
 }
 
 /** The Vectorscope skill's saved public pages (see their ATTRIBUTION files there). */

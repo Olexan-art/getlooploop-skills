@@ -1,0 +1,16 @@
+{
+  "agent": "Claude Code",
+  "model": "Claude Opus 5.5",
+  "topic": "the example.com domain for documentation",
+  "questions": [
+    { "id": "q1", "question": "Can I put example.com in our API docs without asking anyone?", "axes": ["object"], "passage": 1, "verdict": "complete", "citable": true, "quote": "This domain is for use in documentation examples without needing permission." },
+    { "id": "q2", "question": "Our uptime monitor pings example.com every minute. Is that fine?", "axes": ["obstacle", "object"], "passage": 1, "verdict": "complete", "citable": false, "quote": "This is not a service; avoid relying on it for testing and monitoring purposes." },
+    { "id": "q3", "question": "I need a fake email address for a demo in five minutes. Can I use one at example.com?", "axes": ["urgency", "object"], "passage": 1, "verdict": "partial", "citable": false, "quote": "This domain is for use in documentation examples without needing permission." },
+    { "id": "q4", "question": "Who owns example.com?", "axes": ["object"], "passage": null, "verdict": "missing" },
+    { "id": "q5", "question": "On my phone the link opens a bare page. Is the site broken?", "axes": ["device", "obstacle"], "passage": 0, "verdict": "partial", "citable": false, "quote": "Example Domain" },
+    { "id": "q6", "question": "Can I buy example.com, or a domain like it?", "axes": ["object"], "passage": null, "verdict": "missing" },
+    { "id": "q7", "question": "Which other domains are reserved for examples, besides this one?", "axes": ["object"], "passage": null, "verdict": "missing" },
+    { "id": "q8", "question": "A test suite is failing right now because example.com is slow. Is it meant to be reliable?", "axes": ["urgency", "obstacle"], "passage": 1, "verdict": "complete", "citable": false, "quote": "avoid relying on it for testing and monitoring purposes" },
+    { "id": "q9", "question": "Can I point my own app at example.com from the terminal for local testing?", "axes": ["device", "object"], "passage": 1, "verdict": "partial", "citable": false, "quote": "avoid relying on it for testing and monitoring purposes" }
+  ]
+}

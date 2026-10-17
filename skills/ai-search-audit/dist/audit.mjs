@@ -133,8 +133,8 @@ var require_parse = __commonJS({
       );
     }
     __name(funescape, "funescape");
-    function unescapeCSS(str) {
-      return str.replace(reEscape, funescape);
+    function unescapeCSS(str2) {
+      return str2.replace(reEscape, funescape);
     }
     __name(unescapeCSS, "unescapeCSS");
     function isQuote(c2) {
@@ -565,16 +565,16 @@ var require_stringify = __commonJS({
       return namespace !== null ? "".concat(namespace === "*" ? "*" : escapeName(namespace, charsToEscapeInName), "|") : "";
     }
     __name(getNamespace, "getNamespace");
-    function escapeName(str, charsToEscape) {
+    function escapeName(str2, charsToEscape) {
       var lastIdx = 0;
       var ret = "";
-      for (var i = 0; i < str.length; i++) {
-        if (charsToEscape.has(str.charCodeAt(i))) {
-          ret += "".concat(str.slice(lastIdx, i), "\\").concat(str.charAt(i));
+      for (var i = 0; i < str2.length; i++) {
+        if (charsToEscape.has(str2.charCodeAt(i))) {
+          ret += "".concat(str2.slice(lastIdx, i), "\\").concat(str2.charAt(i));
           lastIdx = i + 1;
         }
       }
-      return ret.length > 0 ? ret + str.slice(lastIdx) : str;
+      return ret.length > 0 ? ret + str2.slice(lastIdx) : str2;
     }
     __name(escapeName, "escapeName");
   }
@@ -598,7 +598,7 @@ var require_commonjs = __commonJS({
       o[k2] = m[k];
     }));
     var __exportStar = exports && exports.__exportStar || function(m, exports2) {
-      for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports2, p)) __createBinding(exports2, m, p);
+      for (var p2 in m) if (p2 !== "default" && !Object.prototype.hasOwnProperty.call(exports2, p2)) __createBinding(exports2, m, p2);
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.stringify = exports.parse = exports.isTraversal = void 0;
@@ -2198,28 +2198,28 @@ var EntityDecoder = class {
    * @param offset The offset at which the entity begins. Should be 0 if this is not the first call.
    * @returns The number of characters that were consumed, or -1 if the entity is incomplete.
    */
-  write(str, offset) {
+  write(str2, offset) {
     switch (this.state) {
       case EntityDecoderState.EntityStart: {
-        if (str.charCodeAt(offset) === CharCodes.NUM) {
+        if (str2.charCodeAt(offset) === CharCodes.NUM) {
           this.state = EntityDecoderState.NumericStart;
           this.consumed += 1;
-          return this.stateNumericStart(str, offset + 1);
+          return this.stateNumericStart(str2, offset + 1);
         }
         this.state = EntityDecoderState.NamedEntity;
-        return this.stateNamedEntity(str, offset);
+        return this.stateNamedEntity(str2, offset);
       }
       case EntityDecoderState.NumericStart: {
-        return this.stateNumericStart(str, offset);
+        return this.stateNumericStart(str2, offset);
       }
       case EntityDecoderState.NumericDecimal: {
-        return this.stateNumericDecimal(str, offset);
+        return this.stateNumericDecimal(str2, offset);
       }
       case EntityDecoderState.NumericHex: {
-        return this.stateNumericHex(str, offset);
+        return this.stateNumericHex(str2, offset);
       }
       case EntityDecoderState.NamedEntity: {
-        return this.stateNamedEntity(str, offset);
+        return this.stateNamedEntity(str2, offset);
       }
     }
   }
@@ -2232,22 +2232,22 @@ var EntityDecoder = class {
    * @param offset The current offset.
    * @returns The number of characters that were consumed, or -1 if the entity is incomplete.
    */
-  stateNumericStart(str, offset) {
-    if (offset >= str.length) {
+  stateNumericStart(str2, offset) {
+    if (offset >= str2.length) {
       return -1;
     }
-    if ((str.charCodeAt(offset) | TO_LOWER_BIT) === CharCodes.LOWER_X) {
+    if ((str2.charCodeAt(offset) | TO_LOWER_BIT) === CharCodes.LOWER_X) {
       this.state = EntityDecoderState.NumericHex;
       this.consumed += 1;
-      return this.stateNumericHex(str, offset + 1);
+      return this.stateNumericHex(str2, offset + 1);
     }
     this.state = EntityDecoderState.NumericDecimal;
-    return this.stateNumericDecimal(str, offset);
+    return this.stateNumericDecimal(str2, offset);
   }
-  addToNumericResult(str, start, end2, base) {
+  addToNumericResult(str2, start, end2, base) {
     if (start !== end2) {
       const digitCount = end2 - start;
-      this.result = this.result * Math.pow(base, digitCount) + parseInt(str.substr(start, digitCount), base);
+      this.result = this.result * Math.pow(base, digitCount) + parseInt(str2.substr(start, digitCount), base);
       this.consumed += digitCount;
     }
   }
@@ -2260,18 +2260,18 @@ var EntityDecoder = class {
    * @param offset The current offset.
    * @returns The number of characters that were consumed, or -1 if the entity is incomplete.
    */
-  stateNumericHex(str, offset) {
+  stateNumericHex(str2, offset) {
     const startIdx = offset;
-    while (offset < str.length) {
-      const char = str.charCodeAt(offset);
+    while (offset < str2.length) {
+      const char = str2.charCodeAt(offset);
       if (isNumber(char) || isHexadecimalCharacter(char)) {
         offset += 1;
       } else {
-        this.addToNumericResult(str, startIdx, offset, 16);
+        this.addToNumericResult(str2, startIdx, offset, 16);
         return this.emitNumericEntity(char, 3);
       }
     }
-    this.addToNumericResult(str, startIdx, offset, 16);
+    this.addToNumericResult(str2, startIdx, offset, 16);
     return -1;
   }
   /**
@@ -2283,18 +2283,18 @@ var EntityDecoder = class {
    * @param offset The current offset.
    * @returns The number of characters that were consumed, or -1 if the entity is incomplete.
    */
-  stateNumericDecimal(str, offset) {
+  stateNumericDecimal(str2, offset) {
     const startIdx = offset;
-    while (offset < str.length) {
-      const char = str.charCodeAt(offset);
+    while (offset < str2.length) {
+      const char = str2.charCodeAt(offset);
       if (isNumber(char)) {
         offset += 1;
       } else {
-        this.addToNumericResult(str, startIdx, offset, 10);
+        this.addToNumericResult(str2, startIdx, offset, 10);
         return this.emitNumericEntity(char, 2);
       }
     }
-    this.addToNumericResult(str, startIdx, offset, 10);
+    this.addToNumericResult(str2, startIdx, offset, 10);
     return -1;
   }
   /**
@@ -2339,12 +2339,12 @@ var EntityDecoder = class {
    * @param offset The current offset.
    * @returns The number of characters that were consumed, or -1 if the entity is incomplete.
    */
-  stateNamedEntity(str, offset) {
+  stateNamedEntity(str2, offset) {
     const { decodeTree } = this;
     let current = decodeTree[this.treeIndex];
     let valueLength = (current & BinTrieFlags.VALUE_LENGTH) >> 14;
-    for (; offset < str.length; offset++, this.excess++) {
-      const char = str.charCodeAt(offset);
+    for (; offset < str2.length; offset++, this.excess++) {
+      const char = str2.charCodeAt(offset);
       this.treeIndex = determineBranch(decodeTree, current, this.treeIndex + Math.max(1, valueLength), char);
       if (this.treeIndex < 0) {
         return this.result === 0 || // If we are parsing an attribute
@@ -2429,15 +2429,15 @@ var EntityDecoder = class {
 };
 function getDecoder(decodeTree) {
   let ret = "";
-  const decoder = new EntityDecoder(decodeTree, (str) => ret += fromCodePoint(str));
-  return /* @__PURE__ */ __name(function decodeWithTrie(str, decodeMode) {
+  const decoder = new EntityDecoder(decodeTree, (str2) => ret += fromCodePoint(str2));
+  return /* @__PURE__ */ __name(function decodeWithTrie(str2, decodeMode) {
     let lastIndex = 0;
     let offset = 0;
-    while ((offset = str.indexOf("&", offset)) >= 0) {
-      ret += str.slice(lastIndex, offset);
+    while ((offset = str2.indexOf("&", offset)) >= 0) {
+      ret += str2.slice(lastIndex, offset);
       decoder.startEntity(decodeMode);
       const len = decoder.write(
-        str,
+        str2,
         // Skip the "&"
         offset + 1
       );
@@ -2448,7 +2448,7 @@ function getDecoder(decodeTree) {
       lastIndex = offset + len;
       offset = len === 0 ? lastIndex + 1 : lastIndex;
     }
-    const result = ret + str.slice(lastIndex);
+    const result = ret + str2.slice(lastIndex);
     ret = "";
     return result;
   }, "decodeWithTrie");
@@ -2504,28 +2504,28 @@ var xmlCodeMap = /* @__PURE__ */ new Map([
 ]);
 var getCodePoint = (
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  String.prototype.codePointAt != null ? (str, index2) => str.codePointAt(index2) : (
+  String.prototype.codePointAt != null ? (str2, index2) => str2.codePointAt(index2) : (
     // http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
     (c2, index2) => (c2.charCodeAt(index2) & 64512) === 55296 ? (c2.charCodeAt(index2) - 55296) * 1024 + c2.charCodeAt(index2 + 1) - 56320 + 65536 : c2.charCodeAt(index2)
   )
 );
-function encodeXML(str) {
+function encodeXML(str2) {
   let ret = "";
   let lastIdx = 0;
   let match;
-  while ((match = xmlReplacer.exec(str)) !== null) {
+  while ((match = xmlReplacer.exec(str2)) !== null) {
     const i = match.index;
-    const char = str.charCodeAt(i);
+    const char = str2.charCodeAt(i);
     const next2 = xmlCodeMap.get(char);
     if (next2 !== void 0) {
-      ret += str.substring(lastIdx, i) + next2;
+      ret += str2.substring(lastIdx, i) + next2;
       lastIdx = i + 1;
     } else {
-      ret += `${str.substring(lastIdx, i)}&#x${getCodePoint(str, i).toString(16)};`;
+      ret += `${str2.substring(lastIdx, i)}&#x${getCodePoint(str2, i).toString(16)};`;
       lastIdx = xmlReplacer.lastIndex += Number((char & 64512) === 55296);
     }
   }
-  return ret + str.substr(lastIdx);
+  return ret + str2.substr(lastIdx);
 }
 __name(encodeXML, "encodeXML");
 function getEscaper(regex, map2) {
@@ -3507,12 +3507,12 @@ function isCheerio(maybeCheerio) {
   return maybeCheerio.cheerio != null;
 }
 __name(isCheerio, "isCheerio");
-function camelCase(str) {
-  return str.replace(/[._-](\w|$)/g, (_, x) => x.toUpperCase());
+function camelCase(str2) {
+  return str2.replace(/[._-](\w|$)/g, (_, x) => x.toUpperCase());
 }
 __name(camelCase, "camelCase");
-function cssCase(str) {
-  return str.replace(/[A-Z]/g, "-$&").toLowerCase();
+function cssCase(str2) {
+  return str2.replace(/[A-Z]/g, "-$&").toLowerCase();
 }
 __name(cssCase, "cssCase");
 function domEach(array, fn) {
@@ -3530,15 +3530,15 @@ var CharacterCode;
   CharacterCode2[CharacterCode2["UpperZ"] = 90] = "UpperZ";
   CharacterCode2[CharacterCode2["Exclamation"] = 33] = "Exclamation";
 })(CharacterCode || (CharacterCode = {}));
-function isHtml(str) {
-  if (typeof str !== "string") {
+function isHtml(str2) {
+  if (typeof str2 !== "string") {
     return false;
   }
-  const tagStart = str.indexOf("<");
-  if (tagStart === -1 || tagStart > str.length - 3)
+  const tagStart = str2.indexOf("<");
+  if (tagStart === -1 || tagStart > str2.length - 3)
     return false;
-  const tagChar = str.charCodeAt(tagStart + 1);
-  return (tagChar >= CharacterCode.LowerA && tagChar <= CharacterCode.LowerZ || tagChar >= CharacterCode.UpperA && tagChar <= CharacterCode.UpperZ || tagChar === CharacterCode.Exclamation) && str.includes(">", tagStart + 2);
+  const tagChar = str2.charCodeAt(tagStart + 1);
+  return (tagChar >= CharacterCode.LowerA && tagChar <= CharacterCode.LowerZ || tagChar >= CharacterCode.UpperA && tagChar <= CharacterCode.UpperZ || tagChar === CharacterCode.Exclamation) && str2.includes(">", tagStart + 2);
 }
 __name(isHtml, "isHtml");
 
@@ -7506,8 +7506,8 @@ function empty() {
   });
 }
 __name(empty, "empty");
-function html2(str) {
-  if (str === void 0) {
+function html2(str2) {
+  if (str2 === void 0) {
     const el = this[0];
     if (!el || !hasChildren(el))
       return null;
@@ -7519,7 +7519,7 @@ function html2(str) {
     for (const child of el.children) {
       child.next = child.prev = child.parent = null;
     }
-    const content = isCheerio(str) ? str.toArray() : this._parse(`${str}`, this.options, false, el).children;
+    const content = isCheerio(str2) ? str2.toArray() : this._parse(`${str2}`, this.options, false, el).children;
     update(content, el);
   });
 }
@@ -7528,12 +7528,12 @@ function toString() {
   return this._render(this);
 }
 __name(toString, "toString");
-function text2(str) {
-  if (str === void 0) {
+function text2(str2) {
+  if (str2 === void 0) {
     return text(this);
   }
-  if (typeof str === "function") {
-    return domEach(this, (el, i) => this._make(el).text(str.call(el, i, text([el]))));
+  if (typeof str2 === "function") {
+    return domEach(this, (el, i) => this._make(el).text(str2.call(el, i, text([el]))));
   }
   return domEach(this, (el) => {
     if (!hasChildren(el))
@@ -7541,7 +7541,7 @@ function text2(str) {
     for (const child of el.children) {
       child.next = child.prev = child.parent = null;
     }
-    const textNode = new Text2(`${str}`);
+    const textNode = new Text2(`${str2}`);
     update(textNode, el);
   });
 }
@@ -7615,7 +7615,7 @@ function getCss(el, prop2) {
 }
 __name(getCss, "getCss");
 function stringify(obj) {
-  return Object.keys(obj).reduce((str, prop2) => `${str}${str ? " " : ""}${prop2}: ${obj[prop2]};`, "");
+  return Object.keys(obj).reduce((str2, prop2) => `${str2}${str2 ? " " : ""}${prop2}: ${obj[prop2]};`, "");
 }
 __name(stringify, "stringify");
 function parse5(styles) {
@@ -7624,16 +7624,16 @@ function parse5(styles) {
     return {};
   const obj = {};
   let key;
-  for (const str of styles.split(";")) {
-    const n = str.indexOf(":");
-    if (n < 1 || n === str.length - 1) {
-      const trimmed = str.trimEnd();
+  for (const str2 of styles.split(";")) {
+    const n = str2.indexOf(":");
+    if (n < 1 || n === str2.length - 1) {
+      const trimmed = str2.trimEnd();
       if (trimmed.length > 0 && key !== void 0) {
         obj[key] += `;${trimmed}`;
       }
     } else {
-      key = str.slice(0, n).trim();
-      obj[key] = str.slice(n + 1).trim();
+      key = str2.slice(0, n).trim();
+      obj[key] = str2.slice(n + 1).trim();
     }
   }
   return obj;
@@ -12834,20 +12834,20 @@ var Parser2 = class {
   }
   //Stack events
   /** @internal */
-  onItemPush(node, tid, isTop) {
+  onItemPush(node, tid, isTop2) {
     var _a5, _b;
     (_b = (_a5 = this.treeAdapter).onItemPush) === null || _b === void 0 ? void 0 : _b.call(_a5, node);
-    if (isTop && this.openElements.stackTop > 0)
+    if (isTop2 && this.openElements.stackTop > 0)
       this._setContextModes(node, tid);
   }
   /** @internal */
-  onItemPop(node, isTop) {
+  onItemPop(node, isTop2) {
     var _a5, _b;
     if (this.options.sourceCodeLocationInfo) {
       this._setEndLocation(node, this.currentToken);
     }
     (_b = (_a5 = this.treeAdapter).onItemPop) === null || _b === void 0 ? void 0 : _b.call(_a5, node, this.openElements.current);
-    if (isTop) {
+    if (isTop2) {
       let current;
       let currentTagId;
       if (this.openElements.stackTop === 0 && this.fragmentContext) {
@@ -13811,149 +13811,149 @@ var Parser2 = class {
     }
   }
 };
-function aaObtainFormattingElementEntry(p, token) {
-  let formattingElementEntry = p.activeFormattingElements.getElementEntryInScopeWithTagName(token.tagName);
+function aaObtainFormattingElementEntry(p2, token) {
+  let formattingElementEntry = p2.activeFormattingElements.getElementEntryInScopeWithTagName(token.tagName);
   if (formattingElementEntry) {
-    if (!p.openElements.contains(formattingElementEntry.element)) {
-      p.activeFormattingElements.removeEntry(formattingElementEntry);
+    if (!p2.openElements.contains(formattingElementEntry.element)) {
+      p2.activeFormattingElements.removeEntry(formattingElementEntry);
       formattingElementEntry = null;
-    } else if (!p.openElements.hasInScope(token.tagID)) {
+    } else if (!p2.openElements.hasInScope(token.tagID)) {
       formattingElementEntry = null;
     }
   } else {
-    genericEndTagInBody(p, token);
+    genericEndTagInBody(p2, token);
   }
   return formattingElementEntry;
 }
 __name(aaObtainFormattingElementEntry, "aaObtainFormattingElementEntry");
-function aaObtainFurthestBlock(p, formattingElementEntry) {
+function aaObtainFurthestBlock(p2, formattingElementEntry) {
   let furthestBlock = null;
-  let idx = p.openElements.stackTop;
+  let idx = p2.openElements.stackTop;
   for (; idx >= 0; idx--) {
-    const element = p.openElements.items[idx];
+    const element = p2.openElements.items[idx];
     if (element === formattingElementEntry.element) {
       break;
     }
-    if (p._isSpecialElement(element, p.openElements.tagIDs[idx])) {
+    if (p2._isSpecialElement(element, p2.openElements.tagIDs[idx])) {
       furthestBlock = element;
     }
   }
   if (!furthestBlock) {
-    p.openElements.shortenToLength(Math.max(idx, 0));
-    p.activeFormattingElements.removeEntry(formattingElementEntry);
+    p2.openElements.shortenToLength(Math.max(idx, 0));
+    p2.activeFormattingElements.removeEntry(formattingElementEntry);
   }
   return furthestBlock;
 }
 __name(aaObtainFurthestBlock, "aaObtainFurthestBlock");
-function aaInnerLoop(p, furthestBlock, formattingElement) {
+function aaInnerLoop(p2, furthestBlock, formattingElement) {
   let lastElement = furthestBlock;
-  let nextElement = p.openElements.getCommonAncestor(furthestBlock);
+  let nextElement = p2.openElements.getCommonAncestor(furthestBlock);
   for (let i = 0, element = nextElement; element !== formattingElement; i++, element = nextElement) {
-    nextElement = p.openElements.getCommonAncestor(element);
-    const elementEntry = p.activeFormattingElements.getElementEntry(element);
+    nextElement = p2.openElements.getCommonAncestor(element);
+    const elementEntry = p2.activeFormattingElements.getElementEntry(element);
     const counterOverflow = elementEntry && i >= AA_INNER_LOOP_ITER;
     const shouldRemoveFromOpenElements = !elementEntry || counterOverflow;
     if (shouldRemoveFromOpenElements) {
       if (counterOverflow) {
-        p.activeFormattingElements.removeEntry(elementEntry);
+        p2.activeFormattingElements.removeEntry(elementEntry);
       }
-      p.openElements.remove(element);
+      p2.openElements.remove(element);
     } else {
-      element = aaRecreateElementFromEntry(p, elementEntry);
+      element = aaRecreateElementFromEntry(p2, elementEntry);
       if (lastElement === furthestBlock) {
-        p.activeFormattingElements.bookmark = elementEntry;
+        p2.activeFormattingElements.bookmark = elementEntry;
       }
-      p.treeAdapter.detachNode(lastElement);
-      p.treeAdapter.appendChild(element, lastElement);
+      p2.treeAdapter.detachNode(lastElement);
+      p2.treeAdapter.appendChild(element, lastElement);
       lastElement = element;
     }
   }
   return lastElement;
 }
 __name(aaInnerLoop, "aaInnerLoop");
-function aaRecreateElementFromEntry(p, elementEntry) {
-  const ns = p.treeAdapter.getNamespaceURI(elementEntry.element);
-  const newElement = p.treeAdapter.createElement(elementEntry.token.tagName, ns, elementEntry.token.attrs);
-  p.openElements.replace(elementEntry.element, newElement);
+function aaRecreateElementFromEntry(p2, elementEntry) {
+  const ns = p2.treeAdapter.getNamespaceURI(elementEntry.element);
+  const newElement = p2.treeAdapter.createElement(elementEntry.token.tagName, ns, elementEntry.token.attrs);
+  p2.openElements.replace(elementEntry.element, newElement);
   elementEntry.element = newElement;
   return newElement;
 }
 __name(aaRecreateElementFromEntry, "aaRecreateElementFromEntry");
-function aaInsertLastNodeInCommonAncestor(p, commonAncestor, lastElement) {
-  const tn = p.treeAdapter.getTagName(commonAncestor);
+function aaInsertLastNodeInCommonAncestor(p2, commonAncestor, lastElement) {
+  const tn = p2.treeAdapter.getTagName(commonAncestor);
   const tid = getTagID(tn);
-  if (p._isElementCausesFosterParenting(tid)) {
-    p._fosterParentElement(lastElement);
+  if (p2._isElementCausesFosterParenting(tid)) {
+    p2._fosterParentElement(lastElement);
   } else {
-    const ns = p.treeAdapter.getNamespaceURI(commonAncestor);
+    const ns = p2.treeAdapter.getNamespaceURI(commonAncestor);
     if (tid === TAG_ID.TEMPLATE && ns === NS.HTML) {
-      commonAncestor = p.treeAdapter.getTemplateContent(commonAncestor);
+      commonAncestor = p2.treeAdapter.getTemplateContent(commonAncestor);
     }
-    p.treeAdapter.appendChild(commonAncestor, lastElement);
+    p2.treeAdapter.appendChild(commonAncestor, lastElement);
   }
 }
 __name(aaInsertLastNodeInCommonAncestor, "aaInsertLastNodeInCommonAncestor");
-function aaReplaceFormattingElement(p, furthestBlock, formattingElementEntry) {
-  const ns = p.treeAdapter.getNamespaceURI(formattingElementEntry.element);
+function aaReplaceFormattingElement(p2, furthestBlock, formattingElementEntry) {
+  const ns = p2.treeAdapter.getNamespaceURI(formattingElementEntry.element);
   const { token } = formattingElementEntry;
-  const newElement = p.treeAdapter.createElement(token.tagName, ns, token.attrs);
-  p._adoptNodes(furthestBlock, newElement);
-  p.treeAdapter.appendChild(furthestBlock, newElement);
-  p.activeFormattingElements.insertElementAfterBookmark(newElement, token);
-  p.activeFormattingElements.removeEntry(formattingElementEntry);
-  p.openElements.remove(formattingElementEntry.element);
-  p.openElements.insertAfter(furthestBlock, newElement, token.tagID);
+  const newElement = p2.treeAdapter.createElement(token.tagName, ns, token.attrs);
+  p2._adoptNodes(furthestBlock, newElement);
+  p2.treeAdapter.appendChild(furthestBlock, newElement);
+  p2.activeFormattingElements.insertElementAfterBookmark(newElement, token);
+  p2.activeFormattingElements.removeEntry(formattingElementEntry);
+  p2.openElements.remove(formattingElementEntry.element);
+  p2.openElements.insertAfter(furthestBlock, newElement, token.tagID);
 }
 __name(aaReplaceFormattingElement, "aaReplaceFormattingElement");
-function callAdoptionAgency(p, token) {
+function callAdoptionAgency(p2, token) {
   for (let i = 0; i < AA_OUTER_LOOP_ITER; i++) {
-    const formattingElementEntry = aaObtainFormattingElementEntry(p, token);
+    const formattingElementEntry = aaObtainFormattingElementEntry(p2, token);
     if (!formattingElementEntry) {
       break;
     }
-    const furthestBlock = aaObtainFurthestBlock(p, formattingElementEntry);
+    const furthestBlock = aaObtainFurthestBlock(p2, formattingElementEntry);
     if (!furthestBlock) {
       break;
     }
-    p.activeFormattingElements.bookmark = formattingElementEntry;
-    const lastElement = aaInnerLoop(p, furthestBlock, formattingElementEntry.element);
-    const commonAncestor = p.openElements.getCommonAncestor(formattingElementEntry.element);
-    p.treeAdapter.detachNode(lastElement);
+    p2.activeFormattingElements.bookmark = formattingElementEntry;
+    const lastElement = aaInnerLoop(p2, furthestBlock, formattingElementEntry.element);
+    const commonAncestor = p2.openElements.getCommonAncestor(formattingElementEntry.element);
+    p2.treeAdapter.detachNode(lastElement);
     if (commonAncestor)
-      aaInsertLastNodeInCommonAncestor(p, commonAncestor, lastElement);
-    aaReplaceFormattingElement(p, furthestBlock, formattingElementEntry);
+      aaInsertLastNodeInCommonAncestor(p2, commonAncestor, lastElement);
+    aaReplaceFormattingElement(p2, furthestBlock, formattingElementEntry);
   }
 }
 __name(callAdoptionAgency, "callAdoptionAgency");
-function appendComment(p, token) {
-  p._appendCommentNode(token, p.openElements.currentTmplContentOrNode);
+function appendComment(p2, token) {
+  p2._appendCommentNode(token, p2.openElements.currentTmplContentOrNode);
 }
 __name(appendComment, "appendComment");
-function appendCommentToRootHtmlElement(p, token) {
-  p._appendCommentNode(token, p.openElements.items[0]);
+function appendCommentToRootHtmlElement(p2, token) {
+  p2._appendCommentNode(token, p2.openElements.items[0]);
 }
 __name(appendCommentToRootHtmlElement, "appendCommentToRootHtmlElement");
-function appendCommentToDocument(p, token) {
-  p._appendCommentNode(token, p.document);
+function appendCommentToDocument(p2, token) {
+  p2._appendCommentNode(token, p2.document);
 }
 __name(appendCommentToDocument, "appendCommentToDocument");
-function stopParsing(p, token) {
-  p.stopped = true;
+function stopParsing(p2, token) {
+  p2.stopped = true;
   if (token.location) {
-    const target2 = p.fragmentContext ? 0 : 2;
-    for (let i = p.openElements.stackTop; i >= target2; i--) {
-      p._setEndLocation(p.openElements.items[i], token);
+    const target2 = p2.fragmentContext ? 0 : 2;
+    for (let i = p2.openElements.stackTop; i >= target2; i--) {
+      p2._setEndLocation(p2.openElements.items[i], token);
     }
-    if (!p.fragmentContext && p.openElements.stackTop >= 0) {
-      const htmlElement = p.openElements.items[0];
-      const htmlLocation = p.treeAdapter.getNodeSourceCodeLocation(htmlElement);
+    if (!p2.fragmentContext && p2.openElements.stackTop >= 0) {
+      const htmlElement = p2.openElements.items[0];
+      const htmlLocation = p2.treeAdapter.getNodeSourceCodeLocation(htmlElement);
       if (htmlLocation && !htmlLocation.endTag) {
-        p._setEndLocation(htmlElement, token);
-        if (p.openElements.stackTop >= 1) {
-          const bodyElement = p.openElements.items[1];
-          const bodyLocation = p.treeAdapter.getNodeSourceCodeLocation(bodyElement);
+        p2._setEndLocation(htmlElement, token);
+        if (p2.openElements.stackTop >= 1) {
+          const bodyElement = p2.openElements.items[1];
+          const bodyLocation = p2.treeAdapter.getNodeSourceCodeLocation(bodyElement);
           if (bodyLocation && !bodyLocation.endTag) {
-            p._setEndLocation(bodyElement, token);
+            p2._setEndLocation(bodyElement, token);
           }
         }
       }
@@ -13961,83 +13961,83 @@ function stopParsing(p, token) {
   }
 }
 __name(stopParsing, "stopParsing");
-function doctypeInInitialMode(p, token) {
-  p._setDocumentType(token);
+function doctypeInInitialMode(p2, token) {
+  p2._setDocumentType(token);
   const mode = token.forceQuirks ? DOCUMENT_MODE.QUIRKS : getDocumentMode(token);
   if (!isConforming(token)) {
-    p._err(token, ERR.nonConformingDoctype);
+    p2._err(token, ERR.nonConformingDoctype);
   }
-  p.treeAdapter.setDocumentMode(p.document, mode);
-  p.insertionMode = InsertionMode.BEFORE_HTML;
+  p2.treeAdapter.setDocumentMode(p2.document, mode);
+  p2.insertionMode = InsertionMode.BEFORE_HTML;
 }
 __name(doctypeInInitialMode, "doctypeInInitialMode");
-function tokenInInitialMode(p, token) {
-  p._err(token, ERR.missingDoctype, true);
-  p.treeAdapter.setDocumentMode(p.document, DOCUMENT_MODE.QUIRKS);
-  p.insertionMode = InsertionMode.BEFORE_HTML;
-  p._processToken(token);
+function tokenInInitialMode(p2, token) {
+  p2._err(token, ERR.missingDoctype, true);
+  p2.treeAdapter.setDocumentMode(p2.document, DOCUMENT_MODE.QUIRKS);
+  p2.insertionMode = InsertionMode.BEFORE_HTML;
+  p2._processToken(token);
 }
 __name(tokenInInitialMode, "tokenInInitialMode");
-function startTagBeforeHtml(p, token) {
+function startTagBeforeHtml(p2, token) {
   if (token.tagID === TAG_ID.HTML) {
-    p._insertElement(token, NS.HTML);
-    p.insertionMode = InsertionMode.BEFORE_HEAD;
+    p2._insertElement(token, NS.HTML);
+    p2.insertionMode = InsertionMode.BEFORE_HEAD;
   } else {
-    tokenBeforeHtml(p, token);
+    tokenBeforeHtml(p2, token);
   }
 }
 __name(startTagBeforeHtml, "startTagBeforeHtml");
-function endTagBeforeHtml(p, token) {
+function endTagBeforeHtml(p2, token) {
   const tn = token.tagID;
   if (tn === TAG_ID.HTML || tn === TAG_ID.HEAD || tn === TAG_ID.BODY || tn === TAG_ID.BR) {
-    tokenBeforeHtml(p, token);
+    tokenBeforeHtml(p2, token);
   }
 }
 __name(endTagBeforeHtml, "endTagBeforeHtml");
-function tokenBeforeHtml(p, token) {
-  p._insertFakeRootElement();
-  p.insertionMode = InsertionMode.BEFORE_HEAD;
-  p._processToken(token);
+function tokenBeforeHtml(p2, token) {
+  p2._insertFakeRootElement();
+  p2.insertionMode = InsertionMode.BEFORE_HEAD;
+  p2._processToken(token);
 }
 __name(tokenBeforeHtml, "tokenBeforeHtml");
-function startTagBeforeHead(p, token) {
+function startTagBeforeHead(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HTML: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TAG_ID.HEAD: {
-      p._insertElement(token, NS.HTML);
-      p.headElement = p.openElements.current;
-      p.insertionMode = InsertionMode.IN_HEAD;
+      p2._insertElement(token, NS.HTML);
+      p2.headElement = p2.openElements.current;
+      p2.insertionMode = InsertionMode.IN_HEAD;
       break;
     }
     default: {
-      tokenBeforeHead(p, token);
+      tokenBeforeHead(p2, token);
     }
   }
 }
 __name(startTagBeforeHead, "startTagBeforeHead");
-function endTagBeforeHead(p, token) {
+function endTagBeforeHead(p2, token) {
   const tn = token.tagID;
   if (tn === TAG_ID.HEAD || tn === TAG_ID.BODY || tn === TAG_ID.HTML || tn === TAG_ID.BR) {
-    tokenBeforeHead(p, token);
+    tokenBeforeHead(p2, token);
   } else {
-    p._err(token, ERR.endTagWithoutMatchingOpenElement);
+    p2._err(token, ERR.endTagWithoutMatchingOpenElement);
   }
 }
 __name(endTagBeforeHead, "endTagBeforeHead");
-function tokenBeforeHead(p, token) {
-  p._insertFakeElement(TAG_NAMES.HEAD, TAG_ID.HEAD);
-  p.headElement = p.openElements.current;
-  p.insertionMode = InsertionMode.IN_HEAD;
-  p._processToken(token);
+function tokenBeforeHead(p2, token) {
+  p2._insertFakeElement(TAG_NAMES.HEAD, TAG_ID.HEAD);
+  p2.headElement = p2.openElements.current;
+  p2.insertionMode = InsertionMode.IN_HEAD;
+  p2._processToken(token);
 }
 __name(tokenBeforeHead, "tokenBeforeHead");
-function startTagInHead(p, token) {
+function startTagInHead(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HTML: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TAG_ID.BASE:
@@ -14045,98 +14045,98 @@ function startTagInHead(p, token) {
     case TAG_ID.BGSOUND:
     case TAG_ID.LINK:
     case TAG_ID.META: {
-      p._appendElement(token, NS.HTML);
+      p2._appendElement(token, NS.HTML);
       token.ackSelfClosing = true;
       break;
     }
     case TAG_ID.TITLE: {
-      p._switchToTextParsing(token, TokenizerMode.RCDATA);
+      p2._switchToTextParsing(token, TokenizerMode.RCDATA);
       break;
     }
     case TAG_ID.NOSCRIPT: {
-      if (p.options.scriptingEnabled) {
-        p._switchToTextParsing(token, TokenizerMode.RAWTEXT);
+      if (p2.options.scriptingEnabled) {
+        p2._switchToTextParsing(token, TokenizerMode.RAWTEXT);
       } else {
-        p._insertElement(token, NS.HTML);
-        p.insertionMode = InsertionMode.IN_HEAD_NO_SCRIPT;
+        p2._insertElement(token, NS.HTML);
+        p2.insertionMode = InsertionMode.IN_HEAD_NO_SCRIPT;
       }
       break;
     }
     case TAG_ID.NOFRAMES:
     case TAG_ID.STYLE: {
-      p._switchToTextParsing(token, TokenizerMode.RAWTEXT);
+      p2._switchToTextParsing(token, TokenizerMode.RAWTEXT);
       break;
     }
     case TAG_ID.SCRIPT: {
-      p._switchToTextParsing(token, TokenizerMode.SCRIPT_DATA);
+      p2._switchToTextParsing(token, TokenizerMode.SCRIPT_DATA);
       break;
     }
     case TAG_ID.TEMPLATE: {
-      p._insertTemplate(token);
-      p.activeFormattingElements.insertMarker();
-      p.framesetOk = false;
-      p.insertionMode = InsertionMode.IN_TEMPLATE;
-      p.tmplInsertionModeStack.unshift(InsertionMode.IN_TEMPLATE);
+      p2._insertTemplate(token);
+      p2.activeFormattingElements.insertMarker();
+      p2.framesetOk = false;
+      p2.insertionMode = InsertionMode.IN_TEMPLATE;
+      p2.tmplInsertionModeStack.unshift(InsertionMode.IN_TEMPLATE);
       break;
     }
     case TAG_ID.HEAD: {
-      p._err(token, ERR.misplacedStartTagForHeadElement);
+      p2._err(token, ERR.misplacedStartTagForHeadElement);
       break;
     }
     default: {
-      tokenInHead(p, token);
+      tokenInHead(p2, token);
     }
   }
 }
 __name(startTagInHead, "startTagInHead");
-function endTagInHead(p, token) {
+function endTagInHead(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HEAD: {
-      p.openElements.pop();
-      p.insertionMode = InsertionMode.AFTER_HEAD;
+      p2.openElements.pop();
+      p2.insertionMode = InsertionMode.AFTER_HEAD;
       break;
     }
     case TAG_ID.BODY:
     case TAG_ID.BR:
     case TAG_ID.HTML: {
-      tokenInHead(p, token);
+      tokenInHead(p2, token);
       break;
     }
     case TAG_ID.TEMPLATE: {
-      templateEndTagInHead(p, token);
+      templateEndTagInHead(p2, token);
       break;
     }
     default: {
-      p._err(token, ERR.endTagWithoutMatchingOpenElement);
+      p2._err(token, ERR.endTagWithoutMatchingOpenElement);
     }
   }
 }
 __name(endTagInHead, "endTagInHead");
-function templateEndTagInHead(p, token) {
-  if (p.openElements.tmplCount > 0) {
-    p.openElements.generateImpliedEndTagsThoroughly();
-    if (p.openElements.currentTagId !== TAG_ID.TEMPLATE) {
-      p._err(token, ERR.closingOfElementWithOpenChildElements);
+function templateEndTagInHead(p2, token) {
+  if (p2.openElements.tmplCount > 0) {
+    p2.openElements.generateImpliedEndTagsThoroughly();
+    if (p2.openElements.currentTagId !== TAG_ID.TEMPLATE) {
+      p2._err(token, ERR.closingOfElementWithOpenChildElements);
     }
-    p.openElements.popUntilTagNamePopped(TAG_ID.TEMPLATE);
-    p.activeFormattingElements.clearToLastMarker();
-    p.tmplInsertionModeStack.shift();
-    p._resetInsertionMode();
+    p2.openElements.popUntilTagNamePopped(TAG_ID.TEMPLATE);
+    p2.activeFormattingElements.clearToLastMarker();
+    p2.tmplInsertionModeStack.shift();
+    p2._resetInsertionMode();
   } else {
-    p._err(token, ERR.endTagWithoutMatchingOpenElement);
+    p2._err(token, ERR.endTagWithoutMatchingOpenElement);
   }
 }
 __name(templateEndTagInHead, "templateEndTagInHead");
-function tokenInHead(p, token) {
-  p.openElements.pop();
-  p.insertionMode = InsertionMode.AFTER_HEAD;
-  p._processToken(token);
+function tokenInHead(p2, token) {
+  p2.openElements.pop();
+  p2.insertionMode = InsertionMode.AFTER_HEAD;
+  p2._processToken(token);
 }
 __name(tokenInHead, "tokenInHead");
-function startTagInHeadNoScript(p, token) {
+function startTagInHeadNoScript(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HTML: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TAG_ID.BASEFONT:
@@ -14146,59 +14146,59 @@ function startTagInHeadNoScript(p, token) {
     case TAG_ID.META:
     case TAG_ID.NOFRAMES:
     case TAG_ID.STYLE: {
-      startTagInHead(p, token);
+      startTagInHead(p2, token);
       break;
     }
     case TAG_ID.NOSCRIPT: {
-      p._err(token, ERR.nestedNoscriptInHead);
+      p2._err(token, ERR.nestedNoscriptInHead);
       break;
     }
     default: {
-      tokenInHeadNoScript(p, token);
+      tokenInHeadNoScript(p2, token);
     }
   }
 }
 __name(startTagInHeadNoScript, "startTagInHeadNoScript");
-function endTagInHeadNoScript(p, token) {
+function endTagInHeadNoScript(p2, token) {
   switch (token.tagID) {
     case TAG_ID.NOSCRIPT: {
-      p.openElements.pop();
-      p.insertionMode = InsertionMode.IN_HEAD;
+      p2.openElements.pop();
+      p2.insertionMode = InsertionMode.IN_HEAD;
       break;
     }
     case TAG_ID.BR: {
-      tokenInHeadNoScript(p, token);
+      tokenInHeadNoScript(p2, token);
       break;
     }
     default: {
-      p._err(token, ERR.endTagWithoutMatchingOpenElement);
+      p2._err(token, ERR.endTagWithoutMatchingOpenElement);
     }
   }
 }
 __name(endTagInHeadNoScript, "endTagInHeadNoScript");
-function tokenInHeadNoScript(p, token) {
+function tokenInHeadNoScript(p2, token) {
   const errCode = token.type === TokenType.EOF ? ERR.openElementsLeftAfterEof : ERR.disallowedContentInNoscriptInHead;
-  p._err(token, errCode);
-  p.openElements.pop();
-  p.insertionMode = InsertionMode.IN_HEAD;
-  p._processToken(token);
+  p2._err(token, errCode);
+  p2.openElements.pop();
+  p2.insertionMode = InsertionMode.IN_HEAD;
+  p2._processToken(token);
 }
 __name(tokenInHeadNoScript, "tokenInHeadNoScript");
-function startTagAfterHead(p, token) {
+function startTagAfterHead(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HTML: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TAG_ID.BODY: {
-      p._insertElement(token, NS.HTML);
-      p.framesetOk = false;
-      p.insertionMode = InsertionMode.IN_BODY;
+      p2._insertElement(token, NS.HTML);
+      p2.framesetOk = false;
+      p2.insertionMode = InsertionMode.IN_BODY;
       break;
     }
     case TAG_ID.FRAMESET: {
-      p._insertElement(token, NS.HTML);
-      p.insertionMode = InsertionMode.IN_FRAMESET;
+      p2._insertElement(token, NS.HTML);
+      p2.insertionMode = InsertionMode.IN_FRAMESET;
       break;
     }
     case TAG_ID.BASE:
@@ -14211,236 +14211,236 @@ function startTagAfterHead(p, token) {
     case TAG_ID.STYLE:
     case TAG_ID.TEMPLATE:
     case TAG_ID.TITLE: {
-      p._err(token, ERR.abandonedHeadElementChild);
-      p.openElements.push(p.headElement, TAG_ID.HEAD);
-      startTagInHead(p, token);
-      p.openElements.remove(p.headElement);
+      p2._err(token, ERR.abandonedHeadElementChild);
+      p2.openElements.push(p2.headElement, TAG_ID.HEAD);
+      startTagInHead(p2, token);
+      p2.openElements.remove(p2.headElement);
       break;
     }
     case TAG_ID.HEAD: {
-      p._err(token, ERR.misplacedStartTagForHeadElement);
+      p2._err(token, ERR.misplacedStartTagForHeadElement);
       break;
     }
     default: {
-      tokenAfterHead(p, token);
+      tokenAfterHead(p2, token);
     }
   }
 }
 __name(startTagAfterHead, "startTagAfterHead");
-function endTagAfterHead(p, token) {
+function endTagAfterHead(p2, token) {
   switch (token.tagID) {
     case TAG_ID.BODY:
     case TAG_ID.HTML:
     case TAG_ID.BR: {
-      tokenAfterHead(p, token);
+      tokenAfterHead(p2, token);
       break;
     }
     case TAG_ID.TEMPLATE: {
-      templateEndTagInHead(p, token);
+      templateEndTagInHead(p2, token);
       break;
     }
     default: {
-      p._err(token, ERR.endTagWithoutMatchingOpenElement);
+      p2._err(token, ERR.endTagWithoutMatchingOpenElement);
     }
   }
 }
 __name(endTagAfterHead, "endTagAfterHead");
-function tokenAfterHead(p, token) {
-  p._insertFakeElement(TAG_NAMES.BODY, TAG_ID.BODY);
-  p.insertionMode = InsertionMode.IN_BODY;
-  modeInBody(p, token);
+function tokenAfterHead(p2, token) {
+  p2._insertFakeElement(TAG_NAMES.BODY, TAG_ID.BODY);
+  p2.insertionMode = InsertionMode.IN_BODY;
+  modeInBody(p2, token);
 }
 __name(tokenAfterHead, "tokenAfterHead");
-function modeInBody(p, token) {
+function modeInBody(p2, token) {
   switch (token.type) {
     case TokenType.CHARACTER: {
-      characterInBody(p, token);
+      characterInBody(p2, token);
       break;
     }
     case TokenType.WHITESPACE_CHARACTER: {
-      whitespaceCharacterInBody(p, token);
+      whitespaceCharacterInBody(p2, token);
       break;
     }
     case TokenType.COMMENT: {
-      appendComment(p, token);
+      appendComment(p2, token);
       break;
     }
     case TokenType.START_TAG: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TokenType.END_TAG: {
-      endTagInBody(p, token);
+      endTagInBody(p2, token);
       break;
     }
     case TokenType.EOF: {
-      eofInBody(p, token);
+      eofInBody(p2, token);
       break;
     }
     default:
   }
 }
 __name(modeInBody, "modeInBody");
-function whitespaceCharacterInBody(p, token) {
-  p._reconstructActiveFormattingElements();
-  p._insertCharacters(token);
+function whitespaceCharacterInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
+  p2._insertCharacters(token);
 }
 __name(whitespaceCharacterInBody, "whitespaceCharacterInBody");
-function characterInBody(p, token) {
-  p._reconstructActiveFormattingElements();
-  p._insertCharacters(token);
-  p.framesetOk = false;
+function characterInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
+  p2._insertCharacters(token);
+  p2.framesetOk = false;
 }
 __name(characterInBody, "characterInBody");
-function htmlStartTagInBody(p, token) {
-  if (p.openElements.tmplCount === 0) {
-    p.treeAdapter.adoptAttributes(p.openElements.items[0], token.attrs);
+function htmlStartTagInBody(p2, token) {
+  if (p2.openElements.tmplCount === 0) {
+    p2.treeAdapter.adoptAttributes(p2.openElements.items[0], token.attrs);
   }
 }
 __name(htmlStartTagInBody, "htmlStartTagInBody");
-function bodyStartTagInBody(p, token) {
-  const bodyElement = p.openElements.tryPeekProperlyNestedBodyElement();
-  if (bodyElement && p.openElements.tmplCount === 0) {
-    p.framesetOk = false;
-    p.treeAdapter.adoptAttributes(bodyElement, token.attrs);
+function bodyStartTagInBody(p2, token) {
+  const bodyElement = p2.openElements.tryPeekProperlyNestedBodyElement();
+  if (bodyElement && p2.openElements.tmplCount === 0) {
+    p2.framesetOk = false;
+    p2.treeAdapter.adoptAttributes(bodyElement, token.attrs);
   }
 }
 __name(bodyStartTagInBody, "bodyStartTagInBody");
-function framesetStartTagInBody(p, token) {
-  const bodyElement = p.openElements.tryPeekProperlyNestedBodyElement();
-  if (p.framesetOk && bodyElement) {
-    p.treeAdapter.detachNode(bodyElement);
-    p.openElements.popAllUpToHtmlElement();
-    p._insertElement(token, NS.HTML);
-    p.insertionMode = InsertionMode.IN_FRAMESET;
+function framesetStartTagInBody(p2, token) {
+  const bodyElement = p2.openElements.tryPeekProperlyNestedBodyElement();
+  if (p2.framesetOk && bodyElement) {
+    p2.treeAdapter.detachNode(bodyElement);
+    p2.openElements.popAllUpToHtmlElement();
+    p2._insertElement(token, NS.HTML);
+    p2.insertionMode = InsertionMode.IN_FRAMESET;
   }
 }
 __name(framesetStartTagInBody, "framesetStartTagInBody");
-function addressStartTagInBody(p, token) {
-  if (p.openElements.hasInButtonScope(TAG_ID.P)) {
-    p._closePElement();
+function addressStartTagInBody(p2, token) {
+  if (p2.openElements.hasInButtonScope(TAG_ID.P)) {
+    p2._closePElement();
   }
-  p._insertElement(token, NS.HTML);
+  p2._insertElement(token, NS.HTML);
 }
 __name(addressStartTagInBody, "addressStartTagInBody");
-function numberedHeaderStartTagInBody(p, token) {
-  if (p.openElements.hasInButtonScope(TAG_ID.P)) {
-    p._closePElement();
+function numberedHeaderStartTagInBody(p2, token) {
+  if (p2.openElements.hasInButtonScope(TAG_ID.P)) {
+    p2._closePElement();
   }
-  if (p.openElements.currentTagId !== void 0 && NUMBERED_HEADERS.has(p.openElements.currentTagId)) {
-    p.openElements.pop();
+  if (p2.openElements.currentTagId !== void 0 && NUMBERED_HEADERS.has(p2.openElements.currentTagId)) {
+    p2.openElements.pop();
   }
-  p._insertElement(token, NS.HTML);
+  p2._insertElement(token, NS.HTML);
 }
 __name(numberedHeaderStartTagInBody, "numberedHeaderStartTagInBody");
-function preStartTagInBody(p, token) {
-  if (p.openElements.hasInButtonScope(TAG_ID.P)) {
-    p._closePElement();
+function preStartTagInBody(p2, token) {
+  if (p2.openElements.hasInButtonScope(TAG_ID.P)) {
+    p2._closePElement();
   }
-  p._insertElement(token, NS.HTML);
-  p.skipNextNewLine = true;
-  p.framesetOk = false;
+  p2._insertElement(token, NS.HTML);
+  p2.skipNextNewLine = true;
+  p2.framesetOk = false;
 }
 __name(preStartTagInBody, "preStartTagInBody");
-function formStartTagInBody(p, token) {
-  const inTemplate = p.openElements.tmplCount > 0;
-  if (!p.formElement || inTemplate) {
-    if (p.openElements.hasInButtonScope(TAG_ID.P)) {
-      p._closePElement();
+function formStartTagInBody(p2, token) {
+  const inTemplate = p2.openElements.tmplCount > 0;
+  if (!p2.formElement || inTemplate) {
+    if (p2.openElements.hasInButtonScope(TAG_ID.P)) {
+      p2._closePElement();
     }
-    p._insertElement(token, NS.HTML);
+    p2._insertElement(token, NS.HTML);
     if (!inTemplate) {
-      p.formElement = p.openElements.current;
+      p2.formElement = p2.openElements.current;
     }
   }
 }
 __name(formStartTagInBody, "formStartTagInBody");
-function listItemStartTagInBody(p, token) {
-  p.framesetOk = false;
+function listItemStartTagInBody(p2, token) {
+  p2.framesetOk = false;
   const tn = token.tagID;
-  for (let i = p.openElements.stackTop; i >= 0; i--) {
-    const elementId = p.openElements.tagIDs[i];
+  for (let i = p2.openElements.stackTop; i >= 0; i--) {
+    const elementId = p2.openElements.tagIDs[i];
     if (tn === TAG_ID.LI && elementId === TAG_ID.LI || (tn === TAG_ID.DD || tn === TAG_ID.DT) && (elementId === TAG_ID.DD || elementId === TAG_ID.DT)) {
-      p.openElements.generateImpliedEndTagsWithExclusion(elementId);
-      p.openElements.popUntilTagNamePopped(elementId);
+      p2.openElements.generateImpliedEndTagsWithExclusion(elementId);
+      p2.openElements.popUntilTagNamePopped(elementId);
       break;
     }
-    if (elementId !== TAG_ID.ADDRESS && elementId !== TAG_ID.DIV && elementId !== TAG_ID.P && p._isSpecialElement(p.openElements.items[i], elementId)) {
+    if (elementId !== TAG_ID.ADDRESS && elementId !== TAG_ID.DIV && elementId !== TAG_ID.P && p2._isSpecialElement(p2.openElements.items[i], elementId)) {
       break;
     }
   }
-  if (p.openElements.hasInButtonScope(TAG_ID.P)) {
-    p._closePElement();
+  if (p2.openElements.hasInButtonScope(TAG_ID.P)) {
+    p2._closePElement();
   }
-  p._insertElement(token, NS.HTML);
+  p2._insertElement(token, NS.HTML);
 }
 __name(listItemStartTagInBody, "listItemStartTagInBody");
-function plaintextStartTagInBody(p, token) {
-  if (p.openElements.hasInButtonScope(TAG_ID.P)) {
-    p._closePElement();
+function plaintextStartTagInBody(p2, token) {
+  if (p2.openElements.hasInButtonScope(TAG_ID.P)) {
+    p2._closePElement();
   }
-  p._insertElement(token, NS.HTML);
-  p.tokenizer.state = TokenizerMode.PLAINTEXT;
+  p2._insertElement(token, NS.HTML);
+  p2.tokenizer.state = TokenizerMode.PLAINTEXT;
 }
 __name(plaintextStartTagInBody, "plaintextStartTagInBody");
-function buttonStartTagInBody(p, token) {
-  if (p.openElements.hasInScope(TAG_ID.BUTTON)) {
-    p.openElements.generateImpliedEndTags();
-    p.openElements.popUntilTagNamePopped(TAG_ID.BUTTON);
+function buttonStartTagInBody(p2, token) {
+  if (p2.openElements.hasInScope(TAG_ID.BUTTON)) {
+    p2.openElements.generateImpliedEndTags();
+    p2.openElements.popUntilTagNamePopped(TAG_ID.BUTTON);
   }
-  p._reconstructActiveFormattingElements();
-  p._insertElement(token, NS.HTML);
-  p.framesetOk = false;
+  p2._reconstructActiveFormattingElements();
+  p2._insertElement(token, NS.HTML);
+  p2.framesetOk = false;
 }
 __name(buttonStartTagInBody, "buttonStartTagInBody");
-function aStartTagInBody(p, token) {
-  const activeElementEntry = p.activeFormattingElements.getElementEntryInScopeWithTagName(TAG_NAMES.A);
+function aStartTagInBody(p2, token) {
+  const activeElementEntry = p2.activeFormattingElements.getElementEntryInScopeWithTagName(TAG_NAMES.A);
   if (activeElementEntry) {
-    callAdoptionAgency(p, token);
-    p.openElements.remove(activeElementEntry.element);
-    p.activeFormattingElements.removeEntry(activeElementEntry);
+    callAdoptionAgency(p2, token);
+    p2.openElements.remove(activeElementEntry.element);
+    p2.activeFormattingElements.removeEntry(activeElementEntry);
   }
-  p._reconstructActiveFormattingElements();
-  p._insertElement(token, NS.HTML);
-  p.activeFormattingElements.pushElement(p.openElements.current, token);
+  p2._reconstructActiveFormattingElements();
+  p2._insertElement(token, NS.HTML);
+  p2.activeFormattingElements.pushElement(p2.openElements.current, token);
 }
 __name(aStartTagInBody, "aStartTagInBody");
-function bStartTagInBody(p, token) {
-  p._reconstructActiveFormattingElements();
-  p._insertElement(token, NS.HTML);
-  p.activeFormattingElements.pushElement(p.openElements.current, token);
+function bStartTagInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
+  p2._insertElement(token, NS.HTML);
+  p2.activeFormattingElements.pushElement(p2.openElements.current, token);
 }
 __name(bStartTagInBody, "bStartTagInBody");
-function nobrStartTagInBody(p, token) {
-  p._reconstructActiveFormattingElements();
-  if (p.openElements.hasInScope(TAG_ID.NOBR)) {
-    callAdoptionAgency(p, token);
-    p._reconstructActiveFormattingElements();
+function nobrStartTagInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
+  if (p2.openElements.hasInScope(TAG_ID.NOBR)) {
+    callAdoptionAgency(p2, token);
+    p2._reconstructActiveFormattingElements();
   }
-  p._insertElement(token, NS.HTML);
-  p.activeFormattingElements.pushElement(p.openElements.current, token);
+  p2._insertElement(token, NS.HTML);
+  p2.activeFormattingElements.pushElement(p2.openElements.current, token);
 }
 __name(nobrStartTagInBody, "nobrStartTagInBody");
-function appletStartTagInBody(p, token) {
-  p._reconstructActiveFormattingElements();
-  p._insertElement(token, NS.HTML);
-  p.activeFormattingElements.insertMarker();
-  p.framesetOk = false;
+function appletStartTagInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
+  p2._insertElement(token, NS.HTML);
+  p2.activeFormattingElements.insertMarker();
+  p2.framesetOk = false;
 }
 __name(appletStartTagInBody, "appletStartTagInBody");
-function tableStartTagInBody(p, token) {
-  if (p.treeAdapter.getDocumentMode(p.document) !== DOCUMENT_MODE.QUIRKS && p.openElements.hasInButtonScope(TAG_ID.P)) {
-    p._closePElement();
+function tableStartTagInBody(p2, token) {
+  if (p2.treeAdapter.getDocumentMode(p2.document) !== DOCUMENT_MODE.QUIRKS && p2.openElements.hasInButtonScope(TAG_ID.P)) {
+    p2._closePElement();
   }
-  p._insertElement(token, NS.HTML);
-  p.framesetOk = false;
-  p.insertionMode = InsertionMode.IN_TABLE;
+  p2._insertElement(token, NS.HTML);
+  p2.framesetOk = false;
+  p2.insertionMode = InsertionMode.IN_TABLE;
 }
 __name(tableStartTagInBody, "tableStartTagInBody");
-function areaStartTagInBody(p, token) {
-  p._reconstructActiveFormattingElements();
-  p._appendElement(token, NS.HTML);
-  p.framesetOk = false;
+function areaStartTagInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
+  p2._appendElement(token, NS.HTML);
+  p2.framesetOk = false;
   token.ackSelfClosing = true;
 }
 __name(areaStartTagInBody, "areaStartTagInBody");
@@ -14449,121 +14449,121 @@ function isHiddenInput(token) {
   return inputType != null && inputType.toLowerCase() === HIDDEN_INPUT_TYPE;
 }
 __name(isHiddenInput, "isHiddenInput");
-function inputStartTagInBody(p, token) {
-  p._reconstructActiveFormattingElements();
-  p._appendElement(token, NS.HTML);
+function inputStartTagInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
+  p2._appendElement(token, NS.HTML);
   if (!isHiddenInput(token)) {
-    p.framesetOk = false;
+    p2.framesetOk = false;
   }
   token.ackSelfClosing = true;
 }
 __name(inputStartTagInBody, "inputStartTagInBody");
-function paramStartTagInBody(p, token) {
-  p._appendElement(token, NS.HTML);
+function paramStartTagInBody(p2, token) {
+  p2._appendElement(token, NS.HTML);
   token.ackSelfClosing = true;
 }
 __name(paramStartTagInBody, "paramStartTagInBody");
-function hrStartTagInBody(p, token) {
-  if (p.openElements.hasInButtonScope(TAG_ID.P)) {
-    p._closePElement();
+function hrStartTagInBody(p2, token) {
+  if (p2.openElements.hasInButtonScope(TAG_ID.P)) {
+    p2._closePElement();
   }
-  p._appendElement(token, NS.HTML);
-  p.framesetOk = false;
+  p2._appendElement(token, NS.HTML);
+  p2.framesetOk = false;
   token.ackSelfClosing = true;
 }
 __name(hrStartTagInBody, "hrStartTagInBody");
-function imageStartTagInBody(p, token) {
+function imageStartTagInBody(p2, token) {
   token.tagName = TAG_NAMES.IMG;
   token.tagID = TAG_ID.IMG;
-  areaStartTagInBody(p, token);
+  areaStartTagInBody(p2, token);
 }
 __name(imageStartTagInBody, "imageStartTagInBody");
-function textareaStartTagInBody(p, token) {
-  p._insertElement(token, NS.HTML);
-  p.skipNextNewLine = true;
-  p.tokenizer.state = TokenizerMode.RCDATA;
-  p.originalInsertionMode = p.insertionMode;
-  p.framesetOk = false;
-  p.insertionMode = InsertionMode.TEXT;
+function textareaStartTagInBody(p2, token) {
+  p2._insertElement(token, NS.HTML);
+  p2.skipNextNewLine = true;
+  p2.tokenizer.state = TokenizerMode.RCDATA;
+  p2.originalInsertionMode = p2.insertionMode;
+  p2.framesetOk = false;
+  p2.insertionMode = InsertionMode.TEXT;
 }
 __name(textareaStartTagInBody, "textareaStartTagInBody");
-function xmpStartTagInBody(p, token) {
-  if (p.openElements.hasInButtonScope(TAG_ID.P)) {
-    p._closePElement();
+function xmpStartTagInBody(p2, token) {
+  if (p2.openElements.hasInButtonScope(TAG_ID.P)) {
+    p2._closePElement();
   }
-  p._reconstructActiveFormattingElements();
-  p.framesetOk = false;
-  p._switchToTextParsing(token, TokenizerMode.RAWTEXT);
+  p2._reconstructActiveFormattingElements();
+  p2.framesetOk = false;
+  p2._switchToTextParsing(token, TokenizerMode.RAWTEXT);
 }
 __name(xmpStartTagInBody, "xmpStartTagInBody");
-function iframeStartTagInBody(p, token) {
-  p.framesetOk = false;
-  p._switchToTextParsing(token, TokenizerMode.RAWTEXT);
+function iframeStartTagInBody(p2, token) {
+  p2.framesetOk = false;
+  p2._switchToTextParsing(token, TokenizerMode.RAWTEXT);
 }
 __name(iframeStartTagInBody, "iframeStartTagInBody");
-function rawTextStartTagInBody(p, token) {
-  p._switchToTextParsing(token, TokenizerMode.RAWTEXT);
+function rawTextStartTagInBody(p2, token) {
+  p2._switchToTextParsing(token, TokenizerMode.RAWTEXT);
 }
 __name(rawTextStartTagInBody, "rawTextStartTagInBody");
-function selectStartTagInBody(p, token) {
-  p._reconstructActiveFormattingElements();
-  p._insertElement(token, NS.HTML);
-  p.framesetOk = false;
-  p.insertionMode = p.insertionMode === InsertionMode.IN_TABLE || p.insertionMode === InsertionMode.IN_CAPTION || p.insertionMode === InsertionMode.IN_TABLE_BODY || p.insertionMode === InsertionMode.IN_ROW || p.insertionMode === InsertionMode.IN_CELL ? InsertionMode.IN_SELECT_IN_TABLE : InsertionMode.IN_SELECT;
+function selectStartTagInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
+  p2._insertElement(token, NS.HTML);
+  p2.framesetOk = false;
+  p2.insertionMode = p2.insertionMode === InsertionMode.IN_TABLE || p2.insertionMode === InsertionMode.IN_CAPTION || p2.insertionMode === InsertionMode.IN_TABLE_BODY || p2.insertionMode === InsertionMode.IN_ROW || p2.insertionMode === InsertionMode.IN_CELL ? InsertionMode.IN_SELECT_IN_TABLE : InsertionMode.IN_SELECT;
 }
 __name(selectStartTagInBody, "selectStartTagInBody");
-function optgroupStartTagInBody(p, token) {
-  if (p.openElements.currentTagId === TAG_ID.OPTION) {
-    p.openElements.pop();
+function optgroupStartTagInBody(p2, token) {
+  if (p2.openElements.currentTagId === TAG_ID.OPTION) {
+    p2.openElements.pop();
   }
-  p._reconstructActiveFormattingElements();
-  p._insertElement(token, NS.HTML);
+  p2._reconstructActiveFormattingElements();
+  p2._insertElement(token, NS.HTML);
 }
 __name(optgroupStartTagInBody, "optgroupStartTagInBody");
-function rbStartTagInBody(p, token) {
-  if (p.openElements.hasInScope(TAG_ID.RUBY)) {
-    p.openElements.generateImpliedEndTags();
+function rbStartTagInBody(p2, token) {
+  if (p2.openElements.hasInScope(TAG_ID.RUBY)) {
+    p2.openElements.generateImpliedEndTags();
   }
-  p._insertElement(token, NS.HTML);
+  p2._insertElement(token, NS.HTML);
 }
 __name(rbStartTagInBody, "rbStartTagInBody");
-function rtStartTagInBody(p, token) {
-  if (p.openElements.hasInScope(TAG_ID.RUBY)) {
-    p.openElements.generateImpliedEndTagsWithExclusion(TAG_ID.RTC);
+function rtStartTagInBody(p2, token) {
+  if (p2.openElements.hasInScope(TAG_ID.RUBY)) {
+    p2.openElements.generateImpliedEndTagsWithExclusion(TAG_ID.RTC);
   }
-  p._insertElement(token, NS.HTML);
+  p2._insertElement(token, NS.HTML);
 }
 __name(rtStartTagInBody, "rtStartTagInBody");
-function mathStartTagInBody(p, token) {
-  p._reconstructActiveFormattingElements();
+function mathStartTagInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
   adjustTokenMathMLAttrs(token);
   adjustTokenXMLAttrs(token);
   if (token.selfClosing) {
-    p._appendElement(token, NS.MATHML);
+    p2._appendElement(token, NS.MATHML);
   } else {
-    p._insertElement(token, NS.MATHML);
+    p2._insertElement(token, NS.MATHML);
   }
   token.ackSelfClosing = true;
 }
 __name(mathStartTagInBody, "mathStartTagInBody");
-function svgStartTagInBody(p, token) {
-  p._reconstructActiveFormattingElements();
+function svgStartTagInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
   adjustTokenSVGAttrs(token);
   adjustTokenXMLAttrs(token);
   if (token.selfClosing) {
-    p._appendElement(token, NS.SVG);
+    p2._appendElement(token, NS.SVG);
   } else {
-    p._insertElement(token, NS.SVG);
+    p2._insertElement(token, NS.SVG);
   }
   token.ackSelfClosing = true;
 }
 __name(svgStartTagInBody, "svgStartTagInBody");
-function genericStartTagInBody(p, token) {
-  p._reconstructActiveFormattingElements();
-  p._insertElement(token, NS.HTML);
+function genericStartTagInBody(p2, token) {
+  p2._reconstructActiveFormattingElements();
+  p2._insertElement(token, NS.HTML);
 }
 __name(genericStartTagInBody, "genericStartTagInBody");
-function startTagInBody(p, token) {
+function startTagInBody(p2, token) {
   switch (token.tagID) {
     case TAG_ID.I:
     case TAG_ID.S:
@@ -14577,11 +14577,11 @@ function startTagInBody(p, token) {
     case TAG_ID.SMALL:
     case TAG_ID.STRIKE:
     case TAG_ID.STRONG: {
-      bStartTagInBody(p, token);
+      bStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.A: {
-      aStartTagInBody(p, token);
+      aStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.H1:
@@ -14590,7 +14590,7 @@ function startTagInBody(p, token) {
     case TAG_ID.H4:
     case TAG_ID.H5:
     case TAG_ID.H6: {
-      numberedHeaderStartTagInBody(p, token);
+      numberedHeaderStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.P:
@@ -14618,13 +14618,13 @@ function startTagInBody(p, token) {
     case TAG_ID.FIELDSET:
     case TAG_ID.BLOCKQUOTE:
     case TAG_ID.FIGCAPTION: {
-      addressStartTagInBody(p, token);
+      addressStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.LI:
     case TAG_ID.DD:
     case TAG_ID.DT: {
-      listItemStartTagInBody(p, token);
+      listItemStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.BR:
@@ -14633,38 +14633,38 @@ function startTagInBody(p, token) {
     case TAG_ID.AREA:
     case TAG_ID.EMBED:
     case TAG_ID.KEYGEN: {
-      areaStartTagInBody(p, token);
+      areaStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.HR: {
-      hrStartTagInBody(p, token);
+      hrStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.RB:
     case TAG_ID.RTC: {
-      rbStartTagInBody(p, token);
+      rbStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.RT:
     case TAG_ID.RP: {
-      rtStartTagInBody(p, token);
+      rtStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.PRE:
     case TAG_ID.LISTING: {
-      preStartTagInBody(p, token);
+      preStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.XMP: {
-      xmpStartTagInBody(p, token);
+      xmpStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.SVG: {
-      svgStartTagInBody(p, token);
+      svgStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.HTML: {
-      htmlStartTagInBody(p, token);
+      htmlStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.BASE:
@@ -14676,89 +14676,89 @@ function startTagInBody(p, token) {
     case TAG_ID.BGSOUND:
     case TAG_ID.BASEFONT:
     case TAG_ID.TEMPLATE: {
-      startTagInHead(p, token);
+      startTagInHead(p2, token);
       break;
     }
     case TAG_ID.BODY: {
-      bodyStartTagInBody(p, token);
+      bodyStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.FORM: {
-      formStartTagInBody(p, token);
+      formStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.NOBR: {
-      nobrStartTagInBody(p, token);
+      nobrStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.MATH: {
-      mathStartTagInBody(p, token);
+      mathStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.TABLE: {
-      tableStartTagInBody(p, token);
+      tableStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.INPUT: {
-      inputStartTagInBody(p, token);
+      inputStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.PARAM:
     case TAG_ID.TRACK:
     case TAG_ID.SOURCE: {
-      paramStartTagInBody(p, token);
+      paramStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.IMAGE: {
-      imageStartTagInBody(p, token);
+      imageStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.BUTTON: {
-      buttonStartTagInBody(p, token);
+      buttonStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.APPLET:
     case TAG_ID.OBJECT:
     case TAG_ID.MARQUEE: {
-      appletStartTagInBody(p, token);
+      appletStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.IFRAME: {
-      iframeStartTagInBody(p, token);
+      iframeStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.SELECT: {
-      selectStartTagInBody(p, token);
+      selectStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.OPTION:
     case TAG_ID.OPTGROUP: {
-      optgroupStartTagInBody(p, token);
+      optgroupStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.NOEMBED:
     case TAG_ID.NOFRAMES: {
-      rawTextStartTagInBody(p, token);
+      rawTextStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.FRAMESET: {
-      framesetStartTagInBody(p, token);
+      framesetStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.TEXTAREA: {
-      textareaStartTagInBody(p, token);
+      textareaStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.NOSCRIPT: {
-      if (p.options.scriptingEnabled) {
-        rawTextStartTagInBody(p, token);
+      if (p2.options.scriptingEnabled) {
+        rawTextStartTagInBody(p2, token);
       } else {
-        genericStartTagInBody(p, token);
+        genericStartTagInBody(p2, token);
       }
       break;
     }
     case TAG_ID.PLAINTEXT: {
-      plaintextStartTagInBody(p, token);
+      plaintextStartTagInBody(p2, token);
       break;
     }
     case TAG_ID.COL:
@@ -14775,118 +14775,118 @@ function startTagInBody(p, token) {
       break;
     }
     default: {
-      genericStartTagInBody(p, token);
+      genericStartTagInBody(p2, token);
     }
   }
 }
 __name(startTagInBody, "startTagInBody");
-function bodyEndTagInBody(p, token) {
-  if (p.openElements.hasInScope(TAG_ID.BODY)) {
-    p.insertionMode = InsertionMode.AFTER_BODY;
-    if (p.options.sourceCodeLocationInfo) {
-      const bodyElement = p.openElements.tryPeekProperlyNestedBodyElement();
+function bodyEndTagInBody(p2, token) {
+  if (p2.openElements.hasInScope(TAG_ID.BODY)) {
+    p2.insertionMode = InsertionMode.AFTER_BODY;
+    if (p2.options.sourceCodeLocationInfo) {
+      const bodyElement = p2.openElements.tryPeekProperlyNestedBodyElement();
       if (bodyElement) {
-        p._setEndLocation(bodyElement, token);
+        p2._setEndLocation(bodyElement, token);
       }
     }
   }
 }
 __name(bodyEndTagInBody, "bodyEndTagInBody");
-function htmlEndTagInBody(p, token) {
-  if (p.openElements.hasInScope(TAG_ID.BODY)) {
-    p.insertionMode = InsertionMode.AFTER_BODY;
-    endTagAfterBody(p, token);
+function htmlEndTagInBody(p2, token) {
+  if (p2.openElements.hasInScope(TAG_ID.BODY)) {
+    p2.insertionMode = InsertionMode.AFTER_BODY;
+    endTagAfterBody(p2, token);
   }
 }
 __name(htmlEndTagInBody, "htmlEndTagInBody");
-function addressEndTagInBody(p, token) {
+function addressEndTagInBody(p2, token) {
   const tn = token.tagID;
-  if (p.openElements.hasInScope(tn)) {
-    p.openElements.generateImpliedEndTags();
-    p.openElements.popUntilTagNamePopped(tn);
+  if (p2.openElements.hasInScope(tn)) {
+    p2.openElements.generateImpliedEndTags();
+    p2.openElements.popUntilTagNamePopped(tn);
   }
 }
 __name(addressEndTagInBody, "addressEndTagInBody");
-function formEndTagInBody(p) {
-  const inTemplate = p.openElements.tmplCount > 0;
-  const { formElement } = p;
+function formEndTagInBody(p2) {
+  const inTemplate = p2.openElements.tmplCount > 0;
+  const { formElement } = p2;
   if (!inTemplate) {
-    p.formElement = null;
+    p2.formElement = null;
   }
-  if ((formElement || inTemplate) && p.openElements.hasInScope(TAG_ID.FORM)) {
-    p.openElements.generateImpliedEndTags();
+  if ((formElement || inTemplate) && p2.openElements.hasInScope(TAG_ID.FORM)) {
+    p2.openElements.generateImpliedEndTags();
     if (inTemplate) {
-      p.openElements.popUntilTagNamePopped(TAG_ID.FORM);
+      p2.openElements.popUntilTagNamePopped(TAG_ID.FORM);
     } else if (formElement) {
-      p.openElements.remove(formElement);
+      p2.openElements.remove(formElement);
     }
   }
 }
 __name(formEndTagInBody, "formEndTagInBody");
-function pEndTagInBody(p) {
-  if (!p.openElements.hasInButtonScope(TAG_ID.P)) {
-    p._insertFakeElement(TAG_NAMES.P, TAG_ID.P);
+function pEndTagInBody(p2) {
+  if (!p2.openElements.hasInButtonScope(TAG_ID.P)) {
+    p2._insertFakeElement(TAG_NAMES.P, TAG_ID.P);
   }
-  p._closePElement();
+  p2._closePElement();
 }
 __name(pEndTagInBody, "pEndTagInBody");
-function liEndTagInBody(p) {
-  if (p.openElements.hasInListItemScope(TAG_ID.LI)) {
-    p.openElements.generateImpliedEndTagsWithExclusion(TAG_ID.LI);
-    p.openElements.popUntilTagNamePopped(TAG_ID.LI);
+function liEndTagInBody(p2) {
+  if (p2.openElements.hasInListItemScope(TAG_ID.LI)) {
+    p2.openElements.generateImpliedEndTagsWithExclusion(TAG_ID.LI);
+    p2.openElements.popUntilTagNamePopped(TAG_ID.LI);
   }
 }
 __name(liEndTagInBody, "liEndTagInBody");
-function ddEndTagInBody(p, token) {
+function ddEndTagInBody(p2, token) {
   const tn = token.tagID;
-  if (p.openElements.hasInScope(tn)) {
-    p.openElements.generateImpliedEndTagsWithExclusion(tn);
-    p.openElements.popUntilTagNamePopped(tn);
+  if (p2.openElements.hasInScope(tn)) {
+    p2.openElements.generateImpliedEndTagsWithExclusion(tn);
+    p2.openElements.popUntilTagNamePopped(tn);
   }
 }
 __name(ddEndTagInBody, "ddEndTagInBody");
-function numberedHeaderEndTagInBody(p) {
-  if (p.openElements.hasNumberedHeaderInScope()) {
-    p.openElements.generateImpliedEndTags();
-    p.openElements.popUntilNumberedHeaderPopped();
+function numberedHeaderEndTagInBody(p2) {
+  if (p2.openElements.hasNumberedHeaderInScope()) {
+    p2.openElements.generateImpliedEndTags();
+    p2.openElements.popUntilNumberedHeaderPopped();
   }
 }
 __name(numberedHeaderEndTagInBody, "numberedHeaderEndTagInBody");
-function appletEndTagInBody(p, token) {
+function appletEndTagInBody(p2, token) {
   const tn = token.tagID;
-  if (p.openElements.hasInScope(tn)) {
-    p.openElements.generateImpliedEndTags();
-    p.openElements.popUntilTagNamePopped(tn);
-    p.activeFormattingElements.clearToLastMarker();
+  if (p2.openElements.hasInScope(tn)) {
+    p2.openElements.generateImpliedEndTags();
+    p2.openElements.popUntilTagNamePopped(tn);
+    p2.activeFormattingElements.clearToLastMarker();
   }
 }
 __name(appletEndTagInBody, "appletEndTagInBody");
-function brEndTagInBody(p) {
-  p._reconstructActiveFormattingElements();
-  p._insertFakeElement(TAG_NAMES.BR, TAG_ID.BR);
-  p.openElements.pop();
-  p.framesetOk = false;
+function brEndTagInBody(p2) {
+  p2._reconstructActiveFormattingElements();
+  p2._insertFakeElement(TAG_NAMES.BR, TAG_ID.BR);
+  p2.openElements.pop();
+  p2.framesetOk = false;
 }
 __name(brEndTagInBody, "brEndTagInBody");
-function genericEndTagInBody(p, token) {
+function genericEndTagInBody(p2, token) {
   const tn = token.tagName;
   const tid = token.tagID;
-  for (let i = p.openElements.stackTop; i > 0; i--) {
-    const element = p.openElements.items[i];
-    const elementId = p.openElements.tagIDs[i];
-    if (tid === elementId && (tid !== TAG_ID.UNKNOWN || p.treeAdapter.getTagName(element) === tn)) {
-      p.openElements.generateImpliedEndTagsWithExclusion(tid);
-      if (p.openElements.stackTop >= i)
-        p.openElements.shortenToLength(i);
+  for (let i = p2.openElements.stackTop; i > 0; i--) {
+    const element = p2.openElements.items[i];
+    const elementId = p2.openElements.tagIDs[i];
+    if (tid === elementId && (tid !== TAG_ID.UNKNOWN || p2.treeAdapter.getTagName(element) === tn)) {
+      p2.openElements.generateImpliedEndTagsWithExclusion(tid);
+      if (p2.openElements.stackTop >= i)
+        p2.openElements.shortenToLength(i);
       break;
     }
-    if (p._isSpecialElement(element, elementId)) {
+    if (p2._isSpecialElement(element, elementId)) {
       break;
     }
   }
 }
 __name(genericEndTagInBody, "genericEndTagInBody");
-function endTagInBody(p, token) {
+function endTagInBody(p2, token) {
   switch (token.tagID) {
     case TAG_ID.A:
     case TAG_ID.B:
@@ -14902,11 +14902,11 @@ function endTagInBody(p, token) {
     case TAG_ID.SMALL:
     case TAG_ID.STRIKE:
     case TAG_ID.STRONG: {
-      callAdoptionAgency(p, token);
+      callAdoptionAgency(p2, token);
       break;
     }
     case TAG_ID.P: {
-      pEndTagInBody(p);
+      pEndTagInBody(p2);
       break;
     }
     case TAG_ID.DL:
@@ -14936,16 +14936,16 @@ function endTagInBody(p, token) {
     case TAG_ID.FIELDSET:
     case TAG_ID.BLOCKQUOTE:
     case TAG_ID.FIGCAPTION: {
-      addressEndTagInBody(p, token);
+      addressEndTagInBody(p2, token);
       break;
     }
     case TAG_ID.LI: {
-      liEndTagInBody(p);
+      liEndTagInBody(p2);
       break;
     }
     case TAG_ID.DD:
     case TAG_ID.DT: {
-      ddEndTagInBody(p, token);
+      ddEndTagInBody(p2, token);
       break;
     }
     case TAG_ID.H1:
@@ -14954,205 +14954,205 @@ function endTagInBody(p, token) {
     case TAG_ID.H4:
     case TAG_ID.H5:
     case TAG_ID.H6: {
-      numberedHeaderEndTagInBody(p);
+      numberedHeaderEndTagInBody(p2);
       break;
     }
     case TAG_ID.BR: {
-      brEndTagInBody(p);
+      brEndTagInBody(p2);
       break;
     }
     case TAG_ID.BODY: {
-      bodyEndTagInBody(p, token);
+      bodyEndTagInBody(p2, token);
       break;
     }
     case TAG_ID.HTML: {
-      htmlEndTagInBody(p, token);
+      htmlEndTagInBody(p2, token);
       break;
     }
     case TAG_ID.FORM: {
-      formEndTagInBody(p);
+      formEndTagInBody(p2);
       break;
     }
     case TAG_ID.APPLET:
     case TAG_ID.OBJECT:
     case TAG_ID.MARQUEE: {
-      appletEndTagInBody(p, token);
+      appletEndTagInBody(p2, token);
       break;
     }
     case TAG_ID.TEMPLATE: {
-      templateEndTagInHead(p, token);
+      templateEndTagInHead(p2, token);
       break;
     }
     default: {
-      genericEndTagInBody(p, token);
+      genericEndTagInBody(p2, token);
     }
   }
 }
 __name(endTagInBody, "endTagInBody");
-function eofInBody(p, token) {
-  if (p.tmplInsertionModeStack.length > 0) {
-    eofInTemplate(p, token);
+function eofInBody(p2, token) {
+  if (p2.tmplInsertionModeStack.length > 0) {
+    eofInTemplate(p2, token);
   } else {
-    stopParsing(p, token);
+    stopParsing(p2, token);
   }
 }
 __name(eofInBody, "eofInBody");
-function endTagInText(p, token) {
+function endTagInText(p2, token) {
   var _a5;
   if (token.tagID === TAG_ID.SCRIPT) {
-    (_a5 = p.scriptHandler) === null || _a5 === void 0 ? void 0 : _a5.call(p, p.openElements.current);
+    (_a5 = p2.scriptHandler) === null || _a5 === void 0 ? void 0 : _a5.call(p2, p2.openElements.current);
   }
-  p.openElements.pop();
-  p.insertionMode = p.originalInsertionMode;
+  p2.openElements.pop();
+  p2.insertionMode = p2.originalInsertionMode;
 }
 __name(endTagInText, "endTagInText");
-function eofInText(p, token) {
-  p._err(token, ERR.eofInElementThatCanContainOnlyText);
-  p.openElements.pop();
-  p.insertionMode = p.originalInsertionMode;
-  p.onEof(token);
+function eofInText(p2, token) {
+  p2._err(token, ERR.eofInElementThatCanContainOnlyText);
+  p2.openElements.pop();
+  p2.insertionMode = p2.originalInsertionMode;
+  p2.onEof(token);
 }
 __name(eofInText, "eofInText");
-function characterInTable(p, token) {
-  if (p.openElements.currentTagId !== void 0 && TABLE_STRUCTURE_TAGS.has(p.openElements.currentTagId)) {
-    p.pendingCharacterTokens.length = 0;
-    p.hasNonWhitespacePendingCharacterToken = false;
-    p.originalInsertionMode = p.insertionMode;
-    p.insertionMode = InsertionMode.IN_TABLE_TEXT;
+function characterInTable(p2, token) {
+  if (p2.openElements.currentTagId !== void 0 && TABLE_STRUCTURE_TAGS.has(p2.openElements.currentTagId)) {
+    p2.pendingCharacterTokens.length = 0;
+    p2.hasNonWhitespacePendingCharacterToken = false;
+    p2.originalInsertionMode = p2.insertionMode;
+    p2.insertionMode = InsertionMode.IN_TABLE_TEXT;
     switch (token.type) {
       case TokenType.CHARACTER: {
-        characterInTableText(p, token);
+        characterInTableText(p2, token);
         break;
       }
       case TokenType.WHITESPACE_CHARACTER: {
-        whitespaceCharacterInTableText(p, token);
+        whitespaceCharacterInTableText(p2, token);
         break;
       }
     }
   } else {
-    tokenInTable(p, token);
+    tokenInTable(p2, token);
   }
 }
 __name(characterInTable, "characterInTable");
-function captionStartTagInTable(p, token) {
-  p.openElements.clearBackToTableContext();
-  p.activeFormattingElements.insertMarker();
-  p._insertElement(token, NS.HTML);
-  p.insertionMode = InsertionMode.IN_CAPTION;
+function captionStartTagInTable(p2, token) {
+  p2.openElements.clearBackToTableContext();
+  p2.activeFormattingElements.insertMarker();
+  p2._insertElement(token, NS.HTML);
+  p2.insertionMode = InsertionMode.IN_CAPTION;
 }
 __name(captionStartTagInTable, "captionStartTagInTable");
-function colgroupStartTagInTable(p, token) {
-  p.openElements.clearBackToTableContext();
-  p._insertElement(token, NS.HTML);
-  p.insertionMode = InsertionMode.IN_COLUMN_GROUP;
+function colgroupStartTagInTable(p2, token) {
+  p2.openElements.clearBackToTableContext();
+  p2._insertElement(token, NS.HTML);
+  p2.insertionMode = InsertionMode.IN_COLUMN_GROUP;
 }
 __name(colgroupStartTagInTable, "colgroupStartTagInTable");
-function colStartTagInTable(p, token) {
-  p.openElements.clearBackToTableContext();
-  p._insertFakeElement(TAG_NAMES.COLGROUP, TAG_ID.COLGROUP);
-  p.insertionMode = InsertionMode.IN_COLUMN_GROUP;
-  startTagInColumnGroup(p, token);
+function colStartTagInTable(p2, token) {
+  p2.openElements.clearBackToTableContext();
+  p2._insertFakeElement(TAG_NAMES.COLGROUP, TAG_ID.COLGROUP);
+  p2.insertionMode = InsertionMode.IN_COLUMN_GROUP;
+  startTagInColumnGroup(p2, token);
 }
 __name(colStartTagInTable, "colStartTagInTable");
-function tbodyStartTagInTable(p, token) {
-  p.openElements.clearBackToTableContext();
-  p._insertElement(token, NS.HTML);
-  p.insertionMode = InsertionMode.IN_TABLE_BODY;
+function tbodyStartTagInTable(p2, token) {
+  p2.openElements.clearBackToTableContext();
+  p2._insertElement(token, NS.HTML);
+  p2.insertionMode = InsertionMode.IN_TABLE_BODY;
 }
 __name(tbodyStartTagInTable, "tbodyStartTagInTable");
-function tdStartTagInTable(p, token) {
-  p.openElements.clearBackToTableContext();
-  p._insertFakeElement(TAG_NAMES.TBODY, TAG_ID.TBODY);
-  p.insertionMode = InsertionMode.IN_TABLE_BODY;
-  startTagInTableBody(p, token);
+function tdStartTagInTable(p2, token) {
+  p2.openElements.clearBackToTableContext();
+  p2._insertFakeElement(TAG_NAMES.TBODY, TAG_ID.TBODY);
+  p2.insertionMode = InsertionMode.IN_TABLE_BODY;
+  startTagInTableBody(p2, token);
 }
 __name(tdStartTagInTable, "tdStartTagInTable");
-function tableStartTagInTable(p, token) {
-  if (p.openElements.hasInTableScope(TAG_ID.TABLE)) {
-    p.openElements.popUntilTagNamePopped(TAG_ID.TABLE);
-    p._resetInsertionMode();
-    p._processStartTag(token);
+function tableStartTagInTable(p2, token) {
+  if (p2.openElements.hasInTableScope(TAG_ID.TABLE)) {
+    p2.openElements.popUntilTagNamePopped(TAG_ID.TABLE);
+    p2._resetInsertionMode();
+    p2._processStartTag(token);
   }
 }
 __name(tableStartTagInTable, "tableStartTagInTable");
-function inputStartTagInTable(p, token) {
+function inputStartTagInTable(p2, token) {
   if (isHiddenInput(token)) {
-    p._appendElement(token, NS.HTML);
+    p2._appendElement(token, NS.HTML);
   } else {
-    tokenInTable(p, token);
+    tokenInTable(p2, token);
   }
   token.ackSelfClosing = true;
 }
 __name(inputStartTagInTable, "inputStartTagInTable");
-function formStartTagInTable(p, token) {
-  if (!p.formElement && p.openElements.tmplCount === 0) {
-    p._insertElement(token, NS.HTML);
-    p.formElement = p.openElements.current;
-    p.openElements.pop();
+function formStartTagInTable(p2, token) {
+  if (!p2.formElement && p2.openElements.tmplCount === 0) {
+    p2._insertElement(token, NS.HTML);
+    p2.formElement = p2.openElements.current;
+    p2.openElements.pop();
   }
 }
 __name(formStartTagInTable, "formStartTagInTable");
-function startTagInTable(p, token) {
+function startTagInTable(p2, token) {
   switch (token.tagID) {
     case TAG_ID.TD:
     case TAG_ID.TH:
     case TAG_ID.TR: {
-      tdStartTagInTable(p, token);
+      tdStartTagInTable(p2, token);
       break;
     }
     case TAG_ID.STYLE:
     case TAG_ID.SCRIPT:
     case TAG_ID.TEMPLATE: {
-      startTagInHead(p, token);
+      startTagInHead(p2, token);
       break;
     }
     case TAG_ID.COL: {
-      colStartTagInTable(p, token);
+      colStartTagInTable(p2, token);
       break;
     }
     case TAG_ID.FORM: {
-      formStartTagInTable(p, token);
+      formStartTagInTable(p2, token);
       break;
     }
     case TAG_ID.TABLE: {
-      tableStartTagInTable(p, token);
+      tableStartTagInTable(p2, token);
       break;
     }
     case TAG_ID.TBODY:
     case TAG_ID.TFOOT:
     case TAG_ID.THEAD: {
-      tbodyStartTagInTable(p, token);
+      tbodyStartTagInTable(p2, token);
       break;
     }
     case TAG_ID.INPUT: {
-      inputStartTagInTable(p, token);
+      inputStartTagInTable(p2, token);
       break;
     }
     case TAG_ID.CAPTION: {
-      captionStartTagInTable(p, token);
+      captionStartTagInTable(p2, token);
       break;
     }
     case TAG_ID.COLGROUP: {
-      colgroupStartTagInTable(p, token);
+      colgroupStartTagInTable(p2, token);
       break;
     }
     default: {
-      tokenInTable(p, token);
+      tokenInTable(p2, token);
     }
   }
 }
 __name(startTagInTable, "startTagInTable");
-function endTagInTable(p, token) {
+function endTagInTable(p2, token) {
   switch (token.tagID) {
     case TAG_ID.TABLE: {
-      if (p.openElements.hasInTableScope(TAG_ID.TABLE)) {
-        p.openElements.popUntilTagNamePopped(TAG_ID.TABLE);
-        p._resetInsertionMode();
+      if (p2.openElements.hasInTableScope(TAG_ID.TABLE)) {
+        p2.openElements.popUntilTagNamePopped(TAG_ID.TABLE);
+        p2._resetInsertionMode();
       }
       break;
     }
     case TAG_ID.TEMPLATE: {
-      templateEndTagInHead(p, token);
+      templateEndTagInHead(p2, token);
       break;
     }
     case TAG_ID.BODY:
@@ -15169,70 +15169,70 @@ function endTagInTable(p, token) {
       break;
     }
     default: {
-      tokenInTable(p, token);
+      tokenInTable(p2, token);
     }
   }
 }
 __name(endTagInTable, "endTagInTable");
-function tokenInTable(p, token) {
-  const savedFosterParentingState = p.fosterParentingEnabled;
-  p.fosterParentingEnabled = true;
-  modeInBody(p, token);
-  p.fosterParentingEnabled = savedFosterParentingState;
+function tokenInTable(p2, token) {
+  const savedFosterParentingState = p2.fosterParentingEnabled;
+  p2.fosterParentingEnabled = true;
+  modeInBody(p2, token);
+  p2.fosterParentingEnabled = savedFosterParentingState;
 }
 __name(tokenInTable, "tokenInTable");
-function whitespaceCharacterInTableText(p, token) {
-  p.pendingCharacterTokens.push(token);
+function whitespaceCharacterInTableText(p2, token) {
+  p2.pendingCharacterTokens.push(token);
 }
 __name(whitespaceCharacterInTableText, "whitespaceCharacterInTableText");
-function characterInTableText(p, token) {
-  p.pendingCharacterTokens.push(token);
-  p.hasNonWhitespacePendingCharacterToken = true;
+function characterInTableText(p2, token) {
+  p2.pendingCharacterTokens.push(token);
+  p2.hasNonWhitespacePendingCharacterToken = true;
 }
 __name(characterInTableText, "characterInTableText");
-function tokenInTableText(p, token) {
+function tokenInTableText(p2, token) {
   let i = 0;
-  if (p.hasNonWhitespacePendingCharacterToken) {
-    for (; i < p.pendingCharacterTokens.length; i++) {
-      tokenInTable(p, p.pendingCharacterTokens[i]);
+  if (p2.hasNonWhitespacePendingCharacterToken) {
+    for (; i < p2.pendingCharacterTokens.length; i++) {
+      tokenInTable(p2, p2.pendingCharacterTokens[i]);
     }
   } else {
-    for (; i < p.pendingCharacterTokens.length; i++) {
-      p._insertCharacters(p.pendingCharacterTokens[i]);
+    for (; i < p2.pendingCharacterTokens.length; i++) {
+      p2._insertCharacters(p2.pendingCharacterTokens[i]);
     }
   }
-  p.insertionMode = p.originalInsertionMode;
-  p._processToken(token);
+  p2.insertionMode = p2.originalInsertionMode;
+  p2._processToken(token);
 }
 __name(tokenInTableText, "tokenInTableText");
 var TABLE_VOID_ELEMENTS = /* @__PURE__ */ new Set([TAG_ID.CAPTION, TAG_ID.COL, TAG_ID.COLGROUP, TAG_ID.TBODY, TAG_ID.TD, TAG_ID.TFOOT, TAG_ID.TH, TAG_ID.THEAD, TAG_ID.TR]);
-function startTagInCaption(p, token) {
+function startTagInCaption(p2, token) {
   const tn = token.tagID;
   if (TABLE_VOID_ELEMENTS.has(tn)) {
-    if (p.openElements.hasInTableScope(TAG_ID.CAPTION)) {
-      p.openElements.generateImpliedEndTags();
-      p.openElements.popUntilTagNamePopped(TAG_ID.CAPTION);
-      p.activeFormattingElements.clearToLastMarker();
-      p.insertionMode = InsertionMode.IN_TABLE;
-      startTagInTable(p, token);
+    if (p2.openElements.hasInTableScope(TAG_ID.CAPTION)) {
+      p2.openElements.generateImpliedEndTags();
+      p2.openElements.popUntilTagNamePopped(TAG_ID.CAPTION);
+      p2.activeFormattingElements.clearToLastMarker();
+      p2.insertionMode = InsertionMode.IN_TABLE;
+      startTagInTable(p2, token);
     }
   } else {
-    startTagInBody(p, token);
+    startTagInBody(p2, token);
   }
 }
 __name(startTagInCaption, "startTagInCaption");
-function endTagInCaption(p, token) {
+function endTagInCaption(p2, token) {
   const tn = token.tagID;
   switch (tn) {
     case TAG_ID.CAPTION:
     case TAG_ID.TABLE: {
-      if (p.openElements.hasInTableScope(TAG_ID.CAPTION)) {
-        p.openElements.generateImpliedEndTags();
-        p.openElements.popUntilTagNamePopped(TAG_ID.CAPTION);
-        p.activeFormattingElements.clearToLastMarker();
-        p.insertionMode = InsertionMode.IN_TABLE;
+      if (p2.openElements.hasInTableScope(TAG_ID.CAPTION)) {
+        p2.openElements.generateImpliedEndTags();
+        p2.openElements.popUntilTagNamePopped(TAG_ID.CAPTION);
+        p2.activeFormattingElements.clearToLastMarker();
+        p2.insertionMode = InsertionMode.IN_TABLE;
         if (tn === TAG_ID.TABLE) {
-          endTagInTable(p, token);
+          endTagInTable(p2, token);
         }
       }
       break;
@@ -15250,76 +15250,76 @@ function endTagInCaption(p, token) {
       break;
     }
     default: {
-      endTagInBody(p, token);
+      endTagInBody(p2, token);
     }
   }
 }
 __name(endTagInCaption, "endTagInCaption");
-function startTagInColumnGroup(p, token) {
+function startTagInColumnGroup(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HTML: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TAG_ID.COL: {
-      p._appendElement(token, NS.HTML);
+      p2._appendElement(token, NS.HTML);
       token.ackSelfClosing = true;
       break;
     }
     case TAG_ID.TEMPLATE: {
-      startTagInHead(p, token);
+      startTagInHead(p2, token);
       break;
     }
     default: {
-      tokenInColumnGroup(p, token);
+      tokenInColumnGroup(p2, token);
     }
   }
 }
 __name(startTagInColumnGroup, "startTagInColumnGroup");
-function endTagInColumnGroup(p, token) {
+function endTagInColumnGroup(p2, token) {
   switch (token.tagID) {
     case TAG_ID.COLGROUP: {
-      if (p.openElements.currentTagId === TAG_ID.COLGROUP) {
-        p.openElements.pop();
-        p.insertionMode = InsertionMode.IN_TABLE;
+      if (p2.openElements.currentTagId === TAG_ID.COLGROUP) {
+        p2.openElements.pop();
+        p2.insertionMode = InsertionMode.IN_TABLE;
       }
       break;
     }
     case TAG_ID.TEMPLATE: {
-      templateEndTagInHead(p, token);
+      templateEndTagInHead(p2, token);
       break;
     }
     case TAG_ID.COL: {
       break;
     }
     default: {
-      tokenInColumnGroup(p, token);
+      tokenInColumnGroup(p2, token);
     }
   }
 }
 __name(endTagInColumnGroup, "endTagInColumnGroup");
-function tokenInColumnGroup(p, token) {
-  if (p.openElements.currentTagId === TAG_ID.COLGROUP) {
-    p.openElements.pop();
-    p.insertionMode = InsertionMode.IN_TABLE;
-    p._processToken(token);
+function tokenInColumnGroup(p2, token) {
+  if (p2.openElements.currentTagId === TAG_ID.COLGROUP) {
+    p2.openElements.pop();
+    p2.insertionMode = InsertionMode.IN_TABLE;
+    p2._processToken(token);
   }
 }
 __name(tokenInColumnGroup, "tokenInColumnGroup");
-function startTagInTableBody(p, token) {
+function startTagInTableBody(p2, token) {
   switch (token.tagID) {
     case TAG_ID.TR: {
-      p.openElements.clearBackToTableBodyContext();
-      p._insertElement(token, NS.HTML);
-      p.insertionMode = InsertionMode.IN_ROW;
+      p2.openElements.clearBackToTableBodyContext();
+      p2._insertElement(token, NS.HTML);
+      p2.insertionMode = InsertionMode.IN_ROW;
       break;
     }
     case TAG_ID.TH:
     case TAG_ID.TD: {
-      p.openElements.clearBackToTableBodyContext();
-      p._insertFakeElement(TAG_NAMES.TR, TAG_ID.TR);
-      p.insertionMode = InsertionMode.IN_ROW;
-      startTagInRow(p, token);
+      p2.openElements.clearBackToTableBodyContext();
+      p2._insertFakeElement(TAG_NAMES.TR, TAG_ID.TR);
+      p2.insertionMode = InsertionMode.IN_ROW;
+      startTagInRow(p2, token);
       break;
     }
     case TAG_ID.CAPTION:
@@ -15328,39 +15328,39 @@ function startTagInTableBody(p, token) {
     case TAG_ID.TBODY:
     case TAG_ID.TFOOT:
     case TAG_ID.THEAD: {
-      if (p.openElements.hasTableBodyContextInTableScope()) {
-        p.openElements.clearBackToTableBodyContext();
-        p.openElements.pop();
-        p.insertionMode = InsertionMode.IN_TABLE;
-        startTagInTable(p, token);
+      if (p2.openElements.hasTableBodyContextInTableScope()) {
+        p2.openElements.clearBackToTableBodyContext();
+        p2.openElements.pop();
+        p2.insertionMode = InsertionMode.IN_TABLE;
+        startTagInTable(p2, token);
       }
       break;
     }
     default: {
-      startTagInTable(p, token);
+      startTagInTable(p2, token);
     }
   }
 }
 __name(startTagInTableBody, "startTagInTableBody");
-function endTagInTableBody(p, token) {
+function endTagInTableBody(p2, token) {
   const tn = token.tagID;
   switch (token.tagID) {
     case TAG_ID.TBODY:
     case TAG_ID.TFOOT:
     case TAG_ID.THEAD: {
-      if (p.openElements.hasInTableScope(tn)) {
-        p.openElements.clearBackToTableBodyContext();
-        p.openElements.pop();
-        p.insertionMode = InsertionMode.IN_TABLE;
+      if (p2.openElements.hasInTableScope(tn)) {
+        p2.openElements.clearBackToTableBodyContext();
+        p2.openElements.pop();
+        p2.insertionMode = InsertionMode.IN_TABLE;
       }
       break;
     }
     case TAG_ID.TABLE: {
-      if (p.openElements.hasTableBodyContextInTableScope()) {
-        p.openElements.clearBackToTableBodyContext();
-        p.openElements.pop();
-        p.insertionMode = InsertionMode.IN_TABLE;
-        endTagInTable(p, token);
+      if (p2.openElements.hasTableBodyContextInTableScope()) {
+        p2.openElements.clearBackToTableBodyContext();
+        p2.openElements.pop();
+        p2.insertionMode = InsertionMode.IN_TABLE;
+        endTagInTable(p2, token);
       }
       break;
     }
@@ -15375,19 +15375,19 @@ function endTagInTableBody(p, token) {
       break;
     }
     default: {
-      endTagInTable(p, token);
+      endTagInTable(p2, token);
     }
   }
 }
 __name(endTagInTableBody, "endTagInTableBody");
-function startTagInRow(p, token) {
+function startTagInRow(p2, token) {
   switch (token.tagID) {
     case TAG_ID.TH:
     case TAG_ID.TD: {
-      p.openElements.clearBackToTableRowContext();
-      p._insertElement(token, NS.HTML);
-      p.insertionMode = InsertionMode.IN_CELL;
-      p.activeFormattingElements.insertMarker();
+      p2.openElements.clearBackToTableRowContext();
+      p2._insertElement(token, NS.HTML);
+      p2.insertionMode = InsertionMode.IN_CELL;
+      p2.activeFormattingElements.insertMarker();
       break;
     }
     case TAG_ID.CAPTION:
@@ -15397,47 +15397,47 @@ function startTagInRow(p, token) {
     case TAG_ID.TFOOT:
     case TAG_ID.THEAD:
     case TAG_ID.TR: {
-      if (p.openElements.hasInTableScope(TAG_ID.TR)) {
-        p.openElements.clearBackToTableRowContext();
-        p.openElements.pop();
-        p.insertionMode = InsertionMode.IN_TABLE_BODY;
-        startTagInTableBody(p, token);
+      if (p2.openElements.hasInTableScope(TAG_ID.TR)) {
+        p2.openElements.clearBackToTableRowContext();
+        p2.openElements.pop();
+        p2.insertionMode = InsertionMode.IN_TABLE_BODY;
+        startTagInTableBody(p2, token);
       }
       break;
     }
     default: {
-      startTagInTable(p, token);
+      startTagInTable(p2, token);
     }
   }
 }
 __name(startTagInRow, "startTagInRow");
-function endTagInRow(p, token) {
+function endTagInRow(p2, token) {
   switch (token.tagID) {
     case TAG_ID.TR: {
-      if (p.openElements.hasInTableScope(TAG_ID.TR)) {
-        p.openElements.clearBackToTableRowContext();
-        p.openElements.pop();
-        p.insertionMode = InsertionMode.IN_TABLE_BODY;
+      if (p2.openElements.hasInTableScope(TAG_ID.TR)) {
+        p2.openElements.clearBackToTableRowContext();
+        p2.openElements.pop();
+        p2.insertionMode = InsertionMode.IN_TABLE_BODY;
       }
       break;
     }
     case TAG_ID.TABLE: {
-      if (p.openElements.hasInTableScope(TAG_ID.TR)) {
-        p.openElements.clearBackToTableRowContext();
-        p.openElements.pop();
-        p.insertionMode = InsertionMode.IN_TABLE_BODY;
-        endTagInTableBody(p, token);
+      if (p2.openElements.hasInTableScope(TAG_ID.TR)) {
+        p2.openElements.clearBackToTableRowContext();
+        p2.openElements.pop();
+        p2.insertionMode = InsertionMode.IN_TABLE_BODY;
+        endTagInTableBody(p2, token);
       }
       break;
     }
     case TAG_ID.TBODY:
     case TAG_ID.TFOOT:
     case TAG_ID.THEAD: {
-      if (p.openElements.hasInTableScope(token.tagID) || p.openElements.hasInTableScope(TAG_ID.TR)) {
-        p.openElements.clearBackToTableRowContext();
-        p.openElements.pop();
-        p.insertionMode = InsertionMode.IN_TABLE_BODY;
-        endTagInTableBody(p, token);
+      if (p2.openElements.hasInTableScope(token.tagID) || p2.openElements.hasInTableScope(TAG_ID.TR)) {
+        p2.openElements.clearBackToTableRowContext();
+        p2.openElements.pop();
+        p2.insertionMode = InsertionMode.IN_TABLE_BODY;
+        endTagInTableBody(p2, token);
       }
       break;
     }
@@ -15451,33 +15451,33 @@ function endTagInRow(p, token) {
       break;
     }
     default: {
-      endTagInTable(p, token);
+      endTagInTable(p2, token);
     }
   }
 }
 __name(endTagInRow, "endTagInRow");
-function startTagInCell(p, token) {
+function startTagInCell(p2, token) {
   const tn = token.tagID;
   if (TABLE_VOID_ELEMENTS.has(tn)) {
-    if (p.openElements.hasInTableScope(TAG_ID.TD) || p.openElements.hasInTableScope(TAG_ID.TH)) {
-      p._closeTableCell();
-      startTagInRow(p, token);
+    if (p2.openElements.hasInTableScope(TAG_ID.TD) || p2.openElements.hasInTableScope(TAG_ID.TH)) {
+      p2._closeTableCell();
+      startTagInRow(p2, token);
     }
   } else {
-    startTagInBody(p, token);
+    startTagInBody(p2, token);
   }
 }
 __name(startTagInCell, "startTagInCell");
-function endTagInCell(p, token) {
+function endTagInCell(p2, token) {
   const tn = token.tagID;
   switch (tn) {
     case TAG_ID.TD:
     case TAG_ID.TH: {
-      if (p.openElements.hasInTableScope(tn)) {
-        p.openElements.generateImpliedEndTags();
-        p.openElements.popUntilTagNamePopped(tn);
-        p.activeFormattingElements.clearToLastMarker();
-        p.insertionMode = InsertionMode.IN_ROW;
+      if (p2.openElements.hasInTableScope(tn)) {
+        p2.openElements.generateImpliedEndTags();
+        p2.openElements.popUntilTagNamePopped(tn);
+        p2.activeFormattingElements.clearToLastMarker();
+        p2.insertionMode = InsertionMode.IN_ROW;
       }
       break;
     }
@@ -15486,9 +15486,9 @@ function endTagInCell(p, token) {
     case TAG_ID.TFOOT:
     case TAG_ID.THEAD:
     case TAG_ID.TR: {
-      if (p.openElements.hasInTableScope(tn)) {
-        p._closeTableCell();
-        endTagInRow(p, token);
+      if (p2.openElements.hasInTableScope(tn)) {
+        p2._closeTableCell();
+        endTagInRow(p2, token);
       }
       break;
     }
@@ -15500,42 +15500,42 @@ function endTagInCell(p, token) {
       break;
     }
     default: {
-      endTagInBody(p, token);
+      endTagInBody(p2, token);
     }
   }
 }
 __name(endTagInCell, "endTagInCell");
-function startTagInSelect(p, token) {
+function startTagInSelect(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HTML: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TAG_ID.OPTION: {
-      if (p.openElements.currentTagId === TAG_ID.OPTION) {
-        p.openElements.pop();
+      if (p2.openElements.currentTagId === TAG_ID.OPTION) {
+        p2.openElements.pop();
       }
-      p._insertElement(token, NS.HTML);
+      p2._insertElement(token, NS.HTML);
       break;
     }
     case TAG_ID.OPTGROUP: {
-      if (p.openElements.currentTagId === TAG_ID.OPTION) {
-        p.openElements.pop();
+      if (p2.openElements.currentTagId === TAG_ID.OPTION) {
+        p2.openElements.pop();
       }
-      if (p.openElements.currentTagId === TAG_ID.OPTGROUP) {
-        p.openElements.pop();
+      if (p2.openElements.currentTagId === TAG_ID.OPTGROUP) {
+        p2.openElements.pop();
       }
-      p._insertElement(token, NS.HTML);
+      p2._insertElement(token, NS.HTML);
       break;
     }
     case TAG_ID.HR: {
-      if (p.openElements.currentTagId === TAG_ID.OPTION) {
-        p.openElements.pop();
+      if (p2.openElements.currentTagId === TAG_ID.OPTION) {
+        p2.openElements.pop();
       }
-      if (p.openElements.currentTagId === TAG_ID.OPTGROUP) {
-        p.openElements.pop();
+      if (p2.openElements.currentTagId === TAG_ID.OPTGROUP) {
+        p2.openElements.pop();
       }
-      p._appendElement(token, NS.HTML);
+      p2._appendElement(token, NS.HTML);
       token.ackSelfClosing = true;
       break;
     }
@@ -15543,81 +15543,81 @@ function startTagInSelect(p, token) {
     case TAG_ID.KEYGEN:
     case TAG_ID.TEXTAREA:
     case TAG_ID.SELECT: {
-      if (p.openElements.hasInSelectScope(TAG_ID.SELECT)) {
-        p.openElements.popUntilTagNamePopped(TAG_ID.SELECT);
-        p._resetInsertionMode();
+      if (p2.openElements.hasInSelectScope(TAG_ID.SELECT)) {
+        p2.openElements.popUntilTagNamePopped(TAG_ID.SELECT);
+        p2._resetInsertionMode();
         if (token.tagID !== TAG_ID.SELECT) {
-          p._processStartTag(token);
+          p2._processStartTag(token);
         }
       }
       break;
     }
     case TAG_ID.SCRIPT:
     case TAG_ID.TEMPLATE: {
-      startTagInHead(p, token);
+      startTagInHead(p2, token);
       break;
     }
     default:
   }
 }
 __name(startTagInSelect, "startTagInSelect");
-function endTagInSelect(p, token) {
+function endTagInSelect(p2, token) {
   switch (token.tagID) {
     case TAG_ID.OPTGROUP: {
-      if (p.openElements.stackTop > 0 && p.openElements.currentTagId === TAG_ID.OPTION && p.openElements.tagIDs[p.openElements.stackTop - 1] === TAG_ID.OPTGROUP) {
-        p.openElements.pop();
+      if (p2.openElements.stackTop > 0 && p2.openElements.currentTagId === TAG_ID.OPTION && p2.openElements.tagIDs[p2.openElements.stackTop - 1] === TAG_ID.OPTGROUP) {
+        p2.openElements.pop();
       }
-      if (p.openElements.currentTagId === TAG_ID.OPTGROUP) {
-        p.openElements.pop();
+      if (p2.openElements.currentTagId === TAG_ID.OPTGROUP) {
+        p2.openElements.pop();
       }
       break;
     }
     case TAG_ID.OPTION: {
-      if (p.openElements.currentTagId === TAG_ID.OPTION) {
-        p.openElements.pop();
+      if (p2.openElements.currentTagId === TAG_ID.OPTION) {
+        p2.openElements.pop();
       }
       break;
     }
     case TAG_ID.SELECT: {
-      if (p.openElements.hasInSelectScope(TAG_ID.SELECT)) {
-        p.openElements.popUntilTagNamePopped(TAG_ID.SELECT);
-        p._resetInsertionMode();
+      if (p2.openElements.hasInSelectScope(TAG_ID.SELECT)) {
+        p2.openElements.popUntilTagNamePopped(TAG_ID.SELECT);
+        p2._resetInsertionMode();
       }
       break;
     }
     case TAG_ID.TEMPLATE: {
-      templateEndTagInHead(p, token);
+      templateEndTagInHead(p2, token);
       break;
     }
     default:
   }
 }
 __name(endTagInSelect, "endTagInSelect");
-function startTagInSelectInTable(p, token) {
+function startTagInSelectInTable(p2, token) {
   const tn = token.tagID;
   if (tn === TAG_ID.CAPTION || tn === TAG_ID.TABLE || tn === TAG_ID.TBODY || tn === TAG_ID.TFOOT || tn === TAG_ID.THEAD || tn === TAG_ID.TR || tn === TAG_ID.TD || tn === TAG_ID.TH) {
-    p.openElements.popUntilTagNamePopped(TAG_ID.SELECT);
-    p._resetInsertionMode();
-    p._processStartTag(token);
+    p2.openElements.popUntilTagNamePopped(TAG_ID.SELECT);
+    p2._resetInsertionMode();
+    p2._processStartTag(token);
   } else {
-    startTagInSelect(p, token);
+    startTagInSelect(p2, token);
   }
 }
 __name(startTagInSelectInTable, "startTagInSelectInTable");
-function endTagInSelectInTable(p, token) {
+function endTagInSelectInTable(p2, token) {
   const tn = token.tagID;
   if (tn === TAG_ID.CAPTION || tn === TAG_ID.TABLE || tn === TAG_ID.TBODY || tn === TAG_ID.TFOOT || tn === TAG_ID.THEAD || tn === TAG_ID.TR || tn === TAG_ID.TD || tn === TAG_ID.TH) {
-    if (p.openElements.hasInTableScope(tn)) {
-      p.openElements.popUntilTagNamePopped(TAG_ID.SELECT);
-      p._resetInsertionMode();
-      p.onEndTag(token);
+    if (p2.openElements.hasInTableScope(tn)) {
+      p2.openElements.popUntilTagNamePopped(TAG_ID.SELECT);
+      p2._resetInsertionMode();
+      p2.onEndTag(token);
     }
   } else {
-    endTagInSelect(p, token);
+    endTagInSelect(p2, token);
   }
 }
 __name(endTagInSelectInTable, "endTagInSelectInTable");
-function startTagInTemplate(p, token) {
+function startTagInTemplate(p2, token) {
   switch (token.tagID) {
     // First, handle tags that can start without a mode change
     case TAG_ID.BASE:
@@ -15630,7 +15630,7 @@ function startTagInTemplate(p, token) {
     case TAG_ID.STYLE:
     case TAG_ID.TEMPLATE:
     case TAG_ID.TITLE: {
-      startTagInHead(p, token);
+      startTagInHead(p2, token);
       break;
     }
     // Re-process the token in the appropriate mode
@@ -15639,189 +15639,189 @@ function startTagInTemplate(p, token) {
     case TAG_ID.TBODY:
     case TAG_ID.TFOOT:
     case TAG_ID.THEAD: {
-      p.tmplInsertionModeStack[0] = InsertionMode.IN_TABLE;
-      p.insertionMode = InsertionMode.IN_TABLE;
-      startTagInTable(p, token);
+      p2.tmplInsertionModeStack[0] = InsertionMode.IN_TABLE;
+      p2.insertionMode = InsertionMode.IN_TABLE;
+      startTagInTable(p2, token);
       break;
     }
     case TAG_ID.COL: {
-      p.tmplInsertionModeStack[0] = InsertionMode.IN_COLUMN_GROUP;
-      p.insertionMode = InsertionMode.IN_COLUMN_GROUP;
-      startTagInColumnGroup(p, token);
+      p2.tmplInsertionModeStack[0] = InsertionMode.IN_COLUMN_GROUP;
+      p2.insertionMode = InsertionMode.IN_COLUMN_GROUP;
+      startTagInColumnGroup(p2, token);
       break;
     }
     case TAG_ID.TR: {
-      p.tmplInsertionModeStack[0] = InsertionMode.IN_TABLE_BODY;
-      p.insertionMode = InsertionMode.IN_TABLE_BODY;
-      startTagInTableBody(p, token);
+      p2.tmplInsertionModeStack[0] = InsertionMode.IN_TABLE_BODY;
+      p2.insertionMode = InsertionMode.IN_TABLE_BODY;
+      startTagInTableBody(p2, token);
       break;
     }
     case TAG_ID.TD:
     case TAG_ID.TH: {
-      p.tmplInsertionModeStack[0] = InsertionMode.IN_ROW;
-      p.insertionMode = InsertionMode.IN_ROW;
-      startTagInRow(p, token);
+      p2.tmplInsertionModeStack[0] = InsertionMode.IN_ROW;
+      p2.insertionMode = InsertionMode.IN_ROW;
+      startTagInRow(p2, token);
       break;
     }
     default: {
-      p.tmplInsertionModeStack[0] = InsertionMode.IN_BODY;
-      p.insertionMode = InsertionMode.IN_BODY;
-      startTagInBody(p, token);
+      p2.tmplInsertionModeStack[0] = InsertionMode.IN_BODY;
+      p2.insertionMode = InsertionMode.IN_BODY;
+      startTagInBody(p2, token);
     }
   }
 }
 __name(startTagInTemplate, "startTagInTemplate");
-function endTagInTemplate(p, token) {
+function endTagInTemplate(p2, token) {
   if (token.tagID === TAG_ID.TEMPLATE) {
-    templateEndTagInHead(p, token);
+    templateEndTagInHead(p2, token);
   }
 }
 __name(endTagInTemplate, "endTagInTemplate");
-function eofInTemplate(p, token) {
-  if (p.openElements.tmplCount > 0) {
-    p.openElements.popUntilTagNamePopped(TAG_ID.TEMPLATE);
-    p.activeFormattingElements.clearToLastMarker();
-    p.tmplInsertionModeStack.shift();
-    p._resetInsertionMode();
-    p.onEof(token);
+function eofInTemplate(p2, token) {
+  if (p2.openElements.tmplCount > 0) {
+    p2.openElements.popUntilTagNamePopped(TAG_ID.TEMPLATE);
+    p2.activeFormattingElements.clearToLastMarker();
+    p2.tmplInsertionModeStack.shift();
+    p2._resetInsertionMode();
+    p2.onEof(token);
   } else {
-    stopParsing(p, token);
+    stopParsing(p2, token);
   }
 }
 __name(eofInTemplate, "eofInTemplate");
-function startTagAfterBody(p, token) {
+function startTagAfterBody(p2, token) {
   if (token.tagID === TAG_ID.HTML) {
-    startTagInBody(p, token);
+    startTagInBody(p2, token);
   } else {
-    tokenAfterBody(p, token);
+    tokenAfterBody(p2, token);
   }
 }
 __name(startTagAfterBody, "startTagAfterBody");
-function endTagAfterBody(p, token) {
+function endTagAfterBody(p2, token) {
   var _a5;
   if (token.tagID === TAG_ID.HTML) {
-    if (!p.fragmentContext) {
-      p.insertionMode = InsertionMode.AFTER_AFTER_BODY;
+    if (!p2.fragmentContext) {
+      p2.insertionMode = InsertionMode.AFTER_AFTER_BODY;
     }
-    if (p.options.sourceCodeLocationInfo && p.openElements.tagIDs[0] === TAG_ID.HTML) {
-      p._setEndLocation(p.openElements.items[0], token);
-      const bodyElement = p.openElements.items[1];
-      if (bodyElement && !((_a5 = p.treeAdapter.getNodeSourceCodeLocation(bodyElement)) === null || _a5 === void 0 ? void 0 : _a5.endTag)) {
-        p._setEndLocation(bodyElement, token);
+    if (p2.options.sourceCodeLocationInfo && p2.openElements.tagIDs[0] === TAG_ID.HTML) {
+      p2._setEndLocation(p2.openElements.items[0], token);
+      const bodyElement = p2.openElements.items[1];
+      if (bodyElement && !((_a5 = p2.treeAdapter.getNodeSourceCodeLocation(bodyElement)) === null || _a5 === void 0 ? void 0 : _a5.endTag)) {
+        p2._setEndLocation(bodyElement, token);
       }
     }
   } else {
-    tokenAfterBody(p, token);
+    tokenAfterBody(p2, token);
   }
 }
 __name(endTagAfterBody, "endTagAfterBody");
-function tokenAfterBody(p, token) {
-  p.insertionMode = InsertionMode.IN_BODY;
-  modeInBody(p, token);
+function tokenAfterBody(p2, token) {
+  p2.insertionMode = InsertionMode.IN_BODY;
+  modeInBody(p2, token);
 }
 __name(tokenAfterBody, "tokenAfterBody");
-function startTagInFrameset(p, token) {
+function startTagInFrameset(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HTML: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TAG_ID.FRAMESET: {
-      p._insertElement(token, NS.HTML);
+      p2._insertElement(token, NS.HTML);
       break;
     }
     case TAG_ID.FRAME: {
-      p._appendElement(token, NS.HTML);
+      p2._appendElement(token, NS.HTML);
       token.ackSelfClosing = true;
       break;
     }
     case TAG_ID.NOFRAMES: {
-      startTagInHead(p, token);
+      startTagInHead(p2, token);
       break;
     }
     default:
   }
 }
 __name(startTagInFrameset, "startTagInFrameset");
-function endTagInFrameset(p, token) {
-  if (token.tagID === TAG_ID.FRAMESET && !p.openElements.isRootHtmlElementCurrent()) {
-    p.openElements.pop();
-    if (!p.fragmentContext && p.openElements.currentTagId !== TAG_ID.FRAMESET) {
-      p.insertionMode = InsertionMode.AFTER_FRAMESET;
+function endTagInFrameset(p2, token) {
+  if (token.tagID === TAG_ID.FRAMESET && !p2.openElements.isRootHtmlElementCurrent()) {
+    p2.openElements.pop();
+    if (!p2.fragmentContext && p2.openElements.currentTagId !== TAG_ID.FRAMESET) {
+      p2.insertionMode = InsertionMode.AFTER_FRAMESET;
     }
   }
 }
 __name(endTagInFrameset, "endTagInFrameset");
-function startTagAfterFrameset(p, token) {
+function startTagAfterFrameset(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HTML: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TAG_ID.NOFRAMES: {
-      startTagInHead(p, token);
+      startTagInHead(p2, token);
       break;
     }
     default:
   }
 }
 __name(startTagAfterFrameset, "startTagAfterFrameset");
-function endTagAfterFrameset(p, token) {
+function endTagAfterFrameset(p2, token) {
   if (token.tagID === TAG_ID.HTML) {
-    p.insertionMode = InsertionMode.AFTER_AFTER_FRAMESET;
+    p2.insertionMode = InsertionMode.AFTER_AFTER_FRAMESET;
   }
 }
 __name(endTagAfterFrameset, "endTagAfterFrameset");
-function startTagAfterAfterBody(p, token) {
+function startTagAfterAfterBody(p2, token) {
   if (token.tagID === TAG_ID.HTML) {
-    startTagInBody(p, token);
+    startTagInBody(p2, token);
   } else {
-    tokenAfterAfterBody(p, token);
+    tokenAfterAfterBody(p2, token);
   }
 }
 __name(startTagAfterAfterBody, "startTagAfterAfterBody");
-function tokenAfterAfterBody(p, token) {
-  p.insertionMode = InsertionMode.IN_BODY;
-  modeInBody(p, token);
+function tokenAfterAfterBody(p2, token) {
+  p2.insertionMode = InsertionMode.IN_BODY;
+  modeInBody(p2, token);
 }
 __name(tokenAfterAfterBody, "tokenAfterAfterBody");
-function startTagAfterAfterFrameset(p, token) {
+function startTagAfterAfterFrameset(p2, token) {
   switch (token.tagID) {
     case TAG_ID.HTML: {
-      startTagInBody(p, token);
+      startTagInBody(p2, token);
       break;
     }
     case TAG_ID.NOFRAMES: {
-      startTagInHead(p, token);
+      startTagInHead(p2, token);
       break;
     }
     default:
   }
 }
 __name(startTagAfterAfterFrameset, "startTagAfterAfterFrameset");
-function nullCharacterInForeignContent(p, token) {
+function nullCharacterInForeignContent(p2, token) {
   token.chars = REPLACEMENT_CHARACTER;
-  p._insertCharacters(token);
+  p2._insertCharacters(token);
 }
 __name(nullCharacterInForeignContent, "nullCharacterInForeignContent");
-function characterInForeignContent(p, token) {
-  p._insertCharacters(token);
-  p.framesetOk = false;
+function characterInForeignContent(p2, token) {
+  p2._insertCharacters(token);
+  p2.framesetOk = false;
 }
 __name(characterInForeignContent, "characterInForeignContent");
-function popUntilHtmlOrIntegrationPoint(p) {
-  while (p.treeAdapter.getNamespaceURI(p.openElements.current) !== NS.HTML && p.openElements.currentTagId !== void 0 && !p._isIntegrationPoint(p.openElements.currentTagId, p.openElements.current)) {
-    p.openElements.pop();
+function popUntilHtmlOrIntegrationPoint(p2) {
+  while (p2.treeAdapter.getNamespaceURI(p2.openElements.current) !== NS.HTML && p2.openElements.currentTagId !== void 0 && !p2._isIntegrationPoint(p2.openElements.currentTagId, p2.openElements.current)) {
+    p2.openElements.pop();
   }
 }
 __name(popUntilHtmlOrIntegrationPoint, "popUntilHtmlOrIntegrationPoint");
-function startTagInForeignContent(p, token) {
+function startTagInForeignContent(p2, token) {
   if (causesExit(token)) {
-    popUntilHtmlOrIntegrationPoint(p);
-    p._startTagOutsideForeignContent(token);
+    popUntilHtmlOrIntegrationPoint(p2);
+    p2._startTagOutsideForeignContent(token);
   } else {
-    const current = p._getAdjustedCurrentElement();
-    const currentNs = p.treeAdapter.getNamespaceURI(current);
+    const current = p2._getAdjustedCurrentElement();
+    const currentNs = p2.treeAdapter.getNamespaceURI(current);
     if (currentNs === NS.MATHML) {
       adjustTokenMathMLAttrs(token);
     } else if (currentNs === NS.SVG) {
@@ -15830,30 +15830,30 @@ function startTagInForeignContent(p, token) {
     }
     adjustTokenXMLAttrs(token);
     if (token.selfClosing) {
-      p._appendElement(token, currentNs);
+      p2._appendElement(token, currentNs);
     } else {
-      p._insertElement(token, currentNs);
+      p2._insertElement(token, currentNs);
     }
     token.ackSelfClosing = true;
   }
 }
 __name(startTagInForeignContent, "startTagInForeignContent");
-function endTagInForeignContent(p, token) {
+function endTagInForeignContent(p2, token) {
   if (token.tagID === TAG_ID.P || token.tagID === TAG_ID.BR) {
-    popUntilHtmlOrIntegrationPoint(p);
-    p._endTagOutsideForeignContent(token);
+    popUntilHtmlOrIntegrationPoint(p2);
+    p2._endTagOutsideForeignContent(token);
     return;
   }
-  for (let i = p.openElements.stackTop; i > 0; i--) {
-    const element = p.openElements.items[i];
-    if (p.treeAdapter.getNamespaceURI(element) === NS.HTML) {
-      p._endTagOutsideForeignContent(token);
+  for (let i = p2.openElements.stackTop; i > 0; i--) {
+    const element = p2.openElements.items[i];
+    if (p2.treeAdapter.getNamespaceURI(element) === NS.HTML) {
+      p2._endTagOutsideForeignContent(token);
       break;
     }
-    const tagName = p.treeAdapter.getTagName(element);
+    const tagName = p2.treeAdapter.getTagName(element);
     if (tagName.toLowerCase() === token.tagName) {
       token.tagName = tagName;
-      p.openElements.shortenToLength(i);
+      p2.openElements.shortenToLength(i);
       break;
     }
   }
@@ -16034,19 +16034,19 @@ function enquoteDoctypeId(id) {
 }
 __name(enquoteDoctypeId, "enquoteDoctypeId");
 function serializeDoctypeContent(name, publicId, systemId) {
-  let str = "!DOCTYPE ";
+  let str2 = "!DOCTYPE ";
   if (name) {
-    str += name;
+    str2 += name;
   }
   if (publicId) {
-    str += ` PUBLIC ${enquoteDoctypeId(publicId)}`;
+    str2 += ` PUBLIC ${enquoteDoctypeId(publicId)}`;
   } else if (systemId) {
-    str += " SYSTEM";
+    str2 += " SYSTEM";
   }
   if (systemId) {
-    str += ` ${enquoteDoctypeId(systemId)}`;
+    str2 += ` ${enquoteDoctypeId(systemId)}`;
   }
-  return str;
+  return str2;
 }
 __name(serializeDoctypeContent, "serializeDoctypeContent");
 var adapter = {
@@ -16421,7 +16421,7 @@ function shortLineRuns(bodyText, passages) {
     else flush();
   }
   flush();
-  const flat = passages.map((p) => oneLine(p.text));
+  const flat = passages.map((p2) => oneLine(p2.text));
   return runs.map((lines) => {
     const first2 = lines[0];
     const joined = lines.slice(0, 3).join(" ");
@@ -16439,33 +16439,33 @@ function sentences(text3) {
 }
 __name(sentences, "sentences");
 function lostFaq(passages) {
-  const hits = [];
-  for (const p of passages) {
-    const openers = sentences(p.text).filter((s) => ANSWER_OPENER.test(s));
-    const questions = (p.text.match(/[?？]/g) || []).length;
+  const hits2 = [];
+  for (const p2 of passages) {
+    const openers = sentences(p2.text).filter((s) => ANSWER_OPENER.test(s));
+    const questions = (p2.text.match(/[?？]/g) || []).length;
     if (openers.length >= FAQ_MIN_ANSWER_OPENERS && questions < openers.length * FAQ_MAX_QUESTION_RATIO) {
-      hits.push({ passage: p.index, answers: openers.length, questions, text: clip(openers[0], 80) });
+      hits2.push({ passage: p2.index, answers: openers.length, questions, text: clip(openers[0], 80) });
     }
   }
-  if (!hits.length) return [];
-  return [{ code: "lost_faq_questions", severity: "high", passages: hits.map((h) => h.passage), evidence: { samples: hits.slice(0, MAX_SAMPLES) } }];
+  if (!hits2.length) return [];
+  return [{ code: "lost_faq_questions", severity: "high", passages: hits2.map((h) => h.passage), evidence: { samples: hits2.slice(0, MAX_SAMPLES) } }];
 }
 __name(lostFaq, "lostFaq");
-function isIntro(p, page) {
-  return p.index === 0 && (p.rawHeading ?? p.heading) && oneLine(p.rawHeading ?? p.heading) === oneLine(page.title || page.h1?.[0] || "");
+function isIntro(p2, page) {
+  return p2.index === 0 && (p2.rawHeading ?? p2.heading) && oneLine(p2.rawHeading ?? p2.heading) === oneLine(page.title || page.h1?.[0] || "");
 }
 __name(isIntro, "isIntro");
 function dominantHeading(passages, page) {
   if (passages.length < DOMINANT_MIN_PASSAGES) return [];
-  const total = passages.reduce((sum, p) => sum + p.charCount, 0);
+  const total = passages.reduce((sum, p2) => sum + p2.charCount, 0);
   if (!total) return [];
   const byHeading = /* @__PURE__ */ new Map();
-  for (const p of passages) {
-    if (isIntro(p, page)) continue;
-    const key = oneLine(p.rawHeading ?? p.heading) || "";
+  for (const p2 of passages) {
+    if (isIntro(p2, page)) continue;
+    const key = oneLine(p2.rawHeading ?? p2.heading) || "";
     const entry = byHeading.get(key) ?? { heading: key || null, chars: 0, passages: [] };
-    entry.chars += p.charCount;
-    entry.passages.push(p.index);
+    entry.chars += p2.charCount;
+    entry.passages.push(p2.index);
     byHeading.set(key, entry);
   }
   const out = [];
@@ -16484,13 +16484,13 @@ function dominantHeading(passages, page) {
 }
 __name(dominantHeading, "dominantHeading");
 function midSentence(passages) {
-  const hits = passages.filter((p) => p.index > 0 && new RegExp("^(?:\\p{Ll}|[,;:)\\]}»”’…])", "u").test(p.text.trim())).map((p) => ({ passage: p.index, text: clip(p.text, 80) }));
-  if (!hits.length) return [];
-  return [{ code: "mid_sentence_start", severity: "medium", passages: hits.map((h) => h.passage), evidence: { samples: hits.slice(0, MAX_SAMPLES), count: hits.length } }];
+  const hits2 = passages.filter((p2) => p2.index > 0 && new RegExp("^(?:\\p{Ll}|[,;:)\\]}»”’…])", "u").test(p2.text.trim())).map((p2) => ({ passage: p2.index, text: clip(p2.text, 80) }));
+  if (!hits2.length) return [];
+  return [{ code: "mid_sentence_start", severity: "medium", passages: hits2.map((h) => h.passage), evidence: { samples: hits2.slice(0, MAX_SAMPLES), count: hits2.length } }];
 }
 __name(midSentence, "midSentence");
 function navInContent(reading2) {
-  const runs = reading2.layout?.shortLineRuns ?? shortLineRuns(reading2.passages.map((p) => p.text).join("\n"), reading2.passages);
+  const runs = reading2.layout?.shortLineRuns ?? shortLineRuns(reading2.passages.map((p2) => p2.text).join("\n"), reading2.passages);
   const inside = runs.filter((run) => run.passages.length);
   if (!inside.length) return [];
   const passages = [...new Set(inside.flatMap((run) => run.passages))].sort((a, b) => a - b);
@@ -16504,16 +16504,16 @@ function navInContent(reading2) {
 __name(navInContent, "navInContent");
 function thinSections(passages, page) {
   const sections = [];
-  for (const p of passages) {
-    if (isIntro(p, page) || p.contentRole !== "main") continue;
-    const heading = oneLine(p.rawHeading ?? p.heading);
+  for (const p2 of passages) {
+    if (isIntro(p2, page) || p2.contentRole !== "main") continue;
+    const heading = oneLine(p2.rawHeading ?? p2.heading);
     if (!heading) continue;
     const last2 = sections[sections.length - 1];
-    if (last2 && last2.heading === heading && last2.passages[last2.passages.length - 1] === p.index - 1) {
-      last2.chars += p.charCount;
-      last2.passages.push(p.index);
+    if (last2 && last2.heading === heading && last2.passages[last2.passages.length - 1] === p2.index - 1) {
+      last2.chars += p2.charCount;
+      last2.passages.push(p2.index);
     } else {
-      sections.push({ heading, chars: p.charCount, passages: [p.index] });
+      sections.push({ heading, chars: p2.charCount, passages: [p2.index] });
     }
   }
   const thin = sections.filter((s) => s.chars < THIN_SECTION_CHARS);
@@ -16529,16 +16529,16 @@ __name(thinSections, "thinSections");
 var CODE_LIKE = /[<>{}();=]/;
 var TEASER = new RegExp("(\\S[^\\n]{0,70}?)(…|\\.\\.\\.)(?=[ \\t]*(?:\\n|$)|\\s+\\p{Lu})", "gu");
 function truncatedTeasers(passages) {
-  const hits = [];
-  for (const p of passages) {
-    for (const match of p.text.matchAll(TEASER)) {
+  const hits2 = [];
+  for (const p2 of passages) {
+    for (const match of p2.text.matchAll(TEASER)) {
       if (CODE_LIKE.test(match[1])) continue;
-      hits.push({ passage: p.index, text: clip(`${match[1]}${match[2]}`, 80) });
+      hits2.push({ passage: p2.index, text: clip(`${match[1]}${match[2]}`, 80) });
     }
   }
-  if (!hits.length) return [];
-  const passageIds = [...new Set(hits.map((h) => h.passage))];
-  return [{ code: "truncated_teaser", severity: hits.length >= 3 ? "medium" : "low", passages: passageIds, evidence: { count: hits.length, samples: hits.slice(0, MAX_SAMPLES) } }];
+  if (!hits2.length) return [];
+  const passageIds = [...new Set(hits2.map((h) => h.passage))];
+  return [{ code: "truncated_teaser", severity: hits2.length >= 3 ? "medium" : "low", passages: passageIds, evidence: { count: hits2.length, samples: hits2.slice(0, MAX_SAMPLES) } }];
 }
 __name(truncatedTeasers, "truncatedTeasers");
 function withoutOverlap(previous, current) {
@@ -16574,9 +16574,9 @@ function repeatedClaims(passages, assignment, groupCount) {
   if (!assignment || groupCount < REPEAT_MIN_GROUPS) return [];
   const need = Math.max(2, Math.ceil(groupCount * REPEAT_GROUP_SHARE));
   const where = /* @__PURE__ */ new Map();
-  passages.forEach((p, i) => {
+  passages.forEach((p2, i) => {
     if (i === 0) return;
-    const text3 = withoutOverlap(passages[i - 1]?.text, p.text);
+    const text3 = withoutOverlap(passages[i - 1]?.text, p2.text);
     const seen = /* @__PURE__ */ new Set();
     for (const tokens of proseRuns(text3))
       for (let k = 0; k + REPEAT_NGRAM <= tokens.length; k++) {
@@ -16589,7 +16589,7 @@ function repeatedClaims(passages, assignment, groupCount) {
         seen.add(key);
         const entry = where.get(key) ?? { groups: /* @__PURE__ */ new Set(), passages: /* @__PURE__ */ new Set() };
         entry.groups.add(assignment[i]);
-        entry.passages.add(p.index);
+        entry.passages.add(p2.index);
         where.set(key, entry);
       }
   });
@@ -16599,12 +16599,12 @@ function repeatedClaims(passages, assignment, groupCount) {
   for (const [key, entry] of candidates) {
     const tokens = key.split(" ");
     const tri = /* @__PURE__ */ __name((list2) => list2.slice(0, -2).map((_, k) => list2.slice(k, k + 3).join(" ")), "tri");
-    const clash = picked.some((p) => tri(p.phrase.split(" ")).some((t) => tri(tokens).includes(t)));
+    const clash = picked.some((p2) => tri(p2.phrase.split(" ")).some((t) => tri(tokens).includes(t)));
     if (clash) continue;
     picked.push({ phrase: key, groups: entry.groups.size, passages: [...entry.passages].sort((a, b) => a - b) });
     if (picked.length >= MAX_SAMPLES) break;
   }
-  const ids = [...new Set(picked.flatMap((p) => p.passages))].sort((a, b) => a - b);
+  const ids = [...new Set(picked.flatMap((p2) => p2.passages))].sort((a, b) => a - b);
   return [{ code: "repeated_claim", severity: "low", passages: ids, evidence: { groupCount, samples: picked } }];
 }
 __name(repeatedClaims, "repeatedClaims");
@@ -16765,6 +16765,25 @@ var SOURCES = {
   apgAcc: ["W3C WAI-ARIA APG: accordion pattern", "https://www.w3.org/WAI/ARIA/apg/patterns/accordion/"],
   gHreflang: ["Google Search Central: localized versions (hreflang)", "https://developers.google.com/search/docs/specialty/international/localized-versions"],
   gMulti: ["Google Search Central: multi-regional and multilingual sites", "https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites"],
+  gAi: ["Google Search Central: AI features and your website", "https://developers.google.com/search/docs/appearance/ai-features"],
+  gHelpful: ["Google Search Central: creating helpful, reliable, people-first content", "https://developers.google.com/search/docs/fundamentals/creating-helpful-content"],
+  gStarter: ["Google Search Central: SEO starter guide", "https://developers.google.com/search/docs/fundamentals/seo-starter-guide"],
+  gReview: ["Google Search Central: review snippet structured data", "https://developers.google.com/search/docs/appearance/structured-data/review-snippet"],
+  sRating: ["schema.org: AggregateRating", "https://schema.org/AggregateRating"],
+  gEvent: ["Google Search Central: event structured data", "https://developers.google.com/search/docs/appearance/structured-data/event"],
+  gJob: ["Google Search Central: job posting structured data", "https://developers.google.com/search/docs/appearance/structured-data/job-posting"],
+  gLocal: ["Google Search Central: local business structured data", "https://developers.google.com/search/docs/appearance/structured-data/local-business"],
+  gVideo: ["Google Search Central: video structured data", "https://developers.google.com/search/docs/appearance/structured-data/video"],
+  gQa: ["Google Search Central: Q&A page structured data", "https://developers.google.com/search/docs/appearance/structured-data/qapage"],
+  gVariants: ["Google Search Central: product variant structured data", "https://developers.google.com/search/docs/appearance/structured-data/product-variants"],
+  gSiteName: ["Google Search Central: site names (WebSite structured data on the home page)", "https://developers.google.com/search/docs/appearance/site-names"],
+  gFavicon: ["Google Search Central: favicon in Search results", "https://developers.google.com/search/docs/appearance/favicon-in-search"],
+  sPerson: ["schema.org: Person", "https://schema.org/Person"],
+  wCls: ["web.dev: optimize Cumulative Layout Shift (width and height on images)", "https://web.dev/articles/optimize-cls"],
+  wLcpLazy: ["web.dev: the performance effects of too much lazy loading", "https://web.dev/articles/lcp-lazy-loading"],
+  mixed: ["W3C: Mixed Content", "https://www.w3.org/TR/mixed-content/"],
+  hsts: ["RFC 6797: HTTP Strict Transport Security", "https://www.rfc-editor.org/rfc/rfc6797"],
+  indexnow: ["IndexNow: documentation (the key file)", "https://www.indexnow.org/documentation"],
   gCwv: ["Google Search Central: Core Web Vitals", "https://developers.google.com/search/docs/appearance/core-web-vitals"],
   gInspect: ["Search Console Help: URL Inspection tool", "https://support.google.com/webmasters/answer/9012289"]
 };
@@ -16773,6 +16792,842 @@ var source = /* @__PURE__ */ __name((key) => {
   if (!s) throw new Error(`no source ${key}`);
   return { name: s[0], url: s[1] };
 }, "source");
+
+// scripts/lib/russian.mjs
+var RUSSIAN_ONLY = /[\u044b\u044a\u044d\u0451]/i;
+
+// scripts/lib/patterns.mjs
+var DETECTOR_SET_VERSION = "det-1";
+var SCORE_MODEL_VERSION = "score-1";
+var MIN_WORDS = 60;
+var STOCK_DENSITY_MEDIUM = 2;
+var SATURATION_POINTS_PER_1K = 250;
+var SEVERITY_POINTS = { low: 1, medium: 3, high: 6 };
+var REPEAT_CAP = 4;
+var BANDS = [[60, "high"], [30, "moderate"], [0, "low"]];
+var INVISIBLE = /[\u00ad\u200b\u200c\u200d\u2060\ufeff]/g;
+var ODD_SPACES = /[\u00a0\u2000-\u200a\u202f\u205f\u3000]/g;
+function normalizeText(raw) {
+  return String(raw ?? "").normalize("NFC").replace(/\r\n?/g, "\n").replace(INVISIBLE, "").replace(ODD_SPACES, " ").replace(/[ \t]{2,}/g, " ").replace(/[ \t]+\n/g, "\n").replace(/\n[ \t]+/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+__name(normalizeText, "normalizeText");
+function countWords(text3) {
+  return String(text3 ?? "").split(/[^\p{L}\p{N}'’-]+/u).filter((w) => new RegExp("\\p{L}|\\p{N}", "u").test(w)).length;
+}
+__name(countWords, "countWords");
+function splitSentences(text3) {
+  const out = [];
+  const re = /[^.!?…]+[.!?…]+(?=\s|$)|[^.!?…]+$/gu;
+  let match;
+  while ((match = re.exec(text3)) !== null) {
+    const raw = match[0];
+    const leading = raw.length - raw.trimStart().length;
+    const body = raw.trim();
+    if (body.length < 2) continue;
+    out.push({ text: body, startOffset: match.index + leading, endOffset: match.index + leading + body.length });
+  }
+  return out;
+}
+__name(splitSentences, "splitSentences");
+var UKRAINIAN_ONLY = /[іїєґ]/i;
+var CYRILLIC = new RegExp("\\p{Script=Cyrillic}", "u");
+var LATIN = new RegExp("\\p{Script=Latin}", "u");
+var EN_MARKERS = /* @__PURE__ */ new Set(["the", "and", "of", "to", "is", "that", "with", "for", "this", "are", "which", "from"]);
+var ES_MARKERS = /* @__PURE__ */ new Set(["que", "de", "la", "el", "los", "las", "para", "con", "una", "como", "por", "del", "se"]);
+var ES_LETTERS = /[ñáéíóúü¿¡]/i;
+var OTHER_LATIN = /[ąćęłńśźżğ]|œ|æ|ß/i;
+var MIX_SHARE = 0.35;
+var wordsOf = /* @__PURE__ */ __name((text3) => String(text3 ?? "").split(/[^\p{L}\p{N}'’]+/u).filter((w) => new RegExp("\\p{L}", "u").test(w)), "wordsOf");
+var hits = /* @__PURE__ */ __name((lower, set) => lower.reduce((n, w) => n + (set.has(w) ? 1 : 0), 0), "hits");
+function detectLanguage(text3) {
+  const all = wordsOf(text3);
+  if (all.length < 3) return { ok: false, code: "language_undetermined" };
+  let cyr = 0;
+  let lat = 0;
+  for (const w of all) {
+    if (CYRILLIC.test(w)) cyr += 1;
+    else if (LATIN.test(w)) lat += 1;
+  }
+  const scripted = cyr + lat;
+  if (!scripted) return { ok: false, code: "language_undetermined" };
+  if (Math.min(cyr, lat) / scripted > MIX_SHARE) return { ok: false, code: RUSSIAN_ONLY.test(text3) ? "language_not_supported" : "unsupported_mix" };
+  if (cyr >= lat) {
+    if (RUSSIAN_ONLY.test(text3) || !UKRAINIAN_ONLY.test(text3)) return { ok: false, code: "language_not_supported" };
+    const n = (text3.match(/[іїєґ]/gi) || []).length;
+    return { ok: true, language: "uk", confidence: n >= 6 ? "high" : n >= 2 ? "medium" : "low" };
+  }
+  const lower = all.map((w) => w.toLowerCase());
+  const en3 = hits(lower, EN_MARKERS);
+  const esWords = hits(lower, ES_MARKERS);
+  if (OTHER_LATIN.test(text3) && esWords < 3) return { ok: false, code: "unsupported_language" };
+  const es = esWords + (ES_LETTERS.test(text3) ? 3 : 0);
+  if (!en3 && !es) return { ok: false, code: "language_undetermined" };
+  const [language, top, other] = en3 >= es ? ["en", en3, es] : ["es", es, en3];
+  const margin = top - other;
+  return { ok: true, language, confidence: margin >= 4 ? "high" : margin >= 2 ? "medium" : "low" };
+}
+__name(detectLanguage, "detectLanguage");
+var STOCK = {
+  en: ["it is worth noting that", "it should be emphasised that", "it should be emphasized that", "it should be noted that", "it is important to understand that", "it is necessary to draw attention to the fact that", "in connection with the fact that", "in today's world", "in the modern world", "at the end of the day", "when it comes to", "needless to say", "it goes without saying", "last but not least", "in order to be able to", "due to the fact that"],
+  uk: ["варто зазначити, що", "варто зазначити що", "слід зазначити, що", "слід підкреслити, що", "необхідно звернути увагу на те, що", "у зв'язку з тим, що", "у звʼязку з тим, що", "в зв'язку з тим, що", "важливо розуміти, що", "у сучасних умовах", "на сьогоднішній день", "не секрет, що", "як відомо", "перш за все", "в кінцевому підсумку"],
+  es: ["cabe señalar que", "cabe destacar que", "hay que tener en cuenta que", "es importante entender que", "debido al hecho de que", "en el mundo actual", "en la actualidad", "a día de hoy", "no cabe duda de que", "por otro lado", "en última instancia"]
+};
+var FUNCTION_WORDS = {
+  en: /* @__PURE__ */ new Set(["a", "an", "the", "of", "to", "for", "and", "or", "in", "on", "at", "with", "our", "your", "we", "you", "it", "is", "are", "that", "this", "every", "each", "all"]),
+  uk: /* @__PURE__ */ new Set(["і", "й", "та", "або", "в", "у", "на", "до", "з", "із", "зі", "для", "що", "як", "ми", "ви", "наш", "наша", "наші", "ваш", "ваша", "ваші", "кожен", "кожного", "кожному", "це", "є"]),
+  es: /* @__PURE__ */ new Set(["el", "la", "los", "las", "un", "una", "de", "del", "a", "al", "para", "por", "y", "o", "en", "con", "nuestro", "nuestra", "nuestros", "su", "que", "es", "son", "cada", "todo", "todos"])
+};
+var EQUIVALENT = {
+  en: { a: "art", an: "art", the: "art" },
+  uk: { наш: "poss", наша: "poss", наші: "poss", ваш: "poss", ваша: "poss", ваші: "poss" },
+  es: { el: "art", la: "art", los: "art", las: "art", un: "art", una: "art", nuestro: "poss", nuestra: "poss", nuestros: "poss" }
+};
+var EVALUATIVE = {
+  en: /* @__PURE__ */ new Set(["comprehensive", "seamless", "innovative", "effective", "efficient", "robust", "holistic", "cutting-edge", "state-of-the-art", "world-class", "best-in-class", "unique", "powerful", "flexible", "scalable", "individual", "tailored", "bespoke", "unparalleled", "unrivalled", "proven", "trusted", "leading", "advanced", "optimal", "streamlined", "transparent"]),
+  uk: /* @__PURE__ */ new Set(["комплексний", "комплексне", "комплексна", "комплексні", "ефективний", "ефективне", "ефективна", "ефективні", "інноваційний", "інноваційне", "інноваційна", "інноваційні", "індивідуальний", "індивідуальне", "індивідуальна", "індивідуальні", "унікальний", "унікальне", "унікальна", "унікальні", "гнучкий", "гнучке", "гнучка", "гнучкі", "надійний", "надійне", "надійна", "надійні", "бездоганний", "бездоганне", "бездоганна", "бездоганні", "провідний", "провідне", "провідна", "провідні", "сучасний", "сучасне", "сучасна", "сучасні", "високий", "високе", "висока", "високі", "широкий", "широке", "широка", "широкі", "прозорий", "прозоре", "прозора", "прозорі"]),
+  es: /* @__PURE__ */ new Set(["integral", "integrales", "innovador", "innovadora", "innovadores", "innovadoras", "eficaz", "eficaces", "eficiente", "eficientes", "único", "única", "únicos", "únicas", "flexible", "flexibles", "robusto", "robusta", "escalable", "escalables", "personalizado", "personalizada", "líder", "líderes", "avanzado", "avanzada", "óptimo", "óptima", "transparente", "transparentes", "sólido", "sólida", "integrado", "integrada", "vanguardista"])
+};
+var ABSTRACT_NOUN = {
+  en: /* @__PURE__ */ new Set(["solution", "solutions", "approach", "approaches", "value", "values", "quality", "experience", "experiences", "service", "services", "results", "outcome", "outcomes", "growth", "efficiency", "synergy", "synergies", "innovation", "expertise", "capability", "capabilities", "platform", "ecosystem", "framework", "strategy", "strategies", "process", "processes", "performance", "excellence", "impact", "transformation", "range", "spectrum"]),
+  uk: /* @__PURE__ */ new Set(["рішення", "рішень", "підхід", "підходу", "підходи", "цінність", "цінності", "якість", "якості", "досвід", "досвіду", "сервіс", "сервісу", "послуги", "послуг", "результат", "результати", "результатів", "зростання", "ефективність", "ефективності", "синергія", "синергії", "інновації", "експертиза", "потенціал", "платформа", "платформи", "екосистема", "стратегія", "стратегії", "процес", "процеси", "процесів", "продуктивність", "рівень", "рівня", "спектр", "спектру", "напрямок", "напрямки", "можливості", "можливостей"]),
+  es: /* @__PURE__ */ new Set(["solución", "soluciones", "enfoque", "enfoques", "valor", "valores", "calidad", "experiencia", "experiencias", "servicio", "servicios", "resultado", "resultados", "crecimiento", "eficiencia", "sinergia", "sinergias", "innovación", "experticia", "capacidad", "capacidades", "plataforma", "ecosistema", "estrategia", "estrategias", "proceso", "procesos", "rendimiento", "excelencia", "impacto", "transformación", "gama", "abanico", "nivel", "niveles"])
+};
+var severityFromCount = /* @__PURE__ */ __name((n) => n >= 3 ? "high" : n === 2 ? "medium" : "low", "severityFromCount");
+function findAll2(text3, phrase) {
+  const hay = text3.toLowerCase();
+  const needle = phrase.toLowerCase();
+  const spans = [];
+  let from = 0;
+  while (from <= hay.length - needle.length) {
+    const at = hay.indexOf(needle, from);
+    if (at < 0) break;
+    const before2 = at === 0 ? "" : hay[at - 1];
+    const after2 = hay[at + needle.length] ?? "";
+    if ((!before2 || !/[\p{L}\p{N}]/u.test(before2)) && (!after2 || !/[\p{L}\p{N}]/u.test(after2))) spans.push([at, at + needle.length]);
+    from = at + needle.length;
+  }
+  return spans;
+}
+__name(findAll2, "findAll");
+function detectStock(text3, language) {
+  const out = [];
+  for (const phrase of STOCK[language]) {
+    const spans = findAll2(text3, phrase);
+    for (const [s, e] of spans) out.push({ detector: "phrase_templates", family: "stock", severity: severityFromCount(spans.length), startOffset: s, endOffset: e, evidence: text3.slice(s, e), occurrences: spans.length, reason: "stock_phrase" });
+  }
+  return out;
+}
+__name(detectStock, "detectStock");
+var CONTENT_WORD = /^[\p{L}\p{N}][\p{L}\p{N}'’-]*$/u;
+function skeletonOf(sentence, language) {
+  const fn = FUNCTION_WORDS[language];
+  const eq2 = EQUIVALENT[language];
+  return sentence.toLowerCase().split(/\s+/).map((t) => t.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "")).filter(Boolean).map((w) => eq2[w] || (fn.has(w) ? w : CONTENT_WORD.test(w) ? "·" : w)).join(" ");
+}
+__name(skeletonOf, "skeletonOf");
+function detectRepetition(text3, language) {
+  const by = /* @__PURE__ */ new Map();
+  for (const s of splitSentences(text3)) {
+    const sk = skeletonOf(s.text, language);
+    if (sk.split(" ").length < 4) continue;
+    by.set(sk, [...by.get(sk) || [], s]);
+  }
+  const out = [];
+  for (const group of by.values()) {
+    if (group.length < 2) continue;
+    for (const s of group) out.push({ detector: "sentence_template", family: "repetition", severity: severityFromCount(group.length), startOffset: s.startOffset, endOffset: s.endOffset, evidence: s.text, occurrences: group.length, reason: "shared_sentence_skeleton" });
+  }
+  return out;
+}
+__name(detectRepetition, "detectRepetition");
+function detectUniformity(text3, language) {
+  const sentences3 = splitSentences(text3);
+  const fn = FUNCTION_WORDS[language];
+  const opener = /* @__PURE__ */ __name((s) => {
+    const tokens = s.toLowerCase().split(/\s+/).map((t) => t.replace(/[^\p{L}\p{N}]/gu, "")).filter(Boolean);
+    const taken = [];
+    for (const t of tokens) {
+      taken.push(t);
+      if (!fn.has(t)) break;
+      if (taken.length >= 3) break;
+    }
+    return taken.join(" ");
+  }, "opener");
+  const out = [];
+  let runStart = 0;
+  for (let i = 1; i <= sentences3.length; i += 1) {
+    const same = i < sentences3.length && opener(sentences3[i].text) === opener(sentences3[runStart].text) && opener(sentences3[runStart].text).length > 2;
+    if (same) continue;
+    const length = i - runStart;
+    if (length >= 3) {
+      const first2 = sentences3[runStart];
+      const last2 = sentences3[i - 1];
+      out.push({ detector: "sentence_uniformity", family: "uniformity", severity: length >= 4 ? "high" : "medium", startOffset: first2.startOffset, endOffset: last2.endOffset, evidence: text3.slice(first2.startOffset, last2.endOffset), occurrences: length, reason: "repeated_opening" });
+    }
+    runStart = i;
+  }
+  return out;
+}
+__name(detectUniformity, "detectUniformity");
+function hasConcreteAnchor(sentence) {
+  if (new RegExp("\\p{Nd}", "u").test(sentence)) return true;
+  const words2 = sentence.split(/\s+/).filter(Boolean);
+  for (let i = 1; i < words2.length; i += 1) {
+    const w = words2[i].replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "");
+    if (w.length < 2) continue;
+    const c2 = w[0];
+    if (c2 === c2.toLocaleUpperCase() && c2 !== c2.toLocaleLowerCase() && (w !== w.toLocaleUpperCase() || w.length <= 4)) return true;
+  }
+  return false;
+}
+__name(hasConcreteAnchor, "hasConcreteAnchor");
+function tokensOf(sentence) {
+  const out = [];
+  const re = /[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu;
+  for (let m = re.exec(sentence); m; m = re.exec(sentence)) out.push({ word: m[0].toLocaleLowerCase(), start: m.index, end: m.index + m[0].length });
+  return out;
+}
+__name(tokensOf, "tokensOf");
+function detectVagueness(text3, language) {
+  const evaluative = EVALUATIVE[language];
+  const nouns = ABSTRACT_NOUN[language];
+  const fn = FUNCTION_WORDS[language];
+  const pairs = [];
+  for (const s of splitSentences(text3)) {
+    if (hasConcreteAnchor(s.text)) continue;
+    const tokens = tokensOf(s.text);
+    for (let i = 0; i < tokens.length; i += 1) {
+      const a = tokens[i];
+      const isAdj = evaluative.has(a.word);
+      const isNoun = nouns.has(a.word);
+      if (!isAdj && !isNoun) continue;
+      const own = isAdj ? evaluative : nouns;
+      for (let j = i + 1; j < tokens.length && j <= i + 3; j += 1) {
+        const b = tokens[j];
+        if (j > i + 1) {
+          const between = tokens[j - 1].word;
+          if (!fn.has(between) && !own.has(between)) break;
+        }
+        if (!(isAdj ? nouns.has(b.word) : evaluative.has(b.word))) continue;
+        pairs.push({ key: `${a.word} ${b.word}`, start: s.startOffset + a.start, end: s.startOffset + b.end });
+        break;
+      }
+    }
+  }
+  const outer = pairs.filter((p2) => !pairs.some((o) => o !== p2 && o.start <= p2.start && o.end >= p2.end));
+  const counts = /* @__PURE__ */ new Map();
+  for (const p2 of outer) counts.set(p2.key, (counts.get(p2.key) ?? 0) + 1);
+  const total = outer.length;
+  const severity = severityFromCount(total >= 5 ? 3 : total >= 3 ? 2 : 1);
+  return outer.map((p2) => ({ detector: "abstract_claim", family: "vagueness", severity, startOffset: p2.start, endOffset: p2.end, evidence: text3.slice(p2.start, p2.end), occurrences: counts.get(p2.key) ?? 1, reason: "unsupported_claim" }));
+}
+__name(detectVagueness, "detectVagueness");
+function runDetectors(text3, language) {
+  return [...detectStock(text3, language), ...detectRepetition(text3, language), ...detectUniformity(text3, language), ...detectVagueness(text3, language)].sort((a, b) => a.startOffset - b.startOffset || a.endOffset - b.endOffset);
+}
+__name(runDetectors, "runDetectors");
+function scoreDocument(findings, wordCount) {
+  if (wordCount < MIN_WORDS) return { scoreModelVersion: SCORE_MODEL_VERSION, band: "insufficient_text", value: null, wordCount, perThousand: null, contributions: [] };
+  const seen = /* @__PURE__ */ new Map();
+  const by = /* @__PURE__ */ new Map();
+  for (const f of findings) {
+    const e = by.get(f.family) ?? { family: f.family, counted: 0, suppressed: 0, points: 0 };
+    const key = `${f.detector}::${f.reason}::${f.evidence.toLowerCase()}`;
+    const already = seen.get(key) ?? 0;
+    seen.set(key, already + 1);
+    if (already >= REPEAT_CAP) e.suppressed += 1;
+    else {
+      e.counted += 1;
+      e.points += SEVERITY_POINTS[f.severity];
+    }
+    by.set(f.family, e);
+  }
+  const contributions = [...by.values()].sort((a, b) => b.points - a.points);
+  const points = contributions.reduce((s, c2) => s + c2.points, 0);
+  const perThousand = points / wordCount * 1e3;
+  const value = Math.round(Math.min(1, perThousand / SATURATION_POINTS_PER_1K) * 100);
+  return { scoreModelVersion: SCORE_MODEL_VERSION, band: BANDS.find(([floor]) => value >= floor)[1], value, wordCount, perThousand: Number(perThousand.toFixed(2)), points, capped: perThousand > SATURATION_POINTS_PER_1K, contributions };
+}
+__name(scoreDocument, "scoreDocument");
+function analysePatterns(sections, passages = []) {
+  const parts = [];
+  let offset = 0;
+  const bounds = [];
+  for (const s of sections) {
+    const t = normalizeText(s.text);
+    if (!t) continue;
+    bounds.push({ start: offset, end: offset + t.length, heading: s.heading ?? null });
+    parts.push(t);
+    offset += t.length + 2;
+  }
+  const text3 = parts.join("\n\n");
+  const wordCount = countWords(text3);
+  const lang = detectLanguage(text3);
+  if (!lang.ok) return { analysed: false, reason: lang.code, wordCount, findings: [], score: null, version: DETECTOR_SET_VERSION };
+  const raw = runDetectors(text3, lang.language);
+  const fold3 = /* @__PURE__ */ __name((s) => s.replace(/\s+/g, " ").trim().toLowerCase(), "fold");
+  const findings = raw.map((f) => {
+    const sec = bounds.find((b) => f.startOffset >= b.start && f.startOffset < b.end) || null;
+    const ev = fold3(f.evidence).slice(0, 120);
+    const p2 = passages.find((x) => fold3(x.text).includes(ev));
+    return { ...f, heading: sec?.heading ?? null, passage: p2 ? p2.index : null, word: countWords(text3.slice(0, f.startOffset)) + 1 };
+  });
+  return { analysed: true, language: lang.language, confidence: lang.confidence, wordCount, findings, score: scoreDocument(raw, wordCount), version: DETECTOR_SET_VERSION };
+}
+__name(analysePatterns, "analysePatterns");
+
+// scripts/lib/keyword.mjs
+var MAX_KEYWORD_LENGTH = 80;
+var MIN_KEYWORD_LENGTH = 2;
+var MAX_VARIANTS = 10;
+var OFF_KEYWORD_FLOOR = 0.5;
+var SPREAD_FLOOR = 1 / 3;
+var MIN_GROUPS_FOR_SPREAD = 3;
+var KEYWORD_MAX_WORDS = 5;
+var normaliseKeyword = /* @__PURE__ */ __name((raw) => String(raw ?? "").replace(/\s+/g, " ").trim().slice(0, MAX_KEYWORD_LENGTH), "normaliseKeyword");
+var isUsableKeyword = /* @__PURE__ */ __name((k) => k.length >= MIN_KEYWORD_LENGTH && /[\p{L}\p{N}]/u.test(k), "isUsableKeyword");
+var EDGE_STOP = new Set(
+  "a an the and or but of for to in on at by with from as is are was were be your you our we it its their this that these those how what when where which who why all any more most other than then here there up down out off just also very only so such too now vs via".split(" ")
+);
+var TRAILING_JOIN = new Set("with by for from using via in on at to and or of &".split(" "));
+var CODE_TOKEN2 = /^(?=[^\s]*[A-Za-z])(?=[^\s]*\d)[A-Za-z0-9.\-/]+$/;
+var squashWord = /* @__PURE__ */ __name((v) => v.toLowerCase().replace(/[^a-z0-9]/g, ""), "squashWord");
+function brandName(siteUrl) {
+  if (!siteUrl) return "";
+  let host = "";
+  try {
+    host = new URL(siteUrl).hostname;
+  } catch {
+    host = String(siteUrl).replace(/^https?:\/\//, "").split("/")[0];
+  }
+  return squashWord(host.replace(/^www\./, "").split(".")[0]);
+}
+__name(brandName, "brandName");
+function dropBrand(tokens, brand) {
+  if (brand.length < 3) return tokens;
+  const runs = [[]];
+  for (let i = 0; i < tokens.length; ) {
+    let matched = 0;
+    for (let span = Math.min(3, tokens.length - i); span >= 1; span -= 1) {
+      if (tokens.slice(i, i + span).map(squashWord).join("") === brand) {
+        matched = span;
+        break;
+      }
+    }
+    if (matched) {
+      runs.push([]);
+      i += matched;
+      continue;
+    }
+    runs[runs.length - 1].push(tokens[i]);
+    i += 1;
+  }
+  const best = runs.reduce((a, b) => b.length > a.length ? b : a, []);
+  return best.length ? best : tokens;
+}
+__name(dropBrand, "dropBrand");
+function capWords(tokens) {
+  if (tokens.length <= KEYWORD_MAX_WORDS) return tokens;
+  const seam = /* @__PURE__ */ __name((w) => EDGE_STOP.has(w.toLowerCase()) || TRAILING_JOIN.has(w.toLowerCase()), "seam");
+  let cut = KEYWORD_MAX_WORDS;
+  for (let i = KEYWORD_MAX_WORDS - 1; i >= 2; i -= 1) {
+    if (seam(tokens[i])) {
+      cut = i;
+      break;
+    }
+  }
+  let kept = tokens.slice(0, cut);
+  const next2 = tokens[cut];
+  if (next2 && /^\d[\d.\-]*$/.test(next2) && CODE_TOKEN2.test(kept[kept.length - 1] || "")) kept = tokens.slice(0, cut + 1);
+  while (kept.length && seam(kept[kept.length - 1])) kept.pop();
+  return kept.length ? kept : tokens.slice(0, KEYWORD_MAX_WORDS);
+}
+__name(capWords, "capWords");
+function keywordFromHeading(heading, siteUrl) {
+  let value = String(heading ?? "").replace(/\s+/g, " ").trim();
+  if (!value) return "";
+  const signed = value.match(/^(.{8,}?)\s*[|·–—]\s*([^|·–—]{1,30})$/);
+  if (signed && !/[.!?]/.test(signed[2])) value = signed[1].trim();
+  const offered = value.match(/^(.{8,}?)\s*:\s*(.{3,60})$/);
+  if (offered && /\b(fill|sign|edit|download|print|get|create|make|free|online|template|pdf|form)\b/i.test(offered[2])) value = offered[1].trim();
+  value = value.replace(/\s+(?:19|20)\d{2}$/, "").trim();
+  let tokens = value.split(/\s[|·–—]\s/).map((part) => part.trim().split(" ").filter(Boolean)).reduce((a, b) => b.length > a.length ? b : a, []);
+  const brand = brandName(siteUrl);
+  if (brand) tokens = dropBrand(tokens, brand);
+  const clause = tokens.findIndex((t, i) => i >= 1 && i < KEYWORD_MAX_WORDS && /[,:;]$/.test(t));
+  if (clause >= 1) tokens = [...tokens.slice(0, clause), tokens[clause].replace(/[,:;]+$/, "")];
+  while (tokens.length && TRAILING_JOIN.has(tokens[tokens.length - 1].toLowerCase())) tokens.pop();
+  while (tokens.length && EDGE_STOP.has(tokens[0].toLowerCase())) tokens.shift();
+  while (tokens.length && EDGE_STOP.has(tokens[tokens.length - 1].toLowerCase())) tokens.pop();
+  return normaliseKeyword(capWords(tokens).join(" "));
+}
+__name(keywordFromHeading, "keywordFromHeading");
+var escapeRegExp = /* @__PURE__ */ __name((v) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "escapeRegExp");
+function countPhrase(haystack, phrase) {
+  const needle = String(phrase ?? "").trim();
+  if (!needle) return 0;
+  const re = new RegExp(`(?:^|[^\\p{L}\\p{N}])${escapeRegExp(needle)}(?![\\p{L}\\p{N}])`, "giu");
+  return (String(haystack || "").match(re) || []).length;
+}
+__name(countPhrase, "countPhrase");
+function keywordVariants(keyword) {
+  const trimmed = keyword.trim();
+  if (!trimmed) return [];
+  const out = [];
+  const seen = /* @__PURE__ */ new Set([trimmed.toLowerCase()]);
+  const add2 = /* @__PURE__ */ __name((form) => {
+    const key = form.toLowerCase();
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    out.push(form);
+  }, "add");
+  const NEIGHBOURS = { " ": ["-", ""], "-": [" ", ".", ""], ".": [" ", "-", ""], _: ["-", " ", ""], "/": ["-", " "] };
+  for (let i = 0; i < trimmed.length; i++) {
+    for (const swap of NEIGHBOURS[trimmed[i]] || []) add2(trimmed.slice(0, i) + swap + trimmed.slice(i + 1));
+  }
+  add2(trimmed.replace(/[\s\-._/]/g, ""));
+  return out;
+}
+__name(keywordVariants, "keywordVariants");
+var PROMISE_WORDS = /\b(fee|fees|cost|costs|price|prices|deadline|due date|filed within|time frame|timeframe|mailing address|postal address|street address|office address|filing address|hours|penalty|penalties)\b/i;
+var MONEY_TRIGGER = /^(fee|fees|cost|costs|price|prices|penalty|penalties)$/i;
+var MONEY_CUE = /\b(pay|pays|paid|paying|payment|payments|charge|charges|charged|apply|applies|applied|require|requires|required|requirement|requirements|mandatory|must|due|owe|owed|bill|billed|billing|accompany|accompanies|submit|submission|subscription|plan|plans|monthly|annual|annually|invoice|refund|refundable)\b/i;
+var HAS_FIGURE = /(\d|\$|€|£|¥|\bfree of charge\b|\b(zero|free|nothing|none|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|thirty|hundred|thousand|dozen|half|dollars?|euros?|cents?)\b|\ban? (day|week|month|year|hour|minute)\b|\bno (fees?|costs?|charges?|penalty|penalties|price)\b)/i;
+var QUOTED = /“[^”]*”|"[^"]*"|«[^»]*»|„[^“”]*[“”]/g;
+var MIN_CLAIM_CHARS = 25;
+var sentences2 = /* @__PURE__ */ __name((text3) => String(text3 || "").split(/(?<=[.!?:;])\s+|\n+/).map((p2) => p2.trim()).filter((p2) => p2.length >= MIN_CLAIM_CHARS), "sentences");
+function promiseFailures(text3) {
+  const out = [];
+  for (const sentence of sentences2(text3)) {
+    if (/\?\s*$/.test(sentence) || /\s·\s/.test(sentence)) continue;
+    const own = sentence.replace(QUOTED, " ");
+    const trigger = own.match(PROMISE_WORDS);
+    if (!trigger) continue;
+    if (MONEY_TRIGGER.test(trigger[0]) && !MONEY_CUE.test(own)) continue;
+    if (HAS_FIGURE.test(own)) continue;
+    out.push({ sentence, trigger: trigger[0].toLowerCase() });
+  }
+  return out;
+}
+__name(promiseFailures, "promiseFailures");
+function promiseRuleReads(language) {
+  const primary = String(language || "").trim().toLowerCase().split(/[-_]/)[0];
+  return !primary || primary === "en";
+}
+__name(promiseRuleReads, "promiseRuleReads");
+function keywordReport({ keyword: raw, source: source2, fields, passages, groupCount, language }) {
+  const keyword = normaliseKeyword(raw);
+  const variants = keywordVariants(keyword).slice(0, MAX_VARIANTS - 1);
+  const body = passages.map((p2) => `${p2.heading || ""}
+${p2.text || ""}`).join("\n");
+  const inFields = /* @__PURE__ */ __name((form) => ["title", "h1", "description"].filter((k) => countPhrase(fields[k] || "", form) > 0), "inFields");
+  const exactCount = countPhrase(body, keyword);
+  const exactFields = inFields(keyword);
+  const forms = [keyword, ...variants];
+  const mentions2 = /* @__PURE__ */ __name((p2) => forms.some((f) => countPhrase(p2.text || "", f) > 0 || countPhrase(p2.heading || "", f) > 0), "mentions");
+  const hit = passages.filter(mentions2);
+  const reached = new Set(hit.map((p2) => p2.group)).size;
+  const total = Math.max(0, groupCount || 0);
+  const spread = total ? reached / total : 0;
+  const indexed = passages.reduce((s, p2) => s + (p2.charCount || 0), 0);
+  const onKeyword = hit.reduce((s, p2) => s + (p2.charCount || 0), 0);
+  const share = indexed ? onKeyword / indexed : 0;
+  const findings = [];
+  if (!exactFields.length) findings.push({ code: "keyword_not_in_title", evidence: { keyword, source: source2, exactCount, title: fields.title || "", h1: fields.h1 || "", description: fields.description || "" } });
+  const rivals = variants.map((form) => ({ form, count: countPhrase(body, form), fields: inFields(form) }));
+  const rival = rivals.find((v) => v.fields.length > 0 || v.count > 0);
+  if (rival && (exactCount > 0 || rival.fields.length)) findings.push({ code: "keyword_variant_split", evidence: { keyword, source: source2, exactCount, rival: rival.form, rivalCount: rival.count, rivalFields: rival.fields } });
+  if (total >= MIN_GROUPS_FOR_SPREAD && spread <= SPREAD_FLOOR) findings.push({ code: "keyword_one_section", evidence: { keyword, source: source2, sectionsReached: reached, sections: total, spread: Number(spread.toFixed(3)), passages: hit.map((p2) => p2.index) } });
+  if (indexed && share < OFF_KEYWORD_FLOOR) findings.push({ code: "off_keyword_share", evidence: { keyword, source: source2, charsOnKeyword: onKeyword, charsIndexed: indexed, share: Number(share.toFixed(3)), offShare: Number((1 - share).toFixed(3)), floor: OFF_KEYWORD_FLOOR, offPassages: passages.filter((p2) => !mentions2(p2)).map((p2) => p2.index) } });
+  const promiseChecked = promiseRuleReads(language);
+  let promise = null;
+  let weight = 0;
+  for (const p2 of promiseChecked ? hit : []) {
+    const failing = promiseFailures(p2.text || "");
+    if (!failing.length) continue;
+    const w = new Set(failing.map((x) => x.trigger)).size;
+    if (!promise || w > weight || w === weight && (p2.charCount || 0) > promise.charCount) {
+      weight = w;
+      promise = { passage: p2.index, heading: p2.heading || null, trigger: failing[0].trigger, sentence: failing[0].sentence.slice(0, 240), charCount: p2.charCount || 0 };
+    }
+  }
+  if (promise) findings.push({ code: "promise_without_number", evidence: { passage: promise.passage, heading: promise.heading, trigger: promise.trigger, sentence: promise.sentence } });
+  return { keyword, source: source2, exact: { count: exactCount, fields: exactFields }, variants: rivals, sections: { reached, total, spread: Number(spread.toFixed(3)) }, chars: { onKeyword, indexed, share: Number(share.toFixed(3)) }, promiseChecked, findings };
+}
+__name(keywordReport, "keywordReport");
+
+// ../vectorscope/scripts/lib/judgement.mjs
+var MAX_IDENTITY_CHARS = 60;
+var VERDICTS = ["complete", "partial", "missing"];
+function foldForQuote(text3) {
+  return String(text3 ?? "").replace(/[‘’‚′]/g, "'").replace(/[“”„″«»]/g, '"').replace(/[–—−]/g, "-").replace(/…/g, "...").replace(/\s+/g, " ").trim().toLowerCase();
+}
+__name(foldForQuote, "foldForQuote");
+function quoteIn(quote, text3) {
+  const q2 = foldForQuote(quote);
+  return q2.length > 0 && foldForQuote(text3).includes(q2);
+}
+__name(quoteIn, "quoteIn");
+function validateIdentity(input) {
+  const one = /* @__PURE__ */ __name((key) => {
+    const value = input[key];
+    if (value === void 0 || value === null) return null;
+    if (typeof value !== "string") throw new Error(`"${key}" must be a string, e.g. ${key === "agent" ? '"Claude Code"' : '"Claude Opus 5.5"'}, or left out.`);
+    const text3 = value.replace(/\s+/g, " ").trim();
+    if (!text3 || text3.length > MAX_IDENTITY_CHARS) throw new Error(`"${key}" must be 1–${MAX_IDENTITY_CHARS} characters, or left out.`);
+    if (/[\u0000-\u001f\u007f<>]/.test(text3)) throw new Error(`"${key}" holds control characters or angle brackets; give a plain name.`);
+    return text3;
+  }, "one");
+  return { agent: one("agent"), model: one("model") };
+}
+__name(validateIdentity, "validateIdentity");
+
+// scripts/lib/questions.mjs
+var MIN_QUESTIONS = 8;
+var MAX_QUESTIONS = 12;
+var MAX_QUESTION_CHARS = 200;
+var MAX_QUOTE_CHARS = 400;
+var AXES = ["urgency", "device", "object", "obstacle"];
+var str = /* @__PURE__ */ __name((v) => typeof v === "string" && v.trim().length > 0, "str");
+function validateQuestions(input, passages, { keyword = null } = {}) {
+  if (!input || typeof input !== "object" || !Array.isArray(input.questions)) throw new Error('questions.json must be {"questions": [{"id": "q1", "question": "…", "axes": ["urgency"], "passage": 3, "verdict": "complete", "citable": true, "quote": "…"}]}.');
+  const list2 = input.questions;
+  if (list2.length < MIN_QUESTIONS || list2.length > MAX_QUESTIONS) throw new Error(`${list2.length} questions; write ${MIN_QUESTIONS} to ${MAX_QUESTIONS}.`);
+  const byIndex = new Map(passages.map((p2) => [p2.index, p2]));
+  const ids = /* @__PURE__ */ new Set();
+  const used = /* @__PURE__ */ new Set();
+  const warnings = [];
+  const questions = list2.map((q2, i) => {
+    const where = `questions[${i}]`;
+    if (!q2 || typeof q2 !== "object") throw new Error(`${where} is not an object.`);
+    const id = str(q2.id) ? q2.id.trim() : `q${i + 1}`;
+    if (!/^[A-Za-z0-9_-]{1,20}$/.test(id)) throw new Error(`${where}.id must be a short id such as "q1".`);
+    if (ids.has(id)) throw new Error(`question id ${id} appears twice.`);
+    ids.add(id);
+    if (!str(q2.question) || q2.question.length > MAX_QUESTION_CHARS) throw new Error(`${where}.question must be 1–${MAX_QUESTION_CHARS} characters.`);
+    if (RUSSIAN_ONLY.test(q2.question) || RUSSIAN_ONLY.test(q2.quote || "")) throw new Error(`${where}: Russian letters found. Questions are written in the page's language, and never in Russian.`);
+    const axes = Array.isArray(q2.axes) ? q2.axes : [];
+    if (!axes.length || axes.length > 3 || axes.some((a) => !AXES.includes(a))) throw new Error(`${where}.axes must name 1 to 3 of ${AXES.join(", ")} (never all four in one question).`);
+    for (const a of axes) used.add(a);
+    if (!VERDICTS.includes(q2.verdict)) throw new Error(`${where}.verdict must be one of ${VERDICTS.join(", ")}.`);
+    const passage = q2.passage ?? null;
+    if (passage !== null && !byIndex.has(passage)) throw new Error(`${where}.passage ${JSON.stringify(passage)} is not a passage index of this reading (0–${passages.length - 1}).`);
+    const quote = typeof q2.quote === "string" ? q2.quote.trim() : "";
+    if (q2.verdict === "missing") {
+      if (q2.citable === true) throw new Error(`${where}: a missing answer cannot be citable.`);
+      return { id, question: q2.question.trim(), axes, passage, verdict: "missing", citable: false, quote: null };
+    }
+    if (typeof q2.citable !== "boolean") throw new Error(`${where}.citable must be true or false.`);
+    if (passage === null) throw new Error(`${where}.passage is required for a ${q2.verdict} answer.`);
+    if (!quote) throw new Error(`${where}.quote is required for a ${q2.verdict} answer: the words in the passage that answer.`);
+    if (quote.length > MAX_QUOTE_CHARS) throw new Error(`${where}.quote is over ${MAX_QUOTE_CHARS} characters; quote the answering sentence.`);
+    if (!quoteIn(quote, byIndex.get(passage).text)) throw new Error(`${where}.quote is not verbatim text from passage ${passage}. Copy it exactly (whitespace, quote marks and case may differ).`);
+    return { id, question: q2.question.trim(), axes, passage, verdict: q2.verdict, citable: q2.citable, quote };
+  });
+  const unused = AXES.filter((a) => !used.has(a));
+  if (unused.length) throw new Error(`no question uses the ${unused.join(", ")} axis; vary the circumstance along all four.`);
+  if (keyword) {
+    const k = keyword.toLowerCase();
+    const withKey = questions.filter((q2) => q2.question.toLowerCase().includes(k)).length;
+    if (withKey > questions.length / 2) warnings.push(`${withKey} of ${questions.length} questions contain the keyword "${keyword}"; people describe the problem, not the jargon.`);
+  }
+  if (!questions.some((q2) => q2.verdict === "missing")) warnings.push("every question is answered; include at least one the page probably does not answer.");
+  const topic = str(input.topic) ? input.topic.replace(/\s+/g, " ").trim().slice(0, 120) : null;
+  return { questions, topic, judgement: validateIdentity(input), warnings };
+}
+__name(validateQuestions, "validateQuestions");
+function questionFindings(q2) {
+  if (!q2) return [];
+  const out = [];
+  q2.questions.forEach((x, i) => {
+    if (x.verdict === "complete") return;
+    out.push({
+      id: `${x.verdict === "missing" ? "question_missing" : "question_partial"}-${x.id}`,
+      code: x.verdict === "missing" ? "question_missing" : "question_partial",
+      evidence: { id: x.id, n: i + 1, question: x.question, axes: x.axes, passage: x.passage, quote: x.quote, citable: x.citable },
+      passages: x.verdict === "partial" && x.passage !== null ? [x.passage] : [],
+      where: x.verdict === "partial" ? `question ${i + 1} · passage #${x.passage}` : `question ${i + 1} · no passage`,
+      judgement: q2.judgement
+    });
+  });
+  return out;
+}
+__name(questionFindings, "questionFindings");
+
+// scripts/lib/brand.mjs
+var QUESTIONS = [
+  { id: "what_is", ask: /* @__PURE__ */ __name((b) => `What is ${b}? Answer in two sentences.`, "ask") },
+  { id: "pricing", ask: /* @__PURE__ */ __name((b) => `How much does ${b} cost? Name the plans and prices you know of. If you are not sure, say so.`, "ask") },
+  { id: "integrations", ask: /* @__PURE__ */ __name((b) => `What does ${b} integrate with? Name the integrations you know of.`, "ask") },
+  { id: "weaknesses", ask: /* @__PURE__ */ __name((b) => `What are the main weaknesses or complaints about ${b} compared with its alternatives?`, "ask") },
+  { id: "alternatives", ask: /* @__PURE__ */ __name((b) => `What are the main alternatives to ${b}, and when would somebody pick one of them instead?`, "ask") }
+];
+var QUESTION_IDS = QUESTIONS.map((q2) => q2.id);
+var FACT_QUESTIONS = ["what_is", "pricing", "integrations"];
+var MAX_ANSWER_CHARS = 1500;
+var BASIS = "own_knowledge";
+var DISCLAIMERS = [
+  /\b(?:i|we) (?:do not|don't) have (?:any |much |specific |detailed )?(?:information|details|data|knowledge)\b/i,
+  /\b(?:i|we) (?:am|'m|are) not (?:familiar|aware)\b/i,
+  /\bnot familiar with\b/i,
+  /\b(?:i|we) (?:have|has) no (?:information|knowledge|record)\b/i,
+  /\b(?:i|we) (?:could not|couldn't|cannot|can't) find (?:any |much )?(?:information|details|records?|references?|anything|a company)/i,
+  /\b(?:i|we) (?:do not|don't) (?:know|recognise|recognize) (?:of|about|any)\b/i,
+  /\bno (?:widely |publicly )?(?:known|available|recognised|recognized) (?:company|brand|product|information)\b/i,
+  /\b(?:does|do) not appear to be a (?:well[- ])?known\b/i,
+  /\bunable to find\b/i,
+  /\bmay not exist\b/i
+];
+var disclaimsKnowledge = /* @__PURE__ */ __name((text3) => DISCLAIMERS.some((re) => re.test(String(text3 || "").slice(0, 400))), "disclaimsKnowledge");
+var MONEY = /(?:[$€£]\s?\d[\d.,]*)|(?:\d[\d.,]*\s?(?:usd|eur|gbp|dollars|euros))/gi;
+function amounts(text3) {
+  return [...new Set((String(text3 || "").match(MONEY) || []).map((v) => v.replace(/\s+/g, "").replace(/[.,]$/, "").toLowerCase()))];
+}
+__name(amounts, "amounts");
+var COUNTED = /(?<![\p{L}\p{N}.,$€£])(\d{1,6}(?:[.,]\d+)?)\s+([\p{L}][\p{L}-]{2,})/gu;
+var NOT_A_COUNT = /* @__PURE__ */ new Set(["and", "or", "of", "to", "in", "on", "at", "by", "for", "the", "per", "from", "with", "out", "percent", "pm", "am", "px", "kb", "mb", "gb"]);
+var stem = /* @__PURE__ */ __name((w) => w.toLowerCase().replace(/(?:ies)$/, "y").replace(/(?:es|s)$/, ""), "stem");
+function countedNumbers(text3) {
+  const out = [];
+  for (const m of String(text3 || "").matchAll(COUNTED)) {
+    const noun = m[2].toLowerCase();
+    if (NOT_A_COUNT.has(noun)) continue;
+    const n = Number(m[1].replace(",", "."));
+    if (!Number.isFinite(n) || n >= 1900 && n <= 2100 && !m[1].includes(".")) continue;
+    out.push({ n, unit: stem(noun), raw: m[0] });
+  }
+  return out;
+}
+__name(countedNumbers, "countedNumbers");
+var WORD = /[\p{L}\p{N}][\p{L}\p{N}'-]*/gu;
+var STOP2 = new Set("a an and are as at be by for from has have in is it its of on or that the to with your you this these those we our us they their can will would could should".split(" "));
+var words = /* @__PURE__ */ __name((t) => (String(t || "").toLowerCase().match(WORD) || []).filter((w) => w.length > 2 && !STOP2.has(w)), "words");
+function anchorsOf(sentence, brand) {
+  const out = [];
+  const b = String(brand || "").toLowerCase().replace(/\s+/g, "");
+  const tokens = String(sentence).split(/\s+/).filter(Boolean);
+  tokens.forEach((raw, i) => {
+    const w = raw.replace(/^[^\p{L}\p{N}$€£]+|[^\p{L}\p{N}%]+$/gu, "");
+    if (w.length < 2) return;
+    if (b && w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "").includes(b)) return;
+    if (/\d/.test(w)) out.push(w.toLowerCase());
+    else if (i > 0 && new RegExp("^\\p{Lu}", "u").test(w)) out.push(w.toLowerCase());
+  });
+  return [...new Set(out)];
+}
+__name(anchorsOf, "anchorsOf");
+var sentencesOf = /* @__PURE__ */ __name((text3) => String(text3 || "").replace(/^#{1,6}\s*/gm, "").replace(/^[-*+]\s+/gm, "").replace(/\*\*([^*]+)\*\*/g, "$1").split(/(?<=[.!?])\s+|\n+/).map((s) => s.trim()).filter((s) => s.length >= 12), "sentencesOf");
+function validateBrand(input) {
+  if (!input || typeof input !== "object" || !Array.isArray(input.answers)) throw new Error('brand.json must be {"brand": "…", "basis": "own_knowledge", "answers": [{"question": "what_is", "knows": true, "answer": "…"}, …]}.');
+  if (input.basis !== BASIS) throw new Error(`brand.json "basis" must be "${BASIS}": the answers come from the model's own knowledge, with no browsing or search, and the file says so.`);
+  const brand = typeof input.brand === "string" ? input.brand.replace(/\s+/g, " ").trim() : "";
+  if (!brand || brand.length > 80) throw new Error(`brand.json "brand" must be the brand's name, 1–80 characters.`);
+  const seen = /* @__PURE__ */ new Set();
+  const answers = input.answers.map((a, i) => {
+    const where = `answers[${i}]`;
+    if (!a || !QUESTION_IDS.includes(a.question)) throw new Error(`${where}.question must be one of ${QUESTION_IDS.join(", ")}.`);
+    if (seen.has(a.question)) throw new Error(`question ${a.question} is answered twice.`);
+    seen.add(a.question);
+    if (typeof a.knows !== "boolean") throw new Error(`${where}.knows must be true or false ("doesn't know" is a valid answer: false).`);
+    const text3 = typeof a.answer === "string" ? a.answer.trim() : "";
+    if (text3.length > MAX_ANSWER_CHARS) throw new Error(`${where}.answer is over ${MAX_ANSWER_CHARS} characters.`);
+    if (RUSSIAN_ONLY.test(text3)) throw new Error(`${where}.answer holds Russian letters; answer in English or the page's language, never Russian.`);
+    if (a.knows && !text3) throw new Error(`${where}: knows is true, so the answer text is required.`);
+    return { question: a.question, knows: a.knows && !disclaimsKnowledge(text3), text: text3 };
+  });
+  const missing = QUESTION_IDS.filter((q2) => !seen.has(q2));
+  if (missing.length) throw new Error(`brand.json has no answer to ${missing.join(", ")}; all five are answered, "knows": false included.`);
+  answers.sort((a, b) => QUESTION_IDS.indexOf(a.question) - QUESTION_IDS.indexOf(b.question));
+  return { brand, answers, judgement: validateIdentity(input) };
+}
+__name(validateBrand, "validateBrand");
+function brandFindings(b, page) {
+  if (!b) return [];
+  const out = [];
+  const known = b.answers.filter((a) => a.knows);
+  const base = { judgement: b.judgement };
+  if (!known.length) {
+    out.push({ ...base, code: "brand_unknown", evidence: { brand: b.brand, known: 0, asked: b.answers.length }, where: "brand questions 1–5" });
+    return out;
+  }
+  const pageText = page.text;
+  const pageLower = pageText.toLowerCase();
+  const passageOf = /* @__PURE__ */ __name((needle) => {
+    const n = String(needle).toLowerCase();
+    const p2 = page.passages.find((x) => x.text.toLowerCase().includes(n));
+    return p2 ? p2.index : null;
+  }, "passageOf");
+  const contradictions = [];
+  const ours = amounts(pageText);
+  for (const a of known) {
+    if (a.question === "weaknesses" || a.question === "alternatives") continue;
+    if (a.question === "pricing") {
+      const theirs = amounts(a.text);
+      if (theirs.length && ours.length && !theirs.some((v) => ours.includes(v))) contradictions.push({ question: a.question, kind: "price", model: theirs.slice(0, 3), page: ours.slice(0, 3), passage: passageOf(ours[0]) });
+    }
+    const pageCounts = countedNumbers(pageText);
+    for (const c2 of countedNumbers(a.text)) {
+      const same = pageCounts.filter((p2) => p2.unit === c2.unit);
+      if (same.length && !same.some((p2) => p2.n === c2.n)) contradictions.push({ question: a.question, kind: "count", model: [c2.raw], page: [...new Set(same.map((p2) => p2.raw))].slice(0, 3), passage: passageOf(same[0].raw) });
+    }
+  }
+  if (contradictions.length) {
+    const first2 = contradictions[0];
+    out.push({ ...base, code: "brand_contradiction", evidence: { brand: b.brand, count: contradictions.length, items: contradictions.slice(0, 6) }, passages: [...new Set(contradictions.map((c2) => c2.passage).filter((p2) => p2 !== null))], where: `brand question ${QUESTION_IDS.indexOf(first2.question) + 1} · ${first2.passage !== null ? `page: passage #${first2.passage}` : "page"}` });
+  }
+  const lacking = [];
+  for (const a of known.filter((x) => FACT_QUESTIONS.includes(x.question))) {
+    for (const s of sentencesOf(a.text)) {
+      const anchors = anchorsOf(s, b.brand);
+      if (!anchors.length) continue;
+      const found = anchors.filter((x) => pageLower.includes(x)).length;
+      if (found / anchors.length < 0.5) lacking.push({ question: a.question, sentence: s.slice(0, 220), anchors: anchors.slice(0, 6) });
+    }
+    if (a.question === "pricing" && amounts(a.text).length && !ours.length) lacking.push({ question: a.question, sentence: "prices", anchors: amounts(a.text).slice(0, 3) });
+  }
+  const what = known.find((a) => a.question === "what_is");
+  let support = null;
+  if (what) {
+    const site = new Set(words(pageText));
+    const claim = words(what.text);
+    support = claim.length ? Number((claim.filter((w) => site.has(w)).length / claim.length).toFixed(3)) : null;
+  }
+  if (lacking.length) out.push({ ...base, code: "brand_fact_absent", evidence: { brand: b.brand, count: lacking.length, items: lacking.slice(0, 6), descriptionSupport: support }, where: `brand question${new Set(lacking.map((l) => l.question)).size > 1 ? "s" : ""} ${[...new Set(lacking.map((l) => QUESTION_IDS.indexOf(l.question) + 1))].join(", ")} · not on the page` });
+  return out;
+}
+__name(brandFindings, "brandFindings");
+
+// scripts/lib/reviews.mjs
+var REVIEW_PLATFORMS = [
+  { code: "g2", name: "G2", host: "g2.com", aliases: ["g2 crowd", "g2crowd"], scale: "five" },
+  { code: "capterra", name: "Capterra", host: "capterra.com", aliases: [], scale: "five" },
+  { code: "getapp", name: "GetApp", host: "getapp.com", aliases: ["get app"], scale: "five" },
+  { code: "software_advice", name: "Software Advice", host: "softwareadvice.com", aliases: ["softwareadvice"], scale: "five" },
+  { code: "gartner_peer_insights", name: "Gartner Peer Insights", host: "gartner.com", aliases: ["peer insights"], scale: "five" },
+  { code: "trustradius", name: "TrustRadius", host: "trustradius.com", aliases: ["trust radius"], scale: "ten" },
+  { code: "trustpilot", name: "Trustpilot", host: "trustpilot.com", aliases: ["trust pilot"], scale: "five" },
+  { code: "producthunt", name: "Product Hunt", host: "producthunt.com", aliases: ["producthunt"], scale: "count" },
+  { code: "clutch", name: "Clutch", host: "clutch.co", aliases: ["clutch.co"], scale: "five" },
+  { code: "goodfirms", name: "GoodFirms", host: "goodfirms.co", aliases: ["good firms"], scale: "five" },
+  { code: "app_store", name: "Apple App Store", host: "apps.apple.com", aliases: ["app store", "appstore"], scale: "five" },
+  { code: "google_play", name: "Google Play", host: "play.google.com", aliases: ["play store", "google play store"], scale: "five" }
+];
+var CONTROL = { code: "vetteral", name: "Vetteral", host: null, aliases: [], scale: "five", control: true };
+var ALL_PLATFORMS = [...REVIEW_PLATFORMS, CONTROL];
+var PLATFORM_CODES = ALL_PLATFORMS.map((p2) => p2.code);
+var BASIS2 = "own_knowledge";
+var MAX = { five: 5, ten: 10 };
+function validateReviews(input) {
+  if (!input || typeof input !== "object" || !Array.isArray(input.platforms)) throw new Error('reviews.json must be {"brand": "…", "basis": "own_knowledge", "platforms": [{"platform": "g2", "knows": false}, …]}.');
+  if (input.basis !== BASIS2) throw new Error(`reviews.json "basis" must be "${BASIS2}": the ratings come from the model's own knowledge, with no browsing or search.`);
+  const brand = typeof input.brand === "string" ? input.brand.replace(/\s+/g, " ").trim() : "";
+  if (!brand || brand.length > 80) throw new Error(`reviews.json "brand" must be the brand's name, 1–80 characters.`);
+  const seen = /* @__PURE__ */ new Set();
+  const platforms = input.platforms.map((x, i) => {
+    const where = `platforms[${i}]`;
+    if (!x || !PLATFORM_CODES.includes(x.platform)) throw new Error(`${where}.platform must be one of ${PLATFORM_CODES.join(", ")}.`);
+    if (seen.has(x.platform)) throw new Error(`platform ${x.platform} appears twice.`);
+    seen.add(x.platform);
+    if (typeof x.knows !== "boolean") throw new Error(`${where}.knows must be true or false; false is the honest answer when the model does not know.`);
+    const p2 = ALL_PLATFORMS.find((y) => y.code === x.platform);
+    if (!x.knows) return { platform: p2.code, knows: false, rating: null, reviews: null };
+    const rating = x.rating;
+    if (typeof rating !== "number" || !Number.isFinite(rating) || rating < 0) throw new Error(`${where}.rating must be a number when knows is true.`);
+    if (p2.scale === "count" ? !Number.isInteger(rating) : rating > MAX[p2.scale]) throw new Error(`${where}.rating ${rating} is outside ${p2.name}'s scale (${p2.scale === "count" ? "a whole count of upvotes" : `0–${MAX[p2.scale]}`}).`);
+    const reviews = x.reviews === void 0 || x.reviews === null ? null : x.reviews;
+    if (reviews !== null && (!Number.isInteger(reviews) || reviews < 0)) throw new Error(`${where}.reviews must be a whole number or left out.`);
+    return { platform: p2.code, knows: true, rating, reviews };
+  });
+  const missing = PLATFORM_CODES.filter((c2) => !seen.has(c2));
+  if (missing.length) throw new Error(`reviews.json has no entry for ${missing.join(", ")}; every platform gets one, "knows": false included.`);
+  platforms.sort((a, b) => PLATFORM_CODES.indexOf(a.platform) - PLATFORM_CODES.indexOf(b.platform));
+  return { brand, platforms, judgement: validateIdentity(input) };
+}
+__name(validateReviews, "validateReviews");
+var fold = /* @__PURE__ */ __name((s) => String(s ?? "").toLowerCase().replace(/[’']/g, "").replace(/\s+/g, " "), "fold");
+var mentions = /* @__PURE__ */ __name((text3, p2) => [p2.name, ...p2.aliases].some((n) => new RegExp(`(?:^|[^\\p{L}\\p{N}])${n.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\p{L}\\p{N}])`, "u").test(text3)), "mentions");
+var VISIBLE_RATING = /(?:\b[0-5](?:[.,]\d)?\s*(?:\/\s*5\b|out of 5\b|з 5\b|de 5\b|stars?\b|зір|estrellas?\b))|★{3,}|\b\d[\d,. ]*\s+(?:reviews|ratings|відгук(?:ів|и)?|reseñas|valoraciones)\b/iu;
+var visibleRatingIn = /* @__PURE__ */ __name((text3) => {
+  const m = String(text3 || "").match(VISIBLE_RATING);
+  return m ? m[0].trim() : null;
+}, "visibleRatingIn");
+function reviewFindings(r, page) {
+  const out = [];
+  const text3 = fold(page.text);
+  const hasRatingMarkup = ["AggregateRating", "Review"].some((t) => page.types.has(t)) || /"aggregaterating"|"@type":\s*"review"/i.test(page.jsonText || "");
+  if (r) {
+    const base = { judgement: r.judgement };
+    const control = r.platforms.find((p2) => p2.platform === CONTROL.code);
+    if (control?.knows) out.push({ ...base, code: "review_control_hallucination", evidence: { platform: CONTROL.name, invented: true, rating: control.rating, reviews: control.reviews }, where: `control question · “${CONTROL.name}” (invented)` });
+    const unbacked = [];
+    for (const x of r.platforms.filter((p2) => p2.knows && p2.platform !== CONTROL.code)) {
+      const p2 = REVIEW_PLATFORMS.find((y) => y.code === x.platform);
+      const linked = page.links.some((u) => {
+        try {
+          const h = new URL(u).hostname.replace(/^www\./, "");
+          return h === p2.host || h.endsWith(`.${p2.host}`);
+        } catch {
+          return false;
+        }
+      });
+      if (!mentions(text3, p2) && !linked && !hasRatingMarkup) unbacked.push({ platform: p2.name, rating: x.rating, scale: p2.scale, reviews: x.reviews });
+    }
+    if (unbacked.length) out.push({ ...base, code: "review_rating_unbacked", evidence: { count: unbacked.length, items: unbacked }, where: `review question${unbacked.length > 1 ? "s" : ""} · page text, links and JSON-LD` });
+  }
+  const shown = page.zones.map((z) => ({ zone: z.zone, hit: visibleRatingIn(z.text) })).filter((z) => z.hit);
+  if (shown.length && !hasRatingMarkup) out.push({ code: "reviews_without_markup", evidence: { samples: shown.slice(0, 3).map((z) => z.hit), types: [...page.types].slice(0, 8) }, zones: [...new Set(shown.map((z) => z.zone))], strip: null, where: "visible rating · no AggregateRating" });
+  return out;
+}
+__name(reviewFindings, "reviewFindings");
+
+// scripts/lib/localeFacts.mjs
+function numbersIn(text3) {
+  const out = [];
+  const re = /(?<![\p{L}\p{N}]-?)\d{1,3}(?:[,.\u00a0\u202f ]\d{3})+(?![\p{N}])|(?<![\p{L}\p{N}]-?)\d+(?:[.,]\d+)?(?![\p{N}])/gu;
+  for (const m of String(text3 || "").matchAll(re)) {
+    const raw = m[0];
+    let value;
+    if (/^\d{1,3}(?:[,.\u00a0\u202f ]\d{3})+$/.test(raw)) value = Number(raw.replace(/[^\d]/g, ""));
+    else value = Number(raw.replace(",", "."));
+    if (!Number.isFinite(value)) continue;
+    const at = m.index;
+    out.push({ value, raw: raw.replace(/[\u00a0\u202f]/g, " "), context: String(text3).slice(Math.max(0, at - 30), at + raw.length + 30).replace(/\s+/g, " ").trim() });
+  }
+  return out;
+}
+__name(numbersIn, "numbersIn");
+function sectionNumbers(sections) {
+  const body = (sections || []).filter((s, i) => !(i === 0 && s.intro));
+  return body.filter((s) => s.heading).map((s, position) => ({ position, heading: String(s.heading).slice(0, 160), numbers: numbersIn(s.text).slice(0, 40) }));
+}
+__name(sectionNumbers, "sectionNumbers");
+function compareLocales(selfLang, self, alternates) {
+  const compared = [];
+  const differ = [];
+  for (const a of alternates) {
+    if (!a.sections) continue;
+    if (!self.length || a.sections.length !== self.length) {
+      compared.push({ hreflang: a.hreflang, aligned: false, reason: !self.length && !a.sections.length ? "no_sections" : "sections_differ", sections: [self.length, a.sections.length], differ: 0 });
+      continue;
+    }
+    let n = 0;
+    self.forEach((s, i) => {
+      const t = a.sections[i];
+      const mine = new Set(s.numbers.map((x) => x.value));
+      const theirs = new Set(t.numbers.map((x) => x.value));
+      if (!mine.size || !theirs.size) return;
+      const onlyMine = s.numbers.filter((x) => !theirs.has(x.value));
+      const onlyTheirs = t.numbers.filter((x) => !mine.has(x.value));
+      if (!onlyMine.length || !onlyTheirs.length) return;
+      n += 1;
+      differ.push({ hreflang: a.hreflang, position: i + 1, heading: s.heading, theirHeading: t.heading, self: onlyMine.slice(0, 3).map((x) => x.context), other: onlyTheirs.slice(0, 3).map((x) => x.context), values: [onlyMine[0].raw, onlyTheirs[0].raw] });
+    });
+    compared.push({ hreflang: a.hreflang, aligned: true, sections: [self.length, a.sections.length], differ: n });
+  }
+  const findings = differ.length ? [{ code: "locale_facts_differ", evidence: { selfLang, count: differ.length, items: differ.slice(0, 8), method: "h2 sections aligned by order when both versions have the same count; numbers compared as sets", compared } }] : [];
+  return { compared, differ, findings };
+}
+__name(compareLocales, "compareLocales");
 
 // scripts/lib/checks.mjs
 var TITLE_MAX = 60;
@@ -16793,6 +17648,10 @@ var CODES = {
   noindex: { severity: "blocking", area: "find", owner: "dev", rules: ["gNoindex", "gRobotsMeta"] },
   ai_training_blocked: { severity: "low", area: "find", owner: "seo", rules: ["openai", "anthropic", "gCrawlers", "ccbot"], info: true },
   llms_txt_missing: { severity: "low", area: "find", owner: "seo", rules: ["llms"], info: true },
+  snippet_blocked: { severity: "high", area: "find", owner: "seo", rules: ["gAi", "gRobotsMeta"] },
+  markdown_alternate_broken: { severity: "low", area: "find", owner: "dev", rules: ["llms"] },
+  ai_catalog_invalid: { severity: "low", area: "find", owner: "dev", rules: ["skill"] },
+  indexnow_key_broken: { severity: "low", area: "find", owner: "dev", rules: ["indexnow"] },
   // Classic SEO
   not_https: { severity: "high", area: "classic", owner: "dev", rules: ["gPageExp"] },
   redirect_chain: { severity: "low", area: "classic", owner: "dev", rules: ["gRedirects", "skill"] },
@@ -16817,29 +17676,70 @@ var CODES = {
   viewport_missing: { severity: "medium", area: "classic", owner: "dev", rules: ["gMobile"] },
   html_lang_missing: { severity: "low", area: "classic", owner: "dev", rules: ["i18n"] },
   social_tags_missing: { severity: "low", area: "classic", owner: "seo", rules: ["ogp"] },
-  page_weight_heavy: { severity: "low", area: "classic", owner: "dev", rules: ["skill"] },
+  page_weight_heavy: { severity: "low", area: "classic", owner: "dev", rules: ["skill"], layer: "derived" },
   url_unreadable: { severity: "low", area: "classic", owner: "seo", rules: ["gUrl", "skill"] },
   // Rich results and markup
-  jsonld_invalid: { severity: "medium", area: "markup", owner: "dev", rules: ["gSdIntro"] },
-  structured_data_none: { severity: "low", area: "markup", owner: "seo", rules: ["gSdIntro"], info: true },
-  schema_required_missing: { severity: "medium", area: "markup", owner: "dev", rules: ["gSdIntro"] },
-  schema_recommended_missing: { severity: "low", area: "markup", owner: "dev", rules: ["gSdIntro"] },
-  faq_rich_result_retired: { severity: "low", area: "markup", owner: "seo", rules: ["gUpdates"], info: true },
-  // AI quotes it right (FAQ, schema and visible-text issues; the question tests are not in Lite)
+  jsonld_invalid: { severity: "medium", area: "classic", owner: "dev", rules: ["gSdIntro"] },
+  structured_data_none: { severity: "low", area: "classic", owner: "seo", rules: ["gSdIntro"], info: true },
+  schema_required_missing: { severity: "medium", area: "classic", owner: "dev", rules: ["gSdIntro"] },
+  schema_recommended_missing: { severity: "low", area: "classic", owner: "dev", rules: ["gSdIntro"] },
+  faq_rich_result_retired: { severity: "low", area: "classic", owner: "seo", rules: ["gUpdates"], info: true },
+  rich_result_retired: { severity: "low", area: "classic", owner: "seo", rules: ["gUpdates"], info: true },
+  // Images (a HEAD of up to 20 for their size)
+  image_dimensions_missing: { severity: "low", area: "classic", owner: "dev", rules: ["wCls"] },
+  image_lcp_lazy: { severity: "medium", area: "classic", owner: "dev", rules: ["wLcpLazy", "skill"] },
+  image_not_lazy: { severity: "low", area: "classic", owner: "dev", rules: ["wLcpLazy", "skill"] },
+  image_legacy_format: { severity: "low", area: "classic", owner: "dev", rules: ["gImages", "skill"] },
+  image_oversized: { severity: "medium", area: "classic", owner: "dev", rules: ["gImages", "skill"] },
+  image_no_srcset: { severity: "low", area: "classic", owner: "dev", rules: ["gImages", "skill"] },
+  // The site around the page
+  favicon_missing: { severity: "low", area: "classic", owner: "dev", rules: ["gFavicon"] },
+  site_name_missing: { severity: "low", area: "classic", owner: "seo", rules: ["gSiteName"] },
+  mixed_content: { severity: "medium", area: "classic", owner: "dev", rules: ["mixed"] },
+  soft_404: { severity: "medium", area: "classic", owner: "dev", rules: ["gHttp"] },
+  url_variants_inconsistent: { severity: "medium", area: "classic", owner: "seo", rules: ["gCanon", "gRedirects"] },
+  hsts_missing: { severity: "low", area: "classic", owner: "dev", rules: ["hsts", "skill"] },
+  // Trust (E-E-A-T presence, no score)
+  author_missing: { severity: "low", area: "classic", owner: "content", rules: ["gHelpful"] },
+  about_contact_missing: { severity: "low", area: "classic", owner: "content", rules: ["gHelpful", "skill"] },
+  organization_details_missing: { severity: "low", area: "classic", owner: "seo", rules: ["gOrg"] },
+  article_date_missing: { severity: "low", area: "classic", owner: "content", rules: ["gArticle", "skill"] },
+  privacy_terms_missing: { severity: "low", area: "classic", owner: "content", rules: ["skill"] },
+  date_mismatch: { severity: "low", area: "classic", owner: "content", rules: ["gArticle", "skill"] },
+  // AI quotes it right: FAQ and visible text, the questions people ask, writing patterns, the keyword
   faq_schema_not_visible: { severity: "high", area: "quote", owner: "content", rules: ["gSdPol", "sFaq"] },
   lost_faq_questions: { severity: "high", area: "quote", owner: "content", rules: ["apgAcc", "vs"] },
-  mid_sentence_start: { severity: "medium", area: "quote", owner: "content", rules: ["vs"] },
+  mid_sentence_start: { severity: "medium", area: "quote", owner: "content", rules: ["vs"], layer: "derived" },
   truncated_teaser: { severity: "low", area: "quote", owner: "content", rules: ["vs"] },
-  repeated_claim: { severity: "low", area: "quote", owner: "content", rules: ["vs"] },
+  repeated_claim: { severity: "low", area: "quote", owner: "content", rules: ["vs"], layer: "derived" },
+  question_missing: { severity: "medium", area: "quote", owner: "content", rules: ["gAi", "skill"], layer: "judgement" },
+  question_partial: { severity: "low", area: "quote", owner: "content", rules: ["gAi", "skill"], layer: "judgement" },
+  stock_phrases: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"], layer: "derived" },
+  repeated_sentence_shape: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"] },
+  uniform_openings: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"] },
+  unchecked_claims: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"] },
+  keyword_not_in_title: { severity: "medium", area: "quote", owner: "seo", rules: ["gTitle", "gStarter"] },
+  keyword_variant_split: { severity: "medium", area: "quote", owner: "seo", rules: ["gStarter", "skill"] },
+  keyword_one_section: { severity: "medium", area: "quote", owner: "content", rules: ["gStarter", "skill"], layer: "derived" },
+  off_keyword_share: { severity: "low", area: "quote", owner: "content", rules: ["skill"], layer: "derived" },
+  promise_without_number: { severity: "low", area: "quote", owner: "content", rules: ["gHelpful", "skill"] },
+  // AI gets the brand right: one model's answers from its own knowledge, compared with the page
+  brand_contradiction: { severity: "high", area: "brand", owner: "seo", rules: ["gAi", "skill"], layer: "judgement" },
+  brand_fact_absent: { severity: "medium", area: "brand", owner: "content", rules: ["gAi", "skill"], layer: "judgement" },
+  brand_unknown: { severity: "medium", area: "brand", owner: "seo", rules: ["gAi", "skill"], layer: "judgement" },
+  review_rating_unbacked: { severity: "high", area: "brand", owner: "seo", rules: ["gReview", "sRating", "skill"], layer: "judgement" },
+  review_control_hallucination: { severity: "high", area: "brand", owner: "seo", rules: ["skill"], layer: "judgement" },
+  reviews_without_markup: { severity: "medium", area: "brand", owner: "dev", rules: ["gReview", "sRating"] },
   // AI reads all of it
-  cap_overflow: { severity: "high", area: "read", owner: "content", rules: ["vs"], hides: true },
+  cap_overflow: { severity: "high", area: "read", owner: "content", rules: ["vs"], hides: true, layer: "derived" },
   js_dependent: { severity: "high", area: "read", owner: "dev", rules: ["gJs"], hides: true },
   hero_lede_dropped: { severity: "high", area: "read", owner: "dev", rules: ["header", "vs"], hides: true },
   hidden_headings: { severity: "high", area: "read", owner: "dev", rules: ["hidden"], hides: true },
   ssr_placeholder_text: { severity: "medium", area: "read", owner: "dev", rules: ["gJs"] },
+  spa_shell: { severity: "high", area: "read", owner: "dev", rules: ["gJs", "skill"], hides: true },
   h1_glued_words: { severity: "medium", area: "read", owner: "dev", rules: ["dom", "cssText"] },
   nav_in_content: { severity: "medium", area: "read", owner: "dev", rules: ["nav", "vs"] },
-  dominant_heading: { severity: "medium", area: "read", owner: "content", rules: ["wHead", "vs"] },
+  dominant_heading: { severity: "medium", area: "read", owner: "content", rules: ["wHead", "vs"], layer: "derived" },
   thin_section: { severity: "low", area: "read", owner: "content", rules: ["vs"] },
   // Languages
   hreflang_no_return: { severity: "high", area: "lang", owner: "dev", rules: ["gHreflang"] },
@@ -16850,7 +17750,8 @@ var CODES = {
   description_duplicate_locales: { severity: "low", area: "lang", owner: "content", rules: ["gSnippet", "gMulti"] },
   hreflang_lang_mismatch: { severity: "low", area: "lang", owner: "dev", rules: ["gHreflang", "i18n"] },
   hreflang_no_x_default: { severity: "low", area: "lang", owner: "seo", rules: ["gHreflang"], info: true },
-  llms_txt_one_language: { severity: "low", area: "lang", owner: "seo", rules: ["llms"], info: true }
+  llms_txt_one_language: { severity: "low", area: "lang", owner: "seo", rules: ["llms"], info: true },
+  locale_facts_differ: { severity: "medium", area: "lang", owner: "content", rules: ["gMulti", "skill"] }
 };
 var CODE_ORDER = Object.keys(CODES);
 var SCHEMA_RULES = {
@@ -16860,15 +17761,48 @@ var SCHEMA_RULES = {
   WebApplication: { source: "gSoftware", required: ["name", "offers"], oneOf: ["aggregateRating", "review"] },
   MobileApplication: { source: "gSoftware", required: ["name", "offers"], oneOf: ["aggregateRating", "review"] },
   BreadcrumbList: { source: "gBread", required: ["itemListElement"] },
-  HowTo: { source: "sHowTo", required: ["name", "step"] },
+  Event: { source: "gEvent", required: ["name", "startDate", "location", "location.address"], recommended: ["description", "endDate", "eventStatus", "image", "offers", "organizer", "performer"] },
+  JobPosting: { source: "gJob", required: ["datePosted", "description", "hiringOrganization", "title"], recommended: ["baseSalary", "employmentType", "jobLocation", "validThrough", "identifier"] },
+  LocalBusiness: { source: "gLocal", required: ["name", "address"], recommended: ["telephone", "url", "openingHoursSpecification", "geo", "priceRange"] },
+  VideoObject: { source: "gVideo", required: ["name", "thumbnailUrl", "uploadDate"], recommended: ["description", "duration", "contentUrl | embedUrl"] },
+  QAPage: { source: "gQa", required: ["mainEntity", "mainEntity.name", "mainEntity.answerCount", "mainEntity.acceptedAnswer | mainEntity.suggestedAnswer"] },
+  WebSite: { source: "gSiteName", required: ["name", "url"] },
+  ProductGroup: { source: "gVariants", required: ["name"], recommended: ["hasVariant", "variesBy", "productGroupID", "brand", "description", "url"] },
+  Offer: { source: "gProduct", oneOf: ["price", "priceSpecification", "lowPrice"], recommended: ["priceCurrency", "availability"] },
+  AggregateOffer: { source: "gProduct", required: ["lowPrice", "priceCurrency"] },
+  Review: { source: "gReview", required: ["author", "reviewRating", "reviewRating.ratingValue"], top: ["itemReviewed"], recommended: ["datePublished"] },
+  AggregateRating: { source: "gReview", required: ["ratingValue", "ratingCount | reviewCount"], top: ["itemReviewed"], recommended: ["bestRating", "worstRating"] },
+  Person: { source: "sPerson", recommended: ["name"] },
   Article: { source: "gArticle", recommended: ["headline", "image", "datePublished", "author"] },
   NewsArticle: { source: "gArticle", recommended: ["headline", "image", "datePublished", "author"] },
   BlogPosting: { source: "gArticle", recommended: ["headline", "image", "datePublished", "author"] },
   Organization: { source: "gOrg", recommended: ["name", "url", "logo"] }
 };
-var fold = /* @__PURE__ */ __name((s) => String(s ?? "").replace(/\s+/g, " ").trim(), "fold");
-var norm = /* @__PURE__ */ __name((s) => fold(s).toLowerCase().replace(/[“”«»"'’‘]/g, "").replace(/[?!.:;,]+$/g, ""), "norm");
-var has2 = /* @__PURE__ */ __name((node, key) => node[key] !== void 0 && node[key] !== null && node[key] !== "" && !(Array.isArray(node[key]) && node[key].length === 0), "has");
+var RETIRED = {
+  HowTo: { feature: "How-to", date: "2023-09-14" },
+  Course: { feature: "Course info", date: "2025-09-09" },
+  ClaimReview: { feature: "ClaimReview (fact check)", date: "2025-06-12" },
+  SpecialAnnouncement: { feature: "Special announcement", date: "2025-07-31" },
+  Occupation: { feature: "Estimated salary", date: "2025-09-09" },
+  Quiz: { feature: "Practice problem", date: "2026-01-06" },
+  Vehicle: { feature: "Vehicle listing", date: "2025-09-09" },
+  Car: { feature: "Vehicle listing", date: "2025-09-09" }
+};
+var RETIRED_SEARCHBOX = { feature: "Sitelinks search box", date: "2024-11-29" };
+var fold2 = /* @__PURE__ */ __name((s) => String(s ?? "").replace(/\s+/g, " ").trim(), "fold");
+var norm = /* @__PURE__ */ __name((s) => fold2(s).toLowerCase().replace(/[“”«»"'’‘]/g, "").replace(/[?!.:;,]+$/g, ""), "norm");
+var has1 = /* @__PURE__ */ __name((node, key) => node && typeof node === "object" && node[key] !== void 0 && node[key] !== null && node[key] !== "" && !(Array.isArray(node[key]) && node[key].length === 0), "has1");
+var has2 = /* @__PURE__ */ __name((node, key) => key.split("|").some((alt) => {
+  const parts = alt.trim().split(".");
+  let cur = [node];
+  for (const p2 of parts) {
+    cur = cur.flatMap((c2) => Array.isArray(c2) ? c2 : [c2]).filter((c2) => has1(c2, p2)).map((c2) => c2[p2]);
+    if (!cur.length) return false;
+  }
+  return true;
+}), "has");
+var isTop = /* @__PURE__ */ __name((path) => path === "$" || /^(?:@graph)?\[\d+\]$/.test(path), "isTop");
+var typeList2 = /* @__PURE__ */ __name((v) => (Array.isArray(v) ? v : [v]).filter((t) => typeof t === "string").map((t) => t.replace(/^https?:\/\/schema\.org\//i, "")), "typeList2");
 var asList = /* @__PURE__ */ __name((v) => Array.isArray(v) ? v : v === void 0 || v === null ? [] : [v], "asList");
 function locator(reading2) {
   const zones = reading2.facts.zones;
@@ -16877,9 +17811,9 @@ function locator(reading2) {
   const hero = zones.find((z) => z.kind === "hero")?.id ?? zones.find((z) => z.kind === "intro" || z.kind === "section")?.id ?? null;
   const title = headingKey(reading2.vs.page.title || "");
   const passage = /* @__PURE__ */ __name((i) => {
-    const p = reading2.vs.passages.find((x) => x.index === i);
-    if (!p) return hero;
-    const key = headingKey(p.rawHeading ?? p.heading ?? "");
+    const p2 = reading2.vs.passages.find((x) => x.index === i);
+    if (!p2) return hero;
+    const key = headingKey(p2.rawHeading ?? p2.heading ?? "");
     if (i === 0 && (!key || key === title)) return hero;
     return byHeading.get(key) ?? hero;
   }, "passage");
@@ -16901,7 +17835,7 @@ function accessChecks(r, out) {
   }
   const sources = [];
   for (const m of r.facts.head.robotsMeta) if (/\bnoindex\b|\bnone\b/i.test(m.content)) sources.push(`meta ${m.name}: ${m.content}`);
-  if (/\bnoindex\b|\bnone\b/i.test(r.fetch.xRobotsTag || "")) sources.push(`X-Robots-Tag: ${fold(r.fetch.xRobotsTag)}`);
+  if (/\bnoindex\b|\bnone\b/i.test(r.fetch.xRobotsTag || "")) sources.push(`X-Robots-Tag: ${fold2(r.fetch.xRobotsTag)}`);
   if (sources.length) out.push({ code: "noindex", evidence: { sources }, strip: { side: "head", rows: ["robots"] }, where: sources.map((s) => s.split(":")[0]).join(", ") });
   if (r.llms && !r.llms.present) out.push({ code: "llms_txt_missing", evidence: { url: r.llms.url, status: r.llms.status, softNotFound: Boolean(r.llms.softNotFound) }, strip: { side: "robots", rows: ["llms"] }, where: "/llms.txt" });
 }
@@ -16956,18 +17890,22 @@ function structuredChecks(r, out) {
   const recommended = [];
   let faqQuestions = [];
   let faqBlock = null;
+  const retired = /* @__PURE__ */ new Map();
   for (const block of jsonLd.filter((b) => b.ok)) {
     for (const { types, node, path } of typedNodes(block.value)) {
       for (const type of types) {
+        if (RETIRED[type]) retired.set(type, { type, ...RETIRED[type], block: block.index });
+        if (type === "WebSite" && asList(node.potentialAction).some((a) => a && typeList2(a["@type"]).includes("SearchAction"))) retired.set("SearchAction", { type: "WebSite · SearchAction", ...RETIRED_SEARCHBOX, block: block.index });
         const rule = SCHEMA_RULES[type];
         if (!rule) continue;
         const missing = (rule.required || []).filter((k) => !has2(node, k));
+        if (rule.top && isTop(path)) missing.push(...rule.top.filter((k) => !has2(node, k)));
         if (rule.oneOf && !rule.oneOf.some((k) => has2(node, k))) missing.push(rule.oneOf.join(" | "));
         if (type === "FAQPage" && has2(node, "mainEntity")) {
           const qs = asList(node.mainEntity);
-          const bad = qs.filter((q) => !q || typeof q !== "object" || !has2(q, "name") || !q.acceptedAnswer || !has2(asList(q.acceptedAnswer)[0] || {}, "text"));
+          const bad = qs.filter((q2) => !q2 || typeof q2 !== "object" || !has2(q2, "name") || !q2.acceptedAnswer || !has2(asList(q2.acceptedAnswer)[0] || {}, "text"));
           if (bad.length) missing.push(`mainEntity[${bad.length}] name | acceptedAnswer.text`);
-          faqQuestions = faqQuestions.concat(qs.filter((q) => q && typeof q === "object" && typeof q.name === "string").map((q) => fold(q.name)));
+          faqQuestions = faqQuestions.concat(qs.filter((q2) => q2 && typeof q2 === "object" && typeof q2.name === "string").map((q2) => fold2(q2.name)));
           faqBlock ??= block.index;
         }
         if (type === "BreadcrumbList" && has2(node, "itemListElement")) {
@@ -16986,11 +17924,12 @@ function structuredChecks(r, out) {
     }
   }
   if (required.length) out.push({ code: "schema_required_missing", evidence: { types: [...new Set(required.map((x) => x.type))], items: required.slice(0, 8).map((x) => `${x.type}: ${x.missing.join(", ")}`) }, rulesExtra: [...new Set(required.map((x) => x.source))], strip: { side: "head", rows: ["jsonld"] }, where: required.slice(0, 3).map((x) => `JSON-LD #${x.block} ${x.path}`).join(", ") });
+  if (retired.size) out.push({ code: "rich_result_retired", evidence: { items: [...retired.values()] }, strip: { side: "head", rows: ["jsonld"] }, where: [...retired.values()].map((x) => x.type).join(", ") });
   if (recommended.length) out.push({ code: "schema_recommended_missing", evidence: { types: [...new Set(recommended.map((x) => x.type))], items: recommended.slice(0, 8).map((x) => `${x.type}: ${x.missing.join(", ")}`) }, rulesExtra: [...new Set(recommended.map((x) => x.source))], strip: { side: "head", rows: ["jsonld"] }, where: recommended.slice(0, 3).map((x) => `JSON-LD #${x.block} ${x.path}`).join(", ") });
   const hasFaq = jsonLd.some((b) => b.types.includes("FAQPage")) || microdata.includes("FAQPage");
   if (hasFaq) {
     const visible = norm(r.facts.visibleText);
-    const notVisible = faqQuestions.filter((q) => q && !visible.includes(norm(q)));
+    const notVisible = faqQuestions.filter((q2) => q2 && !visible.includes(norm(q2)));
     if (notVisible.length) out.push({ code: "faq_schema_not_visible", evidence: { questions: faqQuestions.length, notVisible: notVisible.length, samples: notVisible.slice(0, 5) }, strip: { side: "head", rows: ["jsonld"] }, where: `script[type="application/ld+json"] #${faqBlock}` });
     out.push({ code: "faq_rich_result_retired", evidence: { date: "2026-05-07" }, strip: { side: "head", rows: ["jsonld"] }, where: "FAQPage" });
   }
@@ -16999,8 +17938,8 @@ __name(structuredChecks, "structuredChecks");
 function readingChecks(r, loc, out) {
   const vs = r.vs;
   const keys = [];
-  const assignment = vs.passages.map((p) => {
-    const k = headingKey(p.rawHeading ?? p.heading ?? "");
+  const assignment = vs.passages.map((p2) => {
+    const k = headingKey(p2.rawHeading ?? p2.heading ?? "");
     let g = keys.indexOf(k);
     if (g < 0) g = keys.push(k) - 1;
     return g;
@@ -17038,7 +17977,7 @@ function readingChecks(r, loc, out) {
   if (facts.hiddenHeadings.length) {
     out.push({ code: "hidden_headings", severity: facts.hiddenChars >= HIDDEN_HIGH_CHARS ? "high" : "medium", evidence: { count: facts.hiddenHeadings.length, chars: facts.hiddenChars, samples: facts.hiddenHeadings.slice(0, 6).map((h) => `h${h.level} “${h.text}”`) }, zones: [...new Set(facts.hiddenHeadings.map((h) => h.zone))], where: facts.hiddenHeadings[0].root || facts.hiddenHeadings[0].path });
   }
-  if (facts.placeholders.length) out.push({ code: "ssr_placeholder_text", evidence: { count: facts.placeholders.length, samples: facts.placeholders.slice(0, 4).map((p) => p.text) }, zones: [...new Set(facts.placeholders.map((p) => p.zone))], where: facts.placeholders[0].path });
+  if (facts.placeholders.length) out.push({ code: "ssr_placeholder_text", evidence: { count: facts.placeholders.length, samples: facts.placeholders.slice(0, 4).map((p2) => p2.text) }, zones: [...new Set(facts.placeholders.map((p2) => p2.zone))], where: facts.placeholders[0].path });
   const glued = facts.headings.filter((h) => h.level === 1 && h.glued?.length);
   if (glued.length) out.push({ code: "h1_glued_words", evidence: { textContent: glued[0].textContent, joins: glued.flatMap((h) => h.glued).slice(0, 4).map((j) => `${j.left}${j.right}`) }, zones: [...new Set(glued.map((h) => h.zone))], where: glued[0].path });
 }
@@ -17082,7 +18021,7 @@ function languageChecks(r, out) {
   const dupes = /* @__PURE__ */ __name((field) => {
     const groups = /* @__PURE__ */ new Map();
     for (const v of versions) {
-      const key = fold(v[field]);
+      const key = fold2(v[field]);
       if (!key) continue;
       groups.set(key, [...groups.get(key) || [], v.hreflang]);
     }
@@ -17106,13 +18045,224 @@ function languageChecks(r, out) {
       }
     }, "prefixOf");
     const sample = r.llms.sample || [];
-    const mentions = langs.filter((v) => sample.some((u) => samePage(u, v.url) || prefixOf(u) === prefixOf(v.url) && /^[a-z]{2}(?:-[a-z]{2})?$/i.test(prefixOf(v.url).split("/")[1] || "")));
-    const distinct = new Set(mentions.map((v) => primaryTag(v.hreflang)));
+    const mentions2 = langs.filter((v) => sample.some((u) => samePage(u, v.url) || prefixOf(u) === prefixOf(v.url) && /^[a-z]{2}(?:-[a-z]{2})?$/i.test(prefixOf(v.url).split("/")[1] || "")));
+    const distinct = new Set(mentions2.map((v) => primaryTag(v.hreflang)));
     if (distinct.size <= 1) out.push({ code: "llms_txt_one_language", evidence: { versions: langs.length, mentioned: [...distinct].filter(Boolean), links: r.llms.links }, strip: { side: "robots", rows: ["llms"] }, where: "/llms.txt" });
   }
 }
 __name(languageChecks, "languageChecks");
-function auditFindings(reading2) {
+var IMAGE_HEAVY_BYTES = 200 * 1024;
+var IMAGE_SRCSET_BYTES = 100 * 1024;
+var IMAGE_SRCSET_WIDTH = 800;
+var ABOVE_FOLD_IMAGES = 2;
+var NOSNIPPET_SHARE = 0.5;
+var LEGACY_EXT = /\.(?:jpe?g|png|gif|bmp)(?:$|[?#])/i;
+var MODERN_EXT = /\.(?:avif|webp|svg)(?:$|[?#])/i;
+function imageChecks(r, out) {
+  const furniture = new Set(r.facts.zones.filter((z) => ["header", "nav", "footer"].includes(z.kind)).map((z) => z.id));
+  const imgs = r.facts.images.filter((i) => !i.decorative && i.url);
+  const content = imgs.filter((i) => !furniture.has(i.zone));
+  const head2 = new Map((r.images?.results || []).map((x) => [x.index, x]));
+  const where = /* @__PURE__ */ __name((list2) => list2.slice(0, 3).map((i) => i.path).join(", "), "where");
+  const zones = /* @__PURE__ */ __name((list2) => [...new Set(list2.map((i) => i.zone))], "zones");
+  const noSize = imgs.filter((i) => !i.width || !i.height);
+  if (noSize.length) out.push({ code: "image_dimensions_missing", evidence: { count: noSize.length, images: imgs.length, samples: noSize.slice(0, 6).map((i) => i.src) }, zones: zones(noSize), where: where(noSize) });
+  const topZone = r.facts.zones.find((z) => z.kind === "hero" || z.kind === "intro" || z.kind === "section")?.id;
+  const above = content.filter((i) => i.zone === topZone).slice(0, ABOVE_FOLD_IMAGES);
+  const lcp = above[0];
+  if (lcp && lcp.loading === "lazy") out.push({ code: "image_lcp_lazy", evidence: { src: lcp.src, loading: lcp.loading, fetchpriority: lcp.fetchpriority }, zones: [lcp.zone], where: lcp.path });
+  const below = content.filter((i) => !above.includes(i) && i.loading !== "lazy");
+  if (below.length) out.push({ code: "image_not_lazy", evidence: { count: below.length, aboveFold: ABOVE_FOLD_IMAGES, samples: below.slice(0, 6).map((i) => i.src) }, zones: zones(below), where: where(below) });
+  const legacy = imgs.filter((i) => {
+    if (i.modernSource || MODERN_EXT.test(i.url)) return false;
+    const t = head2.get(i.index)?.type || "";
+    return LEGACY_EXT.test(i.url) || /image\/(?:jpe?g|png|gif|bmp)/i.test(t);
+  });
+  if (legacy.length) out.push({ code: "image_legacy_format", evidence: { count: legacy.length, samples: legacy.slice(0, 6).map((i) => i.src) }, zones: zones(legacy), where: where(legacy) });
+  const heavy = imgs.filter((i) => (head2.get(i.index)?.bytes || 0) > IMAGE_HEAVY_BYTES);
+  if (heavy.length) out.push({ code: "image_oversized", evidence: { count: heavy.length, maxBytes: IMAGE_HEAVY_BYTES, samples: heavy.slice(0, 6).map((i) => `${Math.round(head2.get(i.index).bytes / 1024)} KB ${i.src}`) }, zones: zones(heavy), where: where(heavy) });
+  const wide = imgs.filter((i) => !i.srcset && ((head2.get(i.index)?.bytes || 0) > IMAGE_SRCSET_BYTES || Number(i.width) >= IMAGE_SRCSET_WIDTH) && !/\.svg(?:$|[?#])/i.test(i.url));
+  if (wide.length) out.push({ code: "image_no_srcset", evidence: { count: wide.length, samples: wide.slice(0, 6).map((i) => i.src) }, zones: zones(wide), where: where(wide) });
+}
+__name(imageChecks, "imageChecks");
+function snippetChecks(r, out) {
+  const sources = [];
+  for (const m of r.facts.head.robotsMeta) if (/\bnosnippet\b|\bmax-snippet\s*:\s*0\b/i.test(m.content)) sources.push(`meta ${m.name}: ${m.content}`);
+  if (/\bnosnippet\b|\bmax-snippet\s*:\s*0\b/i.test(r.fetch.xRobotsTag || "")) sources.push(`X-Robots-Tag: ${fold2(r.fetch.xRobotsTag)}`);
+  const ns = r.facts.extras?.nosnippet;
+  const visible = fold2(r.facts.visibleText).length;
+  if (ns && ns.chars && visible && ns.chars / visible >= NOSNIPPET_SHARE) sources.push(`data-nosnippet on ${ns.elements} element(s), ${Math.round(ns.chars / visible * 100)}% of the visible text`);
+  if (sources.length) out.push({ code: "snippet_blocked", evidence: { sources }, strip: { side: "head", rows: ["robots"] }, where: sources.map((s) => s.split(":")[0]).join(", ") });
+}
+__name(snippetChecks, "snippetChecks");
+function siteChecks(r, loc, out) {
+  const s = r.site;
+  const x = r.facts.extras || {};
+  const https = /^https:/i.test(r.fetch.finalUrl || "");
+  if (s?.favicon && !s.favicon.ok) out.push({ code: "favicon_missing", evidence: { url: s.favicon.url, declared: s.favicon.declared, status: s.favicon.status }, strip: { side: "head", rows: ["favicon"] }, where: s.favicon.declared ? '<link rel="icon">' : "/favicon.ico" });
+  if (x.mixedTotal) out.push({ code: "mixed_content", evidence: { count: x.mixedTotal, samples: x.mixed.slice(0, 6).map((m) => `${m.tag} ${m.url}`) }, where: x.mixed.slice(0, 2).map((m) => m.tag).join(", ") });
+  if (s?.soft404 && s.soft404.status === 200) out.push({ code: "soft_404", evidence: { url: s.soft404.url, status: s.soft404.status, finalUrl: s.soft404.finalUrl }, where: "a path that does not exist" });
+  const bad = (s?.variants || []).filter((v) => v.status !== null && !v.ends);
+  if (bad.length) out.push({ code: "url_variants_inconsistent", evidence: { count: bad.length, checked: s.variants.length, items: bad.map((v) => `${v.kind}: ${v.url} → ${v.finalUrl ? `${v.status} ${v.finalUrl}` : v.status ?? v.reason}`) }, where: bad.map((v) => v.kind).join(", ") });
+  if (https && !r.fetch.saved && !r.fetch.hsts) out.push({ code: "hsts_missing", evidence: { url: r.fetch.finalUrl }, where: "Strict-Transport-Security" });
+  if (s?.markdown?.declared && !s.markdown.ok) out.push({ code: "markdown_alternate_broken", evidence: { url: s.markdown.url, status: s.markdown.status, contentType: s.markdown.contentType }, strip: { side: "robots", rows: ["markdown"] }, where: '<link rel="alternate" type="text/markdown">' });
+  if (s?.aiCatalog?.present && s.aiCatalog.valid === false) out.push({ code: "ai_catalog_invalid", evidence: { url: s.aiCatalog.url }, strip: { side: "robots", rows: ["ai_catalog"] }, where: new URL(s.aiCatalog.url).pathname });
+  if (s?.indexnow && !s.indexnow.ok) out.push({ code: "indexnow_key_broken", evidence: { url: s.indexnow.url, status: s.indexnow.status }, where: new URL(s.indexnow.url).pathname });
+}
+__name(siteChecks, "siteChecks");
+var ARTICLE_TYPES = ["Article", "NewsArticle", "BlogPosting", "TechArticle", "Report", "ScholarlyArticle"];
+function trustChecks(r, out) {
+  const x = r.facts.extras;
+  if (!x) return;
+  const blocks = r.facts.structured.jsonLd.filter((b) => b.ok);
+  const nodes = blocks.flatMap((b) => typedNodes(b.value));
+  const ofType = /* @__PURE__ */ __name((types) => nodes.filter((n) => n.types.some((t) => types.includes(t))), "ofType");
+  const articles = ofType(ARTICLE_TYPES);
+  const isArticle = articles.length > 0;
+  if (isArticle && !x.byline && !articles.some((a) => has2(a.node, "author"))) out.push({ code: "author_missing", evidence: { types: [...new Set(articles.flatMap((a) => a.types))] }, where: "byline · author" });
+  const missingTrust = ["about", "contact"].filter((k) => !x.trust[k]);
+  if (missingTrust.length) out.push({ code: "about_contact_missing", evidence: { missing: missingTrust }, where: missingTrust.map((k) => `${k} link`).join(", ") });
+  const orgs = ofType(["Organization", "Corporation", "LocalBusiness", "OnlineBusiness", "NGO", "EducationalOrganization"]);
+  const orgMissing = !orgs.length ? ["Organization"] : ["name", "logo", "sameAs"].filter((k) => !orgs.some((o) => has2(o.node, k)));
+  if (orgMissing.length) out.push({ code: "organization_details_missing", evidence: { missing: orgMissing, found: orgs.length }, strip: { side: "head", rows: ["jsonld"] }, where: orgs.length ? `Organization: ${orgMissing.join(", ")}` : "no Organization markup" });
+  const dated = articles.flatMap((a) => [a.node.datePublished, a.node.dateModified]).filter((d) => typeof d === "string");
+  if (isArticle && !x.visibleDates.length) out.push({ code: "article_date_missing", evidence: { markup: dated.slice(0, 2) }, where: "visible date" });
+  const missingLegal = ["privacy", "terms"].filter((k) => !x.trust[k]);
+  if (missingLegal.length) out.push({ code: "privacy_terms_missing", evidence: { missing: missingLegal }, where: missingLegal.map((k) => `${k} link`).join(", ") });
+  const all = nodes.flatMap((n) => [n.node.datePublished, n.node.dateModified]).filter((d) => typeof d === "string" && /^\d{4}-\d{2}-\d{2}/.test(d)).map((d) => d.slice(0, 10));
+  if (all.length && x.visibleDates.length && !all.some((d) => x.visibleDates.includes(d))) out.push({ code: "date_mismatch", evidence: { markup: [...new Set(all)].slice(0, 3), visible: x.visibleDates.slice(0, 3) }, strip: { side: "head", rows: ["jsonld"] }, where: "datePublished / dateModified · visible date" });
+  let home = false;
+  try {
+    home = new URL(r.fetch.finalUrl).pathname === "/";
+  } catch {
+  }
+  if (home && !ofType(["WebSite"]).some((n) => has2(n.node, "name"))) out.push({ code: "site_name_missing", evidence: {}, strip: { side: "head", rows: ["jsonld"] }, where: "WebSite name" });
+}
+__name(trustChecks, "trustChecks");
+function shellChecks(r, out) {
+  const s = r.shell;
+  if (!s?.detected) return;
+  out.push({ code: "spa_shell", evidence: { roots: s.roots, words: s.words, scripts: s.scripts, rendered: r.render ? r.render.ok ? "rendered" : r.render.reason : "not rendered" }, zones: loc0(r), where: s.roots.join(", ") });
+}
+__name(shellChecks, "shellChecks");
+var loc0 = /* @__PURE__ */ __name((r) => {
+  const z = r.facts.zones.find((x) => x.kind === "hero" || x.kind === "intro" || x.kind === "section");
+  return z ? [z.id] : [];
+}, "loc0");
+function sectionGroups(vs) {
+  const keys = [];
+  const assignment = vs.passages.map((p2) => {
+    const k = headingKey(p2.rawHeading ?? p2.heading ?? "");
+    let g = keys.indexOf(k);
+    if (g < 0) g = keys.push(k) - 1;
+    return g;
+  });
+  return { assignment, count: keys.length };
+}
+__name(sectionGroups, "sectionGroups");
+function textModules(reading2, { keyword = null } = {}) {
+  const vs = reading2.vs;
+  const sections = (reading2.facts.sections || []).filter((s) => !s.intro);
+  const patterns = analysePatterns(sections, vs.passages);
+  const given = normaliseKeyword(keyword || "");
+  const h1 = (vs.page.h1 || [])[0] || reading2.facts.headings.find((h) => h.level === 1 && !h.hidden)?.text || "";
+  const kw = given || keywordFromHeading(h1, reading2.fetch.finalUrl);
+  const { assignment, count } = sectionGroups(vs);
+  const kwReport = isUsableKeyword(kw) ? keywordReport({
+    keyword: kw,
+    source: given ? "given" : "h1",
+    fields: { title: reading2.facts.head.title, h1, description: reading2.facts.head.metaDescriptions[0] || "" },
+    passages: vs.passages.map((p2, i) => ({ index: p2.index, heading: p2.heading, text: p2.text, charCount: p2.charCount, group: assignment[i] })),
+    groupCount: count,
+    language: reading2.facts.head.lang
+  }) : { keyword: kw || null, source: given ? "given" : "h1", skipped: kw ? "keyword_unusable" : "no_h1", findings: [] };
+  const alts = (reading2.alternates?.results || []).filter((a) => a.ok && Array.isArray(a.sections));
+  const selfLang = reading2.facts.head.hreflang.find((h) => h.href && samePage(h.href, reading2.fetch.finalUrl))?.hreflang || reading2.facts.head.lang || "this page";
+  const locales = alts.length ? compareLocales(selfLang, sectionNumbers(reading2.facts.sections || []), alts) : null;
+  return { patterns, keyword: kwReport, locales };
+}
+__name(textModules, "textModules");
+var PATTERN_CODE = { stock: "stock_phrases", repetition: "repeated_sentence_shape", uniformity: "uniform_openings", vagueness: "unchecked_claims" };
+function patternChecks(mod, loc, out) {
+  const p2 = mod.patterns;
+  if (!p2.analysed) return;
+  for (const [family, code] of Object.entries(PATTERN_CODE)) {
+    const items = p2.findings.filter((f) => f.family === family);
+    if (!items.length) continue;
+    const per1k = p2.wordCount ? Number((items.length / p2.wordCount * 1e3).toFixed(2)) : 0;
+    let severity = "low";
+    if (family === "stock") severity = per1k >= STOCK_DENSITY_MEDIUM ? "medium" : "low";
+    else if (items.some((f) => f.severity === "high")) severity = "medium";
+    const passages = [...new Set(items.map((f) => f.passage).filter((x) => x !== null))];
+    out.push({
+      code,
+      severity,
+      evidence: {
+        count: items.length,
+        words: p2.wordCount,
+        per1k,
+        threshold: family === "stock" ? STOCK_DENSITY_MEDIUM : null,
+        language: p2.language,
+        score: p2.score ? { value: p2.score.value, band: p2.score.band, perThousand: p2.score.perThousand } : null,
+        items: items.slice(0, 12).map((f) => ({ text: f.evidence.slice(0, 160), passage: f.passage, word: f.word, heading: f.heading, occurrences: f.occurrences })),
+        note: "signals about worn writing, not an AI detector"
+      },
+      passages,
+      zones: loc.passages(passages),
+      where: items.slice(0, 3).map((f) => f.passage !== null ? `passage #${f.passage} · word ${f.word}` : `word ${f.word}`).join(", ")
+    });
+  }
+}
+__name(patternChecks, "patternChecks");
+function keywordChecks(mod, loc, out) {
+  for (const f of mod.keyword.findings || []) {
+    const item = { code: f.code, evidence: f.evidence };
+    if (f.code === "keyword_not_in_title" || f.code === "keyword_variant_split") {
+      item.strip = { side: "head", rows: ["title"] };
+      item.zones = loc.hero !== null ? [loc.hero] : [];
+      item.where = "<title> · <h1> · description";
+    } else if (f.code === "keyword_one_section") {
+      item.passages = f.evidence.passages;
+      item.zones = loc.passages(f.evidence.passages);
+      item.where = `${f.evidence.sectionsReached} of ${f.evidence.sections} h2 sections`;
+    } else if (f.code === "off_keyword_share") {
+      item.where = `${f.evidence.offPassages.length} passages without the phrase`;
+    } else if (f.code === "promise_without_number") {
+      item.passages = [f.evidence.passage];
+      item.zones = loc.passages([f.evidence.passage]);
+      item.where = `passage #${f.evidence.passage}`;
+    }
+    out.push(item);
+  }
+}
+__name(keywordChecks, "keywordChecks");
+function localeChecks(mod, loc, out) {
+  for (const f of mod.locales?.findings || []) {
+    const zones = [...new Set(f.evidence.items.map((d) => loc.heading(d.heading)).filter((z) => z !== null))];
+    out.push({ ...f, zones, where: f.evidence.items.slice(0, 2).map((d) => `${d.hreflang} · h2 #${d.position}`).join(", ") });
+  }
+}
+__name(localeChecks, "localeChecks");
+function pageForJudgement(reading2, loc) {
+  const h = reading2.facts.head;
+  const st = reading2.facts.structured;
+  return {
+    text: [h.title, h.metaDescriptions[0] || "", reading2.facts.visibleText].join("\n"),
+    passages: reading2.vs.passages,
+    links: reading2.facts.links.map((l) => l.url),
+    types: /* @__PURE__ */ new Set([...st.jsonLd.flatMap((b) => b.types), ...st.microdata, ...st.rdfa]),
+    zones: reading2.vs.passages.map((p2) => ({ zone: loc.passage(p2.index), text: p2.text })).filter((z) => z.zone !== null)
+  };
+}
+__name(pageForJudgement, "pageForJudgement");
+function judgementChecks(reading2, loc, extra2, out) {
+  for (const f of questionFindings(extra2.questions)) out.push({ ...f, zones: loc.passages(f.passages) });
+  const page = pageForJudgement(reading2, loc);
+  for (const f of brandFindings(extra2.brand, page)) out.push({ ...f, zones: loc.passages(f.passages || []) });
+  for (const f of reviewFindings(extra2.reviews, page)) out.push(f);
+}
+__name(judgementChecks, "judgementChecks");
+function auditFindings(reading2, extra2 = {}) {
   const loc = locator(reading2);
   const raw = [];
   accessChecks(reading2, raw);
@@ -17120,16 +18270,29 @@ function auditFindings(reading2) {
   structuredChecks(reading2, raw);
   readingChecks(reading2, loc, raw);
   languageChecks(reading2, raw);
+  imageChecks(reading2, raw);
+  snippetChecks(reading2, raw);
+  siteChecks(reading2, loc, raw);
+  trustChecks(reading2, raw);
+  shellChecks(reading2, raw);
+  const mod = extra2.modules || textModules(reading2, extra2);
+  patternChecks(mod, loc, raw);
+  keywordChecks(mod, loc, raw);
+  localeChecks(mod, loc, raw);
+  judgementChecks(reading2, loc, extra2, raw);
   const out = raw.map((f) => {
     const reg = CODES[f.code];
     if (!reg) throw new Error(`unregistered code ${f.code}`);
     const rules = [.../* @__PURE__ */ new Set([...reg.rules, ...f.rulesExtra || []])];
+    const layer = reg.layer || "measured";
     return {
-      id: f.code,
+      id: f.id || f.code,
       code: f.code,
       severity: f.severity || reg.severity,
       area: reg.area,
       owner: reg.owner,
+      layer,
+      judgement: layer === "judgement" ? f.judgement || { agent: null, model: null } : null,
       hides: Boolean(reg.hides),
       informational: Boolean(reg.info),
       where: f.where ?? null,
@@ -17672,6 +18835,11 @@ var fmtUk2 = /* @__PURE__ */ __name((n) => Number(n ?? 0).toLocaleString("en-US"
 var en2 = /* @__PURE__ */ __name((n, one, many) => `${fmtEn(n)} ${n === 1 ? one : many}`, "en");
 var uk2 = /* @__PURE__ */ __name((n, one, few, many) => `${fmtUk2(n)} ${ukForm(n, one, few, many)}`, "uk");
 var kb = /* @__PURE__ */ __name((bytes) => Math.round(bytes / 1024), "kb");
+var dec = /* @__PURE__ */ __name((n, sep) => String(Number(n ?? 0)).replace(".", sep), "dec");
+var q = /* @__PURE__ */ __name((t, n = 38) => {
+  const x = String(t ?? "").replace(/\s+/g, " ").trim();
+  return `“${x.length > n ? `${x.slice(0, n - 1)}…` : x}”`;
+}, "q");
 var list = /* @__PURE__ */ __name((xs, n = 2) => xs.length > n ? `${xs.slice(0, n).join(", ")} +${xs.length - n}` : xs.join(", "), "list");
 var LABELS = {
   robots_unreachable: /* @__PURE__ */ __name(() => ["robots.txt does not answer", "robots.txt не відповідає"], "robots_unreachable"),
@@ -17738,7 +18906,53 @@ var LABELS = {
   description_duplicate_locales: /* @__PURE__ */ __name((e) => [`Same description in ${e.count} languages`, `Однаковий опис у ${e.count} мовах`], "description_duplicate_locales"),
   hreflang_lang_mismatch: /* @__PURE__ */ __name(() => ["html lang ≠ hreflang", "html lang ≠ hreflang"], "hreflang_lang_mismatch"),
   hreflang_no_x_default: /* @__PURE__ */ __name(() => ["No x-default", "Немає x-default"], "hreflang_no_x_default"),
-  llms_txt_one_language: /* @__PURE__ */ __name(() => ["llms.txt: one language only", "llms.txt: лише одна мова"], "llms_txt_one_language")
+  llms_txt_one_language: /* @__PURE__ */ __name(() => ["llms.txt: one language only", "llms.txt: лише одна мова"], "llms_txt_one_language"),
+  locale_facts_differ: /* @__PURE__ */ __name((e) => {
+    const d = e.items[0];
+    const more = e.count > 1 ? ` +${e.count - 1}` : "";
+    return [`${d.values[0]} or ${d.values[1]}? · ${d.hreflang}${more}`, `${d.values[0]} чи ${d.values[1]}? · ${d.hreflang}${more}`];
+  }, "locale_facts_differ"),
+  question_missing: /* @__PURE__ */ __name((e) => [`No answer: ${q(e.question)}`, `Без відповіді: ${q(e.question)}`], "question_missing"),
+  question_partial: /* @__PURE__ */ __name((e) => [`Answered in part: ${q(e.question)}`, `Частково: ${q(e.question)}`], "question_partial"),
+  stock_phrases: /* @__PURE__ */ __name((e) => [`Stock phrases · ${dec(e.per1k, ".")} per 1,000 words`, `Шаблонні фрази · ${dec(e.per1k, ",")} на 1 000 слів`], "stock_phrases"),
+  repeated_sentence_shape: /* @__PURE__ */ __name((e) => [en2(e.count, "sentence of one shape", "sentences of one shape"), `${uk2(e.count, "речення", "речення", "речень")} однієї форми`], "repeated_sentence_shape"),
+  uniform_openings: /* @__PURE__ */ __name((e) => [e.count === 1 ? "A run of sentences opens alike" : `${e.count} runs of sentences open alike`, e.count === 1 ? "Речення поспіль починаються однаково" : `${uk2(e.count, "низка речень", "низки речень", "низок речень")} з однаковим початком`], "uniform_openings"),
+  unchecked_claims: /* @__PURE__ */ __name((e) => [en2(e.count, "claim with nothing to check", "claims with nothing to check"), `${uk2(e.count, "твердження", "твердження", "тверджень")} без фактів для перевірки`], "unchecked_claims"),
+  keyword_not_in_title: /* @__PURE__ */ __name(() => ["Main phrase not in title or h1", "Головної фрази немає в title чи h1"], "keyword_not_in_title"),
+  keyword_variant_split: /* @__PURE__ */ __name(() => ["Main phrase written two ways", "Головну фразу написано двома способами"], "keyword_variant_split"),
+  keyword_one_section: /* @__PURE__ */ __name((e) => [`Main phrase in ${e.sectionsReached} of ${e.sections} sections`, `Головна фраза в ${e.sectionsReached} із ${e.sections} розділів`], "keyword_one_section"),
+  off_keyword_share: /* @__PURE__ */ __name((e) => [`${Math.round(e.offShare * 100)}% of the text off the phrase`, `${Math.round(e.offShare * 100)}% тексту без головної фрази`], "off_keyword_share"),
+  promise_without_number: /* @__PURE__ */ __name(() => ["A promise with no figure", "Обіцянка без числа"], "promise_without_number"),
+  brand_contradiction: /* @__PURE__ */ __name((e) => e.count === 1 ? ["AI contradicts the page", "ШІ суперечить сторінці"] : [`AI contradicts the page · ${e.count}`, `ШІ суперечить сторінці · ${e.count}`], "brand_contradiction"),
+  brand_fact_absent: /* @__PURE__ */ __name((e) => [`AI knows, the page lacks · ${e.count}`, `ШІ знає, на сторінці немає · ${e.count}`], "brand_fact_absent"),
+  brand_unknown: /* @__PURE__ */ __name(() => ["AI doesn't know the brand", "ШІ не знає бренду"], "brand_unknown"),
+  review_rating_unbacked: /* @__PURE__ */ __name((e) => e.count === 1 ? [`${e.items[0].platform} rating, no source`, `Рейтинг ${e.items[0].platform} без джерела`] : [`${e.count} ratings with no source`, `${uk2(e.count, "рейтинг", "рейтинги", "рейтингів")} без джерела`], "review_rating_unbacked"),
+  review_control_hallucination: /* @__PURE__ */ __name(() => ["AI rated a platform that doesn't exist", "ШІ оцінив платформу, якої немає"], "review_control_hallucination"),
+  reviews_without_markup: /* @__PURE__ */ __name(() => ["Ratings shown without markup", "Оцінки без розмітки"], "reviews_without_markup"),
+  rich_result_retired: /* @__PURE__ */ __name((e) => e.items.length === 1 ? [`${e.items[0].feature}: no rich result any more`, `${e.items[0].feature}: розширеного результату більше немає`] : [`${e.items.length} retired rich results`, `${uk2(e.items.length, "розширений результат", "розширені результати", "розширених результатів")} більше немає`], "rich_result_retired"),
+  image_dimensions_missing: /* @__PURE__ */ __name((e) => [en2(e.count, "image without width and height", "images without width and height"), `${uk2(e.count, "зображення", "зображення", "зображень")} без width і height`], "image_dimensions_missing"),
+  image_lcp_lazy: /* @__PURE__ */ __name(() => ["First image lazy-loaded", "Перше зображення з lazy"], "image_lcp_lazy"),
+  image_not_lazy: /* @__PURE__ */ __name((e) => [en2(e.count, "image below the fold loads eagerly", "images below the fold load eagerly"), `${uk2(e.count, "зображення", "зображення", "зображень")} нижче екрана без lazy`], "image_not_lazy"),
+  image_legacy_format: /* @__PURE__ */ __name((e) => [en2(e.count, "image in JPEG or PNG only", "images in JPEG or PNG only"), `${uk2(e.count, "зображення", "зображення", "зображень")} лише в JPEG чи PNG`], "image_legacy_format"),
+  image_oversized: /* @__PURE__ */ __name((e) => [en2(e.count, "image over 200 KB", "images over 200 KB"), `${uk2(e.count, "зображення", "зображення", "зображень")} понад 200 КБ`], "image_oversized"),
+  image_no_srcset: /* @__PURE__ */ __name((e) => [en2(e.count, "large image without srcset", "large images without srcset"), `${uk2(e.count, "велике зображення", "великі зображення", "великих зображень")} без srcset`], "image_no_srcset"),
+  favicon_missing: /* @__PURE__ */ __name(() => ["Favicon does not load", "Favicon не завантажується"], "favicon_missing"),
+  site_name_missing: /* @__PURE__ */ __name(() => ["No WebSite name markup", "Немає назви сайту в розмітці"], "site_name_missing"),
+  mixed_content: /* @__PURE__ */ __name((e) => [en2(e.count, "http:// resource on an https page", "http:// resources on an https page"), `${uk2(e.count, "ресурс", "ресурси", "ресурсів")} http:// на https-сторінці`], "mixed_content"),
+  soft_404: /* @__PURE__ */ __name(() => ["A missing page answers 200", "Неіснуюча сторінка відповідає 200"], "soft_404"),
+  url_variants_inconsistent: /* @__PURE__ */ __name((e) => [e.count === 1 ? "A URL variant ends elsewhere" : `${e.count} URL variants end elsewhere`, e.count === 1 ? "Варіант адреси веде деінде" : `${uk2(e.count, "варіант адреси веде", "варіанти адреси ведуть", "варіантів адреси ведуть")} деінде`], "url_variants_inconsistent"),
+  hsts_missing: /* @__PURE__ */ __name(() => ["No HSTS header", "Немає заголовка HSTS"], "hsts_missing"),
+  author_missing: /* @__PURE__ */ __name(() => ["Article without an author", "Стаття без автора"], "author_missing"),
+  about_contact_missing: /* @__PURE__ */ __name((e) => [`No ${e.missing.join(" or ")} link`, `Немає посилання ${e.missing.map((k) => k === "about" ? "«Про нас»" : "«Контакти»").join(" чи ")}`], "about_contact_missing"),
+  organization_details_missing: /* @__PURE__ */ __name((e) => e.found ? [`Organization lacks ${e.missing.join(", ")}`, `В Organization бракує ${e.missing.join(", ")}`] : ["No Organization markup", "Немає розмітки Organization"], "organization_details_missing"),
+  article_date_missing: /* @__PURE__ */ __name(() => ["Article without a visible date", "Стаття без видимої дати"], "article_date_missing"),
+  privacy_terms_missing: /* @__PURE__ */ __name((e) => [`No ${e.missing.join(" or ")} link`, `Немає посилання на ${e.missing.map((k) => k === "privacy" ? "конфіденційність" : "умови").join(" чи ")}`], "privacy_terms_missing"),
+  date_mismatch: /* @__PURE__ */ __name(() => ["Markup date ≠ visible date", "Дата в розмітці ≠ видима дата"], "date_mismatch"),
+  snippet_blocked: /* @__PURE__ */ __name(() => ["Snippets blocked", "Сніпети заборонено"], "snippet_blocked"),
+  markdown_alternate_broken: /* @__PURE__ */ __name(() => ["Markdown version does not load", "Markdown-версія не завантажується"], "markdown_alternate_broken"),
+  ai_catalog_invalid: /* @__PURE__ */ __name(() => ["ai-catalog.json does not parse", "ai-catalog.json не розбирається"], "ai_catalog_invalid"),
+  indexnow_key_broken: /* @__PURE__ */ __name(() => ["IndexNow key file missing", "Немає файлу ключа IndexNow"], "indexnow_key_broken"),
+  spa_shell: /* @__PURE__ */ __name((e) => [`Empty app shell · ${e.words} words without JavaScript`, `Порожня оболонка застосунку · ${uk2(e.words, "слово", "слова", "слів")} без JavaScript`], "spa_shell")
 };
 var label = /* @__PURE__ */ __name((f) => {
   const fn = LABELS[f.code];
@@ -17757,14 +18971,20 @@ var AREAS = [
   { id: "find", q: ["AI finds it?", "ШІ знаходить?"] },
   { id: "read", q: ["AI reads all of it?", "ШІ читає все?"] },
   { id: "quote", q: ["AI quotes it right?", "ШІ цитує правильно?"] },
-  { id: "markup", q: ["Rich results & markup", "Розширені результати й розмітка"] },
+  { id: "brand", q: ["AI gets the brand right?", "ШІ правильно описує бренд?"] },
   { id: "lang", q: ["Languages in order?", "Мови гаразд?"] }
 ];
+var LAYER = {
+  measured: ["Measured", "Виміряно"],
+  derived: ["Derived", "Обчислено"],
+  judgement: ["Agent's judgement", "Судження агента"]
+};
 var STATE = {
   ok: ["OK", "Гаразд"],
   prob: ["Problems", "Є проблеми"],
   block: ["Blocking", "Блокує"],
-  na: ["One version", "Одна версія"]
+  na: ["One version", "Одна версія"],
+  unchecked: ["Not checked", "Не перевірено"]
 };
 var MARK = {
   pass: { i: "✓", t: ["Passed", "Пройдено"] },
@@ -17793,11 +19013,17 @@ var UI = {
   statusAria: ["Status by question", "Стан за запитаннями"],
   nothingFound: ["nothing found", "нічого не знайдено"],
   oneVersion: ["no hreflang", "без hreflang"],
+  noBrandFiles: ["no brand.json or reviews.json", "без brand.json і reviews.json"],
+  modelNotStated: ["model not stated", "модель не вказано"],
+  oneModel: [
+    (m) => `Brand, reviews and questions: one model's view (${m}), from its own knowledge, not ChatGPT, Gemini or Perplexity. The web Brandscope and Reviewscope ask three assistants.`,
+    (m) => `Бренд, відгуки й запитання: погляд однієї моделі (${m}), з її власних знань, а не ChatGPT, Gemini чи Perplexity. Вебверсії Brandscope і Reviewscope питають трьох асистентів.`
+  ],
   pageMap: ["Page map", "Мапа сторінки"],
   marked: [(n) => `${en2(n, "problem", "problems")} marked`, (n) => `позначено ${uk2(n, "проблему", "проблеми", "проблем")}`],
   mapAria: ["Map of the audited page, top to bottom, with numbered problem markers", "Мапа перевіреної сторінки згори донизу з пронумерованими маркерами проблем"],
   notSeen: ["AI does not see this", "ШІ цього не бачить"],
-  partSeen: [(p) => `${p}% unseen by AI`, (p) => `${p}% ШІ не бачить`],
+  partSeen: [(p2) => `${p2}% unseen by AI`, (p2) => `${p2}% ШІ не бачить`],
   onlyJs: ["Only with JavaScript", "Лише з JavaScript"],
   panelsHidden: [(n, c2) => `${en2(n, "panel", "panels")} hidden · ${fmtEn(c2)} characters`, (n, c2) => `${uk2(n, "панель", "панелі", "панелей")} приховано · ${uk2(c2, "символ", "символи", "символів")}`],
   unmapped: [(n) => `+${n} not tied to one spot`, (n) => `+${n} не прив’язані до місця`],
@@ -17812,12 +19038,17 @@ var UI = {
   wf: [["Raw HTML", "Сирий HTML"], ["Removed", "Видалено"], ["Kept", "Збережено"], ["In passages", "В уривках"], ["Not in passages", "Не в уривках"], ["Past the cap", "За лімітом"]],
   passagesLine: [(n, cap2) => `${n} of ${cap2} passages`, (n, cap2) => `${n} із ${cap2} уривків`],
   bots: ["Bots in robots.txt", "Боти в robots.txt"],
-  path: [(p) => `path ${p}`, (p) => `шлях ${p}`],
+  path: [(p2) => `path ${p2}`, (p2) => `шлях ${p2}`],
   allowed: ["allowed", "дозволено"],
   blocked: ["blocked", "заборонено"],
   robotsNone: ["no robots.txt: all allowed", "robots.txt немає: усе дозволено"],
   robotsUnreachable: ["robots.txt does not answer: assume all blocked", "robots.txt не відповідає: вважається, що все заборонено"],
   robotsNotChecked: ["robots.txt not measured", "robots.txt не виміряно"],
+  llmsNote: [
+    "Google documents no use of llms.txt: “You don't need to create new machine readable files, AI text files, or markup to appear in these features.”",
+    "Google не документує використання llms.txt: «You don't need to create new machine readable files, AI text files, or markup to appear in these features.»"
+  ],
+  llmsNoteSource: ["Google Search Central: AI features and your website", "Google Search Central: AI features and your website", "https://developers.google.com/search/docs/appearance/ai-features"],
   kind: { search: ["search", "пошук"], user: ["a user's question", "запит користувача"], training: ["training", "навчання"], index: ["web index", "вебіндекс"] },
   classic: ["Google and Bing checks", "Перевірки Google і Bing"],
   checksUnit: [(n) => `${n} checks`, (n) => `${uk2(n, "перевірка", "перевірки", "перевірок")}`],
@@ -17830,7 +19061,7 @@ var UI = {
   },
   langs: ["Language versions", "Мовні версії"],
   versionsUnit: [(n) => en2(n, "version", "versions"), (n) => uk2(n, "версія", "версії", "версій")],
-  langCols: [["Title", "Title"], ["Description", "Опис"], ["hreflang", "hreflang"], ["html lang", "html lang"]],
+  langCols: [["Title", "Title"], ["Description", "Опис"], ["hreflang", "hreflang"], ["Same facts", "Ті самі факти"]],
   langCol: ["Lang", "Мова"],
   langOne: ["One language version: the page declares no hreflang.", "Одна мовна версія: сторінка не оголошує hreflang."],
   langUnread: [(n, cap2) => `+${n} not read (cap ${cap2})`, (n, cap2) => `+${n} не прочитано (ліміт ${cap2})`],
@@ -17838,11 +19069,11 @@ var UI = {
   thisPage: ["this page", "ця сторінка"],
   xDefault: ["x-default", "x-default"],
   cannot: ["What this check cannot see", "Чого ця перевірка не бачить"],
-  full: ["A full version with explanations is available from GetLoopLoop →", "Повна версія з поясненнями — у GetLoopLoop →"],
+  full: ["Full report with explanations →", "Повний звіт із поясненнями →"],
   caps: ["Not checked", "Не перевірено"],
   footer: [
-    "Made with the ai-search-audit skill (Lite) by GetLoopLoop: the scripts fetched the page, its robots.txt, sitemap, llms.txt and language versions, and up to 30 of its links, and sent nothing anywhere. No model wrote any part of this report.",
-    "Зроблено навичкою ai-search-audit (Lite) від GetLoopLoop: скрипти завантажили сторінку, її robots.txt, sitemap, llms.txt і мовні версії та до 30 її посилань і нікуди нічого не надсилали. Жодна модель не писала цього звіту."
+    "Made with the ai-search-audit skill (Lite) by GetLoopLoop: the scripts fetched the page, its robots.txt, sitemap, llms.txt and language versions, and up to 30 of its links, and sent nothing anywhere; the judgement parts are the agent's model.",
+    "Зроблено навичкою ai-search-audit (Lite) від GetLoopLoop: скрипти завантажили сторінку, її robots.txt, sitemap, llms.txt і мовні версії та до 30 її посилань і нікуди нічого не надсилали; частини із судженнями — це модель агента."
   ],
   footerRefused: [
     "Made with the ai-search-audit skill (Lite) by GetLoopLoop: the scripts fetched the page once and kept nothing of it.",
@@ -17852,12 +19083,11 @@ var UI = {
   refusedEyebrow: ["AI search audit · Lite", "Аудит для ШІ-пошуку · Lite"]
 };
 var CANNOT = [
-  { t: ["Descriptions of each problem and directions to fix it", "Опис кожної проблеми й напрям виправлення"], links: [["Full version", "Повна версія", "https://www.getlooploop.com"]] },
-  { t: ["What AI says about your brand and reviews, the questions people ask, a target keyword", "Що ШІ каже про ваш бренд і відгуки, які запитання ставлять люди, цільова ключова фраза"], links: [["Full version", "Повна версія", "https://www.getlooploop.com"]] },
-  { t: ["Several real assistants side by side", "Кілька справжніх асистентів поруч"], links: [["Brandscope", "Brandscope", "https://www.getlooploop.com/brandscope"]] },
-  { t: ["How their answers change over time", "Як їхні відповіді змінюються з часом"], links: [["AI answer volatility", "Мінливість відповідей ШІ", "https://www.getlooploop.com/ai-volatility"]] },
-  { t: ["How AI groups your text by meaning (embeddings map)", "Як ШІ групує ваш текст за змістом (мапа ембедингів)"], links: [["Vectorscope", "Vectorscope", "https://www.getlooploop.com/vectorscope"]] },
-  { t: ["Search Console data, real-user Core Web Vitals, sites beyond one page", "Дані Search Console, Core Web Vitals реальних користувачів, сайти понад одну сторінку"], links: [["GetLoopLoop", "GetLoopLoop", "https://www.getlooploop.com"]] }
+  { t: ["Descriptions of each problem and directions to fix it", "Опис кожної проблеми й напрям виправлення"], links: [["Full version from GetLoopLoop", "Повна версія від GetLoopLoop", "https://www.getlooploop.com"]] },
+  { t: ["What real assistants (ChatGPT, Gemini, Perplexity) say about your brand and reviews", "Що справжні асистенти (ChatGPT, Gemini, Perplexity) кажуть про ваш бренд і відгуки"], links: [["Brandscope", "Brandscope", "https://www.getlooploop.com/brandscope"], ["Reviewscope", "Reviewscope", "https://www.getlooploop.com/reviewscope"]] },
+  { t: ["How their answers change from day to day", "Як їхні відповіді змінюються з дня на день"], links: [["AI answer volatility", "Мінливість відповідей ШІ", "https://www.getlooploop.com/ai-volatility"]] },
+  { t: ["How AI groups your text by meaning (embeddings)", "Як ШІ групує ваш текст за змістом (ембединги)"], links: [["Vectorscope", "Vectorscope", "https://www.getlooploop.com/vectorscope"]] },
+  { t: ["Search Console data, real-user speed, sites over 50 pages, tracking over time", "Дані Search Console, швидкість у реальних користувачів, сайти понад 50 сторінок, відстеження в часі"], links: [["GetLoopLoop", "GetLoopLoop", "https://www.getlooploop.com"]] }
 ];
 function verdict(findings) {
   const blocking = findings.filter((f) => f.severity === "blocking").length;
@@ -17917,6 +19147,14 @@ function zoneSeen(reading2) {
   return out;
 }
 __name(zoneSeen, "zoneSeen");
+function isHome(reading2) {
+  try {
+    return new URL(reading2.fetch.finalUrl).pathname === "/";
+  } catch {
+    return false;
+  }
+}
+__name(isHome, "isHome");
 function checklist(reading2, findings) {
   const by = /* @__PURE__ */ __name((codes) => findings.filter((f) => codes.includes(f.code)), "by");
   const hl = reading2.facts.head.hreflang;
@@ -17945,7 +19183,16 @@ function checklist(reading2, findings) {
     ["core_web_vitals", ["CWV", "CWV"], ["Core Web Vitals from real users", "Core Web Vitals від реальних користувачів"], [], "na"],
     ["hreflang_pairs", ["hreflang", "hreflang"], ["hreflang versions link back", "Мовні версії hreflang посилаються взаємно"], ["hreflang_no_return", "hreflang_invalid_code", "hreflang_no_self", "hreflang_alternate_broken"], !hl.length ? "none" : !reading2.alternates ? "na" : null],
     ["rich_faqpage", ["FAQ", "FAQ"], ["FAQPage markup", "Розмітка FAQPage"], ["faq_schema_not_visible", "faq_rich_result_retired"], types.has("FAQPage") ? null : "none"],
-    ["rich_breadcrumb", ["Breadcrumb", "Ланцюжок"], ["BreadcrumbList markup", "Розмітка BreadcrumbList"], [], types.has("BreadcrumbList") ? null : "none"]
+    ["rich_breadcrumb", ["Breadcrumb", "Ланцюжок"], ["BreadcrumbList markup", "Розмітка BreadcrumbList"], [], types.has("BreadcrumbList") ? null : "none"],
+    ["images", ["Images", "Зображення"], ["Image sizes, formats, lazy loading, srcset", "Розміри, формати, lazy і srcset зображень"], ["image_dimensions_missing", "image_lcp_lazy", "image_not_lazy", "image_legacy_format", "image_oversized", "image_no_srcset"], reading2.facts.images.length ? null : "none"],
+    ["snippet", ["Snippet", "Сніпет"], ["Eligible for a snippet (no nosnippet, max-snippet:0)", "Може мати сніпет (без nosnippet, max-snippet:0)"], ["snippet_blocked"], null],
+    ["favicon", ["Favicon", "Favicon"], ["A favicon that loads", "Favicon завантажується"], ["favicon_missing"], !reading2.site ? "na" : null],
+    ["site_name", ["Site name", "Назва сайту"], ["WebSite name markup on the home page", "Назва сайту в розмітці WebSite на головній"], ["site_name_missing"], isHome(reading2) ? null : "none"],
+    ["mixed", ["Mixed", "Змішаний"], ["No http:// resources on https", "Без ресурсів http:// на https"], ["mixed_content"], null],
+    ["soft404", ["Soft 404", "Soft 404"], ["A missing page answers 404", "Неіснуюча сторінка відповідає 404"], ["soft_404"], !reading2.site ? "na" : null],
+    ["variants", ["Variants", "Варіанти"], ["http, www and slash variants end at the page", "Варіанти http, www і слеш ведуть на сторінку"], ["url_variants_inconsistent"], !reading2.site ? "na" : null],
+    ["hsts", ["HSTS", "HSTS"], ["Strict-Transport-Security header", "Заголовок Strict-Transport-Security"], ["hsts_missing"], reading2.fetch.saved ? "na" : null],
+    ["trust", ["Trust", "Довіра"], ["Author, About, Contact, organisation, dates, privacy and terms", "Автор, «Про нас», контакти, організація, дати, конфіденційність і умови"], ["author_missing", "about_contact_missing", "organization_details_missing", "article_date_missing", "privacy_terms_missing", "date_mismatch"], null]
   ];
   return cells.map(([id, short, name, codes, fixed]) => {
     let items = by(codes);
@@ -17955,7 +19202,7 @@ function checklist(reading2, findings) {
   });
 }
 __name(checklist, "checklist");
-function languageGrid(reading2, findings) {
+function languageGrid(reading2, findings, modules2) {
   const hl = reading2.facts.head.hreflang;
   if (!hl.length) return null;
   const f = /* @__PURE__ */ __name((code) => findings.find((x) => x.code === code), "f");
@@ -17971,8 +19218,16 @@ function languageGrid(reading2, findings) {
   const self = hl.find((h) => h.href && (samePage(h.href, page) || canonical && samePage(h.href, canonical)));
   const selfLang = self?.hreflang || reading2.facts.head.lang || "—";
   const rows = [];
-  const langCell = /* @__PURE__ */ __name((lang, hreflang) => !lang ? "warn" : mismatch && mismatch.evidence.items.some((s) => s.startsWith(`${hreflang}:`)) ? "warn" : "pass", "langCell");
-  rows.push({ hreflang: selfLang, self: true, cells: [inGroup(dupT, selfLang) ? "fail" : "pass", inGroup(dupD, selfLang) ? "warn" : "pass", noSelf ? "fail" : "pass", langCell(reading2.facts.head.lang, selfLang)] });
+  const langOff = /* @__PURE__ */ __name((lang, hreflang) => !lang || Boolean(mismatch && mismatch.evidence.items.some((s) => s.startsWith(`${hreflang}:`))), "langOff");
+  const locales = modules2?.locales || null;
+  const drift = f("locale_facts_differ");
+  const factsCell = /* @__PURE__ */ __name((hreflang) => {
+    const c2 = locales?.compared.find((x) => x.hreflang === hreflang);
+    if (!c2 || !c2.aligned) return "na";
+    return drift && drift.evidence.items.some((d) => d.hreflang === hreflang) ? "fail" : "pass";
+  }, "factsCell");
+  const selfFacts = !locales || !locales.compared.some((c2) => c2.aligned) ? "na" : drift ? "fail" : "pass";
+  rows.push({ hreflang: selfLang, self: true, cells: [inGroup(dupT, selfLang) ? "fail" : "pass", inGroup(dupD, selfLang) ? "warn" : "pass", noSelf ? "fail" : langOff(reading2.facts.head.lang, selfLang) ? "warn" : "pass", selfFacts] });
   for (const a of reading2.alternates?.results || []) {
     if (a.refused) {
       rows.push({ hreflang: a.hreflang, refused: true, cells: ["na", "na", "na", "na"] });
@@ -17984,7 +19239,7 @@ function languageGrid(reading2, findings) {
     }
     const back = noReturn && noReturn.evidence.langs.includes(a.hreflang);
     const bad = broken && broken.evidence.langs.includes(a.hreflang);
-    rows.push({ hreflang: a.hreflang, cells: [inGroup(dupT, a.hreflang) ? "fail" : "pass", inGroup(dupD, a.hreflang) ? "warn" : "pass", back || bad ? "fail" : "pass", langCell(a.lang, a.hreflang)] });
+    rows.push({ hreflang: a.hreflang, cells: [inGroup(dupT, a.hreflang) ? "fail" : "pass", inGroup(dupD, a.hreflang) ? "warn" : "pass", back || bad ? "fail" : langOff(a.lang, a.hreflang) ? "warn" : "pass", factsCell(a.hreflang)] });
   }
   return {
     rows,
@@ -18029,7 +19284,8 @@ function strips(reading2, findings) {
     { id: "jsonld", k: "JSON-LD", v: typesText ? [typesText, typesText] : st.jsonLd.length ? [`${st.jsonLd.length} blocks`, `${st.jsonLd.length} блоки`] : none },
     { id: "social", k: "Open Graph", v: [`${socialHave} of 4 tags`, `${socialHave} з 4 тегів`] },
     { id: "viewport", k: "viewport", v: h.viewport ? ["set", "задано"] : none },
-    { id: "scripts", k: "scripts", v: [`${h.scripts.total} · ${h.scripts.blocking} blocking`, `${h.scripts.total} · ${h.scripts.blocking} блокують`] }
+    { id: "scripts", k: "scripts", v: [`${h.scripts.total} · ${h.scripts.blocking} blocking`, `${h.scripts.total} · ${h.scripts.blocking} блокують`] },
+    { id: "favicon", k: "favicon", v: !reading2.site ? reading2.facts.extras?.icons.length ? ["declared", "оголошено"] : ["not measured", "не виміряно"] : reading2.site.favicon.ok ? ["loads", "завантажується"] : reading2.site.favicon.reason === "data_uri" ? ["data: URI", "data: URI"] : [`HTTP ${reading2.site.favicon.status ?? "—"}`, `HTTP ${reading2.site.favicon.status ?? "—"}`] }
   ];
   const r = reading2.robots;
   const bots = r.bots || [];
@@ -18041,19 +19297,23 @@ function strips(reading2, findings) {
   }, "groupVal");
   const sm = reading2.sitemap;
   const ll = reading2.llms;
+  const site = reading2.site;
   const robots = [
     { id: "search", k: "Google · Bing", v: groupVal(["index"]) },
     { id: "ai_search", k: ["AI search bots", "ШІ-пошуковики"], v: groupVal(["search", "user"]) },
     { id: "ai_training", k: ["AI training bots", "Боти навчання ШІ"], v: groupVal(["training"]) },
     { id: "sitemap", k: "sitemap.xml", v: !sm ? ["not measured", "не виміряно"] : !sm.found ? ["not found", "не знайдено"] : sm.listsPage === true ? ["lists the page", "сторінка є"] : sm.listsPage === false ? ["page not listed", "сторінки немає"] : ["not measured", "не виміряно"] },
-    { id: "llms", k: "llms.txt", v: !ll ? ["not measured", "не виміряно"] : ll.present ? [`present · ${ll.links} links`, `є · ${uk3(ll.links, "посилання", "посилання", "посилань")}`] : none }
+    { id: "llms", k: "llms.txt", v: !ll ? ["not measured", "не виміряно"] : ll.present ? [`present · ${ll.links} links`, `є · ${uk3(ll.links, "посилання", "посилання", "посилань")}`] : none },
+    { id: "markdown", k: ["Markdown copy", "Markdown-копія"], v: !site ? ["not measured", "не виміряно"] : site.markdown.ok ? [site.markdown.declared ? "declared · loads" : ".md · loads", site.markdown.declared ? "оголошено · є" : ".md · є"] : site.markdown.declared ? [`declared · HTTP ${site.markdown.status ?? "—"}`, `оголошено · HTTP ${site.markdown.status ?? "—"}`] : none },
+    { id: "ai_catalog", k: "ai-catalog.json", v: !site ? ["not measured", "не виміряно"] : !site.aiCatalog?.present ? none : site.aiCatalog.valid ? ["present · JSON", "є · JSON"] : ["present · not JSON", "є · не JSON"] }
   ];
   const attach = /* @__PURE__ */ __name((side, rows) => rows.map((row) => ({ ...row, pins: findings.filter((f) => hasRow(f, side, row.id)) })), "attach");
   return { head: attach("head", head2), robots: attach("robots", robots) };
 }
 __name(strips, "strips");
-function buildModel(reading2) {
-  const findings = auditFindings(reading2).map((f) => ({ ...f, label: label(f) }));
+function buildModel(reading2, extra2 = {}) {
+  const modules2 = textModules(reading2, extra2);
+  const findings = auditFindings(reading2, { ...extra2, modules: modules2 }).map((f) => ({ ...f, label: label(f) }));
   const zones = reading2.facts.zones;
   const seen = zoneSeen(reading2);
   const jsZones = (reading2.render?.jsZones || []).map((z, i) => ({ ...z, id: `js${i}`, kind: "js" }));
@@ -18086,6 +19346,7 @@ function buildModel(reading2) {
     const items = findings.filter((f) => f.area === a.id);
     let state = items.some((f) => f.severity === "blocking") ? "block" : items.some((f) => f.severity === "high" || f.severity === "medium") ? "prob" : "ok";
     if (a.id === "lang" && !reading2.facts.head.hreflang.length && !items.length) state = "na";
+    if (a.id === "brand" && !extra2.brand && !extra2.reviews && !items.length) state = "na";
     return { id: a.id, q: a.q, state, count: items.length, minorOnly: items.length > 0 && state === "ok", worst: items.length ? worst(items) : null };
   });
   const counts = Object.fromEntries(SEVERITIES.map((s) => [s, findings.filter((f) => f.severity === s).length]));
@@ -18102,22 +19363,47 @@ function buildModel(reading2) {
     mappedCount: ordered.filter((f) => f.mapped).length,
     unmappedCount: ordered.filter((f) => !f.mapped).length,
     checklist: checklist(reading2, findings),
-    languages: languageGrid(reading2, findings),
+    languages: languageGrid(reading2, findings, modules2),
     bots: reading2.robots.bots || [],
     robotsPath: pathOf(reading2.fetch.finalUrl),
     waterfall: w,
     passages: { used: reading2.vs.passages.length, cap: reading2.vs.page.chunkCap },
-    caps: caps(reading2)
+    caps: caps(reading2, modules2, extra2),
+    modules: modules2,
+    extra: extra2,
+    judgement: judgementSummary(extra2),
+    keyword: modules2.keyword.keyword ? { keyword: modules2.keyword.keyword, source: modules2.keyword.source } : null
   };
 }
 __name(buildModel, "buildModel");
-function caps(r) {
+function judgementSummary(extra2) {
+  const files = { questions: extra2.questions?.judgement || null, brand: extra2.brand?.judgement || null, reviews: extra2.reviews?.judgement || null };
+  const models = [...new Set(Object.values(files).filter(Boolean).map((j) => j.model).filter(Boolean))];
+  const agents = [...new Set(Object.values(files).filter(Boolean).map((j) => j.agent).filter(Boolean))];
+  return { files, model: models.length ? models.join(", ") : null, agent: agents.length ? agents.join(", ") : null, any: Object.values(files).some(Boolean) };
+}
+__name(judgementSummary, "judgementSummary");
+function caps(r, modules2 = null, extra2 = {}) {
   const out = [];
+  const p2 = modules2?.patterns;
+  if (p2 && !p2.analysed) out.push({ id: "patterns", t: [`Writing patterns not analysed (${p2.reason}): lexicons exist for English, Ukrainian and Spanish`, `Шаблони письма не аналізовано (${p2.reason}): словники є для англійської, української й іспанської`] });
+  if (p2?.analysed && p2.score?.band === "insufficient_text") out.push({ id: "patterns_short", t: [`Writing patterns: ${p2.wordCount} words, under the 60 the density needs; no score`, `Шаблони письма: ${p2.wordCount} слів, менше за 60, потрібних для щільності; без оцінки`] });
+  if (modules2?.keyword?.skipped) out.push({ id: "keyword", t: ["Keyword not checked: no --keyword and no h1 to read one from", "Ключову фразу не перевірено: немає --keyword і немає h1"] });
+  if (modules2?.keyword && !modules2.keyword.skipped && !modules2.keyword.promiseChecked) out.push({ id: "promise", t: ["The promise-without-a-figure rule reads English only", "Правило «обіцянка без числа» читає лише англійську"] });
+  const unaligned = (modules2?.locales?.compared || []).filter((c2) => !c2.aligned && c2.reason !== "no_sections");
+  if (unaligned.length) out.push({ id: "locales", n: unaligned.length, t: [`Facts not compared for ${unaligned.map((c2) => `${c2.hreflang} (${c2.sections[1]} sections vs ${c2.sections[0]})`).join(", ")}: the sections do not line up`, `Факти не порівняно для ${unaligned.map((c2) => `${c2.hreflang} (${c2.sections[1]} розділів проти ${c2.sections[0]})`).join(", ")}: розділи не збігаються`] });
+  for (const [k, name] of [["questions", "questions.json"], ["brand", "brand.json"], ["reviews", "reviews.json"]]) if (!extra2[k]) out.push({ id: `no_${k}`, t: [`${name} not given: that judgement was not made`, `${name} не надано: цього судження не зроблено`] });
   if (r.links?.unchecked) out.push({ id: "links", n: r.links.unchecked, cap: r.links.cap, t: [`${r.links.unchecked} links not checked (cap ${r.links.cap})`, `${uk3(r.links.unchecked, "посилання", "посилання", "посилань")} не перевірено (ліміт ${r.links.cap})`] });
   const unverified = (r.links?.results || []).filter((x) => x.verdict === "unverified").length;
   if (unverified) out.push({ id: "links_unverified", n: unverified, t: [`${unverified} links did not answer or refused the check`, `${uk3(unverified, "посилання не відповіло", "посилання не відповіли", "посилань не відповіли")} або відмовили в перевірці`] });
   if (r.alternates?.unchecked.length) out.push({ id: "alternates", n: r.alternates.unchecked.length, cap: r.alternates.cap, t: [`${r.alternates.unchecked.length} language versions not read (cap ${r.alternates.cap})`, `${uk3(r.alternates.unchecked.length, "мовну версію", "мовні версії", "мовних версій")} не прочитано (ліміт ${r.alternates.cap})`] });
   if (r.sitemap?.children.unread && r.sitemap.listsPage !== true) out.push({ id: "sitemap", n: r.sitemap.children.unread, cap: r.sitemap.children.cap, t: [`${r.sitemap.children.unread} child sitemaps not read (cap ${r.sitemap.children.cap})`, `${uk3(r.sitemap.children.unread, "дочірній sitemap", "дочірні sitemap", "дочірніх sitemap")} не прочитано (ліміт ${r.sitemap.children.cap})`] });
+  if (r.images?.unchecked) out.push({ id: "images", n: r.images.unchecked, cap: r.images.cap, t: [`${r.images.unchecked} images not sized (cap ${r.images.cap})`, `${uk3(r.images.unchecked, "зображення", "зображення", "зображень")} без перевірки розміру (ліміт ${r.images.cap})`] });
+  if (r.shell?.detected) {
+    if (r.render?.ok) out.push({ id: "render_auto", t: [`An app shell: rendered in ${r.render.browser} on its own; ${r.render.jsZones.length} sections only with JavaScript`, `Оболонка застосунку: відрендерено в ${r.render.browser} автоматично; ${r.render.jsZones.length} розділів лише з JavaScript`] });
+    else if (r.render) out.push({ id: "render_none", t: [`An app shell, and no render: ${r.render.reason === "no_browser" ? "no Chrome or Chromium found (set CHROME_PATH)" : r.render.reason}; the JavaScript-only text is not measured`, `Оболонка застосунку без рендеру: ${r.render.reason === "no_browser" ? "не знайдено Chrome чи Chromium (задайте CHROME_PATH)" : r.render.reason}; текст лише з JavaScript не виміряно`] });
+    else out.push({ id: "render_none", t: ["An app shell in a saved page: not rendered", "Оболонка застосунку в збереженій сторінці: не відрендерено"] });
+  }
   const merged = r.facts.zones.find((z) => z.kind === "more");
   if (merged) out.push({ id: "zones", n: merged.merged, t: [`${merged.merged} sections drawn as one zone on the map`, `${uk3(merged.merged, "розділ", "розділи", "розділів")} на мапі показано однією зоною`] });
   if (r.fetch.saved) out.push({ id: "saved", t: ["A saved page: robots.txt, sitemap, llms.txt, language versions and links not measured", "Збережена сторінка: robots.txt, sitemap, llms.txt, мовні версії й посилання не виміряно"] });
@@ -19018,6 +20304,15 @@ var CSS_EXTRA = `
 :root[data-lang="uk"] .lb-en{display:none}
 :root[data-lang="uk"] .lb-uk{display:block}
 @media (max-width:480px){.refusal{padding:14px 14px}.refusal ul{padding-left:16px}}
+/* the judgement badge and the one-model note */
+.lyr{display:inline-flex;align-items:center;gap:4px;font-weight:600;font-size:9.5px;line-height:1.5;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:0 7px;border:1px solid var(--c);color:var(--c);background:var(--cs);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.lyr::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c);flex:none}
+.lyr.judgement{--c:var(--lj);--cs:var(--lj-soft)}
+.pm-key li.jd{flex-wrap:wrap}
+.pm-key li.jd .lyr,.bchip .lyr{text-transform:none;letter-spacing:.02em;font-size:10.5px;white-space:normal;overflow:visible;line-height:1.35;padding:1px 8px}
+.pm-key li.jd .lyr{flex-basis:100%;margin:0 0 2px;width:fit-content;max-width:100%}
+.bchip .lyr{align-self:flex-start}
+.honest{margin:0 0 12px;font-size:13.5px;color:var(--text);border:1px solid var(--line-2);border-left:3px solid var(--lj);border-radius:10px;padding:8px 12px;background:var(--lj-soft)}
 `;
 
 // scripts/lib/favicons.mjs
@@ -19070,7 +20365,7 @@ var STATE_ICON = {
   na: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/><path d="M8 12h8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'
 };
 var EYE_OFF = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10.6 10.6 0 0 1 12 6c5 0 8.5 4.3 9.5 6-.5.9-1.5 2.3-3 3.6M6.4 7.6C4.6 8.9 3.2 10.7 2.5 12c1 1.7 4.5 6 9.5 6 1.6 0 3-.4 4.2-1M9.9 9.9a3 3 0 0 0 4.2 4.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-var STOP2 = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 2.5h7.6l5.7 5.7v7.6l-5.7 5.7H8.2l-5.7-5.7V8.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 12h9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+var STOP3 = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.2 2.5h7.6l5.7 5.7v7.6l-5.7 5.7H8.2l-5.7-5.7V8.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 12h9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
 function pinShape(sev) {
   if (sev === "blocking") {
     const pts = Array.from({ length: 8 }, (_, i) => {
@@ -19091,8 +20386,14 @@ function pinLink(f, x, y) {
   return `<a class="pm-a" href="#${target(f)}" ${attrPair("aria-label", lab(0), lab(1))}><g class="pin ${f.severity}" transform="translate(${x} ${y})"><circle class="ring" r="19"/>${pinShape(f.severity)}<text dy=".36em">${f.pin}</text></g></a>`;
 }
 __name(pinLink, "pinLink");
+var judgeBadge = /* @__PURE__ */ __name((f) => {
+  if (f.layer !== "judgement") return "";
+  const m = f.judgement?.model;
+  const t = [`${LAYER.judgement[0]} · ${m || UI.modelNotStated[0]}`, `${LAYER.judgement[1]} · ${m || UI.modelNotStated[1]}`];
+  return `<span class="lyr judgement">${P(t)}</span>`;
+}, "judgeBadge");
 var ownerMark = /* @__PURE__ */ __name((o) => `<span class="own" ${attrPair("title", OWNERS[o][0], OWNERS[o][1])}>${OWNER_ICON[o]}<span class="vh">${P(OWNERS[o])}</span></span>`, "ownerMark");
-var stx = /* @__PURE__ */ __name((x, y, t, cls, extra = "") => t[0] === t[1] ? `<text class="${cls}" x="${x}" y="${y}"${extra}>${esc(t[0])}</text>` : `<text class="${cls} l-en" x="${x}" y="${y}"${extra}>${esc(t[0])}</text><text class="${cls} l-uk" x="${x}" y="${y}"${extra}>${esc(t[1])}</text>`, "stx");
+var stx = /* @__PURE__ */ __name((x, y, t, cls, extra2 = "") => t[0] === t[1] ? `<text class="${cls}" x="${x}" y="${y}"${extra2}>${esc(t[0])}</text>` : `<text class="${cls} l-en" x="${x}" y="${y}"${extra2}>${esc(t[0])}</text><text class="${cls} l-uk" x="${x}" y="${y}"${extra2}>${esc(t[1])}</text>`, "stx");
 var rr = /* @__PURE__ */ __name((x, y, w, h, cls, rx = 2) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"/>`, "rr");
 var mkI = /* @__PURE__ */ __name((st, lab) => `<span class="mk ${st}" ${attrPair("title", lab[0], lab[1])}><i aria-hidden="true">${MARK[st].i}</i><span class="vh">${P(lab)}</span></span>`, "mkI");
 var head = /* @__PURE__ */ __name((id, t, unit) => `<div class="panel-head"><h2 id="${id}">${P(t)}${unit ? ` <span class="unit">${P(unit)}</span>` : ""}</h2></div>`, "head");
@@ -19124,8 +20425,8 @@ function pageSvg(model2) {
   for (const z of model2.zones) {
     const h = zoneHeight(z, lede && lede.zones.includes(z.id));
     const pins = z.pins.slice(0, z.pins.length > MAX_ZONE_PINS ? MAX_ZONE_PINS - 1 : MAX_ZONE_PINS);
-    const extra = z.pins.length - pins.length;
-    const pinRoom = (pins.length + (extra ? 1 : 0)) * PIN_STEP;
+    const extra2 = z.pins.length - pins.length;
+    const pinRoom = (pins.length + (extra2 ? 1 : 0)) * PIN_STEP;
     const maxChars = Math.max(10, Math.floor((MAP_W - 28 - pinRoom) / 7.6));
     const g = [`<g aria-hidden="true">`, `<rect class="z${z.kind === "js" ? " js" : ""}" x="0.75" y="${y + 0.75}" width="${MAP_W - 1.5}" height="${h - 1.5}" rx="8"/>`];
     const lab = zoneLabel(z).map((t) => clip2(t, maxChars));
@@ -19167,8 +20468,8 @@ function pageSvg(model2) {
     }
     g.push("</g>");
     out.push(g.join(""));
-    pins.forEach((f, i) => out.push(pinLink(f, MAP_W - 22 - (pins.length - 1 - i) * PIN_STEP - (extra ? PIN_STEP : 0), y + 21)));
-    if (extra) out.push(`<text class="zn" x="${MAP_W - 22}" y="${y + 25}" text-anchor="middle" aria-hidden="true">+${extra}</text>`);
+    pins.forEach((f, i) => out.push(pinLink(f, MAP_W - 22 - (pins.length - 1 - i) * PIN_STEP - (extra2 ? PIN_STEP : 0), y + 21)));
+    if (extra2) out.push(`<text class="zn" x="${MAP_W - 22}" y="${y + 25}" text-anchor="middle" aria-hidden="true">+${extra2}</text>`);
     y += h + 12;
   }
   const H = Math.max(40, y - 12);
@@ -19202,7 +20503,7 @@ function mapBlock(model2) {
   if (model2.unmappedCount) legend.push(`<li class="pm-un">${P(call(UI.unmapped, model2.unmappedCount))}</li>`);
   o.push(`<ul class="pm-legend" id="map-legend">${legend.join("")}</ul>`);
   const rest = model2.findings.filter((f) => !f.big);
-  if (rest.length) o.push(`<ol class="pm-key" id="map-key" ${attrPair("aria-label", UI.otherProblems[0], UI.otherProblems[1])}>${rest.map((f) => `<li id="pin-${esc(f.id)}" class="${f.severity}">${pinIcon(f.severity, f.pin, 26)}<span class="vh">${P(SEV[f.severity])}: </span><span class="pk-l">${P(f.label)}</span>${ownerMark(f.owner)}</li>`).join("")}</ol>`);
+  if (rest.length) o.push(`<ol class="pm-key" id="map-key" ${attrPair("aria-label", UI.otherProblems[0], UI.otherProblems[1])}>${rest.map((f) => `<li id="pin-${esc(f.id)}" class="${f.severity}${f.layer === "judgement" ? " jd" : ""}">${pinIcon(f.severity, f.pin, 26)}<span class="vh">${P(SEV[f.severity])}: </span><span class="pk-l">${P(f.label)}</span>${ownerMark(f.owner)}${judgeBadge(f)}</li>`).join("")}</ol>`);
   const zonesCap = model2.caps.find((c2) => c2.id === "zones");
   if (zonesCap) o.push(`<p class="capnote">${P(zonesCap.t)}</p>`);
   o.push("</section>");
@@ -19212,8 +20513,9 @@ __name(mapBlock, "mapBlock");
 function tilesBlock(model2) {
   const o = [`<ul class="tiles tiles-lite" id="status" ${attrPair("aria-label", UI.statusAria[0], UI.statusAria[1])}>`];
   for (const t of model2.tiles) {
-    const tc = t.state === "na" ? UI.oneVersion : !t.count ? UI.nothingFound : t.minorOnly ? nMinor(t.count) : nProblems(t.count);
-    o.push(`<li class="tile ${t.state}" id="tile-${t.id}"><h2>${P(t.q)}</h2><span class="state">${STATE_ICON[t.state]}${P(STATE[t.state])}</span><span class="tc">${P(tc)}</span></li>`);
+    const na = t.id === "brand" ? [STATE.unchecked, UI.noBrandFiles] : [STATE.na, UI.oneVersion];
+    const tc = t.state === "na" ? na[1] : !t.count ? UI.nothingFound : t.minorOnly ? nMinor(t.count) : nProblems(t.count);
+    o.push(`<li class="tile ${t.state}" id="tile-${t.id}"><h2>${P(t.q)}</h2><span class="state">${STATE_ICON[t.state]}${P(t.state === "na" ? na[0] : STATE[t.state])}</span><span class="tc">${P(tc)}</span></li>`);
   }
   o.push("</ul>");
   return o.join("\n");
@@ -19222,7 +20524,7 @@ __name(tilesBlock, "tilesBlock");
 function biggestBlock(model2) {
   const o = [`<section class="panel" id="biggest" aria-labelledby="h-biggest">${head("h-biggest", UI.biggest)}`];
   if (!model2.bigs.length) o.push(`<p class="none-found">${P(UI.noProblems)}</p>`);
-  else o.push(`<ol class="bchips">${model2.bigs.map((f) => `<li class="bchip ${f.severity}" id="big-${esc(f.id)}"><span class="bc-t">${pinIcon(f.severity, f.pin, 30)}<span>${P(f.label)}</span></span><span class="bc-m"><span class="sevw ${f.severity}">${P(SEV[f.severity])}</span>${ownerMark(f.owner)}</span></li>`).join("")}</ol>`);
+  else o.push(`<ol class="bchips">${model2.bigs.map((f) => `<li class="bchip ${f.severity}" id="big-${esc(f.id)}"><span class="bc-t">${pinIcon(f.severity, f.pin, 30)}<span>${P(f.label)}</span></span><span class="bc-m"><span class="sevw ${f.severity}">${P(SEV[f.severity])}</span>${ownerMark(f.owner)}</span>${judgeBadge(f)}</li>`).join("")}</ol>`);
   o.push("</section>");
   return o.join("\n");
 }
@@ -19283,7 +20585,8 @@ function botsBlock(model2) {
   if (r.status === "unreachable") note = `<p class="capnote bad">${P(UI.robotsUnreachable)}</p>`;
   if (r.status === "not_checked") return `<section class="panel wide" id="lc-bots" aria-labelledby="h-lc-bots">${head("h-lc-bots", UI.bots, unit)}<p class="capnote">${P(UI.robotsNotChecked)}</p></section>`;
   const items = model2.bots.map((b) => `<li class="${b.allowed ? "ok" : "no"}" id="bot-${esc(b.token.toLowerCase())}">${favImg(b.vendor)}<span class="bn">${esc(b.token)}</span>${b.allowed ? mkI("pass", UI.allowed) : mkI("fail", UI.blocked)}<span class="bp">${esc(b.vendor)} · ${P(UI.kind[b.kind])}</span></li>`).join("");
-  return `<section class="panel wide" id="lc-bots" aria-labelledby="h-lc-bots">${head("h-lc-bots", UI.bots, unit)}<ul class="bots">${items}</ul>${note}</section>`;
+  const llmsNote = `<p class="capnote" id="llms-note">${P(UI.llmsNote)} ${ext(UI.llmsNoteSource[2], `${esc(UI.llmsNoteSource[0])} ↗`)}</p>`;
+  return `<section class="panel wide" id="lc-bots" aria-labelledby="h-lc-bots">${head("h-lc-bots", UI.bots, unit)}<ul class="bots">${items}</ul>${note}${llmsNote}</section>`;
 }
 __name(botsBlock, "botsBlock");
 function classicBlock(model2) {
@@ -19308,9 +20611,11 @@ function languagesBlock(model2) {
   return `<section class="panel" id="lc-langs" aria-labelledby="h-lc-langs">${head("h-lc-langs", UI.langs, unit)}<div class="tablewrap"><table class="lgrid"><thead><tr><th>${P(UI.langCol)}</th>${UI.langCols.map((c2) => `<th>${P(c2)}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>${markKey}${unread}</section>`;
 }
 __name(languagesBlock, "languagesBlock");
-function cannotBlock() {
+function cannotBlock(model2) {
+  const j = model2.judgement;
+  const note = j.any ? `<p class="honest" id="one-model">${P([UI.oneModel[0](j.model || UI.modelNotStated[0]), UI.oneModel[1](j.model || UI.modelNotStated[1])])}</p>` : "";
   const items = CANNOT.map((c2) => `<li>${EYE_OFF}<span class="cl-t">${P(c2.t)}</span><span>${c2.links.map(([en3, uk4, href]) => ext(href, `${pair(esc(en3), esc(uk4))} ↗`)).join(" · ")}</span></li>`).join("");
-  return `<section class="panel" id="cannot-see" aria-labelledby="h-cannot">${head("h-cannot", UI.cannot)}<ul class="cannot-lite">${items}</ul></section>`;
+  return `<section class="panel" id="cannot-see" aria-labelledby="h-cannot">${head("h-cannot", UI.cannot)}${note}<ul class="cannot-lite">${items}</ul></section>`;
 }
 __name(cannotBlock, "cannotBlock");
 var JS = `
@@ -19397,7 +20702,7 @@ function renderReport(model2) {
   o.push(classicBlock(model2));
   o.push(languagesBlock(model2));
   o.push("</div>");
-  o.push(cannotBlock());
+  o.push(cannotBlock(model2));
   o.push(`<p class="fulllink" id="full-link"><a href="${FULL_VERSION_URL}" rel="noopener noreferrer" target="_blank">${P(UI.full)}</a></p>`);
   o.push(...documentEnd());
   return o.join("\n") + "\n";
@@ -19435,10 +20740,10 @@ function renderRefusal(reading2) {
   const o = documentStart(`${TOOL_NAME} Lite: ${REFUSAL_COPY.title.en}`);
   o.push(`<header class="verdict lite-verdict" id="verdict">${pageId(url, "")}</header>`);
   if (reading2.reasonCode === "refused_language_ru") {
-    o.push(`<section class="refusal" role="alert"><div class="refusal-head">${STOP2}<h2>${P([REFUSAL_COPY.title.en, REFUSAL_COPY.title.uk])}</h2></div><div class="lb-en">${refusalBody("en")}</div><div class="lb-uk" lang="uk">${refusalBody("uk")}</div></section>`);
+    o.push(`<section class="refusal" role="alert"><div class="refusal-head">${STOP3}<h2>${P([REFUSAL_COPY.title.en, REFUSAL_COPY.title.uk])}</h2></div><div class="lb-en">${refusalBody("en")}</div><div class="lb-uk" lang="uk">${refusalBody("uk")}</div></section>`);
   } else {
     const code = `${reading2.reasonCode}${reading2.status ? ` · HTTP ${reading2.status}` : ""}`;
-    o.push(`<section class="refusal" role="alert"><div class="refusal-head">${STOP2}<h2>${P(["The page could not be audited", "Сторінку не вдалося перевірити"])}</h2></div><p class="lead mono">${esc(code)}</p></section>`);
+    o.push(`<section class="refusal" role="alert"><div class="refusal-head">${STOP3}<h2>${P(["The page could not be audited", "Сторінку не вдалося перевірити"])}</h2></div><p class="lead mono">${esc(code)}</p></section>`);
   }
   o.push(...documentEnd("footerRefused"));
   return o.join("\n") + "\n";
@@ -19449,7 +20754,7 @@ __name(renderRefusal, "renderRefusal");
 var SKILL_VERSION = "2.101";
 var READING_SCHEMA = "getlooploop/ai-search-audit-reading@1";
 var EXPORT_SCHEMA = "getlooploop/ai-search-audit@1";
-var PRODUCED_BY = "ai-search-audit skill, Lite (local, deterministic, no model calls)";
+var PRODUCED_BY = "ai-search-audit skill, Lite (local; deterministic checks, and the agent's own judgement where marked; the scripts call no model)";
 
 // scripts/lib/outputs.mjs
 var cell = /* @__PURE__ */ __name((s) => String(s ?? "").replace(/\|/g, "\\|").replace(/\s+/g, " ").trim(), "cell");
@@ -19465,14 +20770,18 @@ function renderMarkdown(model2) {
   o.push(`# ${TOOL_NAME} Lite: ${r.fetch.finalUrl}`, "");
   o.push(`${r.facts.head.title ? `${cell(r.facts.head.title)} · ` : ""}checked ${dateOf(r.createdAt)[0]} · skill ${SKILL_VERSION}`, "");
   o.push(`**${verdict(model2.findings)[0]}** · ${model2.findings.length} problems (${SEVERITIES.map((s) => `${SEV[s][0].toLowerCase()} ${model2.counts[s]}`).join(", ")})`, "");
-  o.push("Lite lists problems, not fixes: labels, severities and places. Every check is deterministic; no model wrote any part of this.", "");
+  o.push("Lite lists problems, not fixes: labels, severities and places. The checks are deterministic (measured or derived); the questions, the brand and the reviews are the agent's judgement, marked as such.", "");
+  const j = model2.judgement;
+  if (j.any) o.push(`> ${UI.oneModel[0](j.model || UI.modelNotStated[0])}`, "");
+  if (model2.keyword) o.push(`Main phrase: “${cell(model2.keyword.keyword)}” (${model2.keyword.source === "given" ? "given with --keyword" : "read off the h1"}).`, "");
   o.push("## Status", "", "| Question | State | Problems |", "|---|---|---|");
-  for (const t of model2.tiles) o.push(`| ${t.q[0]} | ${{ ok: "OK", prob: "Problems", block: "Blocking", na: "One version" }[t.state]} | ${t.count} |`);
+  for (const t of model2.tiles) o.push(`| ${t.q[0]} | ${t.state === "na" ? t.id === "brand" ? "Not checked" : "One version" : { ok: "OK", prob: "Problems", block: "Blocking" }[t.state]} | ${t.count} |`);
   o.push("", "## Biggest problems", "");
   if (!model2.bigs.length) o.push("No problems found.");
-  for (const f of model2.bigs) o.push(`${f.pin}. **${SEV[f.severity][0]}** · ${f.label[0]}${f.where ? ` · \`${cell(f.where)}\`` : ""}`);
-  o.push("", "## All problems", "", "| # | Severity | Problem | Where | Code |", "|---|---|---|---|---|");
-  for (const f of model2.findings) o.push(`| ${f.pin} | ${SEV[f.severity][0]} | ${cell(f.label[0])} | ${f.where ? `\`${cell(f.where)}\`` : "—"} | \`${f.code}\` |`);
+  const layerOf = /* @__PURE__ */ __name((f) => `${LAYER[f.layer][0]}${f.layer === "judgement" ? ` · ${f.judgement?.model || UI.modelNotStated[0]}` : ""}`, "layerOf");
+  for (const f of model2.bigs) o.push(`${f.pin}. **${SEV[f.severity][0]}** · ${cell(f.label[0])}${f.where ? ` · \`${cell(f.where)}\`` : ""}${f.layer === "judgement" ? ` · *${layerOf(f)}*` : ""}`);
+  o.push("", "## All problems", "", "| # | Severity | Problem | Where | Layer | Code |", "|---|---|---|---|---|---|");
+  for (const f of model2.findings) o.push(`| ${f.pin} | ${SEV[f.severity][0]} | ${cell(f.label[0])} | ${f.where ? `\`${cell(f.where)}\`` : "—"} | ${cell(layerOf(f))} | \`${f.code}\` |`);
   o.push("", "## Page map", "", "Top to bottom; the numbers are the problems above. Unseen: the text reaches no passage an AI retriever would read.", "");
   model2.zones.forEach((z, i) => {
     const seen = z.hidden || z.kind === "aside" ? " · unseen" : z.seen !== null && z.seen !== void 0 && z.seen < 0.9 && z.kind !== "header" && z.kind !== "nav" && z.kind !== "footer" ? ` · ${Math.round((1 - z.seen) * 100)}% unseen` : "";
@@ -19497,7 +20806,7 @@ function renderMarkdown(model2) {
   o.push("", "## Language versions", "");
   if (!model2.languages) o.push(UI.langOne[0]);
   else {
-    o.push(`x-default: ${model2.languages.xDefault ? "yes" : "no"}`, "", "| Lang | Title | Description | hreflang | html lang |", "|---|---|---|---|---|");
+    o.push(`x-default: ${model2.languages.xDefault ? "yes" : "no"}`, "", "| Lang | Title | Description | hreflang | Same facts |", "|---|---|---|---|---|");
     for (const row of model2.languages.rows) o.push(`| ${cell(row.hreflang)}${row.self ? " (this page)" : ""}${row.refused ? " (not analysed)" : ""} | ${row.cells.map((s) => MARK[s].t[0]).join(" | ")} |`);
   }
   const w = model2.waterfall;
@@ -19512,7 +20821,7 @@ function renderMarkdown(model2) {
   }
   o.push("", "## What this check cannot see", "");
   for (const c2 of CANNOT) o.push(`- ${c2.t[0]}: ${c2.links.map(([en3, , href]) => `[${en3}](${href})`).join(" · ")}`);
-  o.push("", `A full version with explanations is available from GetLoopLoop: ${FULL_VERSION_URL}`, "");
+  o.push("", `Full report with explanations: ${FULL_VERSION_URL}`, "");
   return o.join("\n");
 }
 __name(renderMarkdown, "renderMarkdown");
@@ -19538,6 +20847,8 @@ function buildExport(model2) {
       owner: f.owner,
       hidesText: f.hides,
       informational: f.informational,
+      layer: f.layer,
+      judgement: f.judgement,
       label: { en: f.label[0], uk: f.label[1] },
       where: f.where,
       map: { zones: f.zones, strip: f.strip },
@@ -19545,7 +20856,12 @@ function buildExport(model2) {
       evidence: f.evidence,
       rules: f.rules
     })),
-    codes: Object.fromEntries(Object.entries(CODES).map(([k, v]) => [k, { severity: v.severity, area: v.area, owner: v.owner }])),
+    codes: Object.fromEntries(Object.entries(CODES).map(([k, v]) => [k, { severity: v.severity, area: v.area, owner: v.owner, layer: v.layer || "measured" }])),
+    layers: { measured: "what a script counted on the page; any agent gets the same value", derived: "computed from measured values by a fixed formula", judgement: "the agent's model read or answered it; another model may judge differently" },
+    judgement: { ...model2.judgement, questions: model2.extra?.questions || null, brand: model2.extra?.brand || null, reviews: model2.extra?.reviews || null },
+    keyword: model2.modules.keyword,
+    writingPatterns: model2.modules.patterns.analysed ? { language: model2.modules.patterns.language, wordCount: model2.modules.patterns.wordCount, score: model2.modules.patterns.score, detectors: model2.modules.patterns.version, findings: model2.modules.patterns.findings.map((x) => ({ family: x.family, detector: x.detector, severity: x.severity, evidence: x.evidence, passage: x.passage, word: x.word, heading: x.heading, occurrences: x.occurrences })), note: "signals about worn writing, not an AI detector" } : { analysed: false, reason: model2.modules.patterns.reason },
+    localeFacts: model2.modules.locales ? { method: "h2 sections aligned by order when both versions have the same count; numbers compared as sets", compared: model2.modules.locales.compared, differ: model2.modules.locales.differ, limits: ["versions whose sections do not line up are not compared", "numbers written as words are not read", "a number may differ on purpose (a local price or phone number)"] } : null,
     checklist: model2.checklist.map((c2) => ({ id: c2.id, name: { en: c2.name[0], uk: c2.name[1] }, state: c2.state, codes: c2.codes })),
     pageMap: {
       zones: model2.zones.map((z) => ({ id: z.id, kind: z.kind, label: z.label, headings: z.headings, chars: z.chars, hidden: Boolean(z.hidden), panels: z.panels || 0, seenShare: z.seen ?? null, merged: z.merged || 0, problems: z.pins.map((f) => f.pin) })),
@@ -19600,14 +20916,20 @@ function buildRefusalExport(reading2) {
 __name(buildRefusalExport, "buildRefusalExport");
 
 // scripts/audit.mjs
-var USAGE = "Usage: node scripts/audit.mjs reading.json [--html report.html] [--md report.md] [--json export.json]";
+var USAGE = [
+  "Usage: node scripts/audit.mjs reading.json [--questions questions.json] [--brand brand.json] [--reviews reviews.json]",
+  '       [--keyword "phrase"] [--html report.html] [--md report.md] [--json export.json] [--check]'
+].join("\n");
 function parseArgs(argv) {
-  const out = { reading: null, html: null, md: null, json: null };
+  const out = { reading: null, html: null, md: null, json: null, questions: null, brand: null, reviews: null, keyword: null, check: false };
+  const takes = { "--html": "html", "--md": "md", "--json": "json", "--questions": "questions", "--brand": "brand", "--reviews": "reviews", "--keyword": "keyword" };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
-    if (arg === "--html") out.html = argv[++i];
-    else if (arg === "--md") out.md = argv[++i];
-    else if (arg === "--json") out.json = argv[++i];
+    if (takes[arg]) {
+      const v = argv[++i];
+      if (v === void 0) throw new Error(`${arg} needs a value`);
+      out[takes[arg]] = v;
+    } else if (arg === "--check") out.check = true;
     else if (arg === "-h" || arg === "--help") out.help = true;
     else if (arg.startsWith("--")) throw new Error(`Unknown option: ${arg}`);
     else if (!out.reading) out.reading = arg;
@@ -19628,19 +20950,25 @@ if (args.help || !args.reading) {
   console.error(USAGE);
   process.exit(args.help ? 0 : 1);
 }
-if (!args.html && !args.md && !args.json) args.html = "report.html";
-var reading;
-try {
-  reading = JSON.parse(readFileSync(args.reading, "utf8"));
-} catch (error) {
-  console.error(`REFUSED   ${args.reading} is not a readable JSON file: ${error.message}`);
-  process.exit(1);
-}
+if (!args.check && !args.html && !args.md && !args.json) args.html = "report.html";
+var readJson = /* @__PURE__ */ __name((file, what) => {
+  try {
+    return JSON.parse(readFileSync(file, "utf8"));
+  } catch (error) {
+    console.error(`REFUSED   ${file} is not a readable JSON file (${what}): ${error.message}`);
+    process.exit(1);
+  }
+}, "readJson");
+var reading = readJson(args.reading, "reading");
 if (reading.schema !== READING_SCHEMA) {
   console.error(`REFUSED   ${args.reading} is not an ai-search-audit reading (schema ${JSON.stringify(reading.schema)}, expected ${READING_SCHEMA}). Run read.mjs first.`);
   process.exit(1);
 }
 if (!reading.ok) {
+  if (args.check) {
+    console.log(`REFUSED   ${reading.reasonCode}: the reading was refused, so there is nothing to judge.`);
+    process.exit(2);
+  }
   if (args.html) writeFileSync(args.html, renderRefusal(reading));
   if (args.md) writeFileSync(args.md, renderRefusalMarkdown(reading));
   if (args.json) writeFileSync(args.json, JSON.stringify(buildRefusalExport(reading), null, 2));
@@ -19648,7 +20976,27 @@ if (!reading.ok) {
   for (const [k, v] of [["html", args.html], ["md", args.md], ["json", args.json]]) if (v) console.log(`${k.padEnd(9)} ${v}`);
   process.exit(2);
 }
-var model = buildModel(reading);
+var extra = { keyword: args.keyword };
+var modules = textModules(reading, { keyword: args.keyword });
+var judged = [
+  ["questions", args.questions, (x) => validateQuestions(x, reading.vs.passages, { keyword: modules.keyword.keyword })],
+  ["brand", args.brand, validateBrand],
+  ["reviews", args.reviews, validateReviews]
+];
+for (const [key, file, validate] of judged) {
+  if (!file) continue;
+  try {
+    extra[key] = validate(readJson(file, key));
+  } catch (error) {
+    console.error(`REFUSED   ${file}: ${error.message}`);
+    process.exit(1);
+  }
+  for (const w of extra[key].warnings || []) console.log(`warning   ${file}: ${w}`);
+  const j = extra[key].judgement;
+  console.log(`${key.padEnd(9)} ${file} ok · judged by ${j.agent || "agent not stated"} · ${j.model || "model not stated"}`);
+}
+if (args.check) process.exit(0);
+var model = buildModel(reading, extra);
 if (args.html) writeFileSync(args.html, renderReport(model));
 if (args.md) writeFileSync(args.md, renderMarkdown(model));
 if (args.json) writeFileSync(args.json, JSON.stringify(buildExport(model), null, 2));
@@ -19656,7 +21004,11 @@ var c = model.counts;
 console.log(`url       ${reading.fetch.finalUrl}`);
 console.log(`problems  ${model.findings.length} · blocking ${c.blocking} · high ${c.high} · medium ${c.medium} · low ${c.low}`);
 console.log(`tiles     ${model.tiles.map((t) => `${t.id} ${t.state}`).join(" · ")}`);
-for (const f of model.findings) console.log(`  ${String(f.pin).padStart(2)} [${f.severity}] ${f.code}${f.where ? `  @ ${f.where.slice(0, 90)}` : ""}`);
+if (model.keyword) console.log(`keyword   “${model.keyword.keyword}” (${model.keyword.source === "given" ? "--keyword" : "from the h1"})`);
+var p = model.modules.patterns;
+console.log(`patterns  ${p.analysed ? `${p.language} · ${p.wordCount} words · ${p.findings.length} signals` : `not analysed (${p.reason})`}`);
+if (model.modules.locales) console.log(`locales   ${model.modules.locales.compared.map((x) => `${x.hreflang} ${x.aligned ? `${x.differ} differ` : "not aligned"}`).join(" · ")}`);
+for (const f of model.findings) console.log(`  ${String(f.pin).padStart(2)} [${f.severity}] ${f.code}${f.layer === "judgement" ? " (judgement)" : ""}${f.where ? `  @ ${f.where.slice(0, 90)}` : ""}`);
 var cl = model.checklist;
 console.log(`checklist ${["pass", "fail", "warn", "na", "none"].map((s) => `${s} ${cl.filter((x) => x.state === s).length}`).join(" · ")}`);
 for (const cap2 of model.caps) console.log(`not done  ${cap2.t[0]}`);

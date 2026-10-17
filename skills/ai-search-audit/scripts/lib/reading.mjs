@@ -7,17 +7,25 @@ import { readPage } from "../../../vectorscope/scripts/lib/reading.mjs";
 import { fetchRobots, robotsReport } from "../../../vectorscope/scripts/lib/robots.mjs";
 import { renderPage } from "../../../vectorscope/scripts/lib/render.mjs";
 import { analyseHtml } from "../../../vectorscope/scripts/lib/extract.mjs";
+import { extractSections } from "../../../vectorscope/scripts/lib/chunk.mjs";
 import { declaredLanguagesFromHtml, judgeLanguage } from "../../../vectorscope/scripts/lib/language.mjs";
 import { isHtmlContentType } from "../../../vectorscope/scripts/lib/nonPageUrl.mjs";
 import { REFUSAL_CODE } from "../../../vectorscope/scripts/lib/refusal.mjs";
 import { basename } from "node:path";
 import { guardedFetch } from "./net.mjs";
 import { collectFacts, headingKey } from "./facts.mjs";
-import { checkAlternates, checkLinks, checkLlms, checkSitemap, robotsSitemaps } from "./collect.mjs";
+import { checkAlternates, checkImages, checkLinks, checkLlms, checkSite, checkSitemap, robotsSitemaps } from "./collect.mjs";
+import { SHELL_MAX_WORDS, SHELL_ROOT_MAX_CHARS } from "./extras.mjs";
 import { READING_SCHEMA, SKILL_VERSION } from "./version.mjs";
 
 export { headingKey };
 
+
+/** The chunker's sections of the kept text, the intro (title, h1, description) marked. */
+export function keptSections(analysed) {
+  const hasIntro = [analysed.title, (analysed.h1 || []).join(" "), analysed.metaDescription].some((x) => String(x || "").trim());
+  return extractSections(analysed).map((s, i) => ({ heading: s.heading ?? null, text: s.text, ...(i === 0 && hasIntro ? { intro: true } : {}) }));
+}
 
 /** Fetch the page itself; every failure becomes a refusal code. */
 async function fetchPage(url) {
@@ -89,6 +97,9 @@ export async function readAudit({ url, html, finalUrl, robotsText, network, rend
   if (!vs.ok) return { ...base, ok: false, reasonCode: vs.reasonCode, fetch: { requestedUrl: urlKey, finalUrl: page.url, chain: page.chain } };
 
   const facts = collectFacts(page.html, page.url);
+  // The kept text's own sections, as the chunker splits it: the writing patterns, the keyword and
+  // the language versions' numbers read these, so all three see what a retriever sees.
+  facts.sections = keptSections(analysed);
 
   let robotsFetched;
   if (online) robotsFetched = await fetchRobots(page.url);
@@ -102,11 +113,19 @@ export async function readAudit({ url, html, finalUrl, robotsText, network, rend
   const llms = online ? await checkLlms(page.url) : null;
   const alternates = online ? await checkAlternates(page.url, facts.head.hreflang) : null;
   const links = online ? await checkLinks(facts.links) : null;
+  const images = online ? await checkImages(facts.images) : null;
+  const site = online ? await checkSite(page.url, facts.extras, { canonical, now: now.getTime() }) : null;
+
+  // A single-page app shell: an app root with almost no text, and scripts to fill it. Then the
+  // render runs on its own (when a local browser is found), so the JavaScript-only text is measured.
+  const emptyRoots = facts.extras.roots.filter((x) => x.chars < SHELL_ROOT_MAX_CHARS);
+  const shell = { detected: vs.page.wordCount < SHELL_MAX_WORDS && emptyRoots.length > 0 && facts.head.scripts.total > 0, roots: emptyRoots.map((x) => x.selector), words: vs.page.wordCount, scripts: facts.head.scripts.total };
+  const autoRender = shell.detected && !render && online;
 
   let rendered = null;
-  if (render) {
+  if (render || autoRender) {
     const result = await renderPage(page.url);
-    if (!result.ok) rendered = { ok: false, reason: result.reason, browser: result.browser ? basename(result.browser) : null };
+    if (!result.ok) rendered = { ok: false, reason: result.reason, browser: result.browser ? basename(result.browser) : null, auto: autoRender };
     else {
       const js = await readPage({ url: urlKey, html: result.html, finalUrl: page.url, robots: "skip" });
       const jsFacts = collectFacts(result.html, page.url);
@@ -118,6 +137,7 @@ export async function readAudit({ url, html, finalUrl, robotsText, network, rend
         charsIndexed: js.ok ? js.page.charsIndexed : 0,
         headings: js.ok ? js.page.headings : 0,
         jsZones: jsOnlyZones(facts, jsFacts),
+        auto: autoRender,
       };
     }
   }
@@ -134,6 +154,7 @@ export async function readAudit({ url, html, finalUrl, robotsText, network, rend
       status: page.status,
       contentType: page.headers.contentType ?? null,
       xRobotsTag: page.headers.xRobotsTag ?? null,
+      hsts: page.headers.hsts ?? null,
       contentLanguage: page.headers.contentLanguage ?? null,
     },
     facts,
@@ -143,6 +164,9 @@ export async function readAudit({ url, html, finalUrl, robotsText, network, rend
     llms,
     alternates,
     links,
+    images,
+    site,
+    shell,
     render: rendered,
   };
 }

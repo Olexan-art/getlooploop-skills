@@ -10,6 +10,8 @@ import { declaredLanguagesFromHtml, judgeLanguage, primaryTag } from "../../../v
 import { analyseHtml } from "../../../vectorscope/scripts/lib/extract.mjs";
 import { isHtmlContentType } from "../../../vectorscope/scripts/lib/nonPageUrl.mjs";
 import { hostKey } from "./facts.mjs";
+import { extractSections } from "../../../vectorscope/scripts/lib/chunk.mjs";
+import { sectionNumbers } from "./localeFacts.mjs";
 
 // ── caps ─────────────────────────────────────────────────────────────────────
 
@@ -186,6 +188,12 @@ export function alternateFacts(html, url) {
   };
 }
 
+/** An alternate's h2 sections as numbers only (see localeFacts.mjs). */
+export function alternateSections(analysed) {
+  const hasIntro = [analysed.title, (analysed.h1 || []).join(" "), analysed.metaDescription].some((x) => String(x || "").trim());
+  return sectionNumbers(extractSections(analysed).map((s, i) => ({ ...s, ...(i === 0 && hasIntro ? { intro: true } : {}) })));
+}
+
 /**
  * Fetch each hreflang alternate (at most ALTERNATES_CAP) and read only what the pair needs:
  * status, final URL, title, description, html lang, noindex and its own hreflang set. An
@@ -219,7 +227,8 @@ export async function checkAlternates(pageUrl, hreflang) {
       results.push({ hreflang: h.hreflang, href: h.href, ok: false, status: r.status, finalUrl: r.url, redirected, reason: isHtml ? "http_error" : "not_html" });
       continue;
     }
-    const language = judgeLanguage({ declared: declaredLanguagesFromHtml(r.text, r.headers.contentLanguage), text: analyseHtml({ html: r.text, url: r.url }).bodyText || "" });
+    const analysed = analyseHtml({ html: r.text, url: r.url });
+    const language = judgeLanguage({ declared: declaredLanguagesFromHtml(r.text, r.headers.contentLanguage), text: analysed.bodyText || "" });
     if (language.russian) {
       results.push({ hreflang: h.hreflang, href: h.href, refused: "refused_language_ru", basis: language.basis });
       continue;
@@ -238,6 +247,9 @@ export async function checkAlternates(pageUrl, hreflang) {
       lang: facts.lang,
       noindex: facts.noindex || /\bnoindex\b|\bnone\b/.test(xRobots),
       hreflangSet: facts.hreflang.slice(0, 60),
+      // Only the numbers of each h2 section, with a few words around each: what the locale-facts
+      // check compares. The rest of the alternate's text is not kept.
+      sections: alternateSections(analysed),
     });
   }
   return { total: list.length, checked: results.length, unchecked: list.slice(ALTERNATES_CAP).map((h) => ({ hreflang: h.hreflang, href: h.href })), cap: ALTERNATES_CAP, results };
@@ -274,4 +286,115 @@ export async function checkLinks(links) {
     return { url: l.url, internal: l.internal, zone: l.zone, path: l.path, text: l.text, status: r.status ?? null, verdict: linkVerdict(r) };
   });
   return { total: unique.length, checked: results.length, unchecked: Math.max(0, unique.length - batch.length), cap: LINK_CHECK_CAP, results };
+}
+
+// ── images and the site around the page ─────────────────────────────────────
+
+/** Images whose size is read (a HEAD each, a bodiless GET when HEAD is refused); the rest are counted. */
+export const IMAGE_CHECK_CAP = 20;
+/** URL variants of the page fetched to see where they end (http, www or not, trailing slash). */
+export const VARIANT_CAP = 3;
+
+/** HEAD the first IMAGE_CHECK_CAP images with a URL: status, Content-Length and Content-Type. */
+export async function checkImages(images) {
+  const list = [];
+  const seen = new Set();
+  for (const img of images) {
+    if (!img.url || seen.has(img.url) || !/^https?:/i.test(img.url)) continue;
+    seen.add(img.url);
+    list.push(img);
+  }
+  const batch = list.slice(0, IMAGE_CHECK_CAP);
+  const results = await pool(batch, LINK_CHECK_CONCURRENCY, async (img) => {
+    let r = await guardedFetch(img.url, { method: "HEAD", timeoutMs: LINK_TIMEOUT_MS, accept: "image/*" });
+    if (!r.ok || [403, 405, 501].includes(r.status) || !r.headers?.contentLength) {
+      const g = await guardedFetch(img.url, { method: "GET", timeoutMs: LINK_TIMEOUT_MS, body: false, accept: "image/*" });
+      if (g.ok) r = g;
+    }
+    return { index: img.index, url: img.url, status: r.status ?? null, bytes: r.ok && r.headers?.contentLength ? Number(r.headers.contentLength) : null, type: r.ok ? r.headers?.contentType || null : null, reason: r.ok ? null : r.reason };
+  });
+  return { total: list.length, checked: results.length, unchecked: Math.max(0, list.length - batch.length), cap: IMAGE_CHECK_CAP, results };
+}
+
+/** www added to a bare domain, or taken off; a deeper subdomain (docs.example.org) has no www variant. */
+const flipWww = (u) => {
+  const x = new URL(u);
+  if (x.hostname.startsWith("www.")) x.hostname = x.hostname.slice(4);
+  else if (x.hostname.split(".").length === 2) x.hostname = `www.${x.hostname}`;
+  else return null;
+  return x.toString();
+};
+const flipSlash = (u) => {
+  const x = new URL(u);
+  if (x.pathname === "/") return null;
+  x.pathname = x.pathname.endsWith("/") ? x.pathname.slice(0, -1) : `${x.pathname}/`;
+  return x.toString();
+};
+
+/** A path that cannot exist on the site, so a 200 answer to it is a soft 404. */
+export function improbablePath(pageUrl, seed = Date.now()) {
+  const u = new URL(pageUrl);
+  return `${u.origin}/getlooploop-audit-missing-${seed.toString(36)}-page`;
+}
+
+/**
+ * One request each: the favicon, a path that does not exist (soft 404), up to VARIANT_CAP URL
+ * variants, a Markdown alternate (declared, or the page URL plus .md), /.well-known/ai-catalog.json
+ * (then /ai-catalog.json if that is missing), and the IndexNow key file when a key is declared.
+ */
+export async function checkSite(pageUrl, extras, { canonical = null, now = Date.now() } = {}) {
+  const u = new URL(pageUrl);
+  const out = {};
+  // Favicon: the declared one, else /favicon.ico.
+  const icon = extras.icons[0] || `${u.origin}/favicon.ico`;
+  // A data: URI is not a file Googlebot-Image can crawl; it is reported, not fetched.
+  const fi = /^data:/i.test(icon) ? { ok: false, reason: "data_uri" } : await guardedFetch(icon, { method: "GET", body: false, accept: "image/*", timeoutMs: LINK_TIMEOUT_MS });
+  out.favicon = { url: /^data:/i.test(icon) ? icon.slice(0, 40) : icon, declared: extras.icons.length > 0, status: fi.status ?? null, ok: Boolean(fi.ok && fi.status === 200 && !/text\/html/i.test(fi.headers?.contentType || "")), reason: fi.ok ? null : fi.reason };
+  // Soft 404.
+  const missing = improbablePath(pageUrl, now);
+  const sm = await guardedFetch(missing, { method: "GET", body: false, accept: "text/html", timeoutMs: LINK_TIMEOUT_MS });
+  out.soft404 = { url: missing, status: sm.status ?? null, finalUrl: sm.ok ? sm.url : null, reason: sm.ok ? null : sm.reason };
+  // URL variants: each should end where the page itself ends (or at its canonical).
+  const target = canonical || pageUrl;
+  const variants = [];
+  if (u.protocol === "https:") variants.push(["http", pageUrl.replace(/^https:/i, "http:")]);
+  const www = flipWww(pageUrl);
+  if (www) variants.push(["www", www]);
+  const slash = flipSlash(pageUrl);
+  if (slash) variants.push(["slash", slash]);
+  out.variants = [];
+  for (const [kind, url] of variants.slice(0, VARIANT_CAP)) {
+    const r = await guardedFetch(url, { method: "GET", body: false, accept: "text/html", timeoutMs: LINK_TIMEOUT_MS });
+    out.variants.push({ kind, url, status: r.status ?? null, finalUrl: r.ok ? r.url : null, ends: r.ok && r.status === 200 && (samePage(r.url, target) || samePage(r.url, pageUrl)), reason: r.ok ? null : r.reason });
+  }
+  // A Markdown alternate.
+  const mdUrl = extras.markdown[0] || (u.pathname.endsWith("/") ? `${u.origin}${u.pathname}index.html.md` : `${u.origin}${u.pathname}.md`);
+  const md = await guardedFetch(mdUrl, { method: "GET", accept: "text/markdown,text/plain;q=0.9,*/*;q=0.1", maxBytes: LLMS_MAX_BYTES, timeoutMs: LINK_TIMEOUT_MS });
+  const mdText = md.ok ? md.text : "";
+  out.markdown = { url: mdUrl, declared: extras.markdown.length > 0, status: md.status ?? null, ok: Boolean(md.ok && md.status === 200 && mdText.trim() && !/^\s*<(?:!doctype|html)/i.test(mdText)), contentType: md.ok ? md.headers.contentType : null, reason: md.ok ? null : md.reason };
+  // ai-catalog.json.
+  out.aiCatalog = null;
+  for (const path of ["/.well-known/ai-catalog.json", "/ai-catalog.json"]) {
+    const r = await guardedFetch(`${u.origin}${path}`, { method: "GET", accept: "application/json", maxBytes: LLMS_MAX_BYTES, timeoutMs: LINK_TIMEOUT_MS });
+    const present = Boolean(r.ok && r.status === 200 && r.text.trim() && !/^\s*</.test(r.text));
+    let valid = null;
+    if (present) {
+      try {
+        JSON.parse(r.text);
+        valid = true;
+      } catch {
+        valid = false;
+      }
+    }
+    out.aiCatalog = { url: `${u.origin}${path}`, status: r.status ?? null, present, valid };
+    if (present) break;
+  }
+  // IndexNow: only when a key is declared.
+  if (extras.indexnow[0]) {
+    const key = extras.indexnow[0];
+    const r = await guardedFetch(`${u.origin}/${key}.txt`, { method: "GET", accept: "text/plain", maxBytes: 4096, timeoutMs: LINK_TIMEOUT_MS });
+    out.indexnow = { key, url: `${u.origin}/${key}.txt`, status: r.status ?? null, ok: Boolean(r.ok && r.status === 200 && r.text.trim() === key) };
+  } else out.indexnow = null;
+  out.requests = (/^data:/i.test(icon) ? 3 : 4) + out.variants.length + (out.aiCatalog && out.aiCatalog.url.endsWith("/ai-catalog.json") && !out.aiCatalog.url.includes(".well-known") ? 1 : 0) + (out.indexnow ? 1 : 0);
+  return out;
 }

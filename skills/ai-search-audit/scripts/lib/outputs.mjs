@@ -2,7 +2,7 @@
 // The export carries every finding with its evidence and its rule sources, so a fuller report
 // (one with descriptions and fix directions) can be rendered from this data alone.
 
-import { CANNOT, MARK, SEV, UI, dateOf, verdict, ZONE_LABEL } from "./copy.mjs";
+import { CANNOT, LAYER, MARK, SEV, UI, dateOf, verdict, ZONE_LABEL } from "./copy.mjs";
 import { CODES, SEVERITIES } from "./checks.mjs";
 import { EXPORT_SCHEMA, PRODUCED_BY, SKILL_VERSION } from "./version.mjs";
 import { FULL_VERSION_URL, refusalLead, TOOL_NAME } from "./report.mjs";
@@ -23,14 +23,18 @@ export function renderMarkdown(model) {
   o.push(`# ${TOOL_NAME} Lite: ${r.fetch.finalUrl}`, "");
   o.push(`${r.facts.head.title ? `${cell(r.facts.head.title)} · ` : ""}checked ${dateOf(r.createdAt)[0]} · skill ${SKILL_VERSION}`, "");
   o.push(`**${verdict(model.findings)[0]}** · ${model.findings.length} problems (${SEVERITIES.map((s) => `${SEV[s][0].toLowerCase()} ${model.counts[s]}`).join(", ")})`, "");
-  o.push("Lite lists problems, not fixes: labels, severities and places. Every check is deterministic; no model wrote any part of this.", "");
+  o.push("Lite lists problems, not fixes: labels, severities and places. The checks are deterministic (measured or derived); the questions, the brand and the reviews are the agent's judgement, marked as such.", "");
+  const j = model.judgement;
+  if (j.any) o.push(`> ${UI.oneModel[0](j.model || UI.modelNotStated[0])}`, "");
+  if (model.keyword) o.push(`Main phrase: “${cell(model.keyword.keyword)}” (${model.keyword.source === "given" ? "given with --keyword" : "read off the h1"}).`, "");
   o.push("## Status", "", "| Question | State | Problems |", "|---|---|---|");
-  for (const t of model.tiles) o.push(`| ${t.q[0]} | ${({ ok: "OK", prob: "Problems", block: "Blocking", na: "One version" })[t.state]} | ${t.count} |`);
+  for (const t of model.tiles) o.push(`| ${t.q[0]} | ${(t.state === "na" ? (t.id === "brand" ? "Not checked" : "One version") : { ok: "OK", prob: "Problems", block: "Blocking" }[t.state])} | ${t.count} |`);
   o.push("", "## Biggest problems", "");
   if (!model.bigs.length) o.push("No problems found.");
-  for (const f of model.bigs) o.push(`${f.pin}. **${SEV[f.severity][0]}** · ${f.label[0]}${f.where ? ` · \`${cell(f.where)}\`` : ""}`);
-  o.push("", "## All problems", "", "| # | Severity | Problem | Where | Code |", "|---|---|---|---|---|");
-  for (const f of model.findings) o.push(`| ${f.pin} | ${SEV[f.severity][0]} | ${cell(f.label[0])} | ${f.where ? `\`${cell(f.where)}\`` : "—"} | \`${f.code}\` |`);
+  const layerOf = (f) => `${LAYER[f.layer][0]}${f.layer === "judgement" ? ` · ${f.judgement?.model || UI.modelNotStated[0]}` : ""}`;
+  for (const f of model.bigs) o.push(`${f.pin}. **${SEV[f.severity][0]}** · ${cell(f.label[0])}${f.where ? ` · \`${cell(f.where)}\`` : ""}${f.layer === "judgement" ? ` · *${layerOf(f)}*` : ""}`);
+  o.push("", "## All problems", "", "| # | Severity | Problem | Where | Layer | Code |", "|---|---|---|---|---|---|");
+  for (const f of model.findings) o.push(`| ${f.pin} | ${SEV[f.severity][0]} | ${cell(f.label[0])} | ${f.where ? `\`${cell(f.where)}\`` : "—"} | ${cell(layerOf(f))} | \`${f.code}\` |`);
   o.push("", "## Page map", "", "Top to bottom; the numbers are the problems above. Unseen: the text reaches no passage an AI retriever would read.", "");
   model.zones.forEach((z, i) => {
     const seen = z.hidden || z.kind === "aside" ? " · unseen" : z.seen !== null && z.seen !== undefined && z.seen < 0.9 && z.kind !== "header" && z.kind !== "nav" && z.kind !== "footer" ? ` · ${Math.round((1 - z.seen) * 100)}% unseen` : "";
@@ -55,7 +59,7 @@ export function renderMarkdown(model) {
   o.push("", "## Language versions", "");
   if (!model.languages) o.push(UI.langOne[0]);
   else {
-    o.push(`x-default: ${model.languages.xDefault ? "yes" : "no"}`, "", "| Lang | Title | Description | hreflang | html lang |", "|---|---|---|---|---|");
+    o.push(`x-default: ${model.languages.xDefault ? "yes" : "no"}`, "", "| Lang | Title | Description | hreflang | Same facts |", "|---|---|---|---|---|");
     for (const row of model.languages.rows) o.push(`| ${cell(row.hreflang)}${row.self ? " (this page)" : ""}${row.refused ? " (not analysed)" : ""} | ${row.cells.map((s) => MARK[s].t[0]).join(" | ")} |`);
   }
   const w = model.waterfall;
@@ -70,7 +74,7 @@ export function renderMarkdown(model) {
   }
   o.push("", "## What this check cannot see", "");
   for (const c of CANNOT) o.push(`- ${c.t[0]}: ${c.links.map(([en, , href]) => `[${en}](${href})`).join(" · ")}`);
-  o.push("", `A full version with explanations is available from GetLoopLoop: ${FULL_VERSION_URL}`, "");
+  o.push("", `Full report with explanations: ${FULL_VERSION_URL}`, "");
   return o.join("\n");
 }
 
@@ -97,6 +101,8 @@ export function buildExport(model) {
       owner: f.owner,
       hidesText: f.hides,
       informational: f.informational,
+      layer: f.layer,
+      judgement: f.judgement,
       label: { en: f.label[0], uk: f.label[1] },
       where: f.where,
       map: { zones: f.zones, strip: f.strip },
@@ -104,7 +110,12 @@ export function buildExport(model) {
       evidence: f.evidence,
       rules: f.rules,
     })),
-    codes: Object.fromEntries(Object.entries(CODES).map(([k, v]) => [k, { severity: v.severity, area: v.area, owner: v.owner }])),
+    codes: Object.fromEntries(Object.entries(CODES).map(([k, v]) => [k, { severity: v.severity, area: v.area, owner: v.owner, layer: v.layer || "measured" }])),
+    layers: { measured: "what a script counted on the page; any agent gets the same value", derived: "computed from measured values by a fixed formula", judgement: "the agent's model read or answered it; another model may judge differently" },
+    judgement: { ...model.judgement, questions: model.extra?.questions || null, brand: model.extra?.brand || null, reviews: model.extra?.reviews || null },
+    keyword: model.modules.keyword,
+    writingPatterns: model.modules.patterns.analysed ? { language: model.modules.patterns.language, wordCount: model.modules.patterns.wordCount, score: model.modules.patterns.score, detectors: model.modules.patterns.version, findings: model.modules.patterns.findings.map((x) => ({ family: x.family, detector: x.detector, severity: x.severity, evidence: x.evidence, passage: x.passage, word: x.word, heading: x.heading, occurrences: x.occurrences })), note: "signals about worn writing, not an AI detector" } : { analysed: false, reason: model.modules.patterns.reason },
+    localeFacts: model.modules.locales ? { method: "h2 sections aligned by order when both versions have the same count; numbers compared as sets", compared: model.modules.locales.compared, differ: model.modules.locales.differ, limits: ["versions whose sections do not line up are not compared", "numbers written as words are not read", "a number may differ on purpose (a local price or phone number)"] } : null,
     checklist: model.checklist.map((c) => ({ id: c.id, name: { en: c.name[0], uk: c.name[1] }, state: c.state, codes: c.codes })),
     pageMap: {
       zones: model.zones.map((z) => ({ id: z.id, kind: z.kind, label: z.label, headings: z.headings, chars: z.chars, hidden: Boolean(z.hidden), panels: z.panels || 0, seenShare: z.seen ?? null, merged: z.merged || 0, problems: z.pins.map((f) => f.pin) })),

@@ -12,7 +12,7 @@ import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS } from "../../../vectorscope/sc
 import { MOTANKA } from "../../../vectorscope/scripts/lib/sprites.mjs";
 import { CSS, CSS_EXTRA } from "./css.mjs";
 import { FAVICONS } from "./favicons.mjs";
-import { CANNOT, MARK, OWNERS, SEV, STATE, UI, ZONE_LABEL, dateOf, fmtEn, fmtUk, nMinor, nProblems, verdict } from "./copy.mjs";
+import { CANNOT, LAYER, MARK, OWNERS, SEV, STATE, UI, ZONE_LABEL, dateOf, fmtEn, fmtUk, nMinor, nProblems, verdict } from "./copy.mjs";
 import { SEVERITIES } from "./checks.mjs";
 
 export const TOOL_NAME = "AI Search Audit";
@@ -82,6 +82,13 @@ function pinLink(f, x, y) {
   const lab = (i) => `${f.pin} · ${SEV[f.severity][i]} · ${f.label[i]}`;
   return `<a class="pm-a" href="#${target(f)}" ${attrPair("aria-label", lab(0), lab(1))}><g class="pin ${f.severity}" transform="translate(${x} ${y})"><circle class="ring" r="19"/>${pinShape(f.severity)}<text dy=".36em">${f.pin}</text></g></a>`;
 }
+/** The "Agent's judgement · <model>" badge, on every finding the agent's model made. */
+const judgeBadge = (f) => {
+  if (f.layer !== "judgement") return "";
+  const m = f.judgement?.model;
+  const t = [`${LAYER.judgement[0]} · ${m || UI.modelNotStated[0]}`, `${LAYER.judgement[1]} · ${m || UI.modelNotStated[1]}`];
+  return `<span class="lyr judgement">${P(t)}</span>`;
+};
 const ownerMark = (o) => `<span class="own" ${attrPair("title", OWNERS[o][0], OWNERS[o][1])}>${OWNER_ICON[o]}<span class="vh">${P(OWNERS[o])}</span></span>`;
 /** SVG text in both languages, or once when the two are the same. */
 const stx = (x, y, t, cls, extra = "") =>
@@ -199,7 +206,7 @@ function mapBlock(model) {
   if (model.unmappedCount) legend.push(`<li class="pm-un">${P(call(UI.unmapped, model.unmappedCount))}</li>`);
   o.push(`<ul class="pm-legend" id="map-legend">${legend.join("")}</ul>`);
   const rest = model.findings.filter((f) => !f.big);
-  if (rest.length) o.push(`<ol class="pm-key" id="map-key" ${attrPair("aria-label", UI.otherProblems[0], UI.otherProblems[1])}>${rest.map((f) => `<li id="pin-${esc(f.id)}" class="${f.severity}">${pinIcon(f.severity, f.pin, 26)}<span class="vh">${P(SEV[f.severity])}: </span><span class="pk-l">${P(f.label)}</span>${ownerMark(f.owner)}</li>`).join("")}</ol>`);
+  if (rest.length) o.push(`<ol class="pm-key" id="map-key" ${attrPair("aria-label", UI.otherProblems[0], UI.otherProblems[1])}>${rest.map((f) => `<li id="pin-${esc(f.id)}" class="${f.severity}${f.layer === "judgement" ? " jd" : ""}">${pinIcon(f.severity, f.pin, 26)}<span class="vh">${P(SEV[f.severity])}: </span><span class="pk-l">${P(f.label)}</span>${ownerMark(f.owner)}${judgeBadge(f)}</li>`).join("")}</ol>`);
   const zonesCap = model.caps.find((c) => c.id === "zones");
   if (zonesCap) o.push(`<p class="capnote">${P(zonesCap.t)}</p>`);
   o.push("</section>");
@@ -211,8 +218,9 @@ function mapBlock(model) {
 function tilesBlock(model) {
   const o = [`<ul class="tiles tiles-lite" id="status" ${attrPair("aria-label", UI.statusAria[0], UI.statusAria[1])}>`];
   for (const t of model.tiles) {
-    const tc = t.state === "na" ? UI.oneVersion : !t.count ? UI.nothingFound : t.minorOnly ? nMinor(t.count) : nProblems(t.count);
-    o.push(`<li class="tile ${t.state}" id="tile-${t.id}"><h2>${P(t.q)}</h2><span class="state">${STATE_ICON[t.state]}${P(STATE[t.state])}</span><span class="tc">${P(tc)}</span></li>`);
+    const na = t.id === "brand" ? [STATE.unchecked, UI.noBrandFiles] : [STATE.na, UI.oneVersion];
+    const tc = t.state === "na" ? na[1] : !t.count ? UI.nothingFound : t.minorOnly ? nMinor(t.count) : nProblems(t.count);
+    o.push(`<li class="tile ${t.state}" id="tile-${t.id}"><h2>${P(t.q)}</h2><span class="state">${STATE_ICON[t.state]}${P(t.state === "na" ? na[0] : STATE[t.state])}</span><span class="tc">${P(tc)}</span></li>`);
   }
   o.push("</ul>");
   return o.join("\n");
@@ -221,7 +229,7 @@ function tilesBlock(model) {
 function biggestBlock(model) {
   const o = [`<section class="panel" id="biggest" aria-labelledby="h-biggest">${head("h-biggest", UI.biggest)}`];
   if (!model.bigs.length) o.push(`<p class="none-found">${P(UI.noProblems)}</p>`);
-  else o.push(`<ol class="bchips">${model.bigs.map((f) => `<li class="bchip ${f.severity}" id="big-${esc(f.id)}"><span class="bc-t">${pinIcon(f.severity, f.pin, 30)}<span>${P(f.label)}</span></span><span class="bc-m"><span class="sevw ${f.severity}">${P(SEV[f.severity])}</span>${ownerMark(f.owner)}</span></li>`).join("")}</ol>`);
+  else o.push(`<ol class="bchips">${model.bigs.map((f) => `<li class="bchip ${f.severity}" id="big-${esc(f.id)}"><span class="bc-t">${pinIcon(f.severity, f.pin, 30)}<span>${P(f.label)}</span></span><span class="bc-m"><span class="sevw ${f.severity}">${P(SEV[f.severity])}</span>${ownerMark(f.owner)}</span>${judgeBadge(f)}</li>`).join("")}</ol>`);
   o.push("</section>");
   return o.join("\n");
 }
@@ -285,7 +293,8 @@ function botsBlock(model) {
   const items = model.bots
     .map((b) => `<li class="${b.allowed ? "ok" : "no"}" id="bot-${esc(b.token.toLowerCase())}">${favImg(b.vendor)}<span class="bn">${esc(b.token)}</span>${b.allowed ? mkI("pass", UI.allowed) : mkI("fail", UI.blocked)}<span class="bp">${esc(b.vendor)} · ${P(UI.kind[b.kind])}</span></li>`)
     .join("");
-  return `<section class="panel wide" id="lc-bots" aria-labelledby="h-lc-bots">${head("h-lc-bots", UI.bots, unit)}<ul class="bots">${items}</ul>${note}</section>`;
+  const llmsNote = `<p class="capnote" id="llms-note">${P(UI.llmsNote)} ${ext(UI.llmsNoteSource[2], `${esc(UI.llmsNoteSource[0])} ↗`)}</p>`;
+  return `<section class="panel wide" id="lc-bots" aria-labelledby="h-lc-bots">${head("h-lc-bots", UI.bots, unit)}<ul class="bots">${items}</ul>${note}${llmsNote}</section>`;
 }
 
 function classicBlock(model) {
@@ -317,9 +326,11 @@ function languagesBlock(model) {
   return `<section class="panel" id="lc-langs" aria-labelledby="h-lc-langs">${head("h-lc-langs", UI.langs, unit)}<div class="tablewrap"><table class="lgrid"><thead><tr><th>${P(UI.langCol)}</th>${UI.langCols.map((c) => `<th>${P(c)}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>${markKey}${unread}</section>`;
 }
 
-function cannotBlock() {
+function cannotBlock(model) {
+  const j = model.judgement;
+  const note = j.any ? `<p class="honest" id="one-model">${P([UI.oneModel[0](j.model || UI.modelNotStated[0]), UI.oneModel[1](j.model || UI.modelNotStated[1])])}</p>` : "";
   const items = CANNOT.map((c) => `<li>${EYE_OFF}<span class="cl-t">${P(c.t)}</span><span>${c.links.map(([en, uk, href]) => ext(href, `${pair(esc(en), esc(uk))} ↗`)).join(" · ")}</span></li>`).join("");
-  return `<section class="panel" id="cannot-see" aria-labelledby="h-cannot">${head("h-cannot", UI.cannot)}<ul class="cannot-lite">${items}</ul></section>`;
+  return `<section class="panel" id="cannot-see" aria-labelledby="h-cannot">${head("h-cannot", UI.cannot)}${note}<ul class="cannot-lite">${items}</ul></section>`;
 }
 
 // ── the page frame ───────────────────────────────────────────────────────────
@@ -410,7 +421,7 @@ export function renderReport(model) {
   o.push(classicBlock(model));
   o.push(languagesBlock(model));
   o.push("</div>");
-  o.push(cannotBlock());
+  o.push(cannotBlock(model));
   o.push(`<p class="fulllink" id="full-link"><a href="${FULL_VERSION_URL}" rel="noopener noreferrer" target="_blank">${P(UI.full)}</a></p>`);
   o.push(...documentEnd());
   return o.join("\n") + "\n";

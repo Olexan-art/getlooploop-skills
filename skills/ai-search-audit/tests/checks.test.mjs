@@ -88,13 +88,14 @@ for (const [code, withIt, without, opts = {}] of CASES) {
 
 test("every registered code has a test case, a label in both languages, an area, an owner and rule sources", async () => {
   const tested = new Set(CASES.map((c) => c[0]));
-  const elsewhere = new Set(["mid_sentence_start", "hreflang_no_return", "hreflang_invalid_code", "hreflang_no_self", "hreflang_alternate_broken", "title_duplicate_locales", "description_duplicate_locales", "hreflang_lang_mismatch", "hreflang_no_x_default", "llms_txt_one_language"]);
+  const elsewhere = new Set(["mid_sentence_start", "hreflang_no_return", "hreflang_invalid_code", "hreflang_no_self", "hreflang_alternate_broken", "title_duplicate_locales", "description_duplicate_locales", "hreflang_lang_mismatch", "hreflang_no_x_default", "llms_txt_one_language", "locale_facts_differ", "question_missing", "question_partial", "stock_phrases", "repeated_sentence_shape", "uniform_openings", "unchecked_claims", "keyword_not_in_title", "keyword_variant_split", "keyword_one_section", "off_keyword_share", "promise_without_number", "brand_contradiction", "brand_fact_absent", "brand_unknown", "review_rating_unbacked", "review_control_hallucination", "reviews_without_markup", "rich_result_retired", "image_dimensions_missing", "image_lcp_lazy", "image_not_lazy", "image_legacy_format", "image_oversized", "image_no_srcset", "favicon_missing", "site_name_missing", "mixed_content", "soft_404", "url_variants_inconsistent", "hsts_missing", "author_missing", "about_contact_missing", "organization_details_missing", "article_date_missing", "privacy_terms_missing", "date_mismatch", "snippet_blocked", "markdown_alternate_broken", "ai_catalog_invalid", "indexnow_key_broken", "spa_shell"]);
   for (const [code, reg] of Object.entries(CODES)) {
     assert.ok(tested.has(code) || elsewhere.has(code), `${code} has no test`);
     assert.ok(LABELS[code], `${code} has no label`);
-    assert.ok(["classic", "find", "read", "quote", "markup", "lang"].includes(reg.area), code);
+    assert.ok(["classic", "find", "read", "quote", "brand", "lang"].includes(reg.area), code);
     assert.ok(["dev", "content", "seo"].includes(reg.owner), code);
     assert.ok(reg.rules.length, code);
+    assert.ok([undefined, "measured", "derived", "judgement"].includes(reg.layer), code);
   }
 });
 

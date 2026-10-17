@@ -43,9 +43,10 @@ test("the Lite layout: verdict, six tiles, the map, biggest problems, the charts
     at = i;
   }
   assert.equal((out.match(/<li class="tile /g) || []).length, 6);
-  assert.ok(out.includes("Rich results &amp; markup"));
-  assert.ok(!out.includes("AI gets the brand right"));
-  assert.equal((out.match(/id="cg-/g) || []).length, 24);
+  for (const q of ["Shown well in search?", "AI finds it?", "AI reads all of it?", "AI quotes it right?", "AI gets the brand right?", "Languages in order?"]) assert.ok(out.includes(q), q);
+  assert.ok(!out.includes("Rich results &amp; markup"));
+  assert.ok(out.includes('id="tile-brand"') && out.includes("no brand.json or reviews.json"), "the brand tile says it was not checked");
+  assert.equal((out.match(/id="cg-/g) || []).length, 33);
   assert.ok(out.includes('href="https://www.getlooploop.com"'));
 });
 
@@ -54,7 +55,9 @@ test("both languages are in the file, and Lite carries no rule text and no fix d
   assert.ok(out.includes('class="l-uk" lang="uk"'));
   assert.ok(out.includes("Мапа сторінки"));
   assert.ok(!/What the rule says|Fix direction|Що каже правило|Напрям виправлення/.test(out));
-  assert.ok(!out.includes("developers.google.com"), "rule sources are in the export, not on the Lite page");
+  // The one quoted source on the page is the llms.txt note; every rule source is in the export.
+  assert.ok(out.includes('id="llms-note"'));
+  assert.ok(!out.replace(/<p class="capnote" id="llms-note">.*?<\/p>/s, "").includes("developers.google.com"), "rule sources are in the export, not on the Lite page");
 });
 
 test("the export: the schema id, every finding with its rule sources, the same pins as the report", async () => {

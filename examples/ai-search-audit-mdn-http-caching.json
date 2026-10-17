@@ -1,8 +1,8 @@
 {
   "schema": "getlooploop/ai-search-audit@1",
   "skillVersion": "2.101",
-  "producedBy": "ai-search-audit skill, Lite (local, deterministic, no model calls)",
-  "createdAt": "2026-10-16T23:25:45.828Z",
+  "producedBy": "ai-search-audit skill, Lite (local; deterministic checks, and the agent's own judgement where marked; the scripts call no model)",
+  "createdAt": "2026-10-17T10:55:47.333Z",
   "edition": "lite",
   "page": {
     "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
@@ -21,11 +21,11 @@
     "uk": "Ніщо не ховає текст від ШІ"
   },
   "counts": {
-    "total": 4,
+    "total": 10,
     "blocking": 0,
     "high": 0,
-    "medium": 2,
-    "low": 2
+    "medium": 3,
+    "low": 7
   },
   "tiles": [
     {
@@ -35,7 +35,7 @@
         "uk": "Добре видно в пошуку?"
       },
       "state": "ok",
-      "problems": 1
+      "problems": 4
     },
     {
       "id": "find",
@@ -62,15 +62,15 @@
         "uk": "ШІ цитує правильно?"
       },
       "state": "prob",
-      "problems": 1
+      "problems": 4
     },
     {
-      "id": "markup",
+      "id": "brand",
       "question": {
-        "en": "Rich results & markup",
-        "uk": "Розширені результати й розмітка"
+        "en": "AI gets the brand right?",
+        "uk": "ШІ правильно описує бренд?"
       },
-      "state": "ok",
+      "state": "na",
       "problems": 0
     },
     {
@@ -94,6 +94,8 @@
       "owner": "content",
       "hidesText": false,
       "informational": false,
+      "layer": "derived",
+      "judgement": null,
       "label": {
         "en": "9 passages start mid-sentence",
         "uk": "9 уривків із середини речення"
@@ -157,8 +159,67 @@
       ]
     },
     {
-      "id": "nav_in_content",
+      "id": "keyword_one_section",
       "pin": 2,
+      "big": true,
+      "code": "keyword_one_section",
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "derived",
+      "judgement": null,
+      "label": {
+        "en": "Main phrase in 4 of 15 sections",
+        "uk": "Головна фраза в 4 із 15 розділів"
+      },
+      "where": "4 of 15 h2 sections",
+      "map": {
+        "zones": [
+          1,
+          3,
+          12
+        ],
+        "strip": null
+      },
+      "passages": [
+        0,
+        1,
+        2,
+        3,
+        22,
+        23
+      ],
+      "evidence": {
+        "keyword": "HTTP caching",
+        "source": "h1",
+        "sectionsReached": 4,
+        "sections": 15,
+        "spread": 0.267,
+        "passages": [
+          0,
+          1,
+          2,
+          3,
+          22,
+          23
+        ]
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: SEO starter guide",
+          "url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
+      "id": "nav_in_content",
+      "pin": 3,
       "big": true,
       "code": "nav_in_content",
       "severity": "medium",
@@ -166,6 +227,8 @@
       "owner": "dev",
       "hidesText": false,
       "informational": false,
+      "layer": "measured",
+      "judgement": null,
       "label": {
         "en": "Menu lines inside the text",
         "uk": "Рядки меню всередині тексту"
@@ -223,7 +286,7 @@
     },
     {
       "id": "llms_txt_missing",
-      "pin": 3,
+      "pin": 4,
       "big": true,
       "code": "llms_txt_missing",
       "severity": "low",
@@ -231,6 +294,8 @@
       "owner": "seo",
       "hidesText": false,
       "informational": true,
+      "layer": "measured",
+      "judgement": null,
       "label": {
         "en": "No llms.txt",
         "uk": "Немає llms.txt"
@@ -260,7 +325,7 @@
     },
     {
       "id": "social_tags_missing",
-      "pin": 4,
+      "pin": 5,
       "big": true,
       "code": "social_tags_missing",
       "severity": "low",
@@ -268,6 +333,8 @@
       "owner": "seo",
       "hidesText": false,
       "informational": false,
+      "layer": "measured",
+      "judgement": null,
       "label": {
         "en": "Preview tags missing",
         "uk": "Бракує тегів прев’ю"
@@ -296,305 +363,1014 @@
           "url": "https://ogp.me/"
         }
       ]
+    },
+    {
+      "id": "image_dimensions_missing",
+      "pin": 6,
+      "big": false,
+      "code": "image_dimensions_missing",
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "hidesText": false,
+      "informational": false,
+      "layer": "measured",
+      "judgement": null,
+      "label": {
+        "en": "2 images without width and height",
+        "uk": "2 зображення без width і height"
+      },
+      "where": "div.layout__body.reference-layout__body > section.content-section > p > img, div.layout__body.reference-layout__body > section.content-section > p > img",
+      "map": {
+        "zones": [
+          3,
+          12
+        ],
+        "strip": null
+      },
+      "passages": [],
+      "evidence": {
+        "count": 2,
+        "images": 2,
+        "samples": [
+          "https://mdn.github.io/shared-assets/images/diagrams/http/cache/type-of-cache.svg",
+          "https://mdn.github.io/shared-assets/images/diagrams/http/cache/request-collapse.svg"
+        ]
+      },
+      "rules": [
+        {
+          "name": "web.dev: optimize Cumulative Layout Shift (width and height on images)",
+          "url": "https://web.dev/articles/optimize-cls"
+        }
+      ]
+    },
+    {
+      "id": "repeated_sentence_shape",
+      "pin": 7,
+      "big": false,
+      "code": "repeated_sentence_shape",
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "measured",
+      "judgement": null,
+      "label": {
+        "en": "2 sentences of one shape",
+        "uk": "2 речення однієї форми"
+      },
+      "where": "passage #5 · word 899, passage #18 · word 3890",
+      "map": {
+        "zones": [
+          4,
+          12
+        ],
+        "strip": null
+      },
+      "passages": [
+        5,
+        18
+      ],
+      "evidence": {
+        "count": 2,
+        "words": 5255,
+        "per1k": 0.38,
+        "threshold": null,
+        "language": "en",
+        "score": {
+          "value": 0,
+          "band": "low",
+          "perThousand": 1.14
+        },
+        "items": [
+          {
+            "text": "This is called heuristic caching.",
+            "passage": 5,
+            "word": 899,
+            "heading": "Heuristic caching",
+            "occurrences": 2
+          },
+          {
+            "text": "This is called request collapse.",
+            "passage": 18,
+            "word": 3890,
+            "heading": "Request collapse",
+            "occurrences": 2
+          }
+        ],
+        "note": "signals about worn writing, not an AI detector"
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: creating helpful, reliable, people-first content",
+          "url": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
+      "id": "organization_details_missing",
+      "pin": 8,
+      "big": false,
+      "code": "organization_details_missing",
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo",
+      "hidesText": false,
+      "informational": false,
+      "layer": "measured",
+      "judgement": null,
+      "label": {
+        "en": "No Organization markup",
+        "uk": "Немає розмітки Organization"
+      },
+      "where": "no Organization markup",
+      "map": {
+        "zones": [],
+        "strip": {
+          "side": "head",
+          "rows": [
+            "jsonld"
+          ]
+        }
+      },
+      "passages": [],
+      "evidence": {
+        "missing": [
+          "Organization"
+        ],
+        "found": 0
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: organization structured data",
+          "url": "https://developers.google.com/search/docs/appearance/structured-data/organization"
+        }
+      ]
+    },
+    {
+      "id": "about_contact_missing",
+      "pin": 9,
+      "big": false,
+      "code": "about_contact_missing",
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "measured",
+      "judgement": null,
+      "label": {
+        "en": "No contact link",
+        "uk": "Немає посилання «Контакти»"
+      },
+      "where": "contact link",
+      "map": {
+        "zones": [],
+        "strip": null
+      },
+      "passages": [],
+      "evidence": {
+        "missing": [
+          "contact"
+        ]
+      },
+      "rules": [
+        {
+          "name": "Google Search Central: creating helpful, reliable, people-first content",
+          "url": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content"
+        },
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
+    },
+    {
+      "id": "off_keyword_share",
+      "pin": 10,
+      "big": false,
+      "code": "off_keyword_share",
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "hidesText": false,
+      "informational": false,
+      "layer": "derived",
+      "judgement": null,
+      "label": {
+        "en": "78% of the text off the phrase",
+        "uk": "78% тексту без головної фрази"
+      },
+      "where": "20 passages without the phrase",
+      "map": {
+        "zones": [],
+        "strip": null
+      },
+      "passages": [],
+      "evidence": {
+        "keyword": "HTTP caching",
+        "source": "h1",
+        "charsOnKeyword": 7638,
+        "charsIndexed": 34619,
+        "share": 0.221,
+        "offShare": 0.779,
+        "floor": 0.5,
+        "offPassages": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          24,
+          25
+        ]
+      },
+      "rules": [
+        {
+          "name": "This skill's rule (README, the thresholds)",
+          "url": "https://github.com/Olexan-art/getlooploop-skills/blob/main/README.md#ai-search-audit-lite"
+        }
+      ]
     }
   ],
   "codes": {
     "robots_unreachable": {
       "severity": "blocking",
       "area": "find",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "search_engine_blocked": {
       "severity": "blocking",
       "area": "find",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "ai_search_blocked": {
       "severity": "blocking",
       "area": "find",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "noindex": {
       "severity": "blocking",
       "area": "find",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "ai_training_blocked": {
       "severity": "low",
       "area": "find",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "llms_txt_missing": {
       "severity": "low",
       "area": "find",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "snippet_blocked": {
+      "severity": "high",
+      "area": "find",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "markdown_alternate_broken": {
+      "severity": "low",
+      "area": "find",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "ai_catalog_invalid": {
+      "severity": "low",
+      "area": "find",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "indexnow_key_broken": {
+      "severity": "low",
+      "area": "find",
+      "owner": "dev",
+      "layer": "measured"
     },
     "not_https": {
       "severity": "high",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "redirect_chain": {
       "severity": "low",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "sitemap_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "sitemap_not_listed": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "title_missing": {
       "severity": "high",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "title_too_long": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "title_too_short": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "meta_description_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "meta_description_short": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "meta_description_long": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "h1_missing": {
       "severity": "medium",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "h1_multiple": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "heading_order_skip": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "canonical_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "canonical_relative": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "canonical_other": {
       "severity": "medium",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "canonical_multiple": {
       "severity": "medium",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "internal_links_none": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "broken_links": {
       "severity": "medium",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "image_alt_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "viewport_missing": {
       "severity": "medium",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "html_lang_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "social_tags_missing": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "page_weight_heavy": {
       "severity": "low",
       "area": "classic",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "derived"
     },
     "url_unreadable": {
       "severity": "low",
       "area": "classic",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "jsonld_invalid": {
       "severity": "medium",
-      "area": "markup",
-      "owner": "dev"
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
     },
     "structured_data_none": {
       "severity": "low",
-      "area": "markup",
-      "owner": "seo"
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
     },
     "schema_required_missing": {
       "severity": "medium",
-      "area": "markup",
-      "owner": "dev"
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
     },
     "schema_recommended_missing": {
       "severity": "low",
-      "area": "markup",
-      "owner": "dev"
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
     },
     "faq_rich_result_retired": {
       "severity": "low",
-      "area": "markup",
-      "owner": "seo"
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "rich_result_retired": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "image_dimensions_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_lcp_lazy": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_not_lazy": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_legacy_format": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_oversized": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "image_no_srcset": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "favicon_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "site_name_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "mixed_content": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "soft_404": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "url_variants_inconsistent": {
+      "severity": "medium",
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "hsts_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "author_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "about_contact_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "organization_details_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "article_date_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "privacy_terms_missing": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "date_mismatch": {
+      "severity": "low",
+      "area": "classic",
+      "owner": "content",
+      "layer": "measured"
     },
     "faq_schema_not_visible": {
       "severity": "high",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "lost_faq_questions": {
       "severity": "high",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "mid_sentence_start": {
       "severity": "medium",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "derived"
     },
     "truncated_teaser": {
       "severity": "low",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "repeated_claim": {
       "severity": "low",
       "area": "quote",
-      "owner": "content"
+      "owner": "content",
+      "layer": "derived"
+    },
+    "question_missing": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content",
+      "layer": "judgement"
+    },
+    "question_partial": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "judgement"
+    },
+    "stock_phrases": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "derived"
+    },
+    "repeated_sentence_shape": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "uniform_openings": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "unchecked_claims": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "keyword_not_in_title": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "keyword_variant_split": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "keyword_one_section": {
+      "severity": "medium",
+      "area": "quote",
+      "owner": "content",
+      "layer": "derived"
+    },
+    "off_keyword_share": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "derived"
+    },
+    "promise_without_number": {
+      "severity": "low",
+      "area": "quote",
+      "owner": "content",
+      "layer": "measured"
+    },
+    "brand_contradiction": {
+      "severity": "high",
+      "area": "brand",
+      "owner": "seo",
+      "layer": "judgement"
+    },
+    "brand_fact_absent": {
+      "severity": "medium",
+      "area": "brand",
+      "owner": "content",
+      "layer": "judgement"
+    },
+    "brand_unknown": {
+      "severity": "medium",
+      "area": "brand",
+      "owner": "seo",
+      "layer": "judgement"
+    },
+    "review_rating_unbacked": {
+      "severity": "high",
+      "area": "brand",
+      "owner": "seo",
+      "layer": "judgement"
+    },
+    "review_control_hallucination": {
+      "severity": "high",
+      "area": "brand",
+      "owner": "seo",
+      "layer": "judgement"
+    },
+    "reviews_without_markup": {
+      "severity": "medium",
+      "area": "brand",
+      "owner": "dev",
+      "layer": "measured"
     },
     "cap_overflow": {
       "severity": "high",
       "area": "read",
-      "owner": "content"
+      "owner": "content",
+      "layer": "derived"
     },
     "js_dependent": {
       "severity": "high",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hero_lede_dropped": {
       "severity": "high",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hidden_headings": {
       "severity": "high",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "ssr_placeholder_text": {
       "severity": "medium",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
+    },
+    "spa_shell": {
+      "severity": "high",
+      "area": "read",
+      "owner": "dev",
+      "layer": "measured"
     },
     "h1_glued_words": {
       "severity": "medium",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "nav_in_content": {
       "severity": "medium",
       "area": "read",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "dominant_heading": {
       "severity": "medium",
       "area": "read",
-      "owner": "content"
+      "owner": "content",
+      "layer": "derived"
     },
     "thin_section": {
       "severity": "low",
       "area": "read",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "hreflang_no_return": {
       "severity": "high",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hreflang_invalid_code": {
       "severity": "medium",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hreflang_no_self": {
       "severity": "medium",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hreflang_alternate_broken": {
       "severity": "medium",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "title_duplicate_locales": {
       "severity": "medium",
       "area": "lang",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "description_duplicate_locales": {
       "severity": "low",
       "area": "lang",
-      "owner": "content"
+      "owner": "content",
+      "layer": "measured"
     },
     "hreflang_lang_mismatch": {
       "severity": "low",
       "area": "lang",
-      "owner": "dev"
+      "owner": "dev",
+      "layer": "measured"
     },
     "hreflang_no_x_default": {
       "severity": "low",
       "area": "lang",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
     },
     "llms_txt_one_language": {
       "severity": "low",
       "area": "lang",
-      "owner": "seo"
+      "owner": "seo",
+      "layer": "measured"
+    },
+    "locale_facts_differ": {
+      "severity": "medium",
+      "area": "lang",
+      "owner": "content",
+      "layer": "measured"
     }
   },
+  "layers": {
+    "measured": "what a script counted on the page; any agent gets the same value",
+    "derived": "computed from measured values by a fixed formula",
+    "judgement": "the agent's model read or answered it; another model may judge differently"
+  },
+  "judgement": {
+    "files": {
+      "questions": null,
+      "brand": null,
+      "reviews": null
+    },
+    "model": null,
+    "agent": null,
+    "any": false,
+    "questions": null,
+    "brand": null,
+    "reviews": null
+  },
+  "keyword": {
+    "keyword": "HTTP caching",
+    "source": "h1",
+    "exact": {
+      "count": 11,
+      "fields": [
+        "title",
+        "h1"
+      ]
+    },
+    "variants": [
+      {
+        "form": "HTTP-caching",
+        "count": 0,
+        "fields": []
+      },
+      {
+        "form": "HTTPcaching",
+        "count": 0,
+        "fields": []
+      }
+    ],
+    "sections": {
+      "reached": 4,
+      "total": 15,
+      "spread": 0.267
+    },
+    "chars": {
+      "onKeyword": 7638,
+      "indexed": 34619,
+      "share": 0.221
+    },
+    "promiseChecked": true,
+    "findings": [
+      {
+        "code": "keyword_one_section",
+        "evidence": {
+          "keyword": "HTTP caching",
+          "source": "h1",
+          "sectionsReached": 4,
+          "sections": 15,
+          "spread": 0.267,
+          "passages": [
+            0,
+            1,
+            2,
+            3,
+            22,
+            23
+          ]
+        }
+      },
+      {
+        "code": "off_keyword_share",
+        "evidence": {
+          "keyword": "HTTP caching",
+          "source": "h1",
+          "charsOnKeyword": 7638,
+          "charsIndexed": 34619,
+          "share": 0.221,
+          "offShare": 0.779,
+          "floor": 0.5,
+          "offPassages": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            24,
+            25
+          ]
+        }
+      }
+    ]
+  },
+  "writingPatterns": {
+    "language": "en",
+    "wordCount": 5255,
+    "score": {
+      "scoreModelVersion": "score-1",
+      "band": "low",
+      "value": 0,
+      "wordCount": 5255,
+      "perThousand": 1.14,
+      "points": 6,
+      "capped": false,
+      "contributions": [
+        {
+          "family": "repetition",
+          "counted": 2,
+          "suppressed": 0,
+          "points": 6
+        }
+      ]
+    },
+    "detectors": "det-1",
+    "findings": [
+      {
+        "family": "repetition",
+        "detector": "sentence_template",
+        "severity": "medium",
+        "evidence": "This is called heuristic caching.",
+        "passage": 5,
+        "word": 899,
+        "heading": "Heuristic caching",
+        "occurrences": 2
+      },
+      {
+        "family": "repetition",
+        "detector": "sentence_template",
+        "severity": "medium",
+        "evidence": "This is called request collapse.",
+        "passage": 18,
+        "word": 3890,
+        "heading": "Request collapse",
+        "occurrences": 2
+      }
+    ],
+    "note": "signals about worn writing, not an AI detector"
+  },
+  "localeFacts": null,
   "checklist": [
     {
       "id": "http_status",
@@ -813,6 +1589,92 @@
       },
       "state": "none",
       "codes": []
+    },
+    {
+      "id": "images",
+      "name": {
+        "en": "Image sizes, formats, lazy loading, srcset",
+        "uk": "Розміри, формати, lazy і srcset зображень"
+      },
+      "state": "warn",
+      "codes": [
+        "image_dimensions_missing"
+      ]
+    },
+    {
+      "id": "snippet",
+      "name": {
+        "en": "Eligible for a snippet (no nosnippet, max-snippet:0)",
+        "uk": "Може мати сніпет (без nosnippet, max-snippet:0)"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "favicon",
+      "name": {
+        "en": "A favicon that loads",
+        "uk": "Favicon завантажується"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "site_name",
+      "name": {
+        "en": "WebSite name markup on the home page",
+        "uk": "Назва сайту в розмітці WebSite на головній"
+      },
+      "state": "none",
+      "codes": []
+    },
+    {
+      "id": "mixed",
+      "name": {
+        "en": "No http:// resources on https",
+        "uk": "Без ресурсів http:// на https"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "soft404",
+      "name": {
+        "en": "A missing page answers 404",
+        "uk": "Неіснуюча сторінка відповідає 404"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "variants",
+      "name": {
+        "en": "http, www and slash variants end at the page",
+        "uk": "Варіанти http, www і слеш ведуть на сторінку"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "hsts",
+      "name": {
+        "en": "Strict-Transport-Security header",
+        "uk": "Заголовок Strict-Transport-Security"
+      },
+      "state": "pass",
+      "codes": []
+    },
+    {
+      "id": "trust",
+      "name": {
+        "en": "Author, About, Contact, organisation, dates, privacy and terms",
+        "uk": "Автор, «Про нас», контакти, організація, дати, конфіденційність і умови"
+      },
+      "state": "warn",
+      "codes": [
+        "about_contact_missing",
+        "organization_details_missing"
+      ]
     }
   ],
   "pageMap": {
@@ -841,7 +1703,9 @@
         "panels": 0,
         "seenShare": 1,
         "merged": 0,
-        "problems": []
+        "problems": [
+          2
+        ]
       },
       {
         "id": 2,
@@ -870,7 +1734,9 @@
         "seenShare": 1,
         "merged": 0,
         "problems": [
-          1
+          1,
+          2,
+          6
         ]
       },
       {
@@ -885,7 +1751,9 @@
         "panels": 0,
         "seenShare": 1,
         "merged": 0,
-        "problems": []
+        "problems": [
+          7
+        ]
       },
       {
         "id": 5,
@@ -928,7 +1796,7 @@
         "seenShare": 1,
         "merged": 0,
         "problems": [
-          2
+          3
         ]
       },
       {
@@ -1009,7 +1877,10 @@
         "seenShare": 1,
         "merged": 5,
         "problems": [
-          1
+          1,
+          2,
+          6,
+          7
         ]
       },
       {
@@ -1080,7 +1951,9 @@
           "en": "BreadcrumbList, ListItem",
           "uk": "BreadcrumbList, ListItem"
         },
-        "problems": []
+        "problems": [
+          8
+        ]
       },
       {
         "id": "social",
@@ -1089,7 +1962,7 @@
           "uk": "1 з 4 тегів"
         },
         "problems": [
-          4
+          5
         ]
       },
       {
@@ -1105,6 +1978,14 @@
         "value": {
           "en": "6 · 0 blocking",
           "uk": "6 · 0 блокують"
+        },
+        "problems": []
+      },
+      {
+        "id": "favicon",
+        "value": {
+          "en": "loads",
+          "uk": "завантажується"
         },
         "problems": []
       }
@@ -1149,8 +2030,24 @@
           "uk": "немає"
         },
         "problems": [
-          3
+          4
         ]
+      },
+      {
+        "id": "markdown",
+        "value": {
+          "en": "none",
+          "uk": "немає"
+        },
+        "problems": []
+      },
+      {
+        "id": "ai_catalog",
+        "value": {
+          "en": "none",
+          "uk": "немає"
+        },
+        "problems": []
       }
     ]
   },
@@ -1279,7 +2176,7 @@
         "url": "https://developer.mozilla.org/sitemaps/en-us/sitemap.xml.gz",
         "status": 200,
         "kind": "urlset",
-        "count": 14839,
+        "count": 14840,
         "read": true
       }
     ],
@@ -1610,6 +2507,27 @@
   },
   "notChecked": [
     {
+      "id": "no_questions",
+      "count": null,
+      "cap": null,
+      "en": "questions.json not given: that judgement was not made",
+      "uk": "questions.json не надано: цього судження не зроблено"
+    },
+    {
+      "id": "no_brand",
+      "count": null,
+      "cap": null,
+      "en": "brand.json not given: that judgement was not made",
+      "uk": "brand.json не надано: цього судження не зроблено"
+    },
+    {
+      "id": "no_reviews",
+      "count": null,
+      "cap": null,
+      "en": "reviews.json not given: that judgement was not made",
+      "uk": "reviews.json не надано: цього судження не зроблено"
+    },
+    {
       "id": "links",
       "count": 470,
       "cap": 30,
@@ -1634,37 +2552,31 @@
       "uk": "Опис кожної проблеми й напрям виправлення",
       "links": [
         {
-          "en": "Full version",
-          "uk": "Повна версія",
+          "en": "Full version from GetLoopLoop",
+          "uk": "Повна версія від GetLoopLoop",
           "href": "https://www.getlooploop.com"
         }
       ]
     },
     {
-      "en": "What AI says about your brand and reviews, the questions people ask, a target keyword",
-      "uk": "Що ШІ каже про ваш бренд і відгуки, які запитання ставлять люди, цільова ключова фраза",
-      "links": [
-        {
-          "en": "Full version",
-          "uk": "Повна версія",
-          "href": "https://www.getlooploop.com"
-        }
-      ]
-    },
-    {
-      "en": "Several real assistants side by side",
-      "uk": "Кілька справжніх асистентів поруч",
+      "en": "What real assistants (ChatGPT, Gemini, Perplexity) say about your brand and reviews",
+      "uk": "Що справжні асистенти (ChatGPT, Gemini, Perplexity) кажуть про ваш бренд і відгуки",
       "links": [
         {
           "en": "Brandscope",
           "uk": "Brandscope",
           "href": "https://www.getlooploop.com/brandscope"
+        },
+        {
+          "en": "Reviewscope",
+          "uk": "Reviewscope",
+          "href": "https://www.getlooploop.com/reviewscope"
         }
       ]
     },
     {
-      "en": "How their answers change over time",
-      "uk": "Як їхні відповіді змінюються з часом",
+      "en": "How their answers change from day to day",
+      "uk": "Як їхні відповіді змінюються з дня на день",
       "links": [
         {
           "en": "AI answer volatility",
@@ -1674,8 +2586,8 @@
       ]
     },
     {
-      "en": "How AI groups your text by meaning (embeddings map)",
-      "uk": "Як ШІ групує ваш текст за змістом (мапа ембедингів)",
+      "en": "How AI groups your text by meaning (embeddings)",
+      "uk": "Як ШІ групує ваш текст за змістом (ембединги)",
       "links": [
         {
           "en": "Vectorscope",
@@ -1685,8 +2597,8 @@
       ]
     },
     {
-      "en": "Search Console data, real-user Core Web Vitals, sites beyond one page",
-      "uk": "Дані Search Console, Core Web Vitals реальних користувачів, сайти понад одну сторінку",
+      "en": "Search Console data, real-user speed, sites over 50 pages, tracking over time",
+      "uk": "Дані Search Console, швидкість у реальних користувачів, сайти понад 50 сторінок, відстеження в часі",
       "links": [
         {
           "en": "GetLoopLoop",

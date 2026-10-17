@@ -17430,7 +17430,8 @@ function headersOf(response) {
     contentType: response.headers.get("content-type"),
     contentLength: response.headers.get("content-length"),
     contentLanguage: response.headers.get("content-language"),
-    xRobotsTag: response.headers.get("x-robots-tag")
+    xRobotsTag: response.headers.get("x-robots-tag"),
+    hsts: response.headers.get("strict-transport-security")
   };
 }
 __name(headersOf, "headersOf");
@@ -17448,6 +17449,145 @@ async function pool(items, limit, job) {
 }
 __name(pool, "pool");
 
+// scripts/lib/extras.mjs
+var fold = /* @__PURE__ */ __name((s) => String(s ?? "").replace(/\s+/g, " ").trim(), "fold");
+var APP_ROOTS = ["#root", "#__next", "#app", "#__nuxt", "#___gatsby", "#svelte", "[data-reactroot]", "app-root", "[ng-version]"];
+var SHELL_MAX_WORDS = 150;
+var SHELL_ROOT_MAX_CHARS = 200;
+var MONTHS = {
+  jan: 1,
+  january: 1,
+  feb: 2,
+  february: 2,
+  mar: 3,
+  march: 3,
+  apr: 4,
+  april: 4,
+  may: 5,
+  jun: 6,
+  june: 6,
+  jul: 7,
+  july: 7,
+  aug: 8,
+  august: 8,
+  sep: 9,
+  sept: 9,
+  september: 9,
+  oct: 10,
+  october: 10,
+  nov: 11,
+  november: 11,
+  dec: 12,
+  december: 12,
+  січня: 1,
+  лютого: 2,
+  березня: 3,
+  квітня: 4,
+  травня: 5,
+  червня: 6,
+  липня: 7,
+  серпня: 8,
+  вересня: 9,
+  жовтня: 10,
+  листопада: 11,
+  грудня: 12,
+  enero: 1,
+  febrero: 2,
+  marzo: 3,
+  abril: 4,
+  mayo: 5,
+  junio: 6,
+  julio: 7,
+  agosto: 8,
+  septiembre: 9,
+  octubre: 10,
+  noviembre: 11,
+  diciembre: 12
+};
+var iso = /* @__PURE__ */ __name((y, m, d) => y >= 1990 && y <= 2100 && m >= 1 && m <= 12 && d >= 1 && d <= 31 ? `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}` : null, "iso");
+function datesIn(text3) {
+  const out = /* @__PURE__ */ new Set();
+  const t = String(text3 || "");
+  for (const m of t.matchAll(/\b(\d{4})-(\d{2})-(\d{2})\b/g)) out.add(iso(+m[1], +m[2], +m[3]));
+  for (const m of t.matchAll(/\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/g)) out.add(iso(+m[3], +m[2], +m[1]));
+  for (const m of t.matchAll(/(?<![\p{L}\p{N}])(\d{1,2})\s+(?:de\s+)?([\p{L}]{3,10})\.?,?\s+(?:de\s+)?(\d{4})(?![\p{N}])/gu)) {
+    const mo = MONTHS[m[2].toLowerCase()];
+    if (mo) out.add(iso(+m[3], mo, +m[1]));
+  }
+  for (const m of t.matchAll(/(?<![\p{L}])([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})(?![\p{N}])/g)) {
+    const mo = MONTHS[m[1].toLowerCase()];
+    if (mo) out.add(iso(+m[3], mo, +m[2]));
+  }
+  out.delete(null);
+  return [...out];
+}
+__name(datesIn, "datesIn");
+var LINK_KINDS = {
+  about: /(?:^|\/)(?:about(?:-us)?|company|team|pro-nas|about_us|quienes-somos|sobre-nosotros|acerca(?:-de)?)(?:\/|\.html?$|$)|\b(?:about|про нас|про компанію|sobre nosotros|acerca de|quiénes somos)\b/i,
+  contact: /(?:^|\/)(?:contact(?:-us|s)?|kontakty|contacto|support)(?:\/|\.html?$|$)|\b(?:contact|контакти|зв[’']язатися|contacto)\b/i,
+  privacy: /(?:^|\/)(?:privacy(?:-policy)?|privacidad|confidentiality|polityka-prywatnosci)(?:\/|\.html?$|$)|\b(?:privacy|конфіденційн|privacidad)/i,
+  terms: /(?:^|\/)(?:terms(?:-of-(?:service|use))?|tos|legal|condiciones|terminos|umovy)(?:\/|\.html?$|$)|\b(?:terms|умови використання|умови користування|términos|condiciones)/i
+};
+function pageExtras($2, resolve, pageUrl, facts) {
+  const attr3 = /* @__PURE__ */ __name((n, k) => n?.attribs && Object.prototype.hasOwnProperty.call(n.attribs, k) ? String(n.attribs[k]) : null, "attr");
+  const relOf = /* @__PURE__ */ __name((n) => (attr3(n, "rel") || "").toLowerCase().split(/\s+/).filter(Boolean), "relOf");
+  const roots = APP_ROOTS.map((sel) => {
+    const el = $2(sel).first();
+    return el.length ? { selector: sel, chars: fold(el.text()).length } : null;
+  }).filter(Boolean);
+  const nosnippet = $2("[data-nosnippet]").toArray().filter((n) => !$2(n).parents("[data-nosnippet]").length);
+  const nosnippetChars = nosnippet.reduce((s, n) => s + fold($2(n).text()).length, 0);
+  const icons = $2("link[rel][href]").toArray().filter((n) => relOf(n).some((r) => ["icon", "apple-touch-icon", "apple-touch-icon-precomposed"].includes(r))).map((n) => resolve(attr3(n, "href"))).filter(Boolean);
+  const markdown = $2("link[rel][href]").toArray().filter((n) => relOf(n).includes("alternate") && /markdown/i.test(attr3(n, "type") || "")).map((n) => resolve(attr3(n, "href"))).filter(Boolean);
+  const indexnow = $2("meta[name]").toArray().filter((n) => /^(?:indexnow|indexnow-key|indexnow_key)$/i.test((attr3(n, "name") || "").trim())).map((n) => fold(attr3(n, "content"))).filter((k) => /^[A-Za-z0-9-]{8,128}$/.test(k));
+  const mixed = [];
+  if (/^https:/i.test(pageUrl)) {
+    const take = /* @__PURE__ */ __name((sel, key, tag) => $2(sel).toArray().forEach((n) => {
+      const raw = (attr3(n, key) || "").trim();
+      if (/^http:\/\//i.test(raw)) mixed.push({ tag, url: raw.slice(0, 160) });
+      if (key === "src" && /(?:^|,\s*)http:\/\//i.test(attr3(n, "srcset") || "")) mixed.push({ tag: `${tag} srcset`, url: (attr3(n, "srcset") || "").slice(0, 160) });
+    }), "take");
+    take("img[src], img[srcset]", "src", "img");
+    take("script[src]", "src", "script");
+    take("iframe[src]", "src", "iframe");
+    take("video[src], audio[src], source[src], embed[src]", "src", "media");
+    $2("link[href]").toArray().filter((n) => relOf(n).some((r) => ["stylesheet", "preload", "icon", "modulepreload"].includes(r))).forEach((n) => {
+      const raw = (attr3(n, "href") || "").trim();
+      if (/^http:\/\//i.test(raw)) mixed.push({ tag: "link", url: raw.slice(0, 160) });
+    });
+  }
+  const trust = {};
+  for (const [k, re] of Object.entries(LINK_KINDS)) {
+    trust[k] = facts.links.filter((l) => l.internal || k === "privacy" || k === "terms").some((l) => {
+      let path = "";
+      try {
+        path = new URL(l.url).pathname.toLowerCase();
+      } catch {
+      }
+      return re.test(path) || re.test(l.text || "");
+    });
+  }
+  const metaAuthor = $2("meta[name]").toArray().find((n) => (attr3(n, "name") || "").trim().toLowerCase() === "author");
+  const byline = Boolean(metaAuthor && fold(attr3(metaAuthor, "content"))) || $2('a[rel~="author"], [rel="author"], [itemprop="author"], .author, .byline, [class*="author-name"], [class*="byline"]').toArray().some((n) => fold($2(n).text()).length >= 2);
+  const timeDates = $2("time[datetime]").toArray().map((n) => (attr3(n, "datetime") || "").slice(0, 10)).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d));
+  const visibleDates = [.../* @__PURE__ */ new Set([...timeDates, ...datesIn(facts.visibleText)])];
+  const article = $2("article").length > 0;
+  return {
+    roots,
+    nosnippet: { elements: nosnippet.length, chars: nosnippetChars },
+    icons,
+    markdown,
+    indexnow,
+    mixed: mixed.slice(0, 40),
+    mixedTotal: mixed.length,
+    trust,
+    byline,
+    visibleDates: visibleDates.slice(0, 20),
+    hasArticleElement: article
+  };
+}
+__name(pageExtras, "pageExtras");
+
 // scripts/lib/facts.mjs
 var MAX_ZONES = 14;
 var INTRO_MERGE_CHARS = 120;
@@ -17456,9 +17596,9 @@ var MAX_SAMPLES = 8;
 var PLACEHOLDER = /^(?:loading|calculating|please wait|fetching|one moment|завантаження|зачекайте|cargando|chargement|wird geladen|ładowanie)(?![\p{L}\p{N}])[^.!?]{0,60}(?:…|\.{3})?$/iu;
 var PLACEHOLDER_MAX_CHARS = 80;
 var headingKey2 = /* @__PURE__ */ __name((s) => String(s ?? "").toLowerCase().replace(/[\s\u00a0]+/g, ""), "headingKey");
-var fold = /* @__PURE__ */ __name((s) => String(s ?? "").replace(/\s+/g, " ").trim(), "fold");
+var fold2 = /* @__PURE__ */ __name((s) => String(s ?? "").replace(/\s+/g, " ").trim(), "fold");
 var clip = /* @__PURE__ */ __name((s, n = 90) => {
-  const t = fold(s);
+  const t = fold2(s);
   return t.length > n ? `${t.slice(0, n - 1)}…` : t;
 }, "clip");
 var isEl = /* @__PURE__ */ __name((n) => n && (n.type === "tag" || n.type === "script" || n.type === "style"), "isEl");
@@ -17542,7 +17682,7 @@ function gluedJoins(heading) {
     const l = a.text.slice(-1);
     const r = b.text.charAt(0);
     if (!l || !r || /\s/.test(l) || /\s/.test(r)) continue;
-    const ownText = /* @__PURE__ */ __name((seg) => fold(seg.owner === heading ? seg.text : textOf(seg.owner)), "ownText");
+    const ownText = /* @__PURE__ */ __name((seg) => fold2(seg.owner === heading ? seg.text : textOf(seg.owner)), "ownText");
     const phrase = /\S\s+\S/.test(ownText(a)) || /\S\s+\S/.test(ownText(b));
     const punct = /[?!:;)\]»”]/.test(l) || l === "." && new RegExp("\\p{L}", "u").test(a.text.slice(-2, -1));
     if (new RegExp("\\p{Lu}", "u").test(r) && (punct || phrase && new RegExp("\\p{L}", "u").test(l))) {
@@ -17595,18 +17735,18 @@ __name(hostKey, "hostKey");
 function headFacts($2, resolve, htmlEl) {
   const titles = $2("title").toArray().filter((n) => !within(n, (p) => p.name === "svg"));
   const named = /* @__PURE__ */ __name((name) => $2("meta[name]").toArray().filter((n) => (attr2(n, "name") || "").trim().toLowerCase() === name), "named");
-  const robotsMeta = $2("meta[name]").toArray().filter((n) => ["robots", "googlebot", "bingbot"].includes((attr2(n, "name") || "").trim().toLowerCase())).map((n) => ({ name: attr2(n, "name").trim().toLowerCase(), content: fold(attr2(n, "content")) }));
+  const robotsMeta = $2("meta[name]").toArray().filter((n) => ["robots", "googlebot", "bingbot"].includes((attr2(n, "name") || "").trim().toLowerCase())).map((n) => ({ name: attr2(n, "name").trim().toLowerCase(), content: fold2(attr2(n, "content")) }));
   const viewport = named("viewport")[0];
-  const hreflang = $2("link[rel][hreflang]").toArray().filter((n) => (attr2(n, "rel") || "").toLowerCase().split(/\s+/).includes("alternate")).map((n) => ({ hreflang: fold(attr2(n, "hreflang")), href: resolve(attr2(n, "href") || ""), raw: attr2(n, "href") })).filter((x) => x.hreflang);
+  const hreflang = $2("link[rel][hreflang]").toArray().filter((n) => (attr2(n, "rel") || "").toLowerCase().split(/\s+/).includes("alternate")).map((n) => ({ hreflang: fold2(attr2(n, "hreflang")), href: resolve(attr2(n, "href") || ""), raw: attr2(n, "href") })).filter((x) => x.hreflang);
   const og = {};
   for (const n of $2("meta[property]").toArray()) {
     const k = (attr2(n, "property") || "").trim().toLowerCase();
-    if (k.startsWith("og:") && !(k in og)) og[k] = fold(attr2(n, "content"));
+    if (k.startsWith("og:") && !(k in og)) og[k] = fold2(attr2(n, "content"));
   }
   const twitter = {};
   for (const n of $2("meta[name]").toArray()) {
     const k = (attr2(n, "name") || "").trim().toLowerCase();
-    if (k.startsWith("twitter:") && !(k in twitter)) twitter[k] = fold(attr2(n, "content"));
+    if (k.startsWith("twitter:") && !(k in twitter)) twitter[k] = fold2(attr2(n, "content"));
   }
   const dataType = /* @__PURE__ */ __name((n) => {
     const t = (attr2(n, "type") || "").trim().toLowerCase();
@@ -17614,12 +17754,12 @@ function headFacts($2, resolve, htmlEl) {
   }, "dataType");
   const exec = $2("script").toArray().filter((n) => !dataType(n));
   return {
-    title: titles.length ? fold($2(titles[0]).text()) : "",
+    title: titles.length ? fold2($2(titles[0]).text()) : "",
     titleCount: titles.length,
-    metaDescriptions: named("description").map((n) => fold(attr2(n, "content"))),
+    metaDescriptions: named("description").map((n) => fold2(attr2(n, "content"))),
     robotsMeta,
-    viewport: viewport ? fold(attr2(viewport, "content")) : null,
-    lang: htmlEl ? fold(attr2(htmlEl, "lang") || attr2(htmlEl, "xml:lang") || "") || null : null,
+    viewport: viewport ? fold2(attr2(viewport, "content")) : null,
+    lang: htmlEl ? fold2(attr2(htmlEl, "lang") || attr2(htmlEl, "xml:lang") || "") || null : null,
     hreflang,
     og,
     twitter,
@@ -17702,7 +17842,7 @@ function collectFacts(html3, pageUrl) {
   function walk(n, ctx) {
     if (n.type === "text") {
       if (ctx.never) return;
-      const t = fold(n.data);
+      const t = fold2(n.data);
       if (!t) return;
       const z2 = current();
       z2.chars += t.length + 1;
@@ -17729,8 +17869,8 @@ function collectFacts(html3, pageUrl) {
         pushed = true;
         furniture = "header";
         if (judged.removed) {
-          const ledes = $2(n).find("p").toArray().filter((p) => !underControl(p, n) && !within(p, isHiddenEl)).map((p) => fold(textOf(p))).filter((t) => t.length >= LEDE_MIN_CHARS);
-          removedHeaders.push({ path: pathOf3(n), hasH1: judged.hasH1, hasNav: judged.hasNav, banner: judged.banner, chars: fold(textOf(n)).length, ledes: ledes.slice(0, MAX_SAMPLES).map((t) => clip(t, 120)), ledeCount: ledes.length, ledeChars: ledes.reduce((s, t) => s + t.length, 0), zone: z2.id });
+          const ledes = $2(n).find("p").toArray().filter((p) => !underControl(p, n) && !within(p, isHiddenEl)).map((p) => fold2(textOf(p))).filter((t) => t.length >= LEDE_MIN_CHARS);
+          removedHeaders.push({ path: pathOf3(n), hasH1: judged.hasH1, hasNav: judged.hasNav, banner: judged.banner, chars: fold2(textOf(n)).length, ledes: ledes.slice(0, MAX_SAMPLES).map((t) => clip(t, 120)), ledeCount: ledes.length, ledeChars: ledes.reduce((s, t) => s + t.length, 0), zone: z2.id });
         }
       } else if ((tag === "nav" || r === "navigation") && !within(n.parent, (p) => p.name === "main" || p.name === "article" || role(p) === "main")) {
         const z2 = last2 && (last2.kind === "header" || last2.kind === "nav") ? last2 : addZone("nav", null);
@@ -17750,7 +17890,7 @@ function collectFacts(html3, pageUrl) {
     }
     if (!never && /^h[1-6]$/.test(tag)) {
       const level = Number(tag[1]);
-      const text3 = fold(textOf(n));
+      const text3 = fold2(textOf(n));
       const inFurniture = Boolean(furniture && furniture !== "header");
       if (level === 1 && !inFurniture) {
         if (!zones.some((z3) => z3.kind === "hero")) {
@@ -17770,12 +17910,14 @@ function collectFacts(html3, pageUrl) {
       headings.push({ level, text: clip(text3, 160), hidden, furniture: furniture || null, overlay, zone: z2.id, path: pathOf3(n), ...level === 1 ? { glued: gluedJoins(n), textContent: clip(textOf(n), 160) } : {} });
       if (hidden && !overlay && !inFurniture && level >= 2 && level <= 4) {
         hiddenHeadings.push({ level, text: clip(text3, 100), zone: z2.id, path: pathOf3(n), root: hiddenRoot ? pathOf3(hiddenRoot) : null });
-        if (hiddenRoot && !hiddenRootChars.has(hiddenRoot)) hiddenRootChars.set(hiddenRoot, fold(textOf(hiddenRoot)).length);
+        if (hiddenRoot && !hiddenRootChars.has(hiddenRoot)) hiddenRootChars.set(hiddenRoot, fold2(textOf(hiddenRoot)).length);
       }
     }
     const z = current();
     if (!never && tag === "img" && !hidden) {
-      images.push({ src: clip(attr2(n, "src") || attr2(n, "data-src") || "", 120), hasAlt: attr2(n, "alt") !== null, decorative: ["presentation", "none"].includes(role(n)), zone: z.id, path: pathOf3(n) });
+      const rawSrc = attr2(n, "src") || attr2(n, "data-src") || "";
+      const sources = n.parent && n.parent.name === "picture" ? n.parent.children.filter((c) => isEl(c) && c.name === "source").map((c) => (attr2(c, "type") || attr2(c, "srcset") || "").toLowerCase()) : [];
+      images.push({ index: images.length, src: clip(rawSrc, 120), url: rawSrc && !/^data:/i.test(rawSrc) ? resolve(rawSrc) : null, hasAlt: attr2(n, "alt") !== null, decorative: ["presentation", "none"].includes(role(n)), width: attr2(n, "width"), height: attr2(n, "height"), loading: (attr2(n, "loading") || "").trim().toLowerCase() || null, fetchpriority: (attr2(n, "fetchpriority") || "").trim().toLowerCase() || null, srcset: Boolean(attr2(n, "srcset") || attr2(n, "data-srcset")) || sources.length > 0, modernSource: sources.some((t) => /avif|webp/.test(t)), zone: z.id, path: pathOf3(n) });
     }
     if (!never && tag === "a" && attr2(n, "href") !== null) {
       const raw = attr2(n, "href").trim();
@@ -17809,6 +17951,7 @@ function collectFacts(html3, pageUrl) {
     hiddenChars: [...hiddenRootChars.values()].reduce((s, c) => s + c, 0),
     visibleText: visible.join(" ")
   };
+  facts.extras = pageExtras($2, resolve, pageUrl, facts);
   facts.zones = tidyZones(zones, facts);
   return facts;
 }
@@ -17886,6 +18029,30 @@ __name(tidyZones, "tidyZones");
 
 // scripts/lib/collect.mjs
 import { gunzipSync } from "node:zlib";
+
+// scripts/lib/localeFacts.mjs
+function numbersIn(text3) {
+  const out = [];
+  const re = /(?<![\p{L}\p{N}]-?)\d{1,3}(?:[,.\u00a0\u202f ]\d{3})+(?![\p{N}])|(?<![\p{L}\p{N}]-?)\d+(?:[.,]\d+)?(?![\p{N}])/gu;
+  for (const m of String(text3 || "").matchAll(re)) {
+    const raw = m[0];
+    let value;
+    if (/^\d{1,3}(?:[,.\u00a0\u202f ]\d{3})+$/.test(raw)) value = Number(raw.replace(/[^\d]/g, ""));
+    else value = Number(raw.replace(",", "."));
+    if (!Number.isFinite(value)) continue;
+    const at = m.index;
+    out.push({ value, raw: raw.replace(/[\u00a0\u202f]/g, " "), context: String(text3).slice(Math.max(0, at - 30), at + raw.length + 30).replace(/\s+/g, " ").trim() });
+  }
+  return out;
+}
+__name(numbersIn, "numbersIn");
+function sectionNumbers(sections) {
+  const body = (sections || []).filter((s, i) => !(i === 0 && s.intro));
+  return body.filter((s) => s.heading).map((s, position) => ({ position, heading: String(s.heading).slice(0, 160), numbers: numbersIn(s.text).slice(0, 40) }));
+}
+__name(sectionNumbers, "sectionNumbers");
+
+// scripts/lib/collect.mjs
 var LINK_CHECK_CAP = 30;
 var LINK_CHECK_CONCURRENCY = 5;
 var LINK_TIMEOUT_MS = 8e3;
@@ -18003,13 +18170,13 @@ async function checkLlms(pageUrl) {
 __name(checkLlms, "checkLlms");
 function alternateFacts(html3, url) {
   const $2 = load(html3);
-  const fold2 = /* @__PURE__ */ __name((s) => String(s ?? "").replace(/\s+/g, " ").trim(), "fold");
+  const fold3 = /* @__PURE__ */ __name((s) => String(s ?? "").replace(/\s+/g, " ").trim(), "fold");
   const metaNamed = /* @__PURE__ */ __name((name) => $2("meta[name]").toArray().filter((n) => String(n.attribs.name || "").trim().toLowerCase() === name), "metaNamed");
-  const robots = metaNamed("robots").concat(metaNamed("googlebot")).map((n) => fold2(n.attribs.content).toLowerCase());
+  const robots = metaNamed("robots").concat(metaNamed("googlebot")).map((n) => fold3(n.attribs.content).toLowerCase());
   return {
-    title: fold2($2("title").first().text()),
-    description: fold2(metaNamed("description")[0]?.attribs.content || ""),
-    lang: fold2($2("html").attr("lang") || "") || null,
+    title: fold3($2("title").first().text()),
+    description: fold3(metaNamed("description")[0]?.attribs.content || ""),
+    lang: fold3($2("html").attr("lang") || "") || null,
     noindex: robots.some((c) => /\bnoindex\b|\bnone\b/.test(c)),
     hreflang: $2("link[rel][hreflang]").toArray().filter((n) => String(n.attribs.rel || "").toLowerCase().split(/\s+/).includes("alternate")).map((n) => {
       let href = null;
@@ -18017,11 +18184,16 @@ function alternateFacts(html3, url) {
         href = new URL(String(n.attribs.href || "").trim(), url).toString();
       } catch {
       }
-      return { hreflang: fold2(n.attribs.hreflang), href };
+      return { hreflang: fold3(n.attribs.hreflang), href };
     })
   };
 }
 __name(alternateFacts, "alternateFacts");
+function alternateSections(analysed) {
+  const hasIntro = [analysed.title, (analysed.h1 || []).join(" "), analysed.metaDescription].some((x) => String(x || "").trim());
+  return sectionNumbers(extractSections(analysed).map((s, i) => ({ ...s, ...i === 0 && hasIntro ? { intro: true } : {} })));
+}
+__name(alternateSections, "alternateSections");
 async function checkAlternates(pageUrl, hreflang) {
   const seen = /* @__PURE__ */ new Set();
   const list = [];
@@ -18050,7 +18222,8 @@ async function checkAlternates(pageUrl, hreflang) {
       results.push({ hreflang: h.hreflang, href: h.href, ok: false, status: r.status, finalUrl: r.url, redirected, reason: isHtml2 ? "http_error" : "not_html" });
       continue;
     }
-    const language = judgeLanguage({ declared: declaredLanguagesFromHtml(r.text, r.headers.contentLanguage), text: analyseHtml({ html: r.text, url: r.url }).bodyText || "" });
+    const analysed = analyseHtml({ html: r.text, url: r.url });
+    const language = judgeLanguage({ declared: declaredLanguagesFromHtml(r.text, r.headers.contentLanguage), text: analysed.bodyText || "" });
     if (language.russian) {
       results.push({ hreflang: h.hreflang, href: h.href, refused: "refused_language_ru", basis: language.basis });
       continue;
@@ -18068,7 +18241,10 @@ async function checkAlternates(pageUrl, hreflang) {
       description: facts.description,
       lang: facts.lang,
       noindex: facts.noindex || /\bnoindex\b|\bnone\b/.test(xRobots),
-      hreflangSet: facts.hreflang.slice(0, 60)
+      hreflangSet: facts.hreflang.slice(0, 60),
+      // Only the numbers of each h2 section, with a few words around each: what the locale-facts
+      // check compares. The rest of the alternate's text is not kept.
+      sections: alternateSections(analysed)
     });
   }
   return { total: list.length, checked: results.length, unchecked: list.slice(ALTERNATES_CAP).map((h) => ({ hreflang: h.hreflang, href: h.href })), cap: ALTERNATES_CAP, results };
@@ -18102,12 +18278,107 @@ async function checkLinks(links) {
   return { total: unique.length, checked: results.length, unchecked: Math.max(0, unique.length - batch.length), cap: LINK_CHECK_CAP, results };
 }
 __name(checkLinks, "checkLinks");
+var IMAGE_CHECK_CAP = 20;
+var VARIANT_CAP = 3;
+async function checkImages(images) {
+  const list = [];
+  const seen = /* @__PURE__ */ new Set();
+  for (const img of images) {
+    if (!img.url || seen.has(img.url) || !/^https?:/i.test(img.url)) continue;
+    seen.add(img.url);
+    list.push(img);
+  }
+  const batch = list.slice(0, IMAGE_CHECK_CAP);
+  const results = await pool(batch, LINK_CHECK_CONCURRENCY, async (img) => {
+    let r = await guardedFetch(img.url, { method: "HEAD", timeoutMs: LINK_TIMEOUT_MS, accept: "image/*" });
+    if (!r.ok || [403, 405, 501].includes(r.status) || !r.headers?.contentLength) {
+      const g = await guardedFetch(img.url, { method: "GET", timeoutMs: LINK_TIMEOUT_MS, body: false, accept: "image/*" });
+      if (g.ok) r = g;
+    }
+    return { index: img.index, url: img.url, status: r.status ?? null, bytes: r.ok && r.headers?.contentLength ? Number(r.headers.contentLength) : null, type: r.ok ? r.headers?.contentType || null : null, reason: r.ok ? null : r.reason };
+  });
+  return { total: list.length, checked: results.length, unchecked: Math.max(0, list.length - batch.length), cap: IMAGE_CHECK_CAP, results };
+}
+__name(checkImages, "checkImages");
+var flipWww = /* @__PURE__ */ __name((u) => {
+  const x = new URL(u);
+  if (x.hostname.startsWith("www.")) x.hostname = x.hostname.slice(4);
+  else if (x.hostname.split(".").length === 2) x.hostname = `www.${x.hostname}`;
+  else return null;
+  return x.toString();
+}, "flipWww");
+var flipSlash = /* @__PURE__ */ __name((u) => {
+  const x = new URL(u);
+  if (x.pathname === "/") return null;
+  x.pathname = x.pathname.endsWith("/") ? x.pathname.slice(0, -1) : `${x.pathname}/`;
+  return x.toString();
+}, "flipSlash");
+function improbablePath(pageUrl, seed = Date.now()) {
+  const u = new URL(pageUrl);
+  return `${u.origin}/getlooploop-audit-missing-${seed.toString(36)}-page`;
+}
+__name(improbablePath, "improbablePath");
+async function checkSite(pageUrl, extras, { canonical = null, now = Date.now() } = {}) {
+  const u = new URL(pageUrl);
+  const out = {};
+  const icon = extras.icons[0] || `${u.origin}/favicon.ico`;
+  const fi = /^data:/i.test(icon) ? { ok: false, reason: "data_uri" } : await guardedFetch(icon, { method: "GET", body: false, accept: "image/*", timeoutMs: LINK_TIMEOUT_MS });
+  out.favicon = { url: /^data:/i.test(icon) ? icon.slice(0, 40) : icon, declared: extras.icons.length > 0, status: fi.status ?? null, ok: Boolean(fi.ok && fi.status === 200 && !/text\/html/i.test(fi.headers?.contentType || "")), reason: fi.ok ? null : fi.reason };
+  const missing = improbablePath(pageUrl, now);
+  const sm = await guardedFetch(missing, { method: "GET", body: false, accept: "text/html", timeoutMs: LINK_TIMEOUT_MS });
+  out.soft404 = { url: missing, status: sm.status ?? null, finalUrl: sm.ok ? sm.url : null, reason: sm.ok ? null : sm.reason };
+  const target = canonical || pageUrl;
+  const variants = [];
+  if (u.protocol === "https:") variants.push(["http", pageUrl.replace(/^https:/i, "http:")]);
+  const www = flipWww(pageUrl);
+  if (www) variants.push(["www", www]);
+  const slash = flipSlash(pageUrl);
+  if (slash) variants.push(["slash", slash]);
+  out.variants = [];
+  for (const [kind, url] of variants.slice(0, VARIANT_CAP)) {
+    const r = await guardedFetch(url, { method: "GET", body: false, accept: "text/html", timeoutMs: LINK_TIMEOUT_MS });
+    out.variants.push({ kind, url, status: r.status ?? null, finalUrl: r.ok ? r.url : null, ends: r.ok && r.status === 200 && (samePage(r.url, target) || samePage(r.url, pageUrl)), reason: r.ok ? null : r.reason });
+  }
+  const mdUrl = extras.markdown[0] || (u.pathname.endsWith("/") ? `${u.origin}${u.pathname}index.html.md` : `${u.origin}${u.pathname}.md`);
+  const md = await guardedFetch(mdUrl, { method: "GET", accept: "text/markdown,text/plain;q=0.9,*/*;q=0.1", maxBytes: LLMS_MAX_BYTES, timeoutMs: LINK_TIMEOUT_MS });
+  const mdText = md.ok ? md.text : "";
+  out.markdown = { url: mdUrl, declared: extras.markdown.length > 0, status: md.status ?? null, ok: Boolean(md.ok && md.status === 200 && mdText.trim() && !/^\s*<(?:!doctype|html)/i.test(mdText)), contentType: md.ok ? md.headers.contentType : null, reason: md.ok ? null : md.reason };
+  out.aiCatalog = null;
+  for (const path of ["/.well-known/ai-catalog.json", "/ai-catalog.json"]) {
+    const r = await guardedFetch(`${u.origin}${path}`, { method: "GET", accept: "application/json", maxBytes: LLMS_MAX_BYTES, timeoutMs: LINK_TIMEOUT_MS });
+    const present = Boolean(r.ok && r.status === 200 && r.text.trim() && !/^\s*</.test(r.text));
+    let valid = null;
+    if (present) {
+      try {
+        JSON.parse(r.text);
+        valid = true;
+      } catch {
+        valid = false;
+      }
+    }
+    out.aiCatalog = { url: `${u.origin}${path}`, status: r.status ?? null, present, valid };
+    if (present) break;
+  }
+  if (extras.indexnow[0]) {
+    const key = extras.indexnow[0];
+    const r = await guardedFetch(`${u.origin}/${key}.txt`, { method: "GET", accept: "text/plain", maxBytes: 4096, timeoutMs: LINK_TIMEOUT_MS });
+    out.indexnow = { key, url: `${u.origin}/${key}.txt`, status: r.status ?? null, ok: Boolean(r.ok && r.status === 200 && r.text.trim() === key) };
+  } else out.indexnow = null;
+  out.requests = (/^data:/i.test(icon) ? 3 : 4) + out.variants.length + (out.aiCatalog && out.aiCatalog.url.endsWith("/ai-catalog.json") && !out.aiCatalog.url.includes(".well-known") ? 1 : 0) + (out.indexnow ? 1 : 0);
+  return out;
+}
+__name(checkSite, "checkSite");
 
 // scripts/lib/version.mjs
 var SKILL_VERSION = "2.101";
 var READING_SCHEMA2 = "getlooploop/ai-search-audit-reading@1";
 
 // scripts/lib/reading.mjs
+function keptSections(analysed) {
+  const hasIntro = [analysed.title, (analysed.h1 || []).join(" "), analysed.metaDescription].some((x) => String(x || "").trim());
+  return extractSections(analysed).map((s, i) => ({ heading: s.heading ?? null, text: s.text, ...i === 0 && hasIntro ? { intro: true } : {} }));
+}
+__name(keptSections, "keptSections");
 async function fetchPage(url) {
   const r = await guardedFetch(url, { accept: "text/html,application/xhtml+xml" });
   if (!r.ok) return { ok: false, reason: r.reason === "too_many_redirects" ? "http_error" : r.reason, status: r.status, chain: r.chain };
@@ -18164,6 +18435,7 @@ async function readAudit({ url, html: html3, finalUrl, robotsText, network, rend
   const vs = await readPage({ url: urlKey, html: page.html, finalUrl: page.url, robots: "skip" });
   if (!vs.ok) return { ...base, ok: false, reasonCode: vs.reasonCode, fetch: { requestedUrl: urlKey, finalUrl: page.url, chain: page.chain } };
   const facts = collectFacts(page.html, page.url);
+  facts.sections = keptSections(analysed);
   let robotsFetched;
   if (online) robotsFetched = await fetchRobots(page.url);
   else if (typeof robotsText === "string") robotsFetched = { status: "ok", url: `${new URL(page.url).origin}/robots.txt`, httpStatus: null, text: robotsText };
@@ -18175,10 +18447,15 @@ async function readAudit({ url, html: html3, finalUrl, robotsText, network, rend
   const llms = online ? await checkLlms(page.url) : null;
   const alternates = online ? await checkAlternates(page.url, facts.head.hreflang) : null;
   const links = online ? await checkLinks(facts.links) : null;
+  const images = online ? await checkImages(facts.images) : null;
+  const site = online ? await checkSite(page.url, facts.extras, { canonical, now: now.getTime() }) : null;
+  const emptyRoots = facts.extras.roots.filter((x) => x.chars < SHELL_ROOT_MAX_CHARS);
+  const shell = { detected: vs.page.wordCount < SHELL_MAX_WORDS && emptyRoots.length > 0 && facts.head.scripts.total > 0, roots: emptyRoots.map((x) => x.selector), words: vs.page.wordCount, scripts: facts.head.scripts.total };
+  const autoRender = shell.detected && !render3 && online;
   let rendered = null;
-  if (render3) {
+  if (render3 || autoRender) {
     const result = await renderPage(page.url);
-    if (!result.ok) rendered = { ok: false, reason: result.reason, browser: result.browser ? basename2(result.browser) : null };
+    if (!result.ok) rendered = { ok: false, reason: result.reason, browser: result.browser ? basename2(result.browser) : null, auto: autoRender };
     else {
       const js = await readPage({ url: urlKey, html: result.html, finalUrl: page.url, robots: "skip" });
       const jsFacts = collectFacts(result.html, page.url);
@@ -18189,7 +18466,8 @@ async function readAudit({ url, html: html3, finalUrl, robotsText, network, rend
         passages: js.ok ? js.passages.length : 0,
         charsIndexed: js.ok ? js.page.charsIndexed : 0,
         headings: js.ok ? js.page.headings : 0,
-        jsZones: jsOnlyZones(facts, jsFacts)
+        jsZones: jsOnlyZones(facts, jsFacts),
+        auto: autoRender
       };
     }
   }
@@ -18205,6 +18483,7 @@ async function readAudit({ url, html: html3, finalUrl, robotsText, network, rend
       status: page.status,
       contentType: page.headers.contentType ?? null,
       xRobotsTag: page.headers.xRobotsTag ?? null,
+      hsts: page.headers.hsts ?? null,
       contentLanguage: page.headers.contentLanguage ?? null
     },
     facts,
@@ -18214,6 +18493,9 @@ async function readAudit({ url, html: html3, finalUrl, robotsText, network, rend
     llms,
     alternates,
     links,
+    images,
+    site,
+    shell,
     render: rendered
   };
 }
@@ -18261,6 +18543,9 @@ function summarise(r, file) {
   if (llms) console.log(`llms.txt  ${llms.present ? `present · ${llms.links} links` : `none (HTTP ${llms.status ?? llms.reason})`}`);
   if (alternates) console.log(`hreflang  ${facts.head.hreflang.length} declared · ${alternates.checked} alternates read${alternates.unchecked.length ? ` · ${alternates.unchecked.length} not read (cap ${alternates.cap})` : ""}`);
   if (links) console.log(`links     ${links.checked} of ${links.total} checked${links.unchecked ? ` · ${links.unchecked} not checked (cap ${links.cap})` : ""} · broken ${links.results.filter((x) => x.verdict === "broken").length} · unverified ${links.results.filter((x) => x.verdict === "unverified").length}`);
+  if (r.images) console.log(`images    ${r.images.checked} of ${r.images.total} sized${r.images.unchecked ? ` · ${r.images.unchecked} not checked (cap ${r.images.cap})` : ""}`);
+  if (r.site) console.log(`site      favicon ${r.site.favicon.ok ? "ok" : r.site.favicon.status ?? r.site.favicon.reason} · missing path ${r.site.soft404.status ?? r.site.soft404.reason} · variants ${r.site.variants.map((v) => `${v.kind} ${v.ends ? "ok" : v.status ?? v.reason}`).join(", ")} · markdown ${r.site.markdown.ok ? "yes" : "no"} · ai-catalog ${r.site.aiCatalog?.present ? r.site.aiCatalog.valid ? "valid" : "invalid" : "none"}${r.site.indexnow ? ` · IndexNow key ${r.site.indexnow.ok ? "ok" : "missing"}` : ""}`);
+  if (r.shell?.detected) console.log(`app shell ${r.shell.roots.join(", ")} · ${r.shell.words} words without JavaScript · ${r.render ? r.render.ok ? "rendered automatically" : `not rendered: ${r.render.reason}` : "not rendered (saved page)"}`);
   if (fetch3.saved) console.log("network   none: a saved page was read; robots.txt, sitemap, llms.txt, alternates and links are not measured");
   if (render3) console.log(render3.ok ? `render    with JS ${fmt(render3.wordCount)} words · ${render3.passages} passages (without JS ${fmt(vs.page.wordCount)} · ${vs.passages.length}) · ${render3.jsZones.length} sections only with JS` : `render    not done: ${render3.reason === "no_browser" ? "no Chrome or Chromium found (set CHROME_PATH)" : render3.reason}`);
   console.log(`reading   ${file}`);

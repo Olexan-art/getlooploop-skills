@@ -1,0 +1,19 @@
+{
+  "agent": "Claude Code",
+  "model": "Claude Opus 5.5",
+  "topic": "cómo corta una página en pasajes un recuperador de IA",
+  "questions": [
+    { "id": "q1", "question": "Mañana publicamos la página: ¿un asistente llegará a ver las preguntas frecuentes del final?", "axes": ["urgency", "object"], "passage": 5, "verdict": "partial", "citable": false, "quote": "Si tu respuesta, tu diferencia o tu FAQ están por debajo del corte, la solución no es más texto" },
+    { "id": "q2", "question": "¿Cuántos pasajes lee de una página?", "axes": ["object"], "passage": 3, "verdict": "complete", "citable": true, "quote": "Esta lectura toma como máximo 26 pasajes de una página." },
+    { "id": "q3", "question": "Escribí una guía larga y nadie cita las últimas secciones. ¿Por qué?", "axes": ["obstacle"], "passage": 5, "verdict": "complete", "citable": true, "quote": "Un sistema de recuperación lee un número fijo de fragmentos de una página e ignora el resto, así que todo lo que queda por debajo de ese corte es invisible por bueno que sea." },
+    { "id": "q4", "question": "¿Puedo revisar una página desde el móvil sin instalar nada?", "axes": ["device"], "passage": 1, "verdict": "partial", "citable": false, "quote": "Un límite gratuito por visitante, sin necesidad de cuenta." },
+    { "id": "q5", "question": "¿Guardáis una copia de la página que pego?", "axes": ["obstacle", "object"], "passage": 15, "verdict": "complete", "citable": true, "quote": "la página descargada no se retiene después de producirla" },
+    { "id": "q6", "question": "¿Qué diferencia hay entre cortar por titulares y cortar por significado?", "axes": ["object"], "passage": 14, "verdict": "complete", "citable": true, "quote": "El fragmentado por titulares corta en los titulares de la página; el fragmentado semántico corta donde cambia el significado, haya titular o no." },
+    { "id": "q7", "question": "Un cliente me pregunta ahora mismo por qué su página no sale en ChatGPT. ¿Esto me dice si está indexada?", "axes": ["urgency", "obstacle"], "passage": 4, "verdict": "complete", "citable": true, "quote": "Esto no demuestra que ningún asistente haya indexado la página." },
+    { "id": "q8", "question": "Lo comparo con nuestro fragmentador RAG: ¿qué ventana y qué solapamiento usa?", "axes": ["device", "object"], "passage": 10, "verdict": "complete", "citable": true, "quote": "El fragmentador (cortes en h2, después ventanas de 2000 caracteres con 200 de solapamiento), el modelo de embeddings y el límite aquí son los que el producto ejecuta en producción." },
+    { "id": "q9", "question": "Nuestra web es una app de React. ¿Se lee el texto que carga después?", "axes": ["obstacle", "object"], "passage": 5, "verdict": "partial", "citable": false, "quote": "Causas habituales, por frecuencia: texto que solo dibuja JavaScript" },
+    { "id": "q10", "question": "Tengo veinte páginas que revisar antes del viernes. ¿Hay un límite?", "axes": ["urgency"], "passage": 15, "verdict": "partial", "citable": false, "quote": "Sí, con un límite de frecuencia en lugar de un muro de pago." },
+    { "id": "q11", "question": "¿Puedo pegar el enlace de un PDF en lugar de una página web?", "axes": ["object"], "passage": null, "verdict": "missing" },
+    { "id": "q12", "question": "La página que necesito solo se abre tras iniciar sesión en mi portátil. ¿La puede leer?", "axes": ["device", "obstacle"], "passage": null, "verdict": "missing" }
+  ]
+}
