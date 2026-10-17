@@ -2,7 +2,7 @@ English · [Українська](README.uk.md)
 
 # GetLoopLoop skills
 
-Vectorscope skill **2.104**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
+Vectorscope skill **2.105**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
 
 Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
@@ -123,6 +123,10 @@ The [skills CLI](https://skills.sh) asks which agents to install it for (add `-g
 **Pasting this repository's link into a chat is not installing it.** Claude rightly will not download and run code from a link someone pasted, so it will at best imitate the steps by hand, and those numbers are not the tool's. Upload the zip as above.
 
 Sources: [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude) · [Create custom skills](https://claude.com/docs/skills/how-to) (the zip's structure, the name and description rules) · [Create and edit files with Claude](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude) (code execution and network egress) · [Agent Skills overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) (network access by surface). Checked on 2026-10-16.
+
+### No internet in the agent's shell
+
+Cloud sandboxes often run the shell offline or keep the skills folder read-only. The skill does not need a skills folder: unpack `vectorscope.zip` anywhere the agent can write and point it at that folder (or attach the zip to the chat). With no network, save the page in your browser as "Web page, HTML only" and, if you can, its `robots.txt`, and give both files to the agent: the skill reads the saved copy and marks every check that needs the network as not checked.
 
 ## Use it with your agent
 

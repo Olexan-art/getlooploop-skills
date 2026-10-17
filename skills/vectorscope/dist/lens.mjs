@@ -24433,7 +24433,7 @@ __name(renderCompareHtml, "renderCompareHtml");
 // scripts/lens.mjs
 var COMPARE_SCHEMA = "getlooploop/vectorscope-compare@1";
 var REFUSAL_SCHEMA = "getlooploop/vectorscope-refusal@1";
-var SKILL_VERSION = "2.104";
+var SKILL_VERSION = "2.105";
 var USAGE = [
   "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json]",
   "         [--topics topics.json] [--baseline old-reading.json [--baseline-groups old-groups.json]] [--json out.json] [--md out.md] [--html out.html]",

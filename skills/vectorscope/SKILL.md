@@ -3,7 +3,7 @@ name: vectorscope
 description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для ШІ-ботів». No embeddings.
 ---
 
-Version 2.104. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, …): the first number moves only on a breaking change.
+Version 2.105. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, 2.105, …): the first number moves only on a breaking change.
 
 # Vectorscope (local, no embeddings)
 
@@ -273,6 +273,14 @@ Short, alongside the report and never instead of it:
 | `empty` | The page answered, but no readable text was left once navigation and boilerplate were removed, or the URL is a feed, sitemap or file. |
 | `refused_language_ru` | The page is in Russian, and this tool does not analyse pages in Russian. One line in the chat, the report, nothing more. |
 
+
+## No network in the shell, or nowhere to install
+
+Some agents run their shell with no internet (cloud sandboxes such as Codex in the cloud or ChatGPT), or cannot write to their skills folder.
+
+- **The skill folder can live anywhere.** If the agent's skills folder is read-only, unpack `vectorscope.zip` (or copy this folder) into any directory you can write, such as the working directory, and use that folder as `$SKILL`. Nothing needs installing. If you cannot get the files at all (no network, downloads blocked), ask the user to attach `vectorscope.zip` from the repository's Releases, and wait.
+- **No network in the shell:** read.mjs prints `REFUSED unreachable`. Ask the user for a saved copy: the page saved from their browser as "Web page, HTML only" (Ctrl+S, or Cmd+S on a Mac), and, if they can, the site's robots.txt (open `<site>/robots.txt` and save it as text). Then run `node "$SKILL/dist/read.mjs" <url> --html page.html --robots robots.txt --out reading.json` and go on with step 2. Without `--robots`, robots.txt is reported as not checked. The report says it read a saved copy.
+- **Only files the user gives you.** Do not make the saved copy yourself with a browsing or fetch tool: those return text or Markdown converted from the page, not its HTML, and the reading would not be the page's. And do not fill in for the scripts: a check made by hand is not this tool's result.
 
 ## If the page cannot be fetched
 
