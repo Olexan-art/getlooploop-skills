@@ -12,19 +12,36 @@ export const PROSECUTOR_FIGURES_AS_OF = "2025-11-05";
 export const REFUSAL_COPY = {
   title: { en: "This page was not analysed", uk: "Цю сторінку не проаналізовано" },
   lead: {
-    en: "Vectorscope does not analyse pages written in Russian. This is the publisher's decision, made because of Russia's war against Ukraine. These are the findings it rests on:",
-    uk: "Vectorscope не аналізує сторінки російською мовою. Це рішення автора інструмента через війну Росії проти України. Воно спирається на такі висновки:",
+    en: "Vectorscope does not analyse pages written in Russian, or sites in Russia's domain zone, hosted in Russia or with a Russian-language version. This is the publisher's decision, made because of Russia's war against Ukraine. These are the findings it rests on:",
+    uk: "Vectorscope не аналізує сторінки російською мовою, а також сайти в доменній зоні Росії, розміщені в Росії або з російськомовною версією. Це рішення автора інструмента через війну Росії проти України. Воно спирається на такі висновки:",
   },
   sanctionsLabel: { en: "Sanctions", uk: "Санкції" },
   sanctions: {
     en: "If this site is operated by people or companies in Russia, it may be subject to sanctions. Check the official lists:",
     uk: "Якщо сайт належить особам чи компаніям у Росії, він може підпадати під санкції. Перевірте офіційні списки:",
   },
-  lastLine: {
-    en: "If the site has a version in another language, run that URL instead.",
-    uk: "Якщо сайт має версію іншою мовою, запустіть її адресу.",
-  },
 };
+
+// 2.110: four signals refuse, checked in this order; the reading names the one that fired, and
+// the report adds its one reason line under the same refusal block.
+export const REFUSED_RU_DOMAIN = "refused_ru_domain";
+export const REFUSED_RU_HOSTING = "refused_ru_hosting";
+export const REFUSED_RU_AUDIENCE = "refused_ru_audience";
+export const REFUSAL_CODES = [REFUSED_RU_DOMAIN, REFUSED_RU_HOSTING, REFUSED_RU_AUDIENCE, REFUSAL_CODE];
+
+/** True for every code that renders the refusal block. */
+export const isRefusalCode = (code) => REFUSAL_CODES.includes(code);
+
+/** The one reason line per code, in each report language. */
+export const REFUSAL_REASON = {
+  [REFUSED_RU_DOMAIN]: { en: "Why: the address is in Russia's domain zone.", uk: "Чому: адреса в доменній зоні Росії." },
+  [REFUSED_RU_HOSTING]: { en: "Why: the site is hosted in Russia.", uk: "Чому: сайт розміщено в Росії." },
+  [REFUSED_RU_AUDIENCE]: { en: "Why: the site has a Russian-language version.", uk: "Чому: сайт має російськомовну версію." },
+  [REFUSAL_CODE]: { en: "Why: the page is in Russian.", uk: "Чому: сторінка російською мовою." },
+};
+
+/** The reason line for a code in one language, or "" for a code that is not a refusal. */
+export const refusalReason = (code, lang) => REFUSAL_REASON[code]?.[lang] ?? "";
 
 /**
  * The findings, in the approved order. A finding with `items` is a source heading with a list

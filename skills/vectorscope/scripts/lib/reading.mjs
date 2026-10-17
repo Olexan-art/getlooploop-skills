@@ -17,6 +17,7 @@ import { renderPage } from "./render.mjs";
 import { basename } from "node:path";
 import { declaredLanguagesFromHtml, judgeLanguage } from "./language.mjs";
 import { measureLosses } from "./losses.mjs";
+import { hostingRecord, judgeRussianSite } from "./russianSite.mjs";
 
 export const REFUSED_LANGUAGE_RU = "refused_language_ru";
 
@@ -54,19 +55,36 @@ function chunkHtml(html, finalUrl, urlKey, host, analysed = analyse(html, finalU
  * every other step is identical.
  * Options (all layers, none touches the passages):
  *   robots: "fetch" (default when the page is fetched), "skip", or { text } for a saved robots.txt;
- *   render: true to compare against a headless-browser render.
+ *   render: true to compare against a headless-browser render;
+ *   deps: { lookup, fetch } for the hosting check, replaced in tests.
+ * Before anything is fetched, a .ru-zone address and a server in Russia refuse; after the fetch,
+ * a Russian-language version of the site, then a page in Russian (russianSite.mjs, language.mjs).
+ * With a saved copy (html) nothing goes to the network, so hosting is recorded "not_checked".
  * Returns { schema, ok, reasonCode, status?, requestedInput, page?, passages?, technical?, robots?, layout?, render? }.
  */
-export async function readPage({ url, html, finalUrl, robots, render = false, onHtml }) {
+export async function readPage({ url, html, finalUrl, robots, render = false, onHtml, deps }) {
   const base = { schema: READING_SCHEMA, requestedInput: String(url ?? "") };
 
   const verdict = judgeRequestedUrl(url);
   if (!verdict.ok) return { ...base, ok: false, reasonCode: verdict.reason };
   const urlKey = verdict.url;
   const host = new URL(urlKey).hostname;
+  const saved = typeof html === "string";
+
+  // 2.110: the domain zone and the hosting country, before the page is fetched at all.
+  const refuse = (judged, pageUrl) => ({
+    ...base,
+    ok: false,
+    reasonCode: judged.refusal.reasonCode,
+    refusal: judged.refusal,
+    page: { url: pageUrl, requestedUrl: urlKey },
+    hosting: hostingRecord(judged.hosting),
+  });
+  const before = await judgeRussianSite({ url: urlKey, network: !saved, deps });
+  if (before.refusal) return refuse(before, urlKey);
 
   let fetched;
-  if (typeof html === "string") {
+  if (saved) {
     fetched = { ok: true, url: finalUrl || urlKey, html };
   } else {
     fetched = await fetchPublicPage(urlKey);
@@ -81,6 +99,11 @@ export async function readPage({ url, html, finalUrl, robots, render = false, on
   }
   if (onHtml) onHtml(fetched.html, fetched.url);
 
+  // The final address after redirects, then a Russian-language version of the site.
+  const after = await judgeRussianSite({ url: urlKey, finalUrl: fetched.url, html: fetched.html, contentLanguage: fetched.contentLanguage, network: !saved, hosting: before.hosting, deps });
+  if (after.refusal) return refuse(after, fetched.url);
+  const hosting = hostingRecord(after.hosting);
+
   // Pages in Russian are not analysed: decided after the extraction, before any chunking. The
   // refusal keeps no page text, title or passages, only what the decision rests on.
   const analysed = analyse(fetched.html, fetched.url, urlKey);
@@ -90,7 +113,9 @@ export async function readPage({ url, html, finalUrl, robots, render = false, on
       ...base,
       ok: false,
       reasonCode: REFUSED_LANGUAGE_RU,
+      refusal: { reasonCode: REFUSED_LANGUAGE_RU, signal: "language" },
       page: { url: analysed.url, requestedUrl: urlKey },
+      hosting,
       language: {
         basis: language.basis,
         declared: language.declared,
@@ -184,6 +209,7 @@ export async function readPage({ url, html, finalUrl, robots, render = false, on
     headers: fetched.headers ?? null,
     accessibility,
     robots: robotsReport(robotsFetched, analysed.url),
+    hosting,
     layout,
     losses,
     ...(rendered ? { render: rendered } : {}),

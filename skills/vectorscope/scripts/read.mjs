@@ -8,13 +8,16 @@
 // One URL writes one reading. Two to five write reading-1.json … reading-N.json and manifest.json
 // into --out-dir (compare mode). A refusal still writes its reading, with ok:false and the code.
 // --html reads a saved copy of the page instead of fetching it (repeatable runs and tests); then
-// robots.txt is not fetched unless --robots names a saved copy.
+// robots.txt is not fetched unless --robots names a saved copy, and the hosting country is not checked.
+// Before the page itself, the host's zone is checked (no request) and its hosting country is asked
+// of DNS and rdap.org; a .ru-zone address or a server in Russia is refused without fetching the page.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { readPage } from "./lib/reading.mjs";
 import { findBrowser } from "./lib/render.mjs";
 import { runChecks } from "./lib/checks.mjs";
+import { isRefusalCode } from "./lib/refusal.mjs";
 
 export const MAX_COMPARE_URLS = 5;
 export const MANIFEST_SCHEMA = "getlooploop/vectorscope-skill-manifest@1";
@@ -46,13 +49,22 @@ function parseArgs(argv) {
 
 const fmt = (n) => Number(n).toLocaleString("en-US");
 
+/** Which signal refused, and what it rests on, in one line for the console. */
+function refusalWhy(reading) {
+  const r = reading.refusal || {};
+  if (reading.reasonCode === "refused_ru_domain") return `the address is in Russia's domain zone (.${r.zone}); the page was not fetched`;
+  if (reading.reasonCode === "refused_ru_hosting") return `the site is hosted in Russia (RDAP country ${r.country} for ${r.ip}); the page was not fetched`;
+  if (reading.reasonCode === "refused_ru_audience") return `the site has a Russian-language version (${(r.signals || []).map((s) => `${s.kind} ${s.value}`).join(", ")})`;
+  const l = reading.language || {};
+  const why = l.basis === "declared" ? `declared ${l.declared?.[0]?.source}="${l.declared?.[0]?.value}"` : `${l.markerWords} of ${l.cyrillicWords} Cyrillic words carry letters Ukrainian does not have`;
+  return `pages in Russian are not analysed (${why})`;
+}
+
 function summarise(reading, file, prefix = "") {
   if (!reading.ok) {
     console.log(`${prefix}REFUSED  ${reading.reasonCode}${reading.status ? ` (HTTP ${reading.status})` : ""}`);
-    if (reading.reasonCode === "refused_language_ru") {
-      const l = reading.language || {};
-      const why = l.basis === "declared" ? `declared ${l.declared?.[0]?.source}="${l.declared?.[0]?.value}"` : `${l.markerWords} of ${l.cyrillicWords} Cyrillic words carry letters Ukrainian does not have`;
-      console.log(`${prefix}reason    pages in Russian are not analysed (${why}); nothing of the page was kept`);
+    if (isRefusalCode(reading.reasonCode)) {
+      console.log(`${prefix}reason    ${refusalWhy(reading)}; nothing of the page was kept`);
       console.log(`${prefix}report    run lens.mjs on this reading alone to write the report that says why`);
     }
     console.log(`${prefix}reading  ${file}`);
@@ -91,6 +103,8 @@ function summarise(reading, file, prefix = "") {
   }
   // Every check except the repetition one, which needs the grouping; lens.mjs prints the full list.
   const checks = runChecks(reading).filter((f) => f.code !== "robots_not_checked");
+  const h = reading.hosting;
+  if (h) console.log(`${prefix}hosting   ${h.status === "checked" ? `${h.country} (${h.ip}, RDAP)` : h.status === "not_determined" ? "not determined (DNS or RDAP gave no country)" : "not checked (saved copy)"}`);
   console.log(`${prefix}checks    ${checks.length ? checks.map((f) => `[${f.severity}] ${f.code}`).join(", ") : "none"}`);
   console.log(`${prefix}reading   ${file}`);
 }

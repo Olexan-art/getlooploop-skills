@@ -3,7 +3,7 @@ name: vectorscope
 description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для ШІ-ботів». No embeddings.
 ---
 
-Version 2.109. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, 2.105, 2.106, 2.107, 2.108, 2.109, …): the first number moves only on a breaking change.
+Version 2.110. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, 2.105, 2.106, 2.107, 2.108, 2.109, 2.110, …): the first number moves only on a breaking change.
 
 # Vectorscope (local, no embeddings)
 
@@ -20,14 +20,14 @@ Steps marked *script* run the product's exact rules and are deterministic. Steps
 - **`$SKILL` below is this skill's folder**, the one this SKILL.md is in. In Claude Code it is `${CLAUDE_SKILL_DIR}`. On claude.ai the skill's whole folder is copied into the code-execution sandbox; use the path you read this file from. Work in a writable directory of your own (the files you and the scripts write go there) and call the scripts by their path. They do not depend on the current directory.
 - **No install.** `dist/read.mjs` and `dist/lens.mjs` (with the code they share in `dist/chunks/`) are the scripts bundled with everything they need, so plain `node` runs them: no `npm install`, no network for packages. They are generated from the readable source in `scripts/` and do exactly the same thing. Only if `dist/` is missing (a checkout without it) run `npm install --omit=dev` in `$SKILL` and use `scripts/read.mjs` and `scripts/lens.mjs` instead.
 - **Node 20.18 or later** (what cheerio, bundled inside, declares). Check with `node --version`. If there is no Node, or an older one, say so and stop.
-- **Network:** a run makes GET requests to the page and to its site's `/robots.txt`, and to nothing else. On claude.ai the code-execution sandbox must be allowed to reach that site (see *If the page cannot be fetched* at the end).
+- **Network:** a run makes GET requests to the page and to its site's `/robots.txt`, plus one DNS lookup of the site's host and one RDAP request to `rdap.org` (`https://rdap.org/ip/<the site's IP address>`) for the country its server is registered in, and to nothing else. The RDAP request sends the site's IP address to rdap.org and nothing of the page; with `--html` (a saved copy) neither is made. On claude.ai the code-execution sandbox must be allowed to reach that site (see *If the page cannot be fetched* at the end).
 - **Never re-create the pipeline by hand.** If the scripts cannot run here (no Node, no code execution, the network blocked), say so, say what would make them run, and stop. Do not fetch the page another way and count, cut or check it yourself: numbers made by hand are not the tool's, however close they look, and the report would present them as if they were.
 
 ## Single page
 
 1. *script* `node "$SKILL/dist/read.mjs" <url> --out reading.json` (add `--render` to compare with a JavaScript render, see Limits).
    It prints the counts, the robots.txt verdict, the technical markup and the first checks. If it prints `REFUSED <code>` (exit code 2), stop and explain the code (table at the end). Do not retry with another URL unless asked.
-   **`REFUSED refused_language_ru`** means the page is in Russian, and pages in Russian are not analysed. Run `node "$SKILL/dist/lens.mjs" reading.json --html report.html --md report.md --json export.json` (no groups file), show the report as usual (step 6; it holds the reason and its sources), say in one line in the chat that this tool does not analyse pages in Russian, and stop. Do not analyse the page in any other way: no re-implementation by hand, no summary or description of its content.
+   **`REFUSED refused_ru_domain`, `refused_ru_hosting`, `refused_ru_audience` or `refused_language_ru`** means the page is not analysed: its address is in a Russian domain zone, its site is hosted in Russia, its site has a Russian-language version, or the page is in Russian (the table at the end has the line for each). Run `node "$SKILL/dist/lens.mjs" reading.json --html report.html --md report.md --json export.json` (no groups file), show the report as usual (step 6; it holds the reason and its sources), say in one line in the chat why it was not analysed (the code's line in the table), and stop. Do not analyse the page in any other way: no re-implementation by hand, no summary or description of its content.
 2. *judgement* Read the `text` of **every** passage in `reading.json`, in full, and write `groups.json` (rules below).
 3. *script* `node "$SKILL/dist/lens.mjs" reading.json groups.json --html report.html --md report.md --json export.json`
    This validates the grouping, computes labels, the page vocabulary (phrases, then narrative words) and all checks, and prints the findings with their passage ids.
@@ -43,7 +43,7 @@ Steps marked *script* run the product's exact rules and are deterministic. Steps
 ## Compare (2 to 5 pages)
 
 1. *script* `node "$SKILL/dist/read.mjs" <url1> <url2> [… <url5>] --out-dir readings`
-   One reading per URL (`readings/reading-1.json` …) and `readings/manifest.json`. Pages are numbered 1…N in the order given. A refused page is left out of the comparison; at least two must read. A page in Russian (`refused_language_ru`) is left out the same way, and the comparison report shows the refusal in its slot; write no groups file for it, and the others proceed.
+   One reading per URL (`readings/reading-1.json` …) and `readings/manifest.json`. Pages are numbered 1…N in the order given. A refused page is left out of the comparison; at least two must read. A refused page (`refused_ru_domain`, `refused_ru_hosting`, `refused_ru_audience`, `refused_language_ru`) is left out the same way, and the comparison report shows the refusal in its slot; write no groups file for it, and the others proceed.
 2. *judgement* Read every passage of every page. Write **one** shared `readings/topics.json`, then `readings/groups-<n>.json` for each page, where every group names a topic from that dictionary. Then `readings/facts.json`, `readings/queries.json` and (optional) `readings/plan.json`.
 3. *script* `node "$SKILL/dist/lens.mjs" --compare readings/manifest.json --html readings/compare.html --md readings/compare.md --json readings/compare.json`
 4. **Show the report**, `readings/compare.html` (required; see *Show the report*).
@@ -278,6 +278,9 @@ Short, alongside the report and never instead of it:
 | `not_html` | The URL is a file such as a PDF or an image, not an HTML page. |
 | `too_large` | The page is over the 3 MB ceiling. |
 | `empty` | The page answered, but no readable text was left once navigation and boilerplate were removed, or the URL is a feed, sitemap or file. |
+| `refused_ru_domain` | The address is in a Russian domain zone (.ru, .su, .рф, .москва, .moscow), and this tool does not analyse it; the page was not fetched. One line in the chat, the report, nothing more. |
+| `refused_ru_hosting` | The site is hosted in Russia (RDAP gives its server's country as RU), and this tool does not analyse it; the page was not fetched. One line in the chat, the report, nothing more. |
+| `refused_ru_audience` | The site has a Russian-language version (an hreflang alternate, og:locale or Content-Language declares a Russian version), and this tool does not analyse it. One line in the chat, the report, nothing more. |
 | `refused_language_ru` | The page is in Russian, and this tool does not analyse pages in Russian. One line in the chat, the report, nothing more. |
 
 

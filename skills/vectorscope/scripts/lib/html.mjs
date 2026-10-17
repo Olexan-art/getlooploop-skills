@@ -9,7 +9,7 @@ import { CHECK_COPY, tr, checkCopy } from "./i18n.mjs";
 import { displayLabel } from "./analysis.mjs";
 import { queryWinner } from "./judgement.mjs";
 import { pathOf } from "./robots.mjs";
-import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS } from "./refusal.mjs";
+import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS, refusalReason } from "./refusal.mjs";
 import { LAYER_COPY, METRICS } from "./metrics.mjs";
 import { charsPastCap, hasLosses } from "./losses.mjs";
 import { CORNER, MOTANKA, ORNAMENT } from "./sprites.mjs";
@@ -203,7 +203,7 @@ h3{font-size:17px;margin:0}
 .refusal b{font-weight:700;color:var(--text)}
 .refusal .src-link{white-space:nowrap;margin-left:4px;font-size:13px}
 .refusal .sanctions{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);max-width:860px}
-.refusal .last{margin:12px 0 0;color:var(--muted)}
+.refusal .why{margin:-6px 0 14px;font-weight:600;color:var(--text)}
 .refusal.compact{margin-top:10px;padding:14px 16px}
 @media (max-width:480px){.refusal{padding:14px 14px}.refusal ul{padding-left:16px}}
 .banner{margin-top:18px;border:1.5px solid var(--red);background:var(--red-soft);border-radius:14px;padding:14px 18px}
@@ -622,8 +622,11 @@ function sourceLink(url) {
   return `<a class="src-link" href="${esc(url)}" rel="noopener noreferrer" target="_blank">${esc(host)} ↗</a>`;
 }
 
-function refusalBody(lang) {
-  const out = [`<p class="lead">${esc(REFUSAL_COPY.lead[lang])}</p>`, "<ul>"];
+function refusalBody(lang, code) {
+  const out = [`<p class="lead">${esc(REFUSAL_COPY.lead[lang])}</p>`];
+  const why = refusalReason(code, lang);
+  if (why) out.push(`<p class="why">${esc(why)}</p>`);
+  out.push("<ul>");
   for (const f of FINDINGS) {
     if (f.items) {
       out.push(`<li><b>${esc(f.source[lang])}</b><ul>`);
@@ -636,16 +639,15 @@ function refusalBody(lang) {
   out.push("</ul>");
   const lists = SANCTIONS_LINKS.map((l) => `<a href="${esc(l.url)}" rel="noopener noreferrer" target="_blank">${esc(l.name)}</a>`).join(" · ");
   out.push(`<p class="sanctions"><b>${esc(REFUSAL_COPY.sanctionsLabel[lang])}:</b> ${esc(REFUSAL_COPY.sanctions[lang])} ${lists}</p>`);
-  out.push(`<p class="last">${esc(REFUSAL_COPY.lastLine[lang])}</p>`);
   return out.join("");
 }
 
-/** The refusal block, both languages; compact in a compare slot. */
-export function refusalBlock(compact = false) {
+/** The refusal block, both languages, with the reason line for its code; compact in a compare slot. */
+export function refusalBlock(compact = false, code = "refused_language_ru") {
   return [
     `<section class="refusal${compact ? " compact" : ""}" role="alert">`,
     `<div class="refusal-head">${STOP}<h2>${L("refusalTitle")}</h2></div>`,
-    `<div class="lb-en">${refusalBody("en")}</div><div class="lb-uk" lang="uk">${refusalBody("uk")}</div>`,
+    `<div class="lb-en">${refusalBody("en", code)}</div><div class="lb-uk" lang="uk">${refusalBody("uk", code)}</div>`,
     "</section>",
   ];
 }
@@ -663,7 +665,7 @@ export function renderRefusalHtml(reading) {
       : `<span class="url mono">${esc(url)}</span>`
   );
   out.push("</header>");
-  out.push(...refusalBlock());
+  out.push(...refusalBlock(false, reading.reasonCode));
   out.push(...footer("footerMadeRefused"));
   out.push(...documentEnd());
   return out.join("\n") + "\n";
@@ -1641,7 +1643,7 @@ export function renderCompareHtml(data) {
   }
   for (const r of refused) {
     out.push(`<div class="pagesec"><h3><span class="mono">${r.n}</span> · ${esc(clip(hostOf(r.url), 48))}</h3>`);
-    out.push(...refusalBlock(true));
+    out.push(...refusalBlock(true, r.reasonCode));
     out.push("</div>");
   }
   out.push("</section>");

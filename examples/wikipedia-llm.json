@@ -1,6 +1,6 @@
 {
   "schema": "getlooploop/vectorscope-reading@1",
-  "generatedAt": "2026-10-17T12:07:12.572Z",
+  "generatedAt": "2026-10-17T19:27:16.924Z",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -730,9 +730,9 @@
       "textHead": "to 43% of its size, beating PNG with 58%.[116] Benchmarks [ edit ] Main article: Language model benchmark Benchmarks are used to evaluate LLM performance on specific tasks. Tests evaluate capabilities such as general knowledge, bias, common"
     }
   ],
-  "skillVersion": "2.104",
+  "skillVersion": "2.110",
   "layers": {
-    "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
+    "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, response headers, accessibility structure, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
     "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
   },
   "measured": {
@@ -1940,6 +1940,8 @@
       },
       "lang": "en"
     },
+    "headers": null,
+    "accessibility": null,
     "render": null,
     "derived": {
       "charsPastCap": 55001,
@@ -3125,6 +3127,8 @@
       }
     ]
   },
+  "headers": null,
+  "accessibility": null,
   "render": null,
   "plan": [
     {

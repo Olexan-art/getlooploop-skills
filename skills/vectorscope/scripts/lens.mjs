@@ -23,7 +23,7 @@ import { pathToFileURL } from "node:url";
 import { PREVIEW_CHARS } from "./lib/lens.mjs";
 import { buildVectorscopeExport, vectorscopeExportName } from "./lib/export.mjs";
 import { renderHtml, renderCompareHtml, renderRefusalHtml } from "./lib/html.mjs";
-import { FINDINGS, REFUSAL_CODE, REFUSAL_COPY, SANCTIONS_LINKS } from "./lib/refusal.mjs";
+import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS, isRefusalCode, refusalReason } from "./lib/refusal.mjs";
 import { buildJudgedLens, compareFacts, compareTopics, diffReadings, displayLabel, pageChecks } from "./lib/analysis.mjs";
 import { queryWinner, validateFacts, validateGrouping, validatePlan, validateQueries, validateTopics } from "./lib/judgement.mjs";
 import { checkCopy, tr } from "./lib/i18n.mjs";
@@ -36,7 +36,7 @@ export { validateGrouping, buildJudgedLens };
 export const COMPARE_SCHEMA = "getlooploop/vectorscope-compare@1";
 export const REFUSAL_SCHEMA = "getlooploop/vectorscope-refusal@1";
 /** Versions count in thousandths (2.101, 2.102, …) so the first number moves only on a real break. Mirrors package.json. */
-export const SKILL_VERSION = "2.109";
+export const SKILL_VERSION = "2.110";
 
 const USAGE = [
   "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json]",
@@ -346,10 +346,11 @@ function closingLine(reading) {
 
 // ── a page in Russian: the refusal and nothing of the page ─────────────────────
 
-/** The refusal in Markdown, English then Ukrainian, every finding with its link. */
-function refusalMarkdown(heading = "##") {
+/** The refusal in Markdown, English then Ukrainian, every finding with its link; the reason lines for the given codes. */
+function refusalMarkdown(heading = "##", reasons = ["refused_language_ru"]) {
   const lang = (code) => {
     const out = [`${heading} ${REFUSAL_COPY.title[code]}`, "", REFUSAL_COPY.lead[code], ""];
+    for (const r of [...new Set(reasons)]) if (refusalReason(r, code)) out.push(refusalReason(r, code), "");
     for (const f of FINDINGS) {
       if (f.items) {
         out.push(`**${f.source[code]}**`, "");
@@ -360,7 +361,6 @@ function refusalMarkdown(heading = "##") {
       }
     }
     out.push(`**${REFUSAL_COPY.sanctionsLabel[code]}:** ${REFUSAL_COPY.sanctions[code]} ${SANCTIONS_LINKS.map((l) => `${l.name} (${l.url})`).join(" · ")}`, "");
-    out.push(REFUSAL_COPY.lastLine[code], "");
     return out;
   };
   return [...lang("en"), ...lang("uk")];
@@ -368,7 +368,7 @@ function refusalMarkdown(heading = "##") {
 
 export function renderRefusalMarkdown(reading) {
   const url = reading.page?.url || reading.requestedInput || "";
-  return [`# Vectorscope: ${REFUSAL_COPY.title.en}`, "", `URL: ${cell(url)}`, "", ...refusalMarkdown("##")].join("\n");
+  return [`# Vectorscope: ${REFUSAL_COPY.title.en}`, "", `URL: ${cell(url)}`, "", ...refusalMarkdown("##", [reading.reasonCode])].join("\n");
 }
 
 function refusalExport(reading) {
@@ -380,13 +380,15 @@ function refusalExport(reading) {
     refused: true,
     reasonCode: reading.reasonCode,
     page: { url: reading.page?.url ?? null, requestedUrl: reading.page?.requestedUrl ?? reading.requestedInput ?? null },
+    refusal: reading.refusal ?? null,
+    hosting: reading.hosting ?? null,
     language: reading.language ?? null,
     passages: [],
   };
 }
 
 function runRefused(args, reading) {
-  console.log(`REFUSED  ${reading.reasonCode}: pages in Russian are not analysed; the report holds the reason and nothing of the page`);
+  console.log(`REFUSED  ${reading.reasonCode}: ${refusalReason(reading.reasonCode, "en").replace(/^Why: /, "").replace(/\.$/, "")}; the report holds the reason and nothing of the page`);
   writeOutputs(args, refusalExport(reading), renderRefusalMarkdown(reading), renderRefusalHtml(reading), "vectorscope-refused.json");
 }
 
@@ -567,7 +569,7 @@ export function renderCompareMarkdown(data) {
   out.push("> The agent grouped every page against one shared topic dictionary, so the topics line up across pages.", "");
   if (data.refused?.length) {
     out.push(`Not analysed: ${data.refused.map((r) => `page ${r.n} (${cell(r.url)})`).join(", ")}.`, "");
-    out.push(...refusalMarkdown("##"));
+    out.push(...refusalMarkdown("##", data.refused.map((r) => r.reasonCode)));
   }
   for (const p of pages) out.push(...blockedBanner(p.reading.robots, `Page ${p.n}: `));
   out.push(`## The pages ${M("measured", "derived")}`, "");
@@ -772,7 +774,7 @@ function printChecks(checks, prefix = "") {
 function runSingle(args) {
   if (args.files.length >= 1 && args.files.length <= 2) {
     const first = readJson(args.files[0], "reading");
-    if (first.reasonCode === REFUSAL_CODE) return runRefused(args, first);
+    if (isRefusalCode(first.reasonCode)) return runRefused(args, first);
   }
   if (args.files.length !== 2) {
     console.error(USAGE);
@@ -829,7 +831,7 @@ function runCompare(args) {
   if (!Array.isArray(manifest.pages)) fail("manifest.json has no pages; write it with read.mjs and several URLs.");
   const dir = dirname(manifestPath);
   const usable = manifest.pages.filter((p) => p.ok);
-  const refused = manifest.pages.filter((p) => !p.ok && p.reasonCode === REFUSAL_CODE).map((p) => ({ n: p.n, url: p.url ?? p.requested, reasonCode: p.reasonCode }));
+  const refused = manifest.pages.filter((p) => !p.ok && isRefusalCode(p.reasonCode)).map((p) => ({ n: p.n, url: p.url ?? p.requested, reasonCode: p.reasonCode }));
   if (usable.length < 2) fail(`only ${usable.length} page(s) in the manifest could be read; a comparison needs two.`);
   for (const p of manifest.pages.filter((x) => !x.ok)) console.log(`note      page ${p.n} (${p.requested}) was refused (${p.reasonCode}) and is left out`);
 
