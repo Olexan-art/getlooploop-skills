@@ -3,7 +3,7 @@ name: vectorscope
 description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для ШІ-ботів». No embeddings.
 ---
 
-Version 2.103. Versions count in thousandths (2.101, 2.102, 2.103, …): the first number moves only on a breaking change.
+Version 2.104. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, …): the first number moves only on a breaking change.
 
 # Vectorscope (local, no embeddings)
 
@@ -11,7 +11,7 @@ Version 2.103. Versions count in thousandths (2.101, 2.102, 2.103, …): the fir
 
 **Коротко українською:** ШІ-асистент не читає сторінку цілком. Машина завантажує її, лишає тільки текст, ріже на уривки й зберігає не більше 26; усе після 26-го вона не бачить. Ця навичка проганяє сторінку саме цими кроками, перевіряє robots.txt для ШІ-краулерів і показує структурні проблеми, через які уривки важко цитувати. Агент групує уривки за темою, перевіряє типові запити й пише план переписування з прикладами «було → стало». Можна порівняти від 2 до 5 сторінок. Скрипти не викликають жодних моделей чи ембедингів.
 
-**Answer the user in the language they wrote in.** The report itself has an EN | UK switch; English is the default.
+**Answer the user in the language they wrote in.**
 
 Steps marked *script* run the product's exact rules and are deterministic. Steps marked *judgement* are yours: you write a small JSON file, and the next script validates it and refuses with a message naming what to fix.
 
@@ -215,13 +215,15 @@ RFC 9309: https://www.rfc-editor.org/rfc/rfc9309. A user-fetch crawler that igno
 
 ## Show the report
 
-This step is required. The HTML report is the result; a run that ends with only a chat message has not delivered it. Mentioning the file name is not showing it. Show `report.html` (or `compare.html`) the way your environment allows:
+This step is required. The HTML report is the result; a run that ends with only a chat message has not delivered it. Mentioning the file name is not showing it.
 
-- **claude.ai or the Claude desktop app, with code execution:** files you create there reach the user as files they can download from the conversation. Save `report.html` (and `report.md`, `export.json`) where your environment's own instructions say files for the user go (use the outputs folder they name, if they name one), and present it as a file in your reply, so the user gets the download in the chat and can open it in a browser. A file left in a scratch folder the user cannot see has not been shown. Do not retype the report into an artifact by hand: it is large, and a copy is not the tool's output.
-- **Claude Code:** if the session has a tool for publishing HTML pages or artifacts, publish `report.html` with it and give the link. Otherwise open it in the user's default browser: `start "" "<absolute path>"` on Windows, `open "<absolute path>"` on macOS, `xdg-open "<absolute path>"` on Linux. Then give the absolute path as well.
-- **Codex, opencode, Hermes Agent or any other agent:** give the report's absolute path, and offer to open it in the default browser with the command above (or the agent's own preview or browser tool, if it has one).
+**Present one file: `report.html`** (in compare mode `readings/compare.html`). `report.md` and `export.json` are written beside it for whoever wants the data; keep them there, but do not present, attach, open or preview them. Never open or preview `export.json` or `report.md` as the result, and never end the reply on either of them: the HTML is the report. If the environment shows the last file you present, that last (and only) file must be the HTML.
 
-The report has an EN | UK switch (`#lang=uk` opens it in Ukrainian) and a light and a dark theme. It is one self-contained file and makes no network requests, so it opens offline.
+- **claude.ai or the Claude desktop app, with code execution:** files you create there reach the user as files they can download from the conversation. Save `report.html` where your environment's own instructions say files for the user go (the outputs folder they name, if they name one), with `report.md` and `export.json` beside it, and present **only `report.html`** as a file in your reply, so the download the user gets and opens is the report. Do not present the JSON or the Markdown, not even after the HTML. A file left in a scratch folder the user cannot see has not been shown. Do not retype the report into an artifact by hand: it is large, and a copy is not the tool's output.
+- **Claude Code:** if the session has a tool for publishing HTML pages or artifacts, publish `report.html` with it, and only that file, and give the link. Otherwise open `report.html` in the user's default browser: `start "" "<absolute path>"` on Windows, `open "<absolute path>"` on macOS, `xdg-open "<absolute path>"` on Linux. Then give its absolute path. Do not open, publish or print the JSON or the Markdown.
+- **Codex, opencode, Hermes Agent or any other agent:** give `report.html`'s absolute path and offer to open it in the default browser with the command above (or the agent's own preview or browser tool, if it has one). Preview only the HTML. Name the other two files only if the user asks for the data.
+
+The report is one self-contained file and makes no network requests, so it opens offline. It opens in English and in the light theme; `#lang=uk` opens it in Ukrainian and `#theme=dark` in the dark theme (for example `report.html#lang=uk&theme=dark`).
 
 ## The chat summary
 
@@ -240,7 +242,7 @@ Short, alongside the report and never instead of it:
 
 ## Outputs
 
-- `report.html`: one self-contained page (no external fonts, scripts or images; a content security policy blocks all network requests; every piece of page text is escaped), in the look of the live tool, safe down to 375 px. A tag beside every section and number says Measured, Derived or Agent's judgement, and a "?" beside each number opens its formula, unit, threshold and known limits; `#help=<metric id>` (for example `#help=chars_past_cap`) opens one when the report loads.
+- `report.html`: one self-contained page (no external fonts, scripts or images; a content security policy blocks all network requests; every piece of page text is escaped), readable down to 375 px. A tag beside every section and number says Measured, Derived or Agent's judgement, and a "?" beside each number opens its formula, unit, threshold and known limits; `#help=<metric id>` (for example `#help=chars_past_cap`) opens one when the report loads.
 - `report.md`: the same reading in Markdown, in English. Every heading and number carries a `measured`, `derived` or `judgement` marker; *Where the text goes*, the last section before the closing line, holds the waterfall, the removals (top 20) and the section map; the last section, *How each number is computed*, gives every metric's formula, unit, threshold and limits.
 - `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. `phrases` and `narrativeWords` (each entry: `term`, `count`, `passages`, `groups`, `spread`, `describesWholePage`) are the page vocabulary exactly as the product computes it; `keywords` is the two as one list, phrases first, in the shape earlier exports had. v2 only **adds** fields, so the schema id is unchanged: `skillVersion`, `judgement` (`agent` and `model` from groups.json, `null` when not stated), `checks` (each with an English `message`), `technical`, `robots`, `render`, `plan`, `queries`, `facts`, `diff`, and on each group `agentLabel`, `note` and `topic`. `label` and `labelSource` keep their v1 meaning (the computed label). Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
 - **2.102 export, schema id unchanged.** `export.json` gains two top-level sections, `measured` (`page`, `retrieval` with `charsInPassagesTotal` and `charsInPassagesUnique`, `passages` without their group, `losses`, `robots`, `technical`, `render`, and under `derived`: `charsPastCap`, the legacy `charsUnread`, `phrases`, `narrativeWords`, `checks`) and `judgement` (`agent`, `model`, `groups`, `assignment`, `duplicates`, `plan`, `queries`, `facts`), plus `layers` (what each section holds) and `metrics` (id → `layer`, `label`, `formula`, `unit`, `threshold`, `limits`: the same text as the report's "?"). Every v1 and v2 field also stays at its old path with its old meaning (`judgement.agent` and `judgement.model` are where v2 put them; `retrieval` only gains `charsPastCap` and `charsInPassagesUnique`), so the schema id stays `getlooploop/vectorscope-reading@1`: nothing a v1 or v2 consumer reads moved or changed. The cost is that some values appear twice; moving them would have broken every saved prompt that reads `phrases` or `labelSource`.

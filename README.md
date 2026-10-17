@@ -2,7 +2,7 @@ English · [Українська](README.uk.md)
 
 # GetLoopLoop skills
 
-Vectorscope skill **2.103**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
+Vectorscope skill **2.104**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
 
 Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
@@ -34,13 +34,13 @@ It does not rank your page, give it a score, detect AI-written text, or predict 
 - **Compare 2 to 5 pages** on one shared topic dictionary: a topic × page table, topic gaps, fact gaps, and who wins each query.
 - **Before and after:** diff a page against an earlier reading.
 - **Optional JavaScript render** with a local Chrome or Chromium, to see how much of the page only exists after scripts run.
-- **One self-contained HTML report** in English or Ukrainian (a switch at the top), light or dark, readable on a phone, with no network requests; plus Markdown and JSON.
+- **One self-contained HTML report** with no network requests, readable on a phone; plus Markdown and JSON.
 
 Why the groups are "the agent's reading": the live tool groups passages by comparing their embeddings. This skill makes no model or embedding calls, so the agent that runs it reads the passages and groups them by subject instead. The fetching, the cutting, the cap and the checks are deterministic; the grouping, the query verdicts and the plan are a judgement, and the scripts validate each of them (every quote must be verbatim from its passage). For the embedding-based reading with the map, use the free tool at https://www.getlooploop.com/vectorscope.
 
 ## What you get
 
-The top of the report, dark and light: the tags beside every section and number, and the info panel that explains them:
+The tags beside every section and number, and the info panel that explains them:
 
 ![Info panel and the measured, derived and judgement tags](docs/report-layers.png)
 
@@ -58,11 +58,13 @@ The "?" beside a number: its formula, unit, threshold and limits:
 
 ![A metric's explanation, open](docs/report-metric-help.png)
 
-The rest of the top of the report, dark and light:
+The top of the report: the pipeline, the counters and the reading strip:
 
-![Report header, dark theme: pipeline, counters with the cap reached, reading strip](docs/report-dark.png)
+![Report header: pipeline, counters, reading strip](docs/report-light.png)
 
-![Report header, light theme](docs/report-light.png)
+The same report with the dark theme switched on:
+
+![Report header, dark theme](docs/report-dark.png)
 
 The same report with the interface in Ukrainian (page content is never translated):
 

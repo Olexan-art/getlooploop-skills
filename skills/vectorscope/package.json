@@ -1,6 +1,6 @@
 {
   "name": "getlooploop-vectorscope-skill",
-  "version": "2.103.0",
+  "version": "2.104.0",
   "description": "The GetLoopLoop Vectorscope, run locally: the product's fetch, extraction, chunking and 26-passage cap, with automatic checks, robots.txt for AI crawlers, and the grouping done by the agent's reading instead of embeddings.",
   "type": "module",
   "private": true,
@@ -13,7 +13,7 @@
     "lens": "node dist/lens.mjs",
     "build": "node tools/build.mjs",
     "zip": "node tools/zip.mjs",
-    "test": "node --test tests/checks.test.mjs tests/robots.test.mjs tests/judgement.test.mjs tests/report.test.mjs tests/vocabulary.test.mjs tests/language.test.mjs tests/refusal.test.mjs tests/core.test.mjs tests/losses.test.mjs tests/layers.test.mjs tests/dist.test.mjs tests/version.test.mjs tests/sprites.test.mjs tests/chunk.test.mjs"
+    "test": "node --test tests/checks.test.mjs tests/robots.test.mjs tests/judgement.test.mjs tests/report.test.mjs tests/vocabulary.test.mjs tests/language.test.mjs tests/refusal.test.mjs tests/core.test.mjs tests/losses.test.mjs tests/layers.test.mjs tests/dist.test.mjs tests/version.test.mjs tests/sprites.test.mjs tests/chunk.test.mjs tests/skill.test.mjs tests/contrast.test.mjs"
   },
   "dependencies": {
     "cheerio": "^1.2.0"

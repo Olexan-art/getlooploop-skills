@@ -108,3 +108,22 @@ test("groups.json agent and model: optional, short plain strings", () => {
   assert.throws(() => validateGrouping({ groups: [[0]], agent: "x".repeat(61) }, 1), /1–60 characters/);
   assert.throws(() => validateGrouping({ groups: [[0]], agent: "<b>x</b>" }, 1), /angle brackets/);
 });
+
+test("html: light by default whatever the system prefers; dark only from the toggle or #theme=dark", () => {
+  const r = reading(["Intro text.", "Body text."]);
+  const html = renderHtml(r, lensOf(r, [[0, 1]]));
+  assert.ok(!html.includes("prefers-color-scheme: light"), "the system preference does not pick the theme");
+  const root = /:root\{([^}]*)\}/.exec(html)[1];
+  assert.match(root, /color-scheme:light/);
+  assert.match(html, /:root\[data-theme="dark"\]\{[^}]*color-scheme:dark/);
+  assert.ok(html.includes("theme=(light|dark)"), "#theme= still works");
+  assert.ok(html.includes('data-set-theme="dark"') && html.includes('data-set-theme="light"'), "the toggle stays");
+  assert.match(html, /prefers-reduced-motion:reduce/);
+  assert.match(html, /:focus-visible/);
+});
+
+test("html: severity and verdict pills carry a shape beside the word, not colour alone", () => {
+  const r = reading([`Intro.`, `body starts lowercase and runs on.`], { headings: [null, "Second"] });
+  const html = renderHtml(r, lensOf(r, [[0, 1]]), { checks: runChecks(r) });
+  for (const m of html.matchAll(/<span class="pill (sev-\w+|good|bad|mid)">(.{0,20})/g)) assert.ok(m[2].startsWith('<svg class="sv"'), m[0]);
+});
