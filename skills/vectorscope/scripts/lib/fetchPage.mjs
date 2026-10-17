@@ -10,6 +10,10 @@ export const FETCH_TIMEOUT_MS = 12_000;
 export const MAX_HTML_BYTES = 3_000_000;
 export const MAX_REDIRECTS = 5;
 
+// The response headers that change how a crawler may store or index the page. Names are the
+// lower-case spellings a server may send any way it likes; `Headers.get` is case-insensitive.
+export const RESPONSE_HEADERS = ["x-robots-tag", "cache-control", "content-type", "content-language"];
+
 /**
  * Returns { ok: true, url, html } or { ok: false, reason, status? }.
  * Reasons: the guard's codes, plus unreachable | http_error | blocked | not_html | too_large.
@@ -69,7 +73,13 @@ export async function fetchPublicPage(startUrl) {
     }
     if (html.length > MAX_HTML_BYTES) return { ok: false, reason: "too_large" };
 
-    return { ok: true, url: current, html, contentLanguage: response.headers.get("content-language") };
+    return {
+      ok: true,
+      url: current,
+      html,
+      contentLanguage: response.headers.get("content-language"),
+      headers: Object.fromEntries(RESPONSE_HEADERS.map((name) => [name, response.headers.get(name)])),
+    };
   }
 
   return { ok: false, reason: "http_error" };

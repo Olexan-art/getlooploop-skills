@@ -36,7 +36,7 @@ export { validateGrouping, buildJudgedLens };
 export const COMPARE_SCHEMA = "getlooploop/vectorscope-compare@1";
 export const REFUSAL_SCHEMA = "getlooploop/vectorscope-refusal@1";
 /** Versions count in thousandths (2.101, 2.102, …) so the first number moves only on a real break. Mirrors package.json. */
-export const SKILL_VERSION = "2.107";
+export const SKILL_VERSION = "2.109";
 
 const USAGE = [
   "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json]",
@@ -128,13 +128,20 @@ function robotsMarkdown(robots) {
   return out;
 }
 
-function technicalMarkdown(technical, render, page) {
-  if (!technical) return [];
-  const t = technical;
+function technicalMarkdown(reading) {
+  const { technical: t, render, page, headers, accessibility } = reading;
+  if (!t) return [];
   const out = [];
   out.push(`- **JSON-LD:** ${t.jsonLd.types.length ? t.jsonLd.types.join(", ") : "none"}${t.jsonLd.invalid ? ` (${t.jsonLd.invalid} block(s) not valid JSON)` : ""}`);
   out.push(`- **Canonical:** ${t.canonical.present ? `${cell(t.canonical.href)} (${t.canonical.self ? "this page" : "another URL"}${t.canonical.absolute ? "" : ", relative"})` : "missing"}`);
   out.push(`- **Meta description:** ${t.metaDescription.present ? `${t.metaDescription.length} characters` : "missing"}`);
+  if (headers) {
+    out.push(`- **X-Robots-Tag:** ${headers["x-robots-tag"] || "none"}`);
+    out.push(`- **Cache-Control:** ${headers["cache-control"] || "none"}`);
+  }
+  if (accessibility) {
+    out.push(`- **Accessibility:** ${accessibility.images.total} image(s), ${accessibility.images.missingAlt} without alt, ${accessibility.images.filenameAlt} with a filename as alt · ${accessibility.headings.total} heading(s), ${accessibility.headings.skippedCount} level jump(s), ${accessibility.headings.h1Count} h1`);
+  }
   if (render) {
     out.push(
       `- **With JavaScript:** ${render.ok ? `${fmt(render.wordCount)} words, ${render.passages} passages (plain fetch: ${fmt(page.wordCount)} words, ${page.chunksIndexed} passages)` : render.reason === "no_browser" ? "not rendered, no local Chrome or Chromium found" : `not rendered (${render.reason})`}`
@@ -458,7 +465,7 @@ export function renderMarkdown(reading, lens, extras = {}) {
   out.push(`## Checks ${M("measured", "derived")}`, "", `### AI crawlers and robots.txt ${M("measured")}`, "");
   out.push(...robotsMarkdown(reading.robots));
   out.push(`### Technical markup ${M("measured")}`, "");
-  out.push(...technicalMarkdown(reading.technical, reading.render, page));
+  out.push(...technicalMarkdown(reading));
   out.push(`### Findings ${M("derived")}`, "");
   out.push(...findingsMarkdown(extras.checks ?? []));
 
@@ -606,7 +613,7 @@ export function renderCompareMarkdown(data) {
   for (const p of pages) {
     out.push(`### Page ${p.n} · ${cell(p.reading.page.url)}`, "");
     out.push(...robotsMarkdown(p.reading.robots));
-    out.push(...technicalMarkdown(p.reading.technical, p.reading.render, p.reading.page));
+    out.push(...technicalMarkdown(p.reading));
     out.push(...findingsMarkdown(p.checks));
   }
   out.push(`## Each page's groups ${M("judgement", "measured")}`, "");
@@ -656,7 +663,7 @@ function sharedJudgement(list) {
 /** What the two top-level sections say they hold (2.102). */
 export const LAYERS_NOTE = {
   measured:
-    "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
+    "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, response headers, accessibility structure, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
   judgement:
     "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently.",
 };
@@ -678,6 +685,8 @@ function measuredSection(reading, lens, checks, base) {
     losses,
     robots: reading.robots ?? null,
     technical: reading.technical ?? null,
+    headers: reading.headers ?? null,
+    accessibility: reading.accessibility ?? null,
     render: reading.render ?? null,
     derived: {
       charsPastCap: charsPastCap(reading),
@@ -724,6 +733,8 @@ function singleExport(reading, lens, extras) {
     checks: exportChecks(checks),
     technical: reading.technical ?? null,
     robots: reading.robots ?? null,
+    headers: reading.headers ?? null,
+    accessibility: reading.accessibility ?? null,
     render: reading.render ?? null,
     plan: extras.plan?.items ?? null,
     queries: extras.queries ?? null,

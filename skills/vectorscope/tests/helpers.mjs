@@ -1,6 +1,6 @@
 // Small synthetic readings for the tests: a page object and passages, nothing fetched.
 
-export function reading(texts, { headings = [], title = "Test page", technical, robots, layout, render, page = {} } = {}) {
+export function reading(texts, { headings = [], title = "Test page", technical, robots, layout, render, headers, accessibility, page = {} } = {}) {
   const passages = texts.map((text, index) => ({
     index,
     heading: headings[index] ?? null,
@@ -31,6 +31,8 @@ export function reading(texts, { headings = [], title = "Test page", technical, 
     ...(robots ? { robots } : {}),
     ...(layout ? { layout } : {}),
     ...(render ? { render } : {}),
+    ...(headers ? { headers } : {}),
+    ...(accessibility ? { accessibility } : {}),
   };
 }
 

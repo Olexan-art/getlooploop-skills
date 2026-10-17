@@ -31,6 +31,17 @@ test("html: no network, bilingual chrome, footer links", () => {
   for (const link of FOOTER_LINKS) assert.ok(html.includes(`href="${link.href}" rel="noopener noreferrer" target="_blank"`), link.name);
 });
 
+test("html: the footer glitches, in steps, and reduced motion turns it off", () => {
+  const r = reading(["Intro text.", "Body text."]);
+  const html = renderHtml(r, lensOf(r, [[0, 1]]));
+  assert.ok(html.includes("@keyframes foot-mark-glitch"), "the mark's glitch");
+  assert.ok(html.includes("@keyframes foot-text-glitch"), "the footer text's glitch");
+  assert.ok(html.includes('class="mark"'), "the mark is wrapped for its glitch");
+  assert.match(html, /foot-mark-glitch 11s steps\(1,end\)/, "the fault is rare and abrupt, not eased");
+  assert.match(html, /foot-text-glitch 13s steps\(1,end\)/);
+  assert.match(html, /prefers-reduced-motion:reduce\)\{\*,/);
+});
+
 test("i18n: every string and every check code has both languages", () => {
   for (const [key, entry] of Object.entries(S)) assert.ok(entry.en && entry.uk, key);
   for (const code of CHECK_CODES) {

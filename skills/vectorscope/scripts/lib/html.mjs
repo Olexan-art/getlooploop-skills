@@ -375,6 +375,25 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .gll-ico--dark{display:none}
 :root[data-theme="dark"] .gll-ico--light{display:none}
 :root[data-theme="dark"] .gll-ico--dark{display:inline}
+/* The footer's glitch: rare, off the beat, in the report's own cyan and pink. It moves the mark,
+   not its filter, so the dimming the theme sets on the image is untouched between faults. */
+.mark{position:relative;display:inline-flex;flex:none;animation:foot-mark-glitch 11s steps(1,end) infinite}
+.mark .motanka{position:relative;z-index:1}
+@keyframes foot-mark-glitch{
+  0%,90%,100%{transform:none;filter:none}
+  91%{transform:translate3d(-2px,0,0);filter:drop-shadow(2px 0 var(--lm))}
+  92%{transform:translate3d(2px,0,0);filter:drop-shadow(-2px 0 var(--lj))}
+  93%{transform:translate3d(-1px,1px,0) skewX(-5deg);filter:drop-shadow(1px 0 var(--lm))}
+  94%{transform:translate3d(1px,0,0) skewX(3deg);filter:drop-shadow(-1px 0 var(--lj))}
+  95%{transform:none;filter:none}
+}
+.foot-made p{animation:foot-text-glitch 13s steps(1,end) infinite}
+@keyframes foot-text-glitch{
+  0%,94%,100%{text-shadow:none;transform:none}
+  95%{text-shadow:1px 0 var(--lm),-1px 0 var(--lj);transform:translate3d(1px,0,0)}
+  96%{text-shadow:-1px 0 var(--lm),1px 0 var(--lj);transform:translate3d(-1px,0,0)}
+  97%{text-shadow:none;transform:none}
+}
 .pagesec{border-top:1px solid var(--line);margin-top:18px;padding-top:16px}
 .pagesec:first-of-type{border-top:0;margin-top:0;padding-top:0}
 .pagesec h3{font-size:17px;margin-bottom:6px}
@@ -558,7 +577,7 @@ function footer(madeKey = "footerMade") {
   }).join("");
   return [
     '<div class="deco deco--foot" aria-hidden="true"></div>',
-    `<footer class="foot"><div class="foot-made"><img class="motanka" src="${MOTANKA}" alt="" width="30" height="39"><p>${L(madeKey)}</p></div><ul class="links">${links}</ul></footer>`,
+    `<footer class="foot"><div class="foot-made"><span class="mark"><img class="motanka" src="${MOTANKA}" alt="" width="30" height="39"></span><p>${L(madeKey)}</p></div><ul class="links">${links}</ul></footer>`,
   ];
 }
 
@@ -910,6 +929,18 @@ function technicalGrid(reading) {
   out.push(`<div class="kv"><div class="k">${L("canonical")}</div><div class="v">${canon}</div></div>`);
   const desc = t.metaDescription.present ? L("metaChars", { n: t.metaDescription.length }) : `<span class="pill mid">${SV.mid}${L("metaNone")}</span>`;
   out.push(`<div class="kv"><div class="k">${L("metaDescription")}</div><div class="v">${desc}</div></div>`);
+  // The response headers, when the page was fetched; a saved copy has none, and the checks skip.
+  const h = reading.headers;
+  if (h) {
+    const xrt = h["x-robots-tag"];
+    out.push(`<div class="kv"><div class="k">${L("headerXRobotsTag")}</div><div class="v">${xrt ? `<span class="code">${esc(xrt)}</span>` : L("headerNone")}</div></div>`);
+    const cc = h["cache-control"];
+    out.push(`<div class="kv"><div class="k">${L("headerCacheControl")}</div><div class="v">${cc ? `<span class="code">${esc(cc)}</span>` : L("headerNone")}</div></div>`);
+  }
+  const a = reading.accessibility;
+  if (a) {
+    out.push(`<div class="kv"><div class="k">${L("accessibility")}</div><div class="v">${L("accessibilitySummary", { images: a.images.total, missingAlt: a.images.missingAlt, headings: a.headings.total, skipped: a.headings.skippedCount })}</div></div>`);
+  }
   out.push("</div>");
   const r = reading.render;
   if (r) {

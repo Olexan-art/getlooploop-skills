@@ -143,3 +143,49 @@ test("js_dependent and cap_overflow", () => {
   assert.ok(c.includes("js_dependent"));
   assert.ok(c.includes("cap_overflow"));
 });
+
+test("header_noindex: X-Robots-Tag noindex is high, and 'none' counts too", () => {
+  const r = reading(["Intro."], { headers: { "x-robots-tag": "noindex" } });
+  const f = find(runChecks(r), "header_noindex");
+  assert.ok(f);
+  assert.equal(f.severity, "high");
+  assert.equal(f.evidence.value, "noindex");
+  assert.ok(codes(runChecks(reading(["Intro."], { headers: { "x-robots-tag": "none" } }))).includes("header_noindex"));
+});
+
+test("header_noindex: quiet without the header or for an unrelated directive", () => {
+  assert.ok(!codes(runChecks(reading(["Intro."]))).includes("header_noindex"));
+  assert.ok(!codes(runChecks(reading(["Intro."], { headers: { "x-robots-tag": "noarchive" } }))).includes("header_noindex"));
+});
+
+test("cache_control_no_store fires, max-age does not", () => {
+  assert.ok(codes(runChecks(reading(["Intro."], { headers: { "cache-control": "no-store" } }))).includes("cache_control_no_store"));
+  assert.ok(!codes(runChecks(reading(["Intro."], { headers: { "cache-control": "max-age=3600, public" } }))).includes("cache_control_no_store"));
+});
+
+test("img_missing_alt and img_filename_alt count the right images", () => {
+  const a = {
+    images: { total: 4, missingAlt: 2, emptyAlt: 1, filenameAlt: 1, samples: [{ text: "/a.png", reason: "missing" }, { text: "/b.jpg", reason: "missing" }, { text: "photo_1.jpg", reason: "filename" }] },
+    headings: { total: 3, h1Count: 1, skippedCount: 0, skipped: [], firstLevel: 1 },
+  };
+  const findings = runChecks(reading(["Intro."], { accessibility: a }));
+  assert.equal(find(findings, "img_missing_alt").evidence.count, 2);
+  assert.equal(find(findings, "img_filename_alt").evidence.count, 1);
+});
+
+test("heading_skip and multiple_h1", () => {
+  const a = {
+    images: { total: 0, missingAlt: 0, emptyAlt: 0, filenameAlt: 0, samples: [] },
+    headings: { total: 4, h1Count: 2, skippedCount: 1, skipped: [{ from: 1, to: 3, text: "Skipped" }], firstLevel: 1 },
+  };
+  const findings = runChecks(reading(["Intro."], { accessibility: a }));
+  assert.equal(find(findings, "heading_skip").evidence.count, 1);
+  assert.equal(find(findings, "multiple_h1").evidence.count, 2);
+});
+
+test("header and accessibility checks are skipped for a saved page (no fields)", () => {
+  const c = codes(runChecks(reading(["Intro."])));
+  for (const code of ["header_noindex", "cache_control_no_store", "img_missing_alt", "img_filename_alt", "heading_skip", "multiple_h1"]) {
+    assert.ok(!c.includes(code), code);
+  }
+});

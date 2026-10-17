@@ -50,6 +50,7 @@ export const CHECK_CODES = [
   "robots_unreachable",
   "ai_search_blocked",
   "noindex",
+  "header_noindex",
   "js_dependent",
   "cap_overflow",
   "lost_faq_questions",
@@ -69,6 +70,11 @@ export const CHECK_CODES = [
   "meta_description_missing",
   "meta_description_short",
   "meta_description_long",
+  "cache_control_no_store",
+  "img_missing_alt",
+  "img_filename_alt",
+  "heading_skip",
+  "multiple_h1",
   "robots_not_checked",
 ];
 
@@ -345,6 +351,46 @@ function technicalChecks(technical) {
   return out;
 }
 
+// ── response-header checks ────────────────────────────────────────────────────
+
+// X-Robots-Tag: noindex (or the equivalent "none") is the same decision as meta robots, made in
+// the header instead; it is read separately so the report can say which one said it. A saved page
+// carries no headers, so these checks are skipped for one.
+function headerChecks(headers) {
+  if (!headers) return [];
+  const out = [];
+  const robotsTag = headers["x-robots-tag"];
+  if (robotsTag && /\b(?:noindex|none)\b/i.test(robotsTag)) {
+    out.push({ code: "header_noindex", severity: "high", passages: [], evidence: { value: robotsTag.trim() } });
+  }
+  const cacheControl = headers["cache-control"];
+  if (cacheControl && /\bno-store\b/i.test(cacheControl)) {
+    out.push({ code: "cache_control_no_store", severity: "low", passages: [], evidence: { value: cacheControl.trim() } });
+  }
+  return out;
+}
+
+// ── accessibility checks ──────────────────────────────────────────────────────
+
+function accessibilityChecks(accessibility) {
+  if (!accessibility) return [];
+  const { images, headings } = accessibility;
+  const out = [];
+  if (images.missingAlt) {
+    out.push({ code: "img_missing_alt", severity: "low", passages: [], evidence: { count: images.missingAlt, samples: images.samples.filter((s) => s.reason === "missing").slice(0, MAX_SAMPLES) } });
+  }
+  if (images.filenameAlt) {
+    out.push({ code: "img_filename_alt", severity: "low", passages: [], evidence: { count: images.filenameAlt, samples: images.samples.filter((s) => s.reason === "filename").slice(0, MAX_SAMPLES) } });
+  }
+  if (headings.skippedCount) {
+    out.push({ code: "heading_skip", severity: "low", passages: [], evidence: { count: headings.skippedCount, samples: headings.skipped.slice(0, MAX_SAMPLES) } });
+  }
+  if (headings.h1Count > 1) {
+    out.push({ code: "multiple_h1", severity: "low", passages: [], evidence: { count: headings.h1Count } });
+  }
+  return out;
+}
+
 function pageChecks(reading) {
   const { page } = reading;
   const out = [];
@@ -379,6 +425,8 @@ export function runChecks(reading, assignment = null, groupCount = 0) {
     ...truncatedTeasers(passages),
     ...repeatedClaims(passages, assignment, groupCount),
     ...technicalChecks(reading.technical),
+    ...headerChecks(reading.headers),
+    ...accessibilityChecks(reading.accessibility),
   ];
   return findings.sort(
     (a, b) => SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity] || CHECK_CODES.indexOf(a.code) - CHECK_CODES.indexOf(b.code)

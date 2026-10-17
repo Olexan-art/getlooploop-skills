@@ -271,6 +271,14 @@ export const S = {
   metaDescription: { en: "Meta description", uk: "Meta description" },
   metaChars: { en: (v) => `${v.n} characters`, uk: (v) => `${v.n} ${ukForm(v.n, "символ", "символи", "символів")}` },
   metaNone: { en: "missing", uk: "немає" },
+  headerXRobotsTag: { en: "X-Robots-Tag", uk: "X-Robots-Tag" },
+  headerCacheControl: { en: "Cache-Control", uk: "Cache-Control" },
+  headerNone: { en: "none", uk: "немає" },
+  accessibility: { en: "Accessibility", uk: "Доступність" },
+  accessibilitySummary: {
+    en: (v) => `${v.images} image(s), ${v.missingAlt} without alt · ${v.headings} heading(s), ${v.skipped} level jump(s)`,
+    uk: (v) => `Зображень: ${v.images}, без alt: ${v.missingAlt} · заголовків: ${v.headings}, стрибків рівня: ${v.skipped}`,
+  },
   render: { en: "With JavaScript", uk: "З JavaScript" },
   renderDone: {
     en: (v) => `${fmtN(v.js)} words and ${v.jsp} passages with JavaScript, against ${fmtN(v.plain)} words and ${v.plainp} passages from the plain fetch. The reading above is the plain fetch.`,
@@ -485,6 +493,11 @@ export const CHECK_COPY = {
     what: { en: "meta robots carries noindex.", uk: "meta robots містить noindex." },
     tell: { en: "Search indexes that assistants answer from will drop the page. Remove noindex unless that is the intent.", uk: "Пошукові індекси, з яких відповідають асистенти, викинуть сторінку. Приберіть noindex, якщо це не навмисно." },
   },
+  header_noindex: {
+    title: { en: "The response header says not to index", uk: "Заголовок відповіді каже не індексувати" },
+    what: { en: (v) => `X-Robots-Tag is “${v.value}”.`, uk: (v) => `X-Robots-Tag — «${v.value}».` },
+    tell: { en: "Same effect as meta robots noindex: search indexes that assistants answer from will drop the page. Remove it unless that is the intent.", uk: "Такий самий ефект, як noindex у meta robots: пошукові індекси, з яких відповідають асистенти, викинуть сторінку. Приберіть його, якщо це не навмисно." },
+  },
   js_dependent: {
     title: { en: "Most of the page needs JavaScript", uk: "Більша частина сторінки потребує JavaScript" },
     what: { en: (v) => `${fmtN(v.withJs)} words with JavaScript, ${fmtN(v.withoutJs)} without.`, uk: (v) => `${fmtUk(v.withJs)} слів з JavaScript, ${fmtUk(v.withoutJs)} без нього.` },
@@ -575,10 +588,35 @@ export const CHECK_COPY = {
     what: { en: (v) => `${v.length} characters.`, uk: (v) => `${v.length} ${ukForm(v.length, "символ", "символи", "символів")}.` },
     tell: { en: "Snippets cut it at about 160 characters. Put the answer first.", uk: "Сніпети обрізають його приблизно на 160 символах. Поставте відповідь на початок." },
   },
+  cache_control_no_store: {
+    title: { en: "The page says not to store it", uk: "Сторінка каже не зберігати її" },
+    what: { en: (v) => `Cache-Control is “${v.value}”.`, uk: (v) => `Cache-Control — «${v.value}».` },
+    tell: { en: "no-store tells caches not to keep a copy. It does not by itself hide the page from assistants, but a crawler that honours it reads the page fresh every time.", uk: "no-store каже кешам не зберігати копію. Саме по собі це не ховає сторінку від асистентів, але краулер, який це поважає, читає її заново щоразу." },
+  },
+  img_missing_alt: {
+    title: { en: "Images with no alt text", uk: "Зображення без alt-тексту" },
+    what: { en: (v) => `${v.count} image(s) have no alt attribute.`, uk: (v) => `Зображень без атрибута alt: ${v.count}.` },
+    tell: { en: "A retriever and a screen reader both read the alt. Describe what the image shows, or set alt=\"\" if it is purely decorative.", uk: "І ретривер, і скрінрідер читають alt. Опишіть, що на зображенні, або поставте alt=\"\", якщо воно суто декоративне." },
+  },
+  img_filename_alt: {
+    title: { en: "Alt text that is only a filename", uk: "Alt-текст — лише назва файлу" },
+    what: { en: (v) => `${v.count} image(s) have an alt that is only a file name.`, uk: (v) => `Зображень, де alt — лише назва файлу: ${v.count}.` },
+    tell: { en: "A file name says nothing about the image. Write what it shows.", uk: "Назва файлу нічого не каже про зображення. Напишіть, що на ньому." },
+  },
+  heading_skip: {
+    title: { en: "Headings that skip a level", uk: "Заголовки, що пропускають рівень" },
+    what: { en: (v) => `${v.count} heading(s) jump a level (h1 → h3, h2 → h4).`, uk: (v) => `Заголовків, що стрибають через рівень (h1 → h3, h2 → h4): ${v.count}.` },
+    tell: { en: "A retriever and a screen reader both follow the heading order. Keep the levels consecutive.", uk: "І ретривер, і скрінрідер ідуть за порядком заголовків. Тримайте рівні послідовними." },
+  },
+  multiple_h1: {
+    title: { en: "More than one h1", uk: "Більше одного h1" },
+    what: { en: (v) => `${v.count} h1 headings.`, uk: (v) => `Заголовків h1: ${v.count}.` },
+    tell: { en: "One page, one main subject: keep a single h1 and let the rest be h2 and below.", uk: "Одна сторінка — один головний предмет: лишіть один h1, а решта нехай буде h2 і нижче." },
+  },
   robots_not_checked: {
     title: { en: "robots.txt not checked", uk: "robots.txt не перевірено" },
     what: { en: "This run read a saved page.", uk: "Цей запуск читав збережену сторінку." },
-    tell: { en: "Run read.mjs on the live URL to check the AI crawlers.", uk: "Запустіть read.mjs на живій адресі, щоб перевірити ШІ-краулерів." },
+    tell: { en: "Run read.mjs on the live URL to check the AI crawlers.", uk: "Запустіть read.mjs на живій адресу, щоб перевірити ШІ-краулерів." },
   },
 };
 

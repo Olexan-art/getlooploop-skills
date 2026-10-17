@@ -2,7 +2,7 @@ English · [Українська](README.uk.md)
 
 # GetLoopLoop skills
 
-Vectorscope skill **2.107**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
+Vectorscope skill **2.109**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
 
 Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
@@ -27,6 +27,7 @@ It does not rank your page, give it a score, detect AI-written text, or predict 
 - **An honest past-the-cap count:** characters past the cap are counted from the unique text in passages, so a page whose cap cut a tail no longer reads 0; the 2.101 number stays in the export as `charsUnread`.
 - **AI crawlers first:** robots.txt checked for GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, Google-Extended, Googlebot, Bingbot and CCBot, with RFC 9309 matching. If the crawlers that answer people are blocked, the report says so before anything else.
 - **Automatic checks**, each with a code, the passages it rests on and the evidence: FAQ answers that lost their questions, one heading carrying too much of the page, passages cut mid-sentence, navigation inside the content, thin sections, truncated teasers, the same claim in every section, canonical, JSON-LD and meta description.
+- **Response headers and accessibility:** the `X-Robots-Tag` and `Cache-Control` headers are read and checked (a header noindex is as serious as meta robots), and the page's images and heading order are read for missing alt text, filename-only alt, level jumps and multiple h1.
 - **The page's vocabulary, phrases first:** the two-to-four-word phrases the page owns, ranked by how many passages use them, then its narrative words. What the page says, not search demand.
 - **Grouping by the agent's reading:** the passages grouped by subject and named, with the page's own heading or keywords kept as the label source.
 - **Query test:** 5 to 10 typical questions (yours or the agent's), the best passage for each, whether it answers completely, and the exact words a retriever could quote.

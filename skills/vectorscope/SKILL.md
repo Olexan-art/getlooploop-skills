@@ -3,7 +3,7 @@ name: vectorscope
 description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для ШІ-ботів». No embeddings.
 ---
 
-Version 2.107. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, 2.105, 2.106, 2.107, …): the first number moves only on a breaking change.
+Version 2.109. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, 2.105, 2.106, 2.107, 2.108, 2.109, …): the first number moves only on a breaking change.
 
 # Vectorscope (local, no embeddings)
 
@@ -56,7 +56,7 @@ Compare the pages the user names. Do not volunteer a comparison against a named 
 
 Every section and every number in the report carries one of three tags, and the export splits the same way. Keep them apart when you present the result:
 
-- **Measured** — what the parser saw: words, headings, passages and their lengths, the characters at each stage of the extraction, which element removed what, robots.txt rules, markup. Scripts counted it; any model gets the same number.
+- **Measured** — what the parser saw: words, headings, passages and their lengths, the characters at each stage of the extraction, which element removed what, robots.txt rules, markup, the response headers (`X-Robots-Tag`, `Cache-Control`) and the accessibility structure (images and their alt text, the heading order). Scripts counted it; any model gets the same number.
 - **Derived** — computed from measured values by a fixed formula: unique text in passages, characters past the cap, group shares, vocabulary counts, check verdicts. Deterministic. Where one rests on your groups (group shares, a phrase's group count, `repeated_claim`), the metric says so.
 - **Agent's judgement** — your reading: groups and labels, repeats, the plan, the query test, the facts.
 
@@ -174,6 +174,7 @@ The scripts run these on every page; each finding has a code, a severity, the pa
 | `robots_unreachable` | high | robots.txt answered 5xx or not at all | Under RFC 9309 a crawler then assumes it may fetch nothing. Say this first. |
 | `ai_search_blocked` | high | robots.txt disallows this path for a search or user-fetch crawler (OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, Googlebot, Bingbot) | **Say this first:** for those assistants the rest of the report is moot until the rule changes. |
 | `noindex` | high | meta robots says noindex | Search indexes that assistants answer from will drop the page. |
+| `header_noindex` | high | the `X-Robots-Tag` response header says noindex or none | Same effect as meta robots noindex; say which one said it. A saved page has no headers, so this check is skipped for one. |
 | `js_dependent` | high | with `--render`, JavaScript adds 50% more words or more (and at least 150) | A retriever that does not run JavaScript reads the smaller number. |
 | `cap_overflow` | high | all 26 slots filled and text left over | Name what fell past the cap; it can never be retrieved. |
 | `lost_faq_questions` | high | 3 or more sentences open with "Yes."/"No." (and similar) and there are fewer "?" than half of them | The questions were in buttons or accordions and did not survive; each answer has lost its address. |
@@ -190,6 +191,11 @@ The scripts run these on every page; each finding has a code, a severity, the pa
 | `canonical_missing`, `canonical_relative` | low | no canonical, or a relative one | Add one absolute canonical. |
 | `jsonld_none` | low | no JSON-LD | Optional; FAQPage, HowTo, Product or Article markup states what the page is. |
 | `meta_description_missing`, `meta_description_short`, `meta_description_long` | low | missing, under 70 or over 160 characters | The chunker puts the description into passage #0. |
+| `cache_control_no_store` | low | the `Cache-Control` header says no-store | Caches are told not to keep a copy; a crawler that honours it reads fresh each time. |
+| `img_missing_alt` | low | an `<img>` has no alt attribute | A retriever and a screen reader both read the alt; describe the image or set `alt=""` if it is decorative. |
+| `img_filename_alt` | low | an alt is only a file name | A file name says nothing; write what the image shows. |
+| `heading_skip` | low | a heading jumps a level (h1 → h3, h2 → h4) | Keep heading levels consecutive for readers and retrievers. |
+| `multiple_h1` | low | more than one h1 | One page, one main subject: keep a single h1. |
 | `robots_not_checked` | info | a saved page was read | Run on the live URL to check the crawlers. |
 
 ### AI crawlers
@@ -247,13 +253,14 @@ Short, alongside the report and never instead of it:
 - `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. `phrases` and `narrativeWords` (each entry: `term`, `count`, `passages`, `groups`, `spread`, `describesWholePage`) are the page vocabulary exactly as the product computes it; `keywords` is the two as one list, phrases first, in the shape earlier exports had. v2 only **adds** fields, so the schema id is unchanged: `skillVersion`, `judgement` (`agent` and `model` from groups.json, `null` when not stated), `checks` (each with an English `message`), `technical`, `robots`, `render`, `plan`, `queries`, `facts`, `diff`, and on each group `agentLabel`, `note` and `topic`. `label` and `labelSource` keep their v1 meaning (the computed label). Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
 - **2.102 export, schema id unchanged.** `export.json` gains two top-level sections, `measured` (`page`, `retrieval` with `charsInPassagesTotal` and `charsInPassagesUnique`, `passages` without their group, `losses`, `robots`, `technical`, `render`, and under `derived`: `charsPastCap`, the legacy `charsUnread`, `phrases`, `narrativeWords`, `checks`) and `judgement` (`agent`, `model`, `groups`, `assignment`, `duplicates`, `plan`, `queries`, `facts`), plus `layers` (what each section holds) and `metrics` (id → `layer`, `label`, `formula`, `unit`, `threshold`, `limits`: the same text as the report's "?"). Every v1 and v2 field also stays at its old path with its old meaning (`judgement.agent` and `judgement.model` are where v2 put them; `retrieval` only gains `charsPastCap` and `charsInPassagesUnique`), so the schema id stays `getlooploop/vectorscope-reading@1`: nothing a v1 or v2 consumer reads moved or changed. The cost is that some values appear twice; moving them would have broken every saved prompt that reads `phrases` or `labelSource`.
 - Compare mode writes `compare.json` (`getlooploop/vectorscope-compare@1`): every page's export under `pages[]`, plus `topics`, `topicTable`, `topicGaps`, `facts`, `factGaps`, `queries` (each with its `winner`) and `plan`. 2.102 adds `layers`, `metrics`, `measured.lossTable` (each page's waterfall and how many sections were cut) and, inside `judgement` beside `agent` and `model`, the shared `topics`, `facts`, `queries` and `plan`. The compare report ends with *Losses by page*, folded like the single report's panel: the table, then each page's waterfall and section map, each folded again.
-- `reading.json` (`getlooploop/vectorscope-skill-reading@1`) gains `technical`, `robots`, `layout`, `losses` (2.102: the waterfall, the passages' placement, the removals and the section map) and, with `--render`, `render`. Its passages are unchanged from v1, and lens still accepts a v1 reading (as a baseline, for example); the checks that need the new fields are then skipped.
+- `reading.json` (`getlooploop/vectorscope-skill-reading@1`) gains `technical`, `robots`, `layout`, `losses` (2.102: the waterfall, the passages' placement, the removals and the section map), `headers` (2.109: the response headers, null for a saved copy) and `accessibility` (2.109: the images and their alt text, the heading order) and, with `--render`, `render`. Its passages are unchanged from v1, and lens still accepts a v1 reading (as a baseline, for example); the checks that need the new fields are then skipped.
 
 ## Limits
 
 - One public URL per reading (up to 5 in compare mode, read one after another). The guard refuses localhost, private and link-local addresses, hostnames without a dot, non-standard ports and anything that is not http(s). It checks every redirect hop (5 at most), for the page and for robots.txt.
 - No login and no cookies: a page behind a sign-in is read as an anonymous visitor sees it. The fetch sends no Accept-Language, so a site that picks a language by location may answer in another language; pass the URL with its language parameter if so.
 - No JavaScript in the reading. The product parses the fetched HTML with cheerio, and so does this skill. `--render` also runs the page in a local Chrome, Chromium or Edge (`CHROME_PATH`, else the usual install paths) with a fresh throwaway profile and `--dump-dom`, and reports words and passages with JavaScript against the plain fetch; the reading itself stays the plain one. With no browser it says so and continues.
+- No response headers for a saved page. `--html` reads a saved copy, so `headers` is null and the `X-Robots-Tag` and `Cache-Control` checks are skipped; the accessibility structure is still read from the saved HTML.
 - 12-second timeout, 3,000,000-character ceiling, HTML only (`text/html` or `application/xhtml+xml`). robots.txt is read up to 500 KiB.
 - The fetch sends `User-Agent: GetLoopLoop/1.0 SEO Crawler`, as the product does. `--html saved.html` reads a saved copy instead (robots.txt is then not checked unless `--robots saved.txt` is given); `--save-html page.html` keeps the fetched copy.
 - Tests: `npm test` in `$SKILL` (Node's built-in runner, no network; it needs `npm install` for the check that `dist/` matches `scripts/`).
