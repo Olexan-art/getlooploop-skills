@@ -181,7 +181,8 @@ function dominantHeading(passages, page) {
 
 function midSentence(passages) {
   const hits = passages
-    .filter((p) => p.index > 0 && /^(?:\p{Ll}|[,;:)\]}»”’…])/u.test(p.text.trim()))
+    // A name written in lower case with a capital inside (pdfFiller, iPhone, eBay, macOS) opens a sentence.
+    .filter((p) => p.index > 0 && /^(?:\p{Ll}|[,;:)\]}»”’…])/u.test(p.text.trim()) && !/^\p{Ll}+\p{Lu}/u.test(p.text.trim()))
     .map((p) => ({ passage: p.index, text: clip(p.text, 80) }));
   if (!hits.length) return [];
   return [{ code: "mid_sentence_start", severity: "medium", passages: hits.map((h) => h.passage), evidence: { samples: hits.slice(0, MAX_SAMPLES), count: hits.length } }];

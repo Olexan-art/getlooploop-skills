@@ -1,6 +1,6 @@
 ---
 name: vectorscope
-description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - Vectorscope's exact fetch, extraction, chunking into passages and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, ClaudeBot, PerplexityBot), structure checks, how generated the text sounds, and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads or chunks a page, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier to cite, or names vectorscope. Also «як ШІ читає сторінку». For a full SEO/GEO audit, use ai-search-audit-full.
+description: Shows how an AI retriever or a RAG pipeline reads a public web page: the fetch, the text extraction, the cut into passages, the 26-passage cap, robots.txt rules for AI crawlers (GPTBot, ClaudeBot, PerplexityBot), structure checks and how generated the text sounds. The agent groups the passages, tests queries and writes a rewrite plan. Output: an HTML report. Compares 2 to 5 pages. Use when the user asks how AI reads or chunks a page, what is past a retrieval cap, if AI bots are blocked, how to make a page easier to cite, or names vectorscope. Also «як ШІ читає сторінку». For a full SEO or GEO audit, use ai-search-audit-full.
 ---
 
 Version 2.111.
