@@ -2,7 +2,7 @@
 
 # Skille GetLoopLoop
 
-Skill Vectorscope **2.111**. Wersje liczymy w tysięcznych (2.101, 2.102, …), więc pierwsza liczba zmienia się tylko przy zmianie niezgodnej wstecz.
+Skill Vectorscope **2.112**. Wersje liczymy w tysięcznych (2.101, 2.102, …), więc pierwsza liczba zmienia się tylko przy zmianie niezgodnej wstecz.
 
 Agent Skills od [GetLoopLoop](https://www.getlooploop.com) dla claude.ai i aplikacji Claude na komputer, Claude Code, Codex, opencode, Hermes Agent i innych agentów, które wczytują skille w formacie `SKILL.md`.
 

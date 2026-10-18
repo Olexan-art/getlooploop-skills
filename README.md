@@ -2,7 +2,7 @@ English · [Українська](README.uk.md) · [Polski](README.pl.md)
 
 # GetLoopLoop skills
 
-Vectorscope skill **2.111**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
+Vectorscope skill **2.112**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
 
 Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
