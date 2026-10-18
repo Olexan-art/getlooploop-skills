@@ -212,6 +212,31 @@ node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 
 AI Search Audit Lite — SEO-аудит і аудит для ШІ-пошуку однієї сторінки, який поєднує читання Vectorscope з чеклістом Google і Bing, robots.txt, структурованими даними й мовними версіями, — тепер має власний репозиторій: **[Olexan-art/ai-search-audit](https://github.com/Olexan-art/ai-search-audit)**. Там описано встановлення, лежать приклади, знімки екрана, а zip для claude.ai — у його Releases. Встановлення: `npx skills add Olexan-art/ai-search-audit --skill ai-search-audit`.
 
+## Як доручати агентові
+
+Коротке доручення з чіткою умовою зупинки та форматом відповіді тримає агента в межах процедури. Скопіюйте його й підставте свою сторінку:
+
+```markdown
+## Task
+Run the skill `vectorscope` on 1 page. Write its report.
+
+## Inputs
+- Page: https://example.com/page
+- Working folder: ./vectorscope
+- Compare with (optional, at most 4): https://example.com/other
+
+## Rules
+1. Read SKILL.md first. Follow it exactly.
+2. Write every file into the working folder.
+
+## Stop condition
+Stop when report.html exists. Show it.
+
+## Reply format
+- The report link or path.
+- The 3 main findings, with the passages they cite.
+```
+
 ## Робота над навичкою
 
 `scripts/` — це вихідний код; `dist/` збирається з нього за допомогою [esbuild](https://esbuild.github.io/) (лише залежність для розробки) і лежить у репозиторії, тож навичка працює без встановлення.

@@ -210,6 +210,31 @@ The scripts make no model or embedding calls and send nothing anywhere except th
 
 AI Search Audit Lite, the SEO and AI search audit of one page that runs the Vectorscope reading alongside the Google and Bing checklist, robots.txt, structured data and language versions, has moved to its own repository: **[Olexan-art/ai-search-audit](https://github.com/Olexan-art/ai-search-audit)**, with its install steps, examples, screenshots and the claude.ai zip in its Releases. Install it with `npx skills add Olexan-art/ai-search-audit --skill ai-search-audit`.
 
+## Asking your agent
+
+A short request with a clear stop condition and a reply format keeps the agent on the procedure. Copy it and put in your page:
+
+```markdown
+## Task
+Run the skill `vectorscope` on 1 page. Write its report.
+
+## Inputs
+- Page: https://example.com/page
+- Working folder: ./vectorscope
+- Compare with (optional, at most 4): https://example.com/other
+
+## Rules
+1. Read SKILL.md first. Follow it exactly.
+2. Write every file into the working folder.
+
+## Stop condition
+Stop when report.html exists. Show it.
+
+## Reply format
+- The report link or path.
+- The 3 main findings, with the passages they cite.
+```
+
 ## Working on the skill
 
 `scripts/` is the source; `dist/` is built from it with [esbuild](https://esbuild.github.io/) (a development dependency only) and committed, so the skill runs without an install.
