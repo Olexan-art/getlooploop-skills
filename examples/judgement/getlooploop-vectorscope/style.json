@@ -1,0 +1,23 @@
+{
+  "agent": "Claude Code",
+  "model": "claude-opus-5-5",
+  "passages": [
+    { "passage": 0, "verdict": "specific", "evidence": "what falls past the 26-passage cap", "why": "names the tool's own cap" },
+    { "passage": 1, "verdict": "specific", "evidence": "cut at h2, then 2,000-char windows", "why": "the tool's exact cut, as interface copy" },
+    { "passage": 2, "verdict": "generic", "evidence": "The reading shows which passages of your page a retriever can receive", "why": "any chunking visualiser could say this" },
+    { "passage": 3, "verdict": "specific", "evidence": "This reading takes at most 26 passages from a page.", "why": "a number a reader can check" },
+    { "passage": 4, "verdict": "generic", "evidence": "This does not establish that any assistant has indexed the page.", "why": "a disclaimer any such tool could carry" },
+    { "passage": 5, "verdict": "specific", "evidence": "Vectorscope applies the same cap the product applies and names the passages that fell outside it.", "why": null },
+    { "passage": 6, "verdict": "specific", "evidence": "change the heading, run the page again, ask the same question", "why": "a concrete test procedure" },
+    { "passage": 7, "verdict": "specific", "evidence": "a window of 2,000 characters with 200 characters of overlap", "why": null },
+    { "passage": 8, "verdict": "specific", "evidence": "a noindex directive is reported rather than ignored", "why": null },
+    { "passage": 9, "verdict": "specific", "evidence": "point at any URL in about twenty seconds", "why": null },
+    { "passage": 10, "verdict": "generic", "evidence": "Vectorscope is for anyone whose page has to be read in passages", "why": "an audience list a competitor's page could carry" },
+    { "passage": 11, "verdict": "specific", "evidence": "On this page the meaning-based step is the grouping of passages that are already cut, not the cut itself.", "why": "definitions tied to this tool" },
+    { "passage": 12, "verdict": "generic", "evidence": "Longer answers to the questions this page can only summarise.", "why": "a link list with no fact of its own" },
+    { "passage": 13, "verdict": "specific", "evidence": "the fetched page itself is not retained after the reading is produced", "why": null },
+    { "passage": 14, "verdict": "specific", "evidence": "with a rate limit rather than a paywall", "why": null },
+    { "passage": 15, "verdict": "specific", "evidence": "first without naming a platform, then naming all twelve", "why": null },
+    { "passage": 16, "verdict": "specific", "evidence": "those need a corpus of the whole site, measured over time", "why": null }
+  ]
+}

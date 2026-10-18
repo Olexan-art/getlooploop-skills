@@ -10,15 +10,17 @@ export const REFUSAL_CODE = "refused_language_ru";
 export const PROSECUTOR_FIGURES_AS_OF = "2025-11-05";
 
 export const REFUSAL_COPY = {
-  title: { en: "This page was not analysed", uk: "Цю сторінку не проаналізовано" },
+  title: { en: "This page was not analysed", uk: "Цю сторінку не проаналізовано", pl: "Ta strona nie została przeanalizowana" },
   lead: {
     en: "Vectorscope does not analyse pages written in Russian, or sites in Russia's domain zone, hosted in Russia or with a Russian-language version. This is the publisher's decision, made because of Russia's war against Ukraine. These are the findings it rests on:",
     uk: "Vectorscope не аналізує сторінки російською мовою, а також сайти в доменній зоні Росії, розміщені в Росії або з російськомовною версією. Це рішення автора інструмента через війну Росії проти України. Воно спирається на такі висновки:",
+    pl: "Vectorscope nie analizuje stron w języku rosyjskim ani serwisów w rosyjskiej strefie domenowej, hostowanych w Rosji lub mających wersję rosyjskojęzyczną. To decyzja autora narzędzia, podjęta z powodu wojny Rosji przeciwko Ukrainie. Opiera się na następujących ustaleniach:",
   },
-  sanctionsLabel: { en: "Sanctions", uk: "Санкції" },
+  sanctionsLabel: { en: "Sanctions", uk: "Санкції", pl: "Sankcje" },
   sanctions: {
     en: "If this site is operated by people or companies in Russia, it may be subject to sanctions. Check the official lists:",
     uk: "Якщо сайт належить особам чи компаніям у Росії, він може підпадати під санкції. Перевірте офіційні списки:",
+    pl: "Jeśli serwis należy do osób lub firm w Rosji, może podlegać sankcjom. Sprawdź oficjalne listy:",
   },
 };
 
@@ -34,10 +36,10 @@ export const isRefusalCode = (code) => REFUSAL_CODES.includes(code);
 
 /** The one reason line per code, in each report language. */
 export const REFUSAL_REASON = {
-  [REFUSED_RU_DOMAIN]: { en: "Why: the address is in Russia's domain zone.", uk: "Чому: адреса в доменній зоні Росії." },
-  [REFUSED_RU_HOSTING]: { en: "Why: the site is hosted in Russia.", uk: "Чому: сайт розміщено в Росії." },
-  [REFUSED_RU_AUDIENCE]: { en: "Why: the site has a Russian-language version.", uk: "Чому: сайт має російськомовну версію." },
-  [REFUSAL_CODE]: { en: "Why: the page is in Russian.", uk: "Чому: сторінка російською мовою." },
+  [REFUSED_RU_DOMAIN]: { en: "Why: the address is in Russia's domain zone.", uk: "Чому: адреса в доменній зоні Росії.", pl: "Powód: adres należy do rosyjskiej strefy domenowej." },
+  [REFUSED_RU_HOSTING]: { en: "Why: the site is hosted in Russia.", uk: "Чому: сайт розміщено в Росії.", pl: "Powód: serwis jest hostowany w Rosji." },
+  [REFUSED_RU_AUDIENCE]: { en: "Why: the site has a Russian-language version.", uk: "Чому: сайт має російськомовну версію.", pl: "Powód: serwis ma wersję rosyjskojęzyczną." },
+  [REFUSAL_CODE]: { en: "Why: the page is in Russian.", uk: "Чому: сторінка російською мовою.", pl: "Powód: strona jest w języku rosyjskim." },
 };
 
 /** The reason line for a code in one language, or "" for a code that is not a refusal. */
@@ -51,13 +53,14 @@ export const refusalReason = (code, lang) => REFUSAL_REASON[code]?.[lang] ?? "";
 export const FINDINGS = [
   {
     id: "unga",
-    source: { en: "United Nations General Assembly", uk: "Генеральна Асамблея ООН" },
+    source: { en: "United Nations General Assembly", uk: "Генеральна Асамблея ООН", pl: "Zgromadzenie Ogólne ONZ" },
     items: [
       {
         id: "es-11-1",
         text: {
           en: "Deplored Russia's aggression against Ukraine and demanded the withdrawal of its forces: **141 states in favour, 5 against, 35 abstentions** (resolution ES-11/1, 2 March 2022).",
           uk: "Засудила агресію Росії проти України й вимагала вивести її війська: **141 держава «за», 5 «проти», 35 утрималися** (резолюція ES-11/1, 2 березня 2022 р.).",
+          pl: "Potępiło agresję Rosji na Ukrainę i zażądało wycofania jej wojsk: **141 państw „za”, 5 „przeciw”, 35 wstrzymało się od głosu** (rezolucja ES-11/1, 2 marca 2022 r.).",
         },
         url: "https://news.un.org/en/story/2022/03/1113152",
       },
@@ -66,6 +69,7 @@ export const FINDINGS = [
         text: {
           en: "Declared the attempted annexation of four Ukrainian regions invalid: **143 in favour, 5 against, 35 abstentions** (resolution ES-11/4, 12 October 2022).",
           uk: "Визнала недійсною спробу анексії чотирьох областей України: **143 «за», 5 «проти», 35 утрималися** (резолюція ES-11/4, 12 жовтня 2022 р.).",
+          pl: "Uznało za nieważną próbę aneksji czterech obwodów Ukrainy: **143 „za”, 5 „przeciw”, 35 wstrzymało się od głosu** (rezolucja ES-11/4, 12 października 2022 r.).",
         },
         url: "https://news.un.org/en/story/2022/10/1129492",
       },
@@ -73,42 +77,46 @@ export const FINDINGS = [
   },
   {
     id: "europarl",
-    source: { en: "European Parliament", uk: "Європейський парламент" },
-    joiner: { en: ": ", uk: " " },
+    source: { en: "European Parliament", uk: "Європейський парламент", pl: "Parlament Europejski" },
+    joiner: { en: ": ", uk: " ", pl: " " },
     text: {
       en: "recognised Russia as a **state sponsor of terrorism** (494 votes to 58, 23 November 2022).",
       uk: "визнав Росію **державою — спонсором тероризму** (494 голоси проти 58, 23 листопада 2022 р.).",
+      pl: "uznał Rosję za **państwo sponsorujące terroryzm** (494 głosy za, 58 przeciw, 23 listopada 2022 r.).",
     },
     url: "https://www.europarl.europa.eu/news/en/press-room/20221118IPR55707/european-parliament-declares-russia-to-be-a-state-sponsor-of-terrorism",
   },
   {
     id: "icc",
-    source: { en: "International Criminal Court", uk: "Міжнародний кримінальний суд" },
-    joiner: { en: ": ", uk: " " },
+    source: { en: "International Criminal Court", uk: "Міжнародний кримінальний суд", pl: "Międzynarodowy Trybunał Karny" },
+    joiner: { en: ": ", uk: " ", pl: " " },
     text: {
       en: "issued arrest warrants for Vladimir Putin and Maria Lvova-Belova for the **war crime of unlawfully deporting Ukrainian children** (17 March 2023).",
       uk: "видав ордери на арешт Володимира Путіна та Марії Львової-Бєлової за **воєнний злочин — незаконну депортацію українських дітей** (17 березня 2023 р.).",
+      pl: "wydał nakazy aresztowania Władimira Putina i Marii Lwowej-Biełowej za **zbrodnię wojenną bezprawnej deportacji ukraińskich dzieci** (17 marca 2023 r.).",
     },
     url: "https://www.icc-cpi.int/news/situation-ukraine-icc-judges-issue-arrest-warrants-against-vladimir-vladimirovich-putin-and",
   },
   {
     id: "coi",
-    source: { en: "UN Commission of Inquiry on Ukraine", uk: "Комісія ООН з розслідування щодо України" },
-    joiner: { en: ": ", uk: " " },
+    source: { en: "UN Commission of Inquiry on Ukraine", uk: "Комісія ООН з розслідування щодо України", pl: "Komisja Śledcza ONZ ds. Ukrainy" },
+    joiner: { en: ": ", uk: " ", pl: " " },
     text: {
       en: 'found that enforced disappearances of civilians by Russian authorities were "widespread and systematic" and amount to **crimes against humanity**, as does its torture of detainees (March 2025).',
       uk: "встановила, що насильницькі зникнення цивільних, які чинить російська влада, «масові й систематичні» і є **злочинами проти людяності**, як і катування утримуваних (березень 2025 р.).",
+      pl: "ustaliła, że wymuszone zaginięcia cywilów dokonywane przez władze rosyjskie mają charakter „powszechny i systematyczny” i stanowią **zbrodnie przeciwko ludzkości**, podobnie jak torturowanie przetrzymywanych (marzec 2025 r.).",
     },
     url: "https://news.un.org/en/story/2025/03/1161281",
   },
   {
     id: "pgo",
-    source: { en: "Office of the Prosecutor General of Ukraine", uk: "Офіс Генерального прокурора України" },
-    joiner: { en: ": ", uk: ": " },
+    source: { en: "Office of the Prosecutor General of Ukraine", uk: "Офіс Генерального прокурора України", pl: "Biuro Prokuratora Generalnego Ukrainy" },
+    joiner: { en: ": ", uk: ": ", pl: ": " },
     asOf: PROSECUTOR_FIGURES_AS_OF,
     text: {
       en: "**over 190,000 war crimes** registered since the full-scale invasion, **747 indictments** sent to court and **206 people convicted** (5 November 2025).",
       uk: "зареєстровано **понад 190 000 воєнних злочинів** від початку повномасштабного вторгнення, **747 обвинувальних актів** скеровано до суду, **206 осіб засуджено** (5 листопада 2025 р.).",
+      pl: "od początku pełnoskalowej inwazji zarejestrowano **ponad 190 000 zbrodni wojennych**, do sądu skierowano **747 aktów oskarżenia**, skazano **206 osób** (5 listopada 2025 r.).",
     },
     url: "https://gp.gov.ua/en/posts/ponad-190-tisyac-vojennix-zlociniv-ofis-genprokurora-predstaviv-komisiyi-oon-masstabi-zlociniv-rf-proti-ukrayini",
   },

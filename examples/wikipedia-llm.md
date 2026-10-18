@@ -51,6 +51,9 @@
 - **JSON-LD:** Article, ImageObject, Organization
 - **Canonical:** https://en.wikipedia.org/wiki/Large_language_model (this page)
 - **Meta description:** missing
+- **X-Robots-Tag:** none
+- **Cache-Control:** private, s-maxage=0, max-age=0, must-revalidate, no-transform
+- **Accessibility:** 48 image(s), 8 without alt, 0 with a filename as alt · 61 heading(s), 0 level jump(s), 1 h1
 
 ### Findings `derived`
 
@@ -73,6 +76,15 @@
 - **[low] No meta description** `meta_description_missing` · passages #0  
   The intro passage (#0) has only the title and h1.  
   *What to do:* The chunker puts the description into passage #0. Write one or two sentences that say what the page answers.
+- **[low] Images with no alt text** `img_missing_alt`  
+  8 image(s) have no alt attribute.  
+  - “//thumb.wikimedia.org/wikipedia/commons/thumb/8/81/The_number_of_publications_about_Large_Language_Models_by_year.png/250px-The_number_of_publications_about_Large_Language_Models_by_year.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail”
+  - “//thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg/250px-Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail”
+  - “//thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg/250px-Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail”
+  - “//thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/The-Transformer-model-architecture.png/330px-The-Transformer-model-architecture.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail”
+  - “//thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg/500px-Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail”
+  - “//thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Multiple_attention_heads.png/330px-Multiple_attention_heads.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail”
+  *What to do:* A retriever and a screen reader both read the alt. Describe what the image shows, or set alt="" if it is purely decorative.
 
 ## Rewrite plan `judgement`
 
@@ -253,14 +265,61 @@ Single words, counted only where no phrase above already used them. They say wha
 
 model (100; 21 passages; 6 of 6 groups; describes the page), llm (98; 21 passages; 6 of 6 groups; describes the page), token (38; 11 passages; 5 of 6 groups; describes the page), text (29; 13 passages; 6 of 6 groups; describes the page), gpt (28; 12 passages; 6 of 6 groups; describes the page), trained (27; 15 passages; 6 of 6 groups; describes the page), input (22; 9 passages; 4 of 6 groups; describes the page), training (22; 11 passages; 6 of 6 groups; describes the page), data (20; 11 passages; 6 of 6 groups; describes the page), dataset (19; 9 passages; 5 of 6 groups; describes the page)
 
+## How generated the text sounds `derived` `judgement`
+
+Stock phrasing, marker words and generic passages. Not an authorship detector: who wrote the text cannot be shown from the text.
+
+- **Pattern score** `derived`: 10/100, low (363 points over 14,054 words = 25.83 per 1,000; PatternScope det-1/score-1, language en).
+- **Marker words** `derived`: 0.4 per 1,000 words, rare (6 occurrences; not part of the score; thresholds not yet calibrated).
+- **Generic passages** `judgement`: 3 of 26, 4% of passage characters (the agent's swap test).
+- **Too short for a score** `measured`: 1 of 26 passages under 60 words (#0).
+
+The script and the agent disagree on #1 and #8: #1 low score, generic text; #8 low score, generic text. Shown, not averaged.
+
+### Where the score comes from `derived`
+
+- Repeated sentence shape: 69 findings, 360 points — “Advances in Neural Information Processing Systems.” ×4, “Archived from the original on 12 June 2023.” ×3, “"Language Models are Few-Shot Learners" (PDF).” ×2, “Archived (PDF) from the original on 17 November 2023.” ×2, “Frontiers of Computer Science.” ×2, “The New York Times .” ×2, “"How to run an LLM locally on your PC in less than 10 minutes".” ×2, “Association for Computing Machinery.” ×2, +45 more
+- Uniform openings: 1 findings, 3 points — “When y = average Pr ( correct token ) {\displaystyle y={\text{average }}\Pr({\text{correc…”
+
+Marker words (not in the score): leverage ×2, intricate, robust, truly, unlock.
+
+| # | Heading | Score | Markers /1k | Agent | Evidence |
+|---|---|---|---|---|---|
+| #0 | Large language model - Wikipedia | — (7 words) | 0 | generic | “Large language model - Wikipedia” — Only the page title; nothing here but the name. |
+| #1 | — | 0 low | 0 | generic ≠ script | “A large language model (LLM) is an AI model (typically a neural network) trained on a vast amount of text for natural language processing tasks” — Standard definition and framing any article on LLMs opens with; no number, date or distinct claim. |
+| #2 | History | 0 low | 0 | specific | “In 2001, a smoothed n-gram model, such as those employing Kneser–Ney smoothing, trained on 300 million words, achieved state-of-the-art perplexity” — Dated milestones with a figure and a citation. |
+| #3 | History | 0 low | 0 | specific | “At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper "Attention Is All You Need".” — Named paper, venue and year. |
+| #4 | History | 0 low | 0 | specific | “In January 2025, DeepSeek released DeepSeek R1, a 671-billion-parameter open-weight model” — Dated release with a parameter count. |
+| #5 | Dataset preprocessing | 0 low | 0 | specific | “"Ġ" denotes a preceding whitespace in RoBERTa and GPT and "##" denotes continuation of a preceding word in BERT.” — Concrete token conventions and a worked BPE procedure. |
+| #6 | Dataset preprocessing | 0 low | 0 | specific | “A trained LLM can be used to clean datasets for training a further LLM.” — Cited claims about data cleaning and synthetic data. |
+| #7 | Training | 0 low | 0 | specific | “the training of GPT-2 (i.e. a 1.5-billion-parameter model) in 2019 cost $50,000, while training of the PaLM (i.e. a 540-billion-parameter model) in 2022 cost $8 million” — Named models with years and training costs. |
+| #8 | Inference | 0 low | 0 | generic ≠ script | “Hosted inference runs a language model on remote AI data centers and makes the output available to users over the Internet.” — Plain definitions of inference that any page could carry unchanged. |
+| #9 | Architecture | 0 low | 3 | specific | “the small (i.e. 117M parameter sized) GPT-2 model has had twelve attention heads and a context window of only 1k tokens.” — Exact model dimensions with a citation. |
+| #10 | Architecture | 0 low | 0 | specific | “One float16 has 16 bits, or 2 bytes, and so one billion parameters require 2 gigabytes.” — Concrete arithmetic plus dated parameter records. |
+| #11 | Architecture | 0 low | 0 | specific | “Dynamic quantization allows for the use of a different quantization codebook per layer, either a lookup table of values or a linear mapping (scaling factor and bias)” — A concrete technical mechanism, not framing. |
+| #12 | Extensibility | 0 low | 0 | specific | “under a "Instruction: [...], Input: [...], Output:" format” — Dated findings and the exact prompt format used. |
+| #13 | Extensibility | 0 low | 0 | specific | “A program separate from the LLM watches the output stream of the LLM for a special tool-calling syntax.” — Describes the procedure behind RAG and tool calls. |
+| #14 | Extensibility | 0 low | 0 | specific | “In the DEPS ("describe, explain, plan and select") method, an LLM is first connected to the visual world via image descriptions.” — Named methods with cited procedures. |
+| #15 | Extensibility | 0 low | 0 | specific | “GPT-4o achieved 13% accuracy while o1 reached 83%.” — Benchmark figures with dates and model names. |
+| #16 | Forms of input and output | 0 low | 0 | specific | “the Flamingo model uses cross-attention layers to inject visual information into its pre-trained language model.” — Step-by-step construction of image tokens and named models. |
+| #17 | Forms of input and output | 0 low | 0 | specific | “Meta hosts ESM Atlas, a database of 772 million structures of metagenomic proteins predicted using ESMFold.” — Named system with a figure. |
+| #18 | Properties | 0 low | 0 | specific | “meaning that it costs 6 FLOPs per parameter to train on one token.” — Chinchilla scaling law with its fitted constants. |
+| #19 | Properties | 0 low | 0 | specific | “chain-of-thought prompting only improved the performance for models that had at least 62B parameters.” — Cited threshold and a named counter-argument. |
+| #20 | Properties | 0 low | 0 | specific | “plot is a straight line (before it hits the plateau at zero), which does not look like emergence.” — Specific mathematical cases of the emergence argument. |
+| #21 | Interpretation | 0 low | 0 | specific | “The resulting models were reverse-engineered, and it turned out they used discrete Fourier transform.” — A concrete research finding, plus a dated survey. |
+| #22 | Interpretation | 0 low | 0 | specific | “Conjecture CEO Connor Leahy considers untuned LLMs to be like inscrutable alien "Shoggoths"” — Named people with attributed quotes. |
+| #23 | Interpretation | 0 low | 0 | specific | “In his 2014 book titled The Language Myth: Why Language Is Not An Instinct, British cognitive linguist and digital communication technologist Vyvyan Evans” — Named author, book and year. |
+| #24 | Evaluation | 0 low | 3 | specific | “was able to compress ImageNet to 43% of its size, beating PNG with 58%.” — Dated study with exact figures. |
+| #25 | Evaluation | 0 low | 0 | specific | “The results demonstrated moderate proficiency, with GPT-4 achieving the highest accuracy at 71%, lagging behind human fact-checkers.” — Named benchmarks and a cited accuracy figure. |
+
 ## Where the text goes `measured` `derived`
 
 Characters, whitespace runs folded to one space. "Text in the raw HTML" is the kept text plus every removal, so the stages sum exactly.
 
 | Stage | Characters | Share | Layer |
 |---|---|---|---|
-| Text in the raw HTML (estimate) | 139,071 | 100% of raw | `derived` |
-| Removed by the cleaner | 44,809 | 32.2% of raw | `measured` |
+| Text in the raw HTML (estimate) | 139,066 | 100% of raw | `derived` |
+| Removed by the cleaner | 44,804 | 32.2% of raw | `measured` |
 | Kept: the chunker's input | 94,262 | 67.8% of raw | `measured` |
 | In passages, unique | 39,111 | 41.5% of kept | `derived` |
 | Kept, in no passage text | 150 | 0.2% of kept | `derived` |
@@ -270,11 +329,11 @@ The passages hold 41,850 characters in all: 39,111 unique, plus 2,686 of overlap
 
 ### What the cleaner removed `measured`
 
-41 elements with text, 44,809 characters. By reason: script, style, noscript, template 28,933 (14) · head (title, meta) 34 (1) · [hidden] or aria-hidden 161 (11) · page header (site banner) 277 (1) · controls inside a kept header 652 (1) · navigation (nav, role=navigation) 14,208 (10) · footer 523 (1) · form, button, select, input 6 (1) · outside the chosen main region 15 (1).
+41 elements with text, 44,804 characters. By reason: script, style, noscript, template 28,928 (14) · head (title, meta) 34 (1) · [hidden] or aria-hidden 161 (11) · page header (site banner) 277 (1) · controls inside a kept header 652 (1) · navigation (nav, role=navigation) 14,208 (10) · footer 523 (1) · form, button, select, input 6 (1) · outside the chosen main region 15 (1).
 
 | Reason | Element | Path | Chars | Its text begins |
 |---|---|---|---|---|
-| script, style, noscript, template | `script` | script | 8,187 | “(RLQ=window.RLQ\|\|[]).push(function(){mw.config.set({"wgHostname":"mw-web.eqiad.c…” |
+| script, style, noscript, template | `script` | script | 8,182 | “(RLQ=window.RLQ\|\|[]).push(function(){mw.config.set({"wgHostname":"mw-web.eqiad.m…” |
 | script, style, noscript, template | `script` | head > script | 6,252 | “(function(){var className="client-js vector-feature-language-in-header-enabled v…” |
 | navigation (nav, role=navigation) | `div#mwDmY.navbox` | … > div#mw-content-text > div.mw-content-ltr > section#mwDlI > div#mwDmY.navbox | 4,118 | “v t e Artificial intelligence (AI) History timeline Glossary Lists Algorithms Co…” |
 | script, style, noscript, template | `style` | … > div.mw-content-ltr > section#mwAQ > span#mwDQ > style | 3,237 | “.mw-parser-output .sidebar{width:22em;float:right;clear:right;margin:0.5em 0 1em…” |
@@ -365,3 +424,7 @@ This is a preview of the machine's view, not a guarantee of what any assistant d
 - **Citable facts** `judgement` (`facts`). The agent's list of concrete facts the passages state, each with the passages that state it. *Unit:* facts. *Limits:* Fact gaps are only as fair as this list is complete.
 - **Topic × page cells** `derived` (`topic_cells`). Passages and characters of the groups the agent assigned to each shared topic. *Unit:* characters, as the passage text holds them. *Limits:* Computed over the agent's groups and topics.
 - **Changes since the baseline** `derived` (`diff_counts`). Passages matched by identical text, then by the same heading in order; the rest are added or removed. *Unit:* passages. *Limits:* A passage that moved and changed heading counts as removed plus added.
+- **Pattern score** `derived` (`pattern_score`). PatternScope's four detector families (det-1) over the page's kept text, without the title, h1 and description intro: stock phrases; sentences sharing one shape; three or more sentences opening the same way; an evaluative word on an abstract noun with no number or name in the sentence. A finding scores 1, 3 or 6 by severity, one identical finding at most 4 times; points per 1,000 words over 250, capped at 100 (score-1). A passage's own score is the same formula over its text, from 60 words. *Unit:* 0–100. *Threshold:* 0–29 low · 30–59 moderate · 60+ high *Limits:* Calibrated on 60–300-word texts; a long page is an extrapolation. Lexicons for English, Ukrainian and Spanish only: any other language gets no score, not a zero. Signals of worn writing, not of who wrote it. Two changes from the web tool, for whole pages rather than pasted text: a sentence shape needs at least one function word (a reference list is not a template), and a few words with letters such as ł or ß do not make an English page another language.
+- **Marker words** `derived` (`marker_words`). Occurrences of words from a fixed per-language list (seamless, unlock, delve; «безшовний», «на новий рівень»; «sin fisuras»…) per 1,000 words of the same text as the Pattern score. The English core follows published excess-vocabulary studies (Kobak et al., 2024); the Ukrainian and Spanish lists are written natively. *Unit:* hits per 1,000 words. *Threshold:* 0–9 rare · 10–24 noticeable · 25+ frequent; not yet calibrated *Limits:* Not part of the Pattern score, so the score stays PatternScope's. Marketing copy written by people uses these words too.
+- **Generic passages** `judgement` (`generic_share`). The agent reads every passage and marks it specific or generic by one question: would it fit a competitor's page with only the brand name changed? Each verdict carries a verbatim quote the script checks. Share = characters of generic passages / characters of all passages. *Unit:* % of passage characters. *Limits:* A model's reading, not a measurement: another model may draw the line elsewhere. Where it disagrees with the script, both are shown, never averaged.
+- **Passages too short for a score** `measured` (`short_passages`). Passages with fewer than 60 words, PatternScope's floor. *Unit:* passages. *Limits:* Their text still counts in the page score; only a score of their own is withheld, because a density over a few dozen words swings on a comma.

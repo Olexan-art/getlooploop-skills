@@ -5,7 +5,7 @@
 //
 // Single page:
 //   node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json]
-//        [--facts facts.json] [--topics topics.json]
+//        [--facts facts.json] [--style style.json] [--topics topics.json]
 //        [--baseline old-reading.json [--baseline-groups old-groups.json]]
 //        [--json out.json] [--md out.md] [--html out.html]
 // Compare (2–5 pages read with read.mjs into one directory):
@@ -29,6 +29,7 @@ import { queryWinner, validateFacts, validateGrouping, validatePlan, validateQue
 import { checkCopy, tr } from "./lib/i18n.mjs";
 import { LAYER_COPY, METRICS, metricsDictionary } from "./lib/metrics.mjs";
 import { charsPastCap, hasLosses } from "./lib/losses.mjs";
+import { computeGenerated, generatedExport, generatedMarkdown, validateStyle } from "./lib/generatedText.mjs";
 
 // Kept for v1 callers that imported these from here.
 export { validateGrouping, buildJudgedLens };
@@ -36,10 +37,10 @@ export { validateGrouping, buildJudgedLens };
 export const COMPARE_SCHEMA = "getlooploop/vectorscope-compare@1";
 export const REFUSAL_SCHEMA = "getlooploop/vectorscope-refusal@1";
 /** Versions count in thousandths (2.101, 2.102, …) so the first number moves only on a real break. Mirrors package.json. */
-export const SKILL_VERSION = "2.110";
+export const SKILL_VERSION = "2.111";
 
 const USAGE = [
-  "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json]",
+  "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json] [--style style.json]",
   "         [--topics topics.json] [--baseline old-reading.json [--baseline-groups old-groups.json]] [--json out.json] [--md out.md] [--html out.html]",
   "       node scripts/lens.mjs --compare readings/manifest.json [--json out.json] [--md out.md] [--html out.html]",
 ].join("\n");
@@ -51,7 +52,7 @@ function fail(message) {
 
 function parseArgs(argv) {
   const out = { files: [] };
-  const flags = ["json", "md", "html", "plan", "queries", "facts", "topics", "baseline", "baseline-groups", "compare"];
+  const flags = ["json", "md", "html", "plan", "queries", "facts", "style", "topics", "baseline", "baseline-groups", "compare"];
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg.startsWith("--") && flags.includes(arg.slice(2))) out[arg.slice(2)] = argv[++i];
@@ -546,6 +547,9 @@ export function renderMarkdown(reading, lens, extras = {}) {
     out.push("");
   }
 
+  // 2.111: how generated the text sounds, above the losses as in the HTML.
+  if (extras.generated) out.push(...generatedMarkdown(extras.generated, { M }));
+
   // 2.103: the loss detail is the last section, as in the HTML report, where it is folded.
   out.push(...lossesMarkdown(reading));
 
@@ -713,6 +717,8 @@ function judgementSection(lens, extras, base) {
     plan: extras.plan?.items ?? null,
     queries: extras.queries ?? null,
     facts: extras.facts ?? null,
+    // 2.111: the swap test, one verdict per passage with its verbatim quote.
+    style: extras.style ? { agent: extras.style.judgement.agent, model: extras.style.judgement.model, passages: extras.style.passages } : null,
   };
 }
 
@@ -742,6 +748,8 @@ function singleExport(reading, lens, extras) {
     queries: extras.queries ?? null,
     facts: extras.facts ?? null,
     diff: extras.diff ?? null,
+    // 2.111, additive: the Pattern score, the marker words and the swap test, as the block shows them.
+    generatedText: extras.generated ? generatedExport(extras.generated) : null,
   };
 }
 
@@ -802,6 +810,8 @@ function runSingle(args) {
     warnings.push(...q.warnings);
   }
   if (args.facts) extras.facts = attempt("facts.json", () => validateFacts(readJson(args.facts, "facts"), pages, topicIds));
+  if (args.style) extras.style = attempt("style.json", () => validateStyle(readJson(args.style, "style"), reading.passages));
+  extras.generated = computeGenerated({ sections: reading.sections ?? null, passages: reading.passages, style: extras.style ?? null });
   if (args["baseline-groups"] && !args.baseline) fail("--baseline-groups needs --baseline.");
   if (args.baseline) {
     const old = loadReading(args.baseline);
@@ -821,6 +831,8 @@ function runSingle(args) {
   console.log(`phrases   ${lens.phrases.slice(0, 8).map((k) => k.term).join(", ")}${lens.phrases.length > 8 ? ", …" : ""}`);
   console.log(`narrative ${lens.narrative.map((k) => k.term).join(", ")}`);
   printChecks(checks);
+  const gx = extras.generated;
+  console.log(`generated ${gx.page?.score ? `pattern score ${gx.page.score.value}/100 ${gx.page.score.band}` : `pattern score not computed (${gx.reason})`}${gx.page ? ` · markers ${gx.page.markers.perThousand}/1k` : ""} · ${gx.judged ? `${gx.generic.passages} of ${gx.generic.of} passages generic${gx.disagreements.length ? `, ${gx.disagreements.length} disagree with the script` : ""}` : "swap test not given (--style)"}`);
   if (extras.diff) console.log(`diff      ${extras.diff.counts.same} same · ${extras.diff.counts.changed} changed · ${extras.diff.counts.added} added · ${extras.diff.counts.removed} removed`);
   writeOutputs(args, singleExport(reading, lens, extras), renderMarkdown(reading, lens, extras), renderHtml(reading, lens, extras), vectorscopeExportName(reading.page));
 }

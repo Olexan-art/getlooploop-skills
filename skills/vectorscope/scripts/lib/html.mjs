@@ -5,7 +5,7 @@
 // them, and page content is never translated.
 
 import { PREVIEW_CHARS } from "./lens.mjs";
-import { CHECK_COPY, tr, checkCopy } from "./i18n.mjs";
+import { CHECK_COPY, LANGS, tr, checkCopy } from "./i18n.mjs";
 import { displayLabel } from "./analysis.mjs";
 import { queryWinner } from "./judgement.mjs";
 import { pathOf } from "./robots.mjs";
@@ -14,6 +14,7 @@ import { LAYER_COPY, METRICS } from "./metrics.mjs";
 import { charsPastCap, hasLosses } from "./losses.mjs";
 import { CORNER, MOTANKA, ORNAMENT } from "./sprites.mjs";
 import { GLL_MARK, GLL_MARK_LIGHT } from "./brandmark.mjs";
+import { GENERATED_CSS, renderGeneratedHtml } from "./generatedText.mjs";
 
 const VECTORSCOPE_URL = "https://www.getlooploop.com/vectorscope";
 
@@ -55,17 +56,19 @@ const clip = (s, n) => {
 
 /** Report copy in both languages; CSS shows one. `v` values must already be HTML-safe. */
 function L(key, v) {
-  return `<span class="l-en">${tr(key, "en", v)}</span><span class="l-uk" lang="uk">${tr(key, "uk", v)}</span>`;
+  return `<span class="l-en">${tr(key, "en", v)}</span><span class="l-uk" lang="uk">${tr(key, "uk", v)}</span><span class="l-pl" lang="pl">${tr(key, "pl", v)}</span>`;
 }
-/** Two already-built strings as a bilingual pair. */
-function pair(en, uk) {
-  return `<span class="l-en">${en}</span><span class="l-uk" lang="uk">${uk}</span>`;
+/** Three already-built strings, one per report language. */
+function pair(en, uk, pl) {
+  if (pl === undefined) throw new Error("pair() needs the Polish string too");
+  return `<span class="l-en">${en}</span><span class="l-uk" lang="uk">${uk}</span><span class="l-pl" lang="pl">${pl}</span>`;
 }
 /** An attribute in both languages: the English value now, both kept for the switch. */
 function attr(name, key, v) {
   const en = tr(key, "en", v);
   const uk = tr(key, "uk", v);
-  return `${name}="${esc(en)}" data-en-${name}="${esc(en)}" data-uk-${name}="${esc(uk)}" data-i18n`;
+  const pl = tr(key, "pl", v);
+  return `${name}="${esc(en)}" data-en-${name}="${esc(en)}" data-uk-${name}="${esc(uk)}" data-pl-${name}="${esc(pl)}" data-i18n`;
 }
 
 /** Evidence made HTML-safe for the copy functions: strings escaped, lists joined. */
@@ -144,9 +147,9 @@ export const REPORT_CSS = `
   --shadow:0 1px 0 rgba(255,255,255,.03) inset;
   color-scheme:dark;
 }
-.l-uk{display:none}
-:root[data-lang="uk"] .l-en{display:none}
-:root[data-lang="uk"] .l-uk{display:inline}
+.l-uk,.l-pl{display:none}
+:root[data-lang="uk"] .l-en,:root[data-lang="pl"] .l-en{display:none}
+:root[data-lang="uk"] .l-uk,:root[data-lang="pl"] .l-pl{display:inline}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;overflow-wrap:anywhere}
@@ -187,9 +190,9 @@ h3{font-size:17px;margin:0}
 .info p{margin:0;font-size:15px;color:var(--muted);max-width:860px;overflow-wrap:anywhere}
 .info p b{color:var(--text);font-weight:600}
 @media (max-width:480px){.info{padding:12px 14px;gap:10px}}
-.lb-uk{display:none}
-:root[data-lang="uk"] .lb-en{display:none}
-:root[data-lang="uk"] .lb-uk{display:block}
+.lb-uk,.lb-pl{display:none}
+:root[data-lang="uk"] .lb-en,:root[data-lang="pl"] .lb-en{display:none}
+:root[data-lang="uk"] .lb-uk,:root[data-lang="pl"] .lb-pl{display:block}
 .refusal{margin-top:18px;border:1.5px solid var(--red);border-left-width:4px;background:var(--panel);border-radius:14px;padding:18px 20px;box-shadow:var(--glow)}
 .refusal-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .refusal-head svg{width:30px;height:30px;color:var(--red);flex:none}
@@ -484,7 +487,7 @@ td.sample{color:var(--muted);font-size:14px;min-width:180px}
 
 // Theme: a #theme=light|dark (or ?theme=) in the URL wins, then the stored choice, then light. The
 // system preference is not read: the report opens light unless the reader asks for dark.
-// Language: #lang=uk|en (or ?lang=) wins, then the stored choice, then English.
+// Language: #lang=en|uk|pl (or ?lang=) wins, then the stored choice, then English.
 // Strip: hovering or focusing a cell writes its passage, heading and group into the readout.
 const JS = `
 (function(){
@@ -495,12 +498,12 @@ const JS = `
   function effective(){return root.getAttribute("data-theme")==="dark"?"dark":"light"}
   function paint(){var t=effective(),l=root.getAttribute("data-lang")||"en";var b=document.querySelectorAll("[data-set-theme]");for(var i=0;i<b.length;i++)b[i].setAttribute("aria-pressed",String(b[i].getAttribute("data-set-theme")===t));var c=document.querySelectorAll("[data-set-lang]");for(var j=0;j<c.length;j++)c[j].setAttribute("aria-pressed",String(c[j].getAttribute("data-set-lang")===l))}
   function applyLang(l){
-    root.setAttribute("data-lang",l);root.setAttribute("lang",l==="uk"?"uk":"en");
+    root.setAttribute("data-lang",l);root.setAttribute("lang",l==="uk"||l==="pl"?l:"en");
     var els=document.querySelectorAll("[data-i18n]"),pre="data-"+l+"-";
     for(var i=0;i<els.length;i++){var el=els[i],set=[];for(var j=0;j<el.attributes.length;j++){var a=el.attributes[j];if(a.name.indexOf(pre)===0)set.push([a.name.slice(pre.length),a.value])}for(var k=0;k<set.length;k++)el.setAttribute(set[k][0],set[k][1])}
   }
   var first=param(/[?#&]theme=(light|dark)/)||get(KEY);if(first==="light"||first==="dark")root.setAttribute("data-theme",first);
-  var lang=param(/[?#&]lang=(en|uk)/)||get(LKEY);root.setAttribute("data-lang",lang==="uk"?"uk":"en");
+  var lang=param(/[?#&]lang=(en|uk|pl)/)||get(LKEY);root.setAttribute("data-lang",lang==="uk"||lang==="pl"?lang:"en");
   document.addEventListener("DOMContentLoaded",function(){
     applyLang(root.getAttribute("data-lang"));paint();
     var b=document.querySelectorAll("[data-set-theme]");
@@ -548,7 +551,7 @@ function documentStart(title) {
     // No network from this file: styles and the one script are inline, nothing else loads.
     `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:">`,
     `<title>${esc(title)}</title>`,
-    `<style>${REPORT_CSS}</style>`,
+    `<style>${REPORT_CSS}${GENERATED_CSS}</style>`,
     `<script>${JS}</script>`,
     "</head>",
     "<body>",
@@ -561,7 +564,7 @@ function topBar(eyebrowKey) {
     '<div class="top">',
     `<span class="eyebrow">${L(eyebrowKey)}</span>`,
     '<div class="toggles">',
-    `<div class="toggle" role="group" ${attr("aria-label", "langGroup")}><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="uk" aria-pressed="false" lang="uk">UK</button></div>`,
+    `<div class="toggle" role="group" ${attr("aria-label", "langGroup")}><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="uk" aria-pressed="false" lang="uk">UK</button><button type="button" data-set-lang="pl" aria-pressed="false" lang="pl">PL</button></div>`,
     `<div class="toggle" role="group" ${attr("aria-label", "themeGroup")}><button type="button" data-set-theme="dark" aria-pressed="false">${L("dark")}</button><button type="button" data-set-theme="light" aria-pressed="false">${L("light")}</button></div>`,
     "</div>",
     "</div>",
@@ -647,7 +650,7 @@ export function refusalBlock(compact = false, code = "refused_language_ru") {
   return [
     `<section class="refusal${compact ? " compact" : ""}" role="alert">`,
     `<div class="refusal-head">${STOP}<h2>${L("refusalTitle")}</h2></div>`,
-    `<div class="lb-en">${refusalBody("en", code)}</div><div class="lb-uk" lang="uk">${refusalBody("uk", code)}</div>`,
+    `<div class="lb-en">${refusalBody("en", code)}</div><div class="lb-uk" lang="uk">${refusalBody("uk", code)}</div><div class="lb-pl" lang="pl">${refusalBody("pl", code)}</div>`,
     "</section>",
   ];
 }
@@ -686,7 +689,7 @@ function byLine(judgements, lang) {
  */
 function infoPanel(cap, judgements) {
   const link = `<a href="${VECTORSCOPE_URL}" rel="noopener noreferrer" target="_blank">getlooploop.com/vectorscope</a>`;
-  const judge = pair(tr("infoJudgeBody", "en", { by: byLine(judgements, "en"), link }), tr("infoJudgeBody", "uk", { by: byLine(judgements, "uk"), link }));
+  const judge = pair(...LANGS.map((lang) => tr("infoJudgeBody", lang, { by: byLine(judgements, lang), link })));
   const badgeOf = (lang, layer) => `<span class="lyr ${layer}">${esc(LAYER_COPY[layer].label[lang])}</span>`;
   const help = '<span class="mhx" aria-hidden="true">?</span>';
   const layersBody = (lang) => tr("infoLayersBody", lang, { measured: badgeOf(lang, "measured"), derived: badgeOf(lang, "derived"), judgement: badgeOf(lang, "judgement"), help });
@@ -695,7 +698,7 @@ function infoPanel(cap, judgements) {
     `<div><h2>${L("infoSameTitle")} ${layerBadges("measured", "derived")}</h2><p>${L("infoSameBody", { cap })}</p></div>`,
     `<div><h2>${L("infoJudgeTitle")} ${layerBadges("judgement")}</h2><p>${judge}</p></div>`,
     `<div><h2>${L("infoNotTitle")}</h2><p>${L("infoNotBody", { cap })}</p></div>`,
-    `<div><h2>${L("infoLayersTitle")}</h2><p>${pair(layersBody("en"), layersBody("uk"))}</p></div>`,
+    `<div><h2>${L("infoLayersTitle")}</h2><p>${pair(...LANGS.map(layersBody))}</p></div>`,
     "</div></section>",
   ];
 }
@@ -705,23 +708,24 @@ function infoPanel(cap, judgements) {
 /** Small tags naming the layer(s) a section or number belongs to. */
 export function layerBadges(...layers) {
   return `<span class="lyrs">${layers
-    .map((layer) => `<span class="lyr ${layer}" ${attrPair("title", LAYER_COPY[layer].what.en, LAYER_COPY[layer].what.uk)}>${pair(esc(LAYER_COPY[layer].label.en), esc(LAYER_COPY[layer].label.uk))}</span>`)
+    .map((layer) => `<span class="lyr ${layer}" ${attrPair("title", ...LANGS.map((l) => LAYER_COPY[layer].what[l]))}>${pair(...LANGS.map((l) => esc(LAYER_COPY[layer].label[l])))}</span>`)
     .join("")}</span>`;
 }
 
 /** An attribute in both languages from two plain strings. */
-function attrPair(name, en, uk) {
-  return `${name}="${esc(en)}" data-en-${name}="${esc(en)}" data-uk-${name}="${esc(uk)}" data-i18n`;
+function attrPair(name, en, uk, pl) {
+  if (pl === undefined) throw new Error("attrPair() needs the Polish string too");
+  return `${name}="${esc(en)}" data-en-${name}="${esc(en)}" data-uk-${name}="${esc(uk)}" data-pl-${name}="${esc(pl)}" data-i18n`;
 }
 
 /** The "?" toggle for one metric: formula, unit, threshold, known limits, from metrics.mjs. */
 export function metricHelp(id) {
   const m = METRICS[id];
   if (!m) throw new Error(`no metric ${id}`);
-  const row = (key, text) => (text ? `<dt>${L(key)}</dt><dd>${pair(esc(text.en), esc(text.uk))}</dd>` : "");
+  const row = (key, text) => (text ? `<dt>${L(key)}</dt><dd>${pair(...LANGS.map((l) => esc(text[l])))}</dd>` : "");
   return (
     `<details class="mh" data-metric="${esc(id)}"><summary ${attr("aria-label", "helpAria")} ${attr("title", "helpAria")}>?</summary>` +
-    `<span class="mh-body"><span class="mh-t">${pair(esc(m.label.en), esc(m.label.uk))} ${layerBadges(m.layer)}</span>` +
+    `<span class="mh-body"><span class="mh-t">${pair(...LANGS.map((l) => esc(m.label[l])))} ${layerBadges(m.layer)}</span>` +
     `<dl>${row("helpFormula", m.formula)}${row("helpUnit", m.unit)}${row("helpThreshold", m.threshold)}${row("helpLimits", m.limits)}</dl></span></details>`
   );
 }
@@ -754,7 +758,8 @@ function waterfallBlock(losses) {
   const height = rows.length * WF_ROW;
   const ariaEn = tr("wfAria", "en", { raw: fmt(w.raw), removed: fmt(w.removed), kept: fmt(w.kept), unique: fmt(w.inPassagesUnique), notIn: fmt(w.notInPassages), pastCap: fmt(w.pastCap) });
   const ariaUk = tr("wfAria", "uk", { raw: fmt(w.raw), removed: fmt(w.removed), kept: fmt(w.kept), unique: fmt(w.inPassagesUnique), notIn: fmt(w.notInPassages), pastCap: fmt(w.pastCap) });
-  const svg = [`<svg class="wf" width="100%" height="${height}" role="img" ${attrPair("aria-label", ariaEn, ariaUk)}>`];
+  const ariaPl = tr("wfAria", "pl", { raw: fmt(w.raw), removed: fmt(w.removed), kept: fmt(w.kept), unique: fmt(w.inPassagesUnique), notIn: fmt(w.notInPassages), pastCap: fmt(w.pastCap) });
+  const svg = [`<svg class="wf" width="100%" height="${height}" role="img" ${attrPair("aria-label", ariaEn, ariaUk, ariaPl)}>`];
   // Guides: where "kept" ends in the raw text, and where the passages end in the kept text.
   svg.push(`<line class="guide" x1="${x(w.kept)}" x2="${x(w.kept)}" y1="22" y2="${2 * WF_ROW + 38}"/>`);
   if (w.inPassagesUnique + w.notInPassages > 0) {
@@ -766,9 +771,10 @@ function waterfallBlock(losses) {
     const share = i <= 2 ? pct(r.value / raw) : pct(w.kept ? r.value / w.kept : 0);
     const titleEn = `${tr(r.key, "en")}: ${fmt(r.value)} · ${tr(i <= 2 ? "wfOfRaw" : "wfOfKept", "en", { p: share })}`;
     const titleUk = `${tr(r.key, "uk")}: ${fmt(r.value)} · ${tr(i <= 2 ? "wfOfRaw" : "wfOfKept", "uk", { p: share })}`;
+    const titlePl = `${tr(r.key, "pl")}: ${fmt(r.value)} · ${tr(i <= 2 ? "wfOfRaw" : "wfOfKept", "pl", { p: share })}`;
     svg.push(`<g>`);
-    svg.push(`<title>${esc(titleEn)} / ${esc(titleUk)}</title>`);
-    svg.push(`<text class="lab l-en" x="0" y="${top + 15}">${esc(tr(r.key, "en"))}</text><text class="lab l-uk" x="0" y="${top + 15}">${esc(tr(r.key, "uk"))}</text>`);
+    svg.push(`<title>${esc(titleEn)} / ${esc(titleUk)} / ${esc(titlePl)}</title>`);
+    svg.push(`<text class="lab l-en" x="0" y="${top + 15}">${esc(tr(r.key, "en"))}</text><text class="lab l-uk" x="0" y="${top + 15}">${esc(tr(r.key, "uk"))}</text><text class="lab l-pl" x="0" y="${top + 15}">${esc(tr(r.key, "pl"))}</text>`);
     svg.push(`<text class="val" x="100%" y="${top + 15}" text-anchor="end">${fmt(r.value)}</text>`);
     svg.push(`<rect class="track" x="0" y="${top + 22}" width="100%" height="16" rx="4"/>`);
     // A zero stage is a line at its position, never an empty space.
@@ -960,10 +966,11 @@ function findingCard(finding, anchor) {
   const ev = safeEvidence(finding.evidence);
   const en = checkCopy(finding.code, "en", ev);
   const uk = checkCopy(finding.code, "uk", ev);
+  const pl = checkCopy(finding.code, "pl", ev);
   const out = [];
   out.push(`<li class="finding ${finding.severity}">`);
-  out.push(`<div class="fhead"><span class="pill sev-${finding.severity}">${SV[finding.severity]}${L(SEV_KEY[finding.severity])}</span><h3>${pair(en.title, uk.title)}</h3><span class="code">${esc(finding.code)}</span></div>`);
-  if (en.what) out.push(`<p>${pair(en.what, uk.what)}</p>`);
+  out.push(`<div class="fhead"><span class="pill sev-${finding.severity}">${SV[finding.severity]}${L(SEV_KEY[finding.severity])}</span><h3>${pair(en.title, uk.title, pl.title)}</h3><span class="code">${esc(finding.code)}</span></div>`);
+  if (en.what) out.push(`<p>${pair(en.what, uk.what, pl.what)}</p>`);
   const samples = finding.evidence?.samples;
   if (Array.isArray(samples) && samples.length) {
     out.push('<ul class="samples">');
@@ -980,7 +987,7 @@ function findingCard(finding, anchor) {
   }
   const sampled = Array.isArray(samples) ? new Set(samples.map((s) => s.passage)) : new Set();
   if (finding.passages.length && finding.passages.some((p) => !sampled.has(p)) && !samples?.some((s) => s.phrase)) out.push(refs(finding.passages, anchor));
-  out.push(`<p class="tell"><b>${L("whatToDo")}:</b> ${pair(en.tell, uk.tell)}</p>`);
+  out.push(`<p class="tell"><b>${L("whatToDo")}:</b> ${pair(en.tell, uk.tell, pl.tell)}</p>`);
   out.push("</li>");
   return out.join("");
 }
@@ -1015,7 +1022,7 @@ function planPanel(plan, anchorFor, multi) {
     const anchor = anchorFor(item.page);
     out.push('<li class="item">');
     const known = item.check && CHECK_COPY[item.check];
-    const code = item.check ? `<span class="pill">${known ? pair(checkCopy(item.check, "en").title, checkCopy(item.check, "uk").title) : esc(item.check)}</span>` : "";
+    const code = item.check ? `<span class="pill">${known ? pair(...LANGS.map((l) => checkCopy(item.check, l).title)) : esc(item.check)}</span>` : "";
     const where = multi ? `<span class="pill">${L("pageN", { n: item.page })}</span>` : "";
     out.push(`<div class="ihead"><span class="prio">${item.priority}</span>${where}${code}${item.passages.map((i) => `<a class="mono small" href="#${anchor(i)}">#${i}</a>`).join(" ")}</div>`);
     out.push(`<dl><dt>${L("problem")}</dt><dd>${esc(item.problem)}</dd><dt>${L("fix")}</dt><dd>${esc(item.fix)}</dd></dl>`);
@@ -1178,14 +1185,18 @@ function stripBlock(reading, lens, anchor, compact = false) {
     const label = oneLine(displayLabel(lens.groups[c.group]));
     const roleEn = c.contentRole !== "main" ? ` · ${tr(c.contentRole === "related" ? "roleRelated" : "roleUtility", "en")}` : "";
     const roleUk = c.contentRole !== "main" ? ` · ${tr(c.contentRole === "related" ? "roleRelated" : "roleUtility", "uk")}` : "";
+    const rolePl = c.contentRole !== "main" ? ` · ${tr(c.contentRole === "related" ? "roleRelated" : "roleUtility", "pl")}` : "";
     const headEn = c.heading ? oneLine(c.heading) : tr("noHeading", "en");
     const headUk = c.heading ? oneLine(c.heading) : tr("noHeading", "uk");
+    const headPl = c.heading ? oneLine(c.heading) : tr("noHeading", "pl");
     const tipEn = tr("cellTip", "en", { i: c.chunkIndex, heading: esc(headEn), g: c.group, label: esc(label), chars: c.charCount, role: roleEn });
     const tipUk = tr("cellTip", "uk", { i: c.chunkIndex, heading: esc(headUk), g: c.group, label: esc(label), chars: c.charCount, role: roleUk });
+    const tipPl = tr("cellTip", "pl", { i: c.chunkIndex, heading: esc(headPl), g: c.group, label: esc(label), chars: c.charCount, role: rolePl });
     const ariaEn = tr("cellAria", "en", { i: c.chunkIndex, heading: headEn, g: c.group, label, chars: c.charCount, role: roleEn });
     const ariaUk = tr("cellAria", "uk", { i: c.chunkIndex, heading: headUk, g: c.group, label, chars: c.charCount, role: roleUk });
+    const ariaPl = tr("cellAria", "pl", { i: c.chunkIndex, heading: headPl, g: c.group, label, chars: c.charCount, role: rolePl });
     out.push(
-      `<a role="listitem" class="cell${c.contentRole !== "main" ? " side" : ""}" style="${colour(c.group)}" href="#${anchor(c.chunkIndex)}" data-tip="${esc(tipEn)}" data-en-data-tip="${esc(tipEn)}" data-uk-data-tip="${esc(tipUk)}" aria-label="${esc(ariaEn)}" data-en-aria-label="${esc(ariaEn)}" data-uk-aria-label="${esc(ariaUk)}" title="${esc(ariaEn)}" data-en-title="${esc(ariaEn)}" data-uk-title="${esc(ariaUk)}" data-i18n></a>`
+      `<a role="listitem" class="cell${c.contentRole !== "main" ? " side" : ""}" style="${colour(c.group)}" href="#${anchor(c.chunkIndex)}" data-tip="${esc(tipEn)}" data-en-data-tip="${esc(tipEn)}" data-uk-data-tip="${esc(tipUk)}" data-pl-data-tip="${esc(tipPl)}" aria-label="${esc(ariaEn)}" data-en-aria-label="${esc(ariaEn)}" data-uk-aria-label="${esc(ariaUk)}" data-pl-aria-label="${esc(ariaPl)}" title="${esc(ariaEn)}" data-en-title="${esc(ariaEn)}" data-uk-title="${esc(ariaUk)}" data-pl-title="${esc(ariaPl)}" data-i18n></a>`
     );
   }
   for (let i = lens.chunks.length; i < cap; i++) out.push('<span class="slot" aria-hidden="true"></span>');
@@ -1395,6 +1406,13 @@ export function renderHtml(reading, lens, extras = {}) {
   out.push(...vocabularyPanel(lens, groupCount));
 
   out.push(...factsPanelSingle(extras.facts, 1, anchor));
+
+  // ── 2.111: how generated the text sounds, the last open panel, above the folded losses
+  if (extras.generated) {
+    const j = extras.generated.judgement;
+    const by = j ? [j.model ? esc(j.model) : null, j.agent ? esc(j.agent) : null].filter(Boolean).join(" · ") || null : null;
+    out.push(renderGeneratedHtml(extras.generated, { tag: (layers) => layerBadges(...layers), help: metricHelp, anchor: (i) => `#${anchor(i)}`, by }));
+  }
 
   // ── 2.102: where the text goes; 2.103: last, folded
   out.push(...lossesPanel(reading));

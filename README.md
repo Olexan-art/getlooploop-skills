@@ -1,29 +1,30 @@
-English · [Українська](README.uk.md)
+English · [Українська](README.uk.md) · [Polski](README.pl.md)
 
 # GetLoopLoop skills
 
-Vectorscope skill **2.110**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
+Vectorscope skill **2.111**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
 
 Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
 | Skill | What it does |
 |---|---|
-| [`vectorscope`](skills/vectorscope/SKILL.md) | Shows how a retrieval system reads public pages: the product's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers, automatic structure checks, and the agent's grouping, query test and rewrite plan. Compares 2 to 5 pages. |
+| [`vectorscope`](skills/vectorscope/SKILL.md) | Shows how a retrieval system reads public pages: the product's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers, automatic structure checks, how generated the text sounds, and the agent's grouping, query test and rewrite plan. Compares 2 to 5 pages. The report is in English, Ukrainian and Polish. |
 
 ## In plain words
 
 Before an AI assistant can quote your page, a machine has to read it, and it does not read it the way you do. It fetches the page once, throws away the menus, buttons and footers, and cuts the rest into passages of about 2,000 characters. It keeps at most 26. Each passage is later found and quoted **on its own**, without the page around it.
 
-This skill runs those same steps on any public page and tells you what to fix: whether AI crawlers are even allowed in, which passages lost their question or their subject, what fell past the 26-passage limit, which typical questions the page answers and which it does not, and how to rewrite the weakest passages so each one stands on its own.
+This skill runs those same steps on any public page and tells you what to fix: whether AI crawlers are even allowed in, which passages lost their question or their subject, what fell past the 26-passage limit, which typical questions the page answers and which it does not, how templated the text reads and which passages say nothing a competitor's page could not, and how to rewrite the weakest passages so each one stands on its own.
 
-It does not rank your page, give it a score, detect AI-written text, or predict what any assistant will say about you.
+It does not rank your page, decide who wrote it, or predict what any assistant will say about you.
 
 ## Features
 
 - **The machine's reading:** the exact fetch, extraction, chunking and 26-passage cap of the live tool; how many words survive, how many passages they become, what falls past the cap.
 - **Measured, derived, judgement:** every section and number carries a tag saying whether the parser measured it, a fixed formula derived it, or the agent judged it; the export splits into `measured` and `judgement` the same way.
+- **How generated the text sounds** (2.111, the last open section, above *Where the text goes*): the Pattern score of the GetLoopLoop [PatternScope](https://www.getlooploop.com/patternscope) over the page's text (stock phrases, repeated sentence shapes, sentences that open the same way, claims with no number or name; the web tool's rules, with two adjustments for a whole page rather than a pasted text, for English, Ukrainian and Spanish), the words language models overuse counted beside it, and the agent's swap test: which passages would fit a competitor's page with only the name changed. Passage by passage, with the findings behind every point; where the script and the agent disagree, both are shown. Not an authorship detector, and the block says so.
 - **Where the text goes** (at the end of the report, folded under a line that gives the characters past the cap): a character waterfall from the raw HTML to the passages (removed by the cleaner, kept, in passages without double-counting the overlap, past the cap), a table of what the cleaner removed and why (the element, its CSS path, its characters, how its text begins), and a map of how much of each section reached a passage.
-- **Every number explained:** a "?" beside each number opens its formula, unit, threshold and known limits, in English or Ukrainian; the Markdown ends with the same list and the export carries it as a `metrics` dictionary.
+- **Every number explained:** a "?" beside each number opens its formula, unit, threshold and known limits, in English, Ukrainian or Polish; the Markdown ends with the same list and the export carries it as a `metrics` dictionary.
 - **An honest past-the-cap count:** characters past the cap are counted from the unique text in passages, so a page whose cap cut a tail no longer reads 0; the 2.101 number stays in the export as `charsUnread`.
 - **AI crawlers first:** robots.txt checked for GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, Google-Extended, Googlebot, Bingbot and CCBot, with RFC 9309 matching. If the crawlers that answer people are blocked, the report says so before anything else.
 - **Automatic checks**, each with a code, the passages it rests on and the evidence: FAQ answers that lost their questions, one heading carrying too much of the page, passages cut mid-sentence, navigation inside the content, thin sections, truncated teasers, the same claim in every section, canonical, JSON-LD and meta description.
@@ -35,11 +36,19 @@ It does not rank your page, give it a score, detect AI-written text, or predict 
 - **Compare 2 to 5 pages** on one shared topic dictionary: a topic × page table, topic gaps, fact gaps, and who wins each query.
 - **Before and after:** diff a page against an earlier reading.
 - **Optional JavaScript render** with a local Chrome or Chromium, to see how much of the page only exists after scripts run.
-- **One self-contained HTML report** with no network requests, readable on a phone; plus Markdown and JSON.
+- **One self-contained HTML report** with no network requests, readable on a phone, its interface in English, Ukrainian or Polish; plus Markdown and JSON.
 
 Why the groups are "the agent's reading": the live tool groups passages by comparing their embeddings. This skill makes no model or embedding calls, so the agent that runs it reads the passages and groups them by subject instead. The fetching, the cutting, the cap and the checks are deterministic; the grouping, the query verdicts and the plan are a judgement, and the scripts validate each of them (every quote must be verbatim from its passage). For the embedding-based reading with the map, use the free tool at https://www.getlooploop.com/vectorscope.
 
 ## What you get
+
+How generated the text sounds: the Pattern score, the marker words, the agent's swap test, the two strips side by side and every passage with its evidence:
+
+![How generated the text sounds](docs/report-generated.png)
+
+The same block with the interface in Polish:
+
+![How generated the text sounds, in Polish](docs/report-generated-pl.png)
 
 The tags beside every section and number, and the info panel that explains them:
 
@@ -95,10 +104,10 @@ The footer, and the report on a phone:
 
 ![Footer](docs/report-footer.png)
 
-Three real runs are in [`examples/`](examples), each with the files the agent wrote in [`examples/judgement/`](examples/judgement):
+Three real runs are in [`examples/`](examples), each with the files the agent wrote in [`examples/judgement/`](examples/judgement). The two single-page reports were rendered again with 2.111 on 18 October; the comparison is the 2.110 report, because web.dev now declares a Russian version and a comparison needs two readable pages:
 
-- the Vectorscope page itself, which needs 17 passages and loses nothing to the cap ([HTML](examples/getlooploop-vectorscope.html), [Markdown](examples/getlooploop-vectorscope.md), [JSON](examples/getlooploop-vectorscope.json));
-- the Wikipedia article on large language models, which fills every slot and leaves 55,001 characters past the cap, six sections reaching no passage at all ([HTML](examples/wikipedia-llm.html), [Markdown](examples/wikipedia-llm.md), [JSON](examples/wikipedia-llm.json));
+- the Vectorscope page itself, which needs 17 passages and loses nothing to the cap; its Pattern score is 1 of 100 with no marker words, and the swap test finds 4 of its 17 passages generic ([HTML](examples/getlooploop-vectorscope.html), [Markdown](examples/getlooploop-vectorscope.md), [JSON](examples/getlooploop-vectorscope.json));
+- the Wikipedia article on large language models, which fills every slot and leaves 55,001 characters past the cap, six sections reaching no passage at all; its Pattern score is 10 of 100, almost all of it citation formats in the references, and the swap test finds 3 of 26 passages generic ([HTML](examples/wikipedia-llm.html), [Markdown](examples/wikipedia-llm.md), [JSON](examples/wikipedia-llm.json));
 - MDN's HTTP caching guide against web.dev's HTTP cache article; MDN fills every slot and, since 2.103, loses nothing past the cap: its h3 "Validation" no longer cuts "Common caching patterns", and the slot that cut used now holds the page's last section ([HTML](examples/http-caching-compare.html), [Markdown](examples/http-caching-compare.md), [JSON](examples/http-caching-compare.json)).
 
 ## Install
@@ -188,8 +197,8 @@ Sources: [Claude Code skills](https://code.claude.com/docs/en/skills) · [Codex 
 node dist/read.mjs https://example.com/page --out reading.json   # fetch → extract → chunk → cap, robots.txt, checks
 # the agent reads the passages and writes groups.json
 node dist/lens.mjs reading.json groups.json --html report.html   # labels, phrases, all checks
-# the agent writes queries.json and plan.json
-node dist/lens.mjs reading.json groups.json --queries queries.json --plan plan.json --html report.html --md report.md --json export.json
+# the agent writes queries.json, style.json and plan.json
+node dist/lens.mjs reading.json groups.json --queries queries.json --style style.json --plan plan.json --html report.html --md report.md --json export.json
 
 node dist/read.mjs <url1> <url2> --out-dir readings              # compare; then topics.json, groups-<n>.json, facts.json, queries.json
 node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html

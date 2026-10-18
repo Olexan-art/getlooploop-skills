@@ -1,6 +1,6 @@
 {
   "schema": "getlooploop/vectorscope-reading@1",
-  "generatedAt": "2026-10-17T19:27:16.526Z",
+  "generatedAt": "2026-10-18T09:35:43.176Z",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -658,7 +658,7 @@
       "textHead": "One page on its own. Whether that page answers the questions people actually ask an assistant, how it stands against a rival page on the same subject, and which topics your site has no page for at all — those need a corpus of the whole site"
     }
   ],
-  "skillVersion": "2.110",
+  "skillVersion": "2.111",
   "layers": {
     "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, response headers, accessibility structure, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
     "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
@@ -2461,7 +2461,115 @@
           ]
         }
       }
-    ]
+    ],
+    "style": {
+      "agent": "Claude Code",
+      "model": "claude-opus-5-5",
+      "passages": [
+        {
+          "passage": 0,
+          "verdict": "specific",
+          "evidence": "what falls past the 26-passage cap",
+          "why": "names the tool's own cap"
+        },
+        {
+          "passage": 1,
+          "verdict": "specific",
+          "evidence": "cut at h2, then 2,000-char windows",
+          "why": "the tool's exact cut, as interface copy"
+        },
+        {
+          "passage": 2,
+          "verdict": "generic",
+          "evidence": "The reading shows which passages of your page a retriever can receive",
+          "why": "any chunking visualiser could say this"
+        },
+        {
+          "passage": 3,
+          "verdict": "specific",
+          "evidence": "This reading takes at most 26 passages from a page.",
+          "why": "a number a reader can check"
+        },
+        {
+          "passage": 4,
+          "verdict": "generic",
+          "evidence": "This does not establish that any assistant has indexed the page.",
+          "why": "a disclaimer any such tool could carry"
+        },
+        {
+          "passage": 5,
+          "verdict": "specific",
+          "evidence": "Vectorscope applies the same cap the product applies and names the passages that fell outside it.",
+          "why": null
+        },
+        {
+          "passage": 6,
+          "verdict": "specific",
+          "evidence": "change the heading, run the page again, ask the same question",
+          "why": "a concrete test procedure"
+        },
+        {
+          "passage": 7,
+          "verdict": "specific",
+          "evidence": "a window of 2,000 characters with 200 characters of overlap",
+          "why": null
+        },
+        {
+          "passage": 8,
+          "verdict": "specific",
+          "evidence": "a noindex directive is reported rather than ignored",
+          "why": null
+        },
+        {
+          "passage": 9,
+          "verdict": "specific",
+          "evidence": "point at any URL in about twenty seconds",
+          "why": null
+        },
+        {
+          "passage": 10,
+          "verdict": "generic",
+          "evidence": "Vectorscope is for anyone whose page has to be read in passages",
+          "why": "an audience list a competitor's page could carry"
+        },
+        {
+          "passage": 11,
+          "verdict": "specific",
+          "evidence": "On this page the meaning-based step is the grouping of passages that are already cut, not the cut itself.",
+          "why": "definitions tied to this tool"
+        },
+        {
+          "passage": 12,
+          "verdict": "generic",
+          "evidence": "Longer answers to the questions this page can only summarise.",
+          "why": "a link list with no fact of its own"
+        },
+        {
+          "passage": 13,
+          "verdict": "specific",
+          "evidence": "the fetched page itself is not retained after the reading is produced",
+          "why": null
+        },
+        {
+          "passage": 14,
+          "verdict": "specific",
+          "evidence": "with a rate limit rather than a paywall",
+          "why": null
+        },
+        {
+          "passage": 15,
+          "verdict": "specific",
+          "evidence": "first without naming a platform, then naming all twelve",
+          "why": null
+        },
+        {
+          "passage": 16,
+          "verdict": "specific",
+          "evidence": "those need a corpus of the whole site, measured over time",
+          "why": null
+        }
+      ]
+    }
   },
   "metrics": {
     "words": {
@@ -2711,6 +2819,38 @@
       "unit": "passages",
       "threshold": null,
       "limits": "A passage that moved and changed heading counts as removed plus added."
+    },
+    "pattern_score": {
+      "layer": "derived",
+      "label": "Pattern score",
+      "formula": "PatternScope's four detector families (det-1) over the page's kept text, without the title, h1 and description intro: stock phrases; sentences sharing one shape; three or more sentences opening the same way; an evaluative word on an abstract noun with no number or name in the sentence. A finding scores 1, 3 or 6 by severity, one identical finding at most 4 times; points per 1,000 words over 250, capped at 100 (score-1). A passage's own score is the same formula over its text, from 60 words.",
+      "unit": "0–100",
+      "threshold": "0–29 low · 30–59 moderate · 60+ high",
+      "limits": "Calibrated on 60–300-word texts; a long page is an extrapolation. Lexicons for English, Ukrainian and Spanish only: any other language gets no score, not a zero. Signals of worn writing, not of who wrote it. Two changes from the web tool, for whole pages rather than pasted text: a sentence shape needs at least one function word (a reference list is not a template), and a few words with letters such as ł or ß do not make an English page another language."
+    },
+    "marker_words": {
+      "layer": "derived",
+      "label": "Marker words",
+      "formula": "Occurrences of words from a fixed per-language list (seamless, unlock, delve; «безшовний», «на новий рівень»; «sin fisuras»…) per 1,000 words of the same text as the Pattern score. The English core follows published excess-vocabulary studies (Kobak et al., 2024); the Ukrainian and Spanish lists are written natively.",
+      "unit": "hits per 1,000 words",
+      "threshold": "0–9 rare · 10–24 noticeable · 25+ frequent; not yet calibrated",
+      "limits": "Not part of the Pattern score, so the score stays PatternScope's. Marketing copy written by people uses these words too."
+    },
+    "generic_share": {
+      "layer": "judgement",
+      "label": "Generic passages",
+      "formula": "The agent reads every passage and marks it specific or generic by one question: would it fit a competitor's page with only the brand name changed? Each verdict carries a verbatim quote the script checks. Share = characters of generic passages / characters of all passages.",
+      "unit": "% of passage characters",
+      "threshold": null,
+      "limits": "A model's reading, not a measurement: another model may draw the line elsewhere. Where it disagrees with the script, both are shown, never averaged."
+    },
+    "short_passages": {
+      "layer": "measured",
+      "label": "Passages too short for a score",
+      "formula": "Passages with fewer than 60 words, PatternScope's floor.",
+      "unit": "passages",
+      "threshold": null,
+      "limits": "Their text still counts in the page score; only a score of their own is withheld, because a density over a few dozen words swings on a comma."
     }
   },
   "checks": [
@@ -3197,5 +3337,354 @@
       }
     }
   ],
-  "diff": null
+  "diff": null,
+  "generatedText": {
+    "versions": {
+      "detectors": "det-1",
+      "score": "score-1",
+      "markers": "markers-1"
+    },
+    "analysed": true,
+    "reason": null,
+    "language": "en",
+    "patternScore": {
+      "value": 1,
+      "band": "low",
+      "points": 6,
+      "perThousand": 2.51,
+      "words": 2387
+    },
+    "markerWords": {
+      "hits": 0,
+      "perThousand": 0,
+      "band": "rare",
+      "terms": []
+    },
+    "families": [
+      {
+        "family": "repetition",
+        "findings": 2,
+        "points": 6,
+        "chips": [
+          {
+            "text": "\" contributes the question itself.",
+            "count": 1,
+            "passages": [
+              7
+            ]
+          },
+          {
+            "text": "Not an AI detector.",
+            "count": 1,
+            "passages": [
+              15
+            ]
+          }
+        ],
+        "more": 0
+      }
+    ],
+    "shortPassages": [
+      0,
+      2,
+      3,
+      4,
+      14,
+      16
+    ],
+    "judgement": {
+      "agent": "Claude Code",
+      "model": "claude-opus-5-5",
+      "generic": {
+        "passages": 4,
+        "of": 17,
+        "chars": 1832,
+        "totalChars": 14211,
+        "share": 0.12891422137780592
+      }
+    },
+    "disagreements": [
+      {
+        "passage": 10,
+        "kind": "script_missed"
+      },
+      {
+        "passage": 12,
+        "kind": "script_missed"
+      }
+    ],
+    "passages": [
+      {
+        "index": 0,
+        "words": 45,
+        "chars": 286,
+        "score": null,
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "what falls past the 26-passage cap",
+        "why": "names the tool's own cap",
+        "disagree": null
+      },
+      {
+        "index": 1,
+        "words": 143,
+        "chars": 804,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "cut at h2, then 2,000-char windows",
+        "why": "the tool's exact cut, as interface copy",
+        "disagree": null
+      },
+      {
+        "index": 2,
+        "words": 46,
+        "chars": 259,
+        "score": null,
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "generic",
+        "evidence": "The reading shows which passages of your page a retriever can receive",
+        "why": "any chunking visualiser could say this",
+        "disagree": null
+      },
+      {
+        "index": 3,
+        "words": 29,
+        "chars": 139,
+        "score": null,
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "This reading takes at most 26 passages from a page.",
+        "why": "a number a reader can check",
+        "disagree": null
+      },
+      {
+        "index": 4,
+        "words": 41,
+        "chars": 246,
+        "score": null,
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "generic",
+        "evidence": "This does not establish that any assistant has indexed the page.",
+        "why": "a disclaimer any such tool could carry",
+        "disagree": null
+      },
+      {
+        "index": 5,
+        "words": 355,
+        "chars": 1995,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "Vectorscope applies the same cap the product applies and names the passages that fell outside it.",
+        "why": null,
+        "disagree": null
+      },
+      {
+        "index": 6,
+        "words": 84,
+        "chars": 455,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "change the heading, run the page again, ask the same question",
+        "why": "a concrete test procedure",
+        "disagree": null
+      },
+      {
+        "index": 7,
+        "words": 343,
+        "chars": 1994,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "a window of 2,000 characters with 200 characters of overlap",
+        "why": null,
+        "disagree": null
+      },
+      {
+        "index": 8,
+        "words": 204,
+        "chars": 1126,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "a noindex directive is reported rather than ignored",
+        "why": null,
+        "disagree": null
+      },
+      {
+        "index": 9,
+        "words": 154,
+        "chars": 863,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "point at any URL in about twenty seconds",
+        "why": null,
+        "disagree": null
+      },
+      {
+        "index": 10,
+        "words": 154,
+        "chars": 890,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "generic",
+        "evidence": "Vectorscope is for anyone whose page has to be read in passages",
+        "why": "an audience list a competitor's page could carry",
+        "disagree": "script_missed"
+      },
+      {
+        "index": 11,
+        "words": 241,
+        "chars": 1400,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "On this page the meaning-based step is the grouping of passages that are already cut, not the cut itself.",
+        "why": "definitions tied to this tool",
+        "disagree": null
+      },
+      {
+        "index": 12,
+        "words": 71,
+        "chars": 437,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "generic",
+        "evidence": "Longer answers to the questions this page can only summarise.",
+        "why": "a link list with no fact of its own",
+        "disagree": "script_missed"
+      },
+      {
+        "index": 13,
+        "words": 355,
+        "chars": 1992,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "the fetched page itself is not retained after the reading is produced",
+        "why": null,
+        "disagree": null
+      },
+      {
+        "index": 14,
+        "words": 57,
+        "chars": 300,
+        "score": null,
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "with a rate limit rather than a paywall",
+        "why": null,
+        "disagree": null
+      },
+      {
+        "index": 15,
+        "words": 125,
+        "chars": 746,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "first without naming a platform, then naming all twelve",
+        "why": null,
+        "disagree": null
+      },
+      {
+        "index": 16,
+        "words": 53,
+        "chars": 279,
+        "score": null,
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "those need a corpus of the whole site, measured over time",
+        "why": null,
+        "disagree": null
+      }
+    ]
+  }
 }

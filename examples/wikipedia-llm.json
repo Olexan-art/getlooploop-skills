@@ -1,6 +1,6 @@
 {
   "schema": "getlooploop/vectorscope-reading@1",
-  "generatedAt": "2026-10-17T19:27:16.924Z",
+  "generatedAt": "2026-10-18T09:35:43.843Z",
   "producedBy": {
     "tool": "vectorscope-skill (local, no embeddings)",
     "what": "One page, put through the GetLoopLoop Vectorscope's fetch, extract and chunk steps locally, with the product's 26-passage cap, and no embedding step. Grouped by the agent's reading, not by embeddings; groups are a judgement, chunking and the 26-passage cap are the product's exact rules.",
@@ -730,7 +730,7 @@
       "textHead": "to 43% of its size, beating PNG with 58%.[116] Benchmarks [ edit ] Main article: Language model benchmark Benchmarks are used to evaluate LLM performance on specific tasks. Tests evaluate capabilities such as general knowledge, bias, common"
     }
   ],
-  "skillVersion": "2.110",
+  "skillVersion": "2.111",
   "layers": {
     "measured": "measured: what the scripts saw (page, retrieval counts, passages, losses, robots.txt, markup, response headers, accessibility structure, render) and, under measured.derived, what fixed formulas computed from it (characters past the cap, vocabulary counts, check verdicts). Identical whichever model runs the skill; where a derived value rests on the agent's groups (a vocabulary term's groups, repeated_claim), the metrics dictionary says so.",
     "judgement": "judgement: the agent's reading: who did it (agent, model), the groups and their labels, which passage is in which group, repeats, the rewrite plan, the query test and the facts. Validated by the scripts (shape, verbatim quotes), but another model may judge differently."
@@ -939,8 +939,8 @@
       "unit": "characters, whitespace runs folded to one space",
       "consistent": true,
       "waterfall": {
-        "raw": 139071,
-        "removed": 44809,
+        "raw": 139066,
+        "removed": 44804,
         "kept": 94262,
         "inPassagesUnique": 39111,
         "notInPassages": 150,
@@ -961,12 +961,12 @@
       "removals": {
         "elementsMatched": 340,
         "elementsWithText": 41,
-        "chars": 44809,
+        "chars": 44804,
         "byReason": [
           {
             "reason": "script_style",
             "elements": 14,
-            "chars": 28933
+            "chars": 28928
           },
           {
             "reason": "head_meta",
@@ -1017,8 +1017,8 @@
             "classes": [],
             "element": "script",
             "path": "script",
-            "chars": 8187,
-            "sample": "(RLQ=window.RLQ||[]).push(function(){mw.config.set({\"wgHostname\":\"mw-web.eqiad.c"
+            "chars": 8182,
+            "sample": "(RLQ=window.RLQ||[]).push(function(){mw.config.set({\"wgHostname\":\"mw-web.eqiad.m"
           },
           {
             "reason": "script_style",
@@ -1940,8 +1940,53 @@
       },
       "lang": "en"
     },
-    "headers": null,
-    "accessibility": null,
+    "headers": {
+      "x-robots-tag": null,
+      "cache-control": "private, s-maxage=0, max-age=0, must-revalidate, no-transform",
+      "content-type": "text/html; charset=UTF-8",
+      "content-language": "en"
+    },
+    "accessibility": {
+      "images": {
+        "total": 48,
+        "missingAlt": 8,
+        "emptyAlt": 4,
+        "filenameAlt": 0,
+        "samples": [
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/8/81/The_number_of_publications_about_Large_Language_Models_by_year.png/250px-The_number_of_publications_about_Large_Language_Models_by_year.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg/250px-Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg/250px-Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/The-Transformer-model-architecture.png/330px-The-Transformer-model-architecture.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg/500px-Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Multiple_attention_heads.png/330px-Multiple_attention_heads.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          }
+        ]
+      },
+      "headings": {
+        "total": 61,
+        "h1Count": 1,
+        "skippedCount": 0,
+        "skipped": [],
+        "firstLevel": 2
+      }
+    },
     "render": null,
     "derived": {
       "charsPastCap": 55001,
@@ -2247,6 +2292,41 @@
           ],
           "evidence": {},
           "message": "The intro passage (#0) has only the title and h1."
+        },
+        {
+          "code": "img_missing_alt",
+          "severity": "low",
+          "passages": [],
+          "evidence": {
+            "count": 8,
+            "samples": [
+              {
+                "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/8/81/The_number_of_publications_about_Large_Language_Models_by_year.png/250px-The_number_of_publications_about_Large_Language_Models_by_year.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+                "reason": "missing"
+              },
+              {
+                "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg/250px-Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+                "reason": "missing"
+              },
+              {
+                "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg/250px-Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+                "reason": "missing"
+              },
+              {
+                "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/The-Transformer-model-architecture.png/330px-The-Transformer-model-architecture.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+                "reason": "missing"
+              },
+              {
+                "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg/500px-Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+                "reason": "missing"
+              },
+              {
+                "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Multiple_attention_heads.png/330px-Multiple_attention_heads.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+                "reason": "missing"
+              }
+            ]
+          },
+          "message": "8 image(s) have no alt attribute."
         }
       ]
     }
@@ -2637,7 +2717,169 @@
         }
       }
     ],
-    "facts": null
+    "facts": null,
+    "style": {
+      "agent": "Claude Code",
+      "model": "claude-opus-5-5",
+      "passages": [
+        {
+          "passage": 0,
+          "verdict": "generic",
+          "evidence": "Large language model - Wikipedia",
+          "why": "Only the page title; nothing here but the name."
+        },
+        {
+          "passage": 1,
+          "verdict": "generic",
+          "evidence": "A large language model (LLM) is an AI model (typically a neural network) trained on a vast amount of text for natural language processing tasks",
+          "why": "Standard definition and framing any article on LLMs opens with; no number, date or distinct claim."
+        },
+        {
+          "passage": 2,
+          "verdict": "specific",
+          "evidence": "In 2001, a smoothed n-gram model, such as those employing Kneser–Ney smoothing, trained on 300 million words, achieved state-of-the-art perplexity",
+          "why": "Dated milestones with a figure and a citation."
+        },
+        {
+          "passage": 3,
+          "verdict": "specific",
+          "evidence": "At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper \"Attention Is All You Need\".",
+          "why": "Named paper, venue and year."
+        },
+        {
+          "passage": 4,
+          "verdict": "specific",
+          "evidence": "In January 2025, DeepSeek released DeepSeek R1, a 671-billion-parameter open-weight model",
+          "why": "Dated release with a parameter count."
+        },
+        {
+          "passage": 5,
+          "verdict": "specific",
+          "evidence": "\"Ġ\" denotes a preceding whitespace in RoBERTa and GPT and \"##\" denotes continuation of a preceding word in BERT.",
+          "why": "Concrete token conventions and a worked BPE procedure."
+        },
+        {
+          "passage": 6,
+          "verdict": "specific",
+          "evidence": "A trained LLM can be used to clean datasets for training a further LLM.",
+          "why": "Cited claims about data cleaning and synthetic data."
+        },
+        {
+          "passage": 7,
+          "verdict": "specific",
+          "evidence": "the training of GPT-2 (i.e. a 1.5-billion-parameter model) in 2019 cost $50,000, while training of the PaLM (i.e. a 540-billion-parameter model) in 2022 cost $8 million",
+          "why": "Named models with years and training costs."
+        },
+        {
+          "passage": 8,
+          "verdict": "generic",
+          "evidence": "Hosted inference runs a language model on remote AI data centers and makes the output available to users over the Internet.",
+          "why": "Plain definitions of inference that any page could carry unchanged."
+        },
+        {
+          "passage": 9,
+          "verdict": "specific",
+          "evidence": "the small (i.e. 117M parameter sized) GPT-2 model has had twelve attention heads and a context window of only 1k tokens.",
+          "why": "Exact model dimensions with a citation."
+        },
+        {
+          "passage": 10,
+          "verdict": "specific",
+          "evidence": "One float16 has 16 bits, or 2 bytes, and so one billion parameters require 2 gigabytes.",
+          "why": "Concrete arithmetic plus dated parameter records."
+        },
+        {
+          "passage": 11,
+          "verdict": "specific",
+          "evidence": "Dynamic quantization allows for the use of a different quantization codebook per layer, either a lookup table of values or a linear mapping (scaling factor and bias)",
+          "why": "A concrete technical mechanism, not framing."
+        },
+        {
+          "passage": 12,
+          "verdict": "specific",
+          "evidence": "under a \"Instruction: [...], Input: [...], Output:\" format",
+          "why": "Dated findings and the exact prompt format used."
+        },
+        {
+          "passage": 13,
+          "verdict": "specific",
+          "evidence": "A program separate from the LLM watches the output stream of the LLM for a special tool-calling syntax.",
+          "why": "Describes the procedure behind RAG and tool calls."
+        },
+        {
+          "passage": 14,
+          "verdict": "specific",
+          "evidence": "In the DEPS (\"describe, explain, plan and select\") method, an LLM is first connected to the visual world via image descriptions.",
+          "why": "Named methods with cited procedures."
+        },
+        {
+          "passage": 15,
+          "verdict": "specific",
+          "evidence": "GPT-4o achieved 13% accuracy while o1 reached 83%.",
+          "why": "Benchmark figures with dates and model names."
+        },
+        {
+          "passage": 16,
+          "verdict": "specific",
+          "evidence": "the Flamingo model uses cross-attention layers to inject visual information into its pre-trained language model.",
+          "why": "Step-by-step construction of image tokens and named models."
+        },
+        {
+          "passage": 17,
+          "verdict": "specific",
+          "evidence": "Meta hosts ESM Atlas, a database of 772 million structures of metagenomic proteins predicted using ESMFold.",
+          "why": "Named system with a figure."
+        },
+        {
+          "passage": 18,
+          "verdict": "specific",
+          "evidence": "meaning that it costs 6 FLOPs per parameter to train on one token.",
+          "why": "Chinchilla scaling law with its fitted constants."
+        },
+        {
+          "passage": 19,
+          "verdict": "specific",
+          "evidence": "chain-of-thought prompting only improved the performance for models that had at least 62B parameters.",
+          "why": "Cited threshold and a named counter-argument."
+        },
+        {
+          "passage": 20,
+          "verdict": "specific",
+          "evidence": "plot is a straight line (before it hits the plateau at zero), which does not look like emergence.",
+          "why": "Specific mathematical cases of the emergence argument."
+        },
+        {
+          "passage": 21,
+          "verdict": "specific",
+          "evidence": "The resulting models were reverse-engineered, and it turned out they used discrete Fourier transform.",
+          "why": "A concrete research finding, plus a dated survey."
+        },
+        {
+          "passage": 22,
+          "verdict": "specific",
+          "evidence": "Conjecture CEO Connor Leahy considers untuned LLMs to be like inscrutable alien \"Shoggoths\"",
+          "why": "Named people with attributed quotes."
+        },
+        {
+          "passage": 23,
+          "verdict": "specific",
+          "evidence": "In his 2014 book titled The Language Myth: Why Language Is Not An Instinct, British cognitive linguist and digital communication technologist Vyvyan Evans",
+          "why": "Named author, book and year."
+        },
+        {
+          "passage": 24,
+          "verdict": "specific",
+          "evidence": "was able to compress ImageNet to 43% of its size, beating PNG with 58%.",
+          "why": "Dated study with exact figures."
+        },
+        {
+          "passage": 25,
+          "verdict": "specific",
+          "evidence": "The results demonstrated moderate proficiency, with GPT-4 achieving the highest accuracy at 71%, lagging behind human fact-checkers.",
+          "why": "Named benchmarks and a cited accuracy figure."
+        }
+      ]
+    }
   },
   "metrics": {
     "words": {
@@ -2887,6 +3129,38 @@
       "unit": "passages",
       "threshold": null,
       "limits": "A passage that moved and changed heading counts as removed plus added."
+    },
+    "pattern_score": {
+      "layer": "derived",
+      "label": "Pattern score",
+      "formula": "PatternScope's four detector families (det-1) over the page's kept text, without the title, h1 and description intro: stock phrases; sentences sharing one shape; three or more sentences opening the same way; an evaluative word on an abstract noun with no number or name in the sentence. A finding scores 1, 3 or 6 by severity, one identical finding at most 4 times; points per 1,000 words over 250, capped at 100 (score-1). A passage's own score is the same formula over its text, from 60 words.",
+      "unit": "0–100",
+      "threshold": "0–29 low · 30–59 moderate · 60+ high",
+      "limits": "Calibrated on 60–300-word texts; a long page is an extrapolation. Lexicons for English, Ukrainian and Spanish only: any other language gets no score, not a zero. Signals of worn writing, not of who wrote it. Two changes from the web tool, for whole pages rather than pasted text: a sentence shape needs at least one function word (a reference list is not a template), and a few words with letters such as ł or ß do not make an English page another language."
+    },
+    "marker_words": {
+      "layer": "derived",
+      "label": "Marker words",
+      "formula": "Occurrences of words from a fixed per-language list (seamless, unlock, delve; «безшовний», «на новий рівень»; «sin fisuras»…) per 1,000 words of the same text as the Pattern score. The English core follows published excess-vocabulary studies (Kobak et al., 2024); the Ukrainian and Spanish lists are written natively.",
+      "unit": "hits per 1,000 words",
+      "threshold": "0–9 rare · 10–24 noticeable · 25+ frequent; not yet calibrated",
+      "limits": "Not part of the Pattern score, so the score stays PatternScope's. Marketing copy written by people uses these words too."
+    },
+    "generic_share": {
+      "layer": "judgement",
+      "label": "Generic passages",
+      "formula": "The agent reads every passage and marks it specific or generic by one question: would it fit a competitor's page with only the brand name changed? Each verdict carries a verbatim quote the script checks. Share = characters of generic passages / characters of all passages.",
+      "unit": "% of passage characters",
+      "threshold": null,
+      "limits": "A model's reading, not a measurement: another model may draw the line elsewhere. Where it disagrees with the script, both are shown, never averaged."
+    },
+    "short_passages": {
+      "layer": "measured",
+      "label": "Passages too short for a score",
+      "formula": "Passages with fewer than 60 words, PatternScope's floor.",
+      "unit": "passages",
+      "threshold": null,
+      "limits": "Their text still counts in the page score; only a score of their own is withheld, because a density over a few dozen words swings on a comma."
     }
   },
   "checks": [
@@ -2986,6 +3260,41 @@
       ],
       "evidence": {},
       "message": "The intro passage (#0) has only the title and h1."
+    },
+    {
+      "code": "img_missing_alt",
+      "severity": "low",
+      "passages": [],
+      "evidence": {
+        "count": 8,
+        "samples": [
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/8/81/The_number_of_publications_about_Large_Language_Models_by_year.png/250px-The_number_of_publications_about_Large_Language_Models_by_year.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg/250px-Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg/250px-Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/The-Transformer-model-architecture.png/330px-The-Transformer-model-architecture.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg/500px-Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          },
+          {
+            "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Multiple_attention_heads.png/330px-Multiple_attention_heads.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+            "reason": "missing"
+          }
+        ]
+      },
+      "message": "8 image(s) have no alt attribute."
     }
   ],
   "technical": {
@@ -3127,8 +3436,53 @@
       }
     ]
   },
-  "headers": null,
-  "accessibility": null,
+  "headers": {
+    "x-robots-tag": null,
+    "cache-control": "private, s-maxage=0, max-age=0, must-revalidate, no-transform",
+    "content-type": "text/html; charset=UTF-8",
+    "content-language": "en"
+  },
+  "accessibility": {
+    "images": {
+      "total": 48,
+      "missingAlt": 8,
+      "emptyAlt": 4,
+      "filenameAlt": 0,
+      "samples": [
+        {
+          "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/8/81/The_number_of_publications_about_Large_Language_Models_by_year.png/250px-The_number_of_publications_about_Large_Language_Models_by_year.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+          "reason": "missing"
+        },
+        {
+          "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg/250px-Trends_in_AI_training_FLOP_over_time_%282010-2025%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+          "reason": "missing"
+        },
+        {
+          "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg/250px-Large-scale_AI_training_compute_%28FLOP%29_vs_Publication_date_%282017-2024%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+          "reason": "missing"
+        },
+        {
+          "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/The-Transformer-model-architecture.png/330px-The-Transformer-model-architecture.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+          "reason": "missing"
+        },
+        {
+          "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg/500px-Estimated_training_cost_of_some_AI_models_-_2024_AI_index.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+          "reason": "missing"
+        },
+        {
+          "text": "//thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Multiple_attention_heads.png/330px-Multiple_attention_heads.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+          "reason": "missing"
+        }
+      ]
+    },
+    "headings": {
+      "total": 61,
+      "h1Count": 1,
+      "skippedCount": 0,
+      "skipped": [],
+      "firstLevel": 2
+    }
+  },
   "render": null,
   "plan": [
     {
@@ -3307,5 +3661,588 @@
     }
   ],
   "facts": null,
-  "diff": null
+  "diff": null,
+  "generatedText": {
+    "versions": {
+      "detectors": "det-1",
+      "score": "score-1",
+      "markers": "markers-1"
+    },
+    "analysed": true,
+    "reason": null,
+    "language": "en",
+    "patternScore": {
+      "value": 10,
+      "band": "low",
+      "points": 363,
+      "perThousand": 25.83,
+      "words": 14054
+    },
+    "markerWords": {
+      "hits": 6,
+      "perThousand": 0.4,
+      "band": "rare",
+      "terms": [
+        {
+          "term": "leverage",
+          "count": 2,
+          "passages": [
+            9
+          ]
+        },
+        {
+          "term": "intricate",
+          "count": 1,
+          "passages": [
+            24
+          ]
+        },
+        {
+          "term": "robust",
+          "count": 1,
+          "passages": []
+        },
+        {
+          "term": "truly",
+          "count": 1,
+          "passages": []
+        },
+        {
+          "term": "unlock",
+          "count": 1,
+          "passages": []
+        }
+      ]
+    },
+    "families": [
+      {
+        "family": "repetition",
+        "findings": 69,
+        "points": 360,
+        "chips": [
+          {
+            "text": "Advances in Neural Information Processing Systems.",
+            "count": 4,
+            "passages": []
+          },
+          {
+            "text": "Archived from the original on 12 June 2023.",
+            "count": 3,
+            "passages": []
+          },
+          {
+            "text": "\"Language Models are Few-Shot Learners\" (PDF).",
+            "count": 2,
+            "passages": []
+          },
+          {
+            "text": "Archived (PDF) from the original on 17 November 2023.",
+            "count": 2,
+            "passages": []
+          },
+          {
+            "text": "Frontiers of Computer Science.",
+            "count": 2,
+            "passages": []
+          },
+          {
+            "text": "The New York Times .",
+            "count": 2,
+            "passages": []
+          },
+          {
+            "text": "\"How to run an LLM locally on your PC in less than 10 minutes\".",
+            "count": 2,
+            "passages": []
+          },
+          {
+            "text": "Association for Computing Machinery.",
+            "count": 2,
+            "passages": []
+          }
+        ],
+        "more": 45
+      },
+      {
+        "family": "uniformity",
+        "findings": 1,
+        "points": 3,
+        "chips": [
+          {
+            "text": "When y = average Pr ( correct token ) {\\displaystyle y={\\text{average }}\\Pr({\\text{correc…",
+            "count": 1,
+            "passages": [
+              19
+            ]
+          }
+        ],
+        "more": 0
+      }
+    ],
+    "shortPassages": [
+      0
+    ],
+    "judgement": {
+      "agent": "Claude Code",
+      "model": "claude-opus-5-5",
+      "generic": {
+        "passages": 3,
+        "of": 26,
+        "chars": 1771,
+        "totalChars": 41850,
+        "share": 0.04231780167264038
+      }
+    },
+    "disagreements": [
+      {
+        "passage": 1,
+        "kind": "script_missed"
+      },
+      {
+        "passage": 8,
+        "kind": "script_missed"
+      }
+    ],
+    "passages": [
+      {
+        "index": 0,
+        "words": 7,
+        "chars": 53,
+        "score": null,
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "generic",
+        "evidence": "Large language model - Wikipedia",
+        "why": "Only the page title; nothing here but the name.",
+        "disagree": null
+      },
+      {
+        "index": 1,
+        "words": 179,
+        "chars": 1157,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "generic",
+        "evidence": "A large language model (LLM) is an AI model (typically a neural network) trained on a vast amount of text for natural language processing tasks",
+        "why": "Standard definition and framing any article on LLMs opens with; no number, date or distinct claim.",
+        "disagree": "script_missed"
+      },
+      {
+        "index": 2,
+        "words": 292,
+        "chars": 1998,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "In 2001, a smoothed n-gram model, such as those employing Kneser–Ney smoothing, trained on 300 million words, achieved state-of-the-art perplexity",
+        "why": "Dated milestones with a figure and a citation.",
+        "disagree": null
+      },
+      {
+        "index": 3,
+        "words": 312,
+        "chars": 1994,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper \"Attention Is All You Need\".",
+        "why": "Named paper, venue and year.",
+        "disagree": null
+      },
+      {
+        "index": 4,
+        "words": 181,
+        "chars": 1180,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "In January 2025, DeepSeek released DeepSeek R1, a 671-billion-parameter open-weight model",
+        "why": "Dated release with a parameter count.",
+        "disagree": null
+      },
+      {
+        "index": 5,
+        "words": 312,
+        "chars": 1989,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "\"Ġ\" denotes a preceding whitespace in RoBERTa and GPT and \"##\" denotes continuation of a preceding word in BERT.",
+        "why": "Concrete token conventions and a worked BPE procedure.",
+        "disagree": null
+      },
+      {
+        "index": 6,
+        "words": 176,
+        "chars": 1127,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "A trained LLM can be used to clean datasets for training a further LLM.",
+        "why": "Cited claims about data cleaning and synthetic data.",
+        "disagree": null
+      },
+      {
+        "index": 7,
+        "words": 237,
+        "chars": 1535,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "the training of GPT-2 (i.e. a 1.5-billion-parameter model) in 2019 cost $50,000, while training of the PaLM (i.e. a 540-billion-parameter model) in 2022 cost $8 million",
+        "why": "Named models with years and training costs.",
+        "disagree": null
+      },
+      {
+        "index": 8,
+        "words": 91,
+        "chars": 561,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "generic",
+        "evidence": "Hosted inference runs a language model on remote AI data centers and makes the output available to users over the Internet.",
+        "why": "Plain definitions of inference that any page could carry unchanged.",
+        "disagree": "script_missed"
+      },
+      {
+        "index": 9,
+        "words": 327,
+        "chars": 1998,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 1,
+          "perThousand": 3.1
+        },
+        "verdict": "specific",
+        "evidence": "the small (i.e. 117M parameter sized) GPT-2 model has had twelve attention heads and a context window of only 1k tokens.",
+        "why": "Exact model dimensions with a citation.",
+        "disagree": null
+      },
+      {
+        "index": 10,
+        "words": 301,
+        "chars": 1995,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "One float16 has 16 bits, or 2 bytes, and so one billion parameters require 2 gigabytes.",
+        "why": "Concrete arithmetic plus dated parameter records.",
+        "disagree": null
+      },
+      {
+        "index": 11,
+        "words": 78,
+        "chars": 509,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "Dynamic quantization allows for the use of a different quantization codebook per layer, either a lookup table of values or a linear mapping (scaling factor and bias)",
+        "why": "A concrete technical mechanism, not framing.",
+        "disagree": null
+      },
+      {
+        "index": 12,
+        "words": 311,
+        "chars": 1997,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "under a \"Instruction: [...], Input: [...], Output:\" format",
+        "why": "Dated findings and the exact prompt format used.",
+        "disagree": null
+      },
+      {
+        "index": 13,
+        "words": 326,
+        "chars": 1992,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "A program separate from the LLM watches the output stream of the LLM for a special tool-calling syntax.",
+        "why": "Describes the procedure behind RAG and tool calls.",
+        "disagree": null
+      },
+      {
+        "index": 14,
+        "words": 335,
+        "chars": 1995,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "In the DEPS (\"describe, explain, plan and select\") method, an LLM is first connected to the visual world via image descriptions.",
+        "why": "Named methods with cited procedures.",
+        "disagree": null
+      },
+      {
+        "index": 15,
+        "words": 256,
+        "chars": 1766,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "GPT-4o achieved 13% accuracy while o1 reached 83%.",
+        "why": "Benchmark figures with dates and model names.",
+        "disagree": null
+      },
+      {
+        "index": 16,
+        "words": 301,
+        "chars": 1999,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "the Flamingo model uses cross-attention layers to inject visual information into its pre-trained language model.",
+        "why": "Step-by-step construction of image tokens and named models.",
+        "disagree": null
+      },
+      {
+        "index": 17,
+        "words": 271,
+        "chars": 1831,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "Meta hosts ESM Atlas, a database of 772 million structures of metagenomic proteins predicted using ESMFold.",
+        "why": "Named system with a figure.",
+        "disagree": null
+      },
+      {
+        "index": 18,
+        "words": 353,
+        "chars": 1993,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "meaning that it costs 6 FLOPs per parameter to train on one token.",
+        "why": "Chinchilla scaling law with its fitted constants.",
+        "disagree": null
+      },
+      {
+        "index": 19,
+        "words": 301,
+        "chars": 1997,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "chain-of-thought prompting only improved the performance for models that had at least 62B parameters.",
+        "why": "Cited threshold and a named counter-argument.",
+        "disagree": null
+      },
+      {
+        "index": 20,
+        "words": 104,
+        "chars": 654,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "plot is a straight line (before it hits the plateau at zero), which does not look like emergence.",
+        "why": "Specific mathematical cases of the emergence argument.",
+        "disagree": null
+      },
+      {
+        "index": 21,
+        "words": 286,
+        "chars": 1997,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "The resulting models were reverse-engineered, and it turned out they used discrete Fourier transform.",
+        "why": "A concrete research finding, plus a dated survey.",
+        "disagree": null
+      },
+      {
+        "index": 22,
+        "words": 303,
+        "chars": 1994,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "Conjecture CEO Connor Leahy considers untuned LLMs to be like inscrutable alien \"Shoggoths\"",
+        "why": "Named people with attributed quotes.",
+        "disagree": null
+      },
+      {
+        "index": 23,
+        "words": 237,
+        "chars": 1551,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "In his 2014 book titled The Language Myth: Why Language Is Not An Instinct, British cognitive linguist and digital communication technologist Vyvyan Evans",
+        "why": "Named author, book and year.",
+        "disagree": null
+      },
+      {
+        "index": 24,
+        "words": 315,
+        "chars": 1991,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 1,
+          "perThousand": 3.2
+        },
+        "verdict": "specific",
+        "evidence": "was able to compress ImageNet to 43% of its size, beating PNG with 58%.",
+        "why": "Dated study with exact figures.",
+        "disagree": null
+      },
+      {
+        "index": 25,
+        "words": 280,
+        "chars": 1997,
+        "score": {
+          "value": 0,
+          "band": "low"
+        },
+        "markers": {
+          "hits": 0,
+          "perThousand": 0
+        },
+        "verdict": "specific",
+        "evidence": "The results demonstrated moderate proficiency, with GPT-4 achieving the highest accuracy at 71%, lagging behind human fact-checkers.",
+        "why": "Named benchmarks and a cited accuracy figure.",
+        "disagree": null
+      }
+    ]
+  }
 }

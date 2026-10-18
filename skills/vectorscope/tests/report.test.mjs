@@ -28,6 +28,7 @@ test("html: no network, bilingual chrome, footer links", () => {
   assert.match(html, /default-src 'none'/);
   assert.ok(!/<link[^>]+stylesheet/.test(html) && !/src="https?:/.test(html));
   assert.ok(html.includes('data-set-lang="uk"') && html.includes('class="l-uk"'));
+  assert.ok(html.includes('data-set-lang="pl"') && html.includes('class="l-pl"'));
   for (const link of FOOTER_LINKS) assert.ok(html.includes(`href="${link.href}" rel="noopener noreferrer" target="_blank"`), link.name);
 });
 
@@ -43,11 +44,11 @@ test("html: the footer glitches, in steps, and reduced motion turns it off", () 
 });
 
 test("i18n: every string and every check code has both languages", () => {
-  for (const [key, entry] of Object.entries(S)) assert.ok(entry.en && entry.uk, key);
+  for (const [key, entry] of Object.entries(S)) assert.ok(entry.en && entry.uk && entry.pl, key);
   for (const code of CHECK_CODES) {
     const copy = CHECK_COPY[code];
     assert.ok(copy, code);
-    for (const part of ["title", "what", "tell"]) assert.ok(copy[part].en && copy[part].uk, `${code}.${part}`);
+    for (const part of ["title", "what", "tell"]) assert.ok(copy[part].en && copy[part].uk && copy[part].pl, `${code}.${part}`);
   }
 });
 

@@ -1,15 +1,15 @@
 ---
 name: vectorscope
-description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), automatic structure checks, and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, how to make a page easier for AI to cite, how pages compare for AI search, or names vectorscope. Ukrainian requests too, e.g. «як ШІ-асистент читає сторінку», «на які фрагменти ділиться сторінка», «що не вміщується в ліміт», «прожени сторінку через vectorscope», «порівняй сторінки», «перевір robots.txt для ШІ-ботів». No embeddings.
+description: Show how an AI assistant's retriever or a RAG pipeline reads public web pages - the GetLoopLoop Vectorscope's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended and more), structure checks, how generated the text sounds (PatternScope score, marker words, the agent's swap test), and an agent-written grouping, query test and rewrite plan, as an HTML report; compares 2 to 5 pages. Use when the user asks how AI reads a page, what passages it splits into, what falls past a retrieval cap, whether AI bots are blocked, whether the text reads as templated, how to make a page easier for AI to cite, or names vectorscope. Ukrainian and Polish requests too, e.g. «як ШІ-асистент читає сторінку», «що не вміщується в ліміт», «наскільки текст звучить як згенерований», «jak AI czyta stronę», «na jakie fragmenty dzieli się strona». No embeddings.
 ---
 
-Version 2.110. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, 2.105, 2.106, 2.107, 2.108, 2.109, 2.110, …): the first number moves only on a breaking change.
+Version 2.111. Versions count in thousandths (2.101, 2.102, 2.103, 2.104, 2.105, 2.106, 2.107, 2.108, 2.109, 2.110, 2.111, …): the first number moves only on a breaking change.
 
 # Vectorscope (local, no embeddings)
 
-**In plain words, for people opening this file:** an AI assistant does not read a web page whole. A machine fetches it, keeps only the readable text, cuts it into passages and stores at most 26 of them; whatever comes after the 26th is never seen. This skill runs those exact steps on a public page, checks whether AI crawlers may fetch it, flags the structural problems that make passages hard to quote, and has the agent group the passages by subject, test the questions people ask and write a rewrite plan. It writes a report (HTML, Markdown and JSON). It does not score or rank the page, detect AI text, or predict what any assistant will say. It makes no model or embedding calls; the only network requests are the page and its robots.txt.
+**In plain words, for people opening this file:** an AI assistant does not read a web page whole. A machine fetches it, keeps only the readable text, cuts it into passages and stores at most 26 of them; whatever comes after the 26th is never seen. This skill runs those exact steps on a public page, checks whether AI crawlers may fetch it, flags the structural problems that make passages hard to quote, scores how templated the text reads (PatternScope's rules, plus words models overuse), and has the agent group the passages by subject, test the questions people ask, mark which passages are generic and write a rewrite plan. It writes a report (HTML, Markdown and JSON). It does not rank the page, decide who wrote it, or predict what any assistant will say. It makes no model or embedding calls; the only network requests are the page and its robots.txt.
 
-**Коротко українською:** ШІ-асистент не читає сторінку цілком. Машина завантажує її, лишає тільки текст, ріже на уривки й зберігає не більше 26; усе після 26-го вона не бачить. Ця навичка проганяє сторінку саме цими кроками, перевіряє robots.txt для ШІ-краулерів і показує структурні проблеми, через які уривки важко цитувати. Агент групує уривки за темою, перевіряє типові запити й пише план переписування з прикладами «було → стало». Можна порівняти від 2 до 5 сторінок. Скрипти не викликають жодних моделей чи ембедингів.
+**Коротко українською:** ШІ-асистент не читає сторінку цілком. Машина завантажує її, лишає тільки текст, ріже на уривки й зберігає не більше 26; усе після 26-го вона не бачить. Ця навичка проганяє сторінку саме цими кроками, перевіряє robots.txt для ШІ-краулерів і показує структурні проблеми, через які уривки важко цитувати, і рахує, наскільки текст звучить як згенерований (правила PatternScope і слова, які моделі вживають надмірно). Агент групує уривки за темою, перевіряє типові запити, позначає загальні уривки й пише план переписування з прикладами «було → стало». Звіт має три мови: англійську, українську й польську. Можна порівняти від 2 до 5 сторінок. Скрипти не викликають жодних моделей чи ембедингів.
 
 **Answer the user in the language they wrote in.**
 
@@ -32,9 +32,9 @@ Steps marked *script* run the product's exact rules and are deterministic. Steps
 3. *script* `node "$SKILL/dist/lens.mjs" reading.json groups.json --html report.html --md report.md --json export.json`
    This validates the grouping, computes labels, the page vocabulary (phrases, then narrative words) and all checks, and prints the findings with their passage ids.
    read.mjs has already printed where the text went: a `losses` line (raw HTML text → removed by the cleaner → kept → in passages, unique → past the cap) and the three largest removal reasons. The report draws it in full (see *Measured, derived, judgement* below).
-4. *judgement* Write `queries.json` (5 to 10 typical queries, each answered from the passages) and `plan.json` (the rewrite plan). Write `facts.json` too if the user wants the citable facts listed.
+4. *judgement* Write `queries.json` (5 to 10 typical queries, each answered from the passages), `style.json` (the swap test: is each passage specific or generic, rules below) and `plan.json` (the rewrite plan). Write `facts.json` too if the user wants the citable facts listed.
 5. *script* Run lens again with everything:
-   `node "$SKILL/dist/lens.mjs" reading.json groups.json --plan plan.json --queries queries.json [--facts facts.json] --html report.html --md report.md --json export.json`
+   `node "$SKILL/dist/lens.mjs" reading.json groups.json --plan plan.json --queries queries.json --style style.json [--facts facts.json] --html report.html --md report.md --json export.json`
    A `REFUSED` names the file and the item; fix it and rerun. A `warning` (for example a plan item citing a check that did not fire) is kept, but deserves a sentence in your answer.
 6. **Show the report** (required; see *Show the report*). A chat summary goes with it, never instead of it.
 
@@ -51,6 +51,8 @@ Steps marked *script* run the product's exact rules and are deterministic. Steps
 The comparison report shows each page's counts and blocked crawlers, the topic × page table (passages and characters per topic), topic gaps (topics the others cover and a page does not), fact gaps (facts only one page states), who wins each query, the plan, the crawler table by page, every page's findings, and each page's strip and groups.
 
 Compare the pages the user names. Do not volunteer a comparison against a named company's page unless the user asks for it.
+
+*How generated the text sounds* is a single-page section: for one page of a comparison, run that page on its own with `--style`.
 
 ## Measured, derived, judgement
 
@@ -141,6 +143,17 @@ A fact is something concrete and citable: a number, a name, a rule, a definition
 
 Judge only from the passages, never from what you know about the subject. In single mode `"result": {…}` may replace `results`. The report counts complete, partial and missing per page and, in compare mode, names who wins each query (the better verdict, then citable; ties are shown).
 
+### style.json
+
+```json
+{ "agent": "Claude Code", "model": "…",
+  "passages": [
+    { "passage": 3, "verdict": "specific", "evidence": "Free for up to 5 clients.", "why": "a limit a reader can check" },
+    { "passage": 5, "verdict": "generic", "evidence": "unlock its full potential", "why": "names no integration" } ] }
+```
+
+The swap test, one verdict for **every** passage: would this passage fit a competitor's page with only the brand name changed? `generic` if yes, `specific` if it holds something only this page could say (a number, a name, a limit, a procedure, a first-hand detail). `evidence` is the words that decided it, verbatim from that passage (at most 200 characters); `why` is optional, one short line in the user's language. Judge the passage, not the page, and not who wrote it: this is not an AI detector, and the report says so. The script checks every passage is judged once and every quote is verbatim, then shows your verdicts beside PatternScope's score and the marker words; where they disagree it shows both and averages nothing.
+
 ### plan.json
 
 ```json
@@ -229,7 +242,7 @@ This step is required. The HTML report is the result; a run that ends with only 
 - **Claude Code:** if the session has a tool for publishing HTML pages or artifacts, publish `report.html` with it, and only that file, and give the link. Otherwise open `report.html` in the user's default browser: `start "" "<absolute path>"` on Windows, `open "<absolute path>"` on macOS, `xdg-open "<absolute path>"` on Linux. Then give its absolute path. Do not open, publish or print the JSON or the Markdown.
 - **Codex, opencode, Hermes Agent or any other agent:** give `report.html`'s absolute path and offer to open it in the default browser with the command above (or the agent's own preview or browser tool, if it has one). Preview only the HTML. Name the other two files only if the user asks for the data.
 
-The report is one self-contained file and makes no network requests, so it opens offline. It opens in English and in the light theme; `#lang=uk` opens it in Ukrainian and `#theme=dark` in the dark theme (for example `report.html#lang=uk&theme=dark`).
+The report is one self-contained file and makes no network requests, so it opens offline. It opens in English and in the light theme; `#lang=uk` opens it in Ukrainian, `#lang=pl` in Polish and `#theme=dark` in the dark theme (for example `report.html#lang=pl&theme=dark`). When the user writes in Ukrainian or Polish, give the link with that `#lang`.
 
 ## The chat summary
 
@@ -240,6 +253,7 @@ Short, alongside the report and never instead of it:
 - The findings, high first, each with its passage ids and what to do.
 - The plan's top three items, with one before → after.
 - The query test: how many queries were answered completely, and which found nothing. In compare mode: the topic gaps, the facts only one page has, and who wins each query.
+- How generated the text sounds: the Pattern score and its band, the marker words per 1,000 words, and how many passages you judged generic, each with its layer (the score and the markers are derived, the swap test is your judgement). Name the passages where the script and you disagree. Never say the page was written by AI, or was not: the text cannot show it.
 - The groups, briefly. Your label first; quote the computed label as the section's name only when its source is `heading`.
 - The page vocabulary: the **phrases this page owns** first (two to four words it writes together, ranked by how many passages use them), then the **narrative words** (single words not already inside a listed phrase). Say, with it, that these are what the page says, not search demand; for how people actually ask, point to the query test or https://www.getlooploop.com/voicescope.
 - Say, once, that the groups, the queries and the plan are the agent's reading of the passages (judgement), not an embedding clustering; the chunking, the cap, the losses and the checks are deterministic (measured and derived). For the embedding-based reading with the map, point to https://www.getlooploop.com/vectorscope.
@@ -249,11 +263,12 @@ Short, alongside the report and never instead of it:
 ## Outputs
 
 - `report.html`: one self-contained page (no external fonts, scripts or images; a content security policy blocks all network requests; every piece of page text is escaped), readable down to 375 px. A tag beside every section and number says Measured, Derived or Agent's judgement, and a "?" beside each number opens its formula, unit, threshold and known limits; `#help=<metric id>` (for example `#help=chars_past_cap`) opens one when the report loads.
+- **2.111: how generated the text sounds.** The last open section of `report.html`, just above *Where the text goes*: the Pattern score over the page's kept text (PatternScope `det-1`/`score-1`, the rules of https://www.getlooploop.com/patternscope with two adjustments for a whole page that the "?" states; English, Ukrainian and Spanish), the marker words beside it and never inside it, the passages under 60 words that get no score of their own, your swap test, and where the script and you disagree. `export.json` gains `generatedText`, and `judgement.style` holds your verdicts. The report's interface is in English, Ukrainian and Polish.
 - `report.md`: the same reading in Markdown, in English. Every heading and number carries a `measured`, `derived` or `judgement` marker; *Where the text goes*, the last section before the closing line, holds the waterfall, the removals (top 20) and the section map; the last section, *How each number is computed*, gives every metric's formula, unit, threshold and limits.
 - `export.json`: the product's `getlooploop/vectorscope-reading@1` shape. `phrases` and `narrativeWords` (each entry: `term`, `count`, `passages`, `groups`, `spread`, `describesWholePage`) are the page vocabulary exactly as the product computes it; `keywords` is the two as one list, phrases first, in the shape earlier exports had. v2 only **adds** fields, so the schema id is unchanged: `skillVersion`, `judgement` (`agent` and `model` from groups.json, `null` when not stated), `checks` (each with an English `message`), `technical`, `robots`, `render`, `plan`, `queries`, `facts`, `diff`, and on each group `agentLabel`, `note` and `topic`. `label` and `labelSource` keep their v1 meaning (the computed label). Every field that needs vectors (cohesion, selfSimilarity, groupFloor, projection, embeddingModel, dimensions) is `null`.
 - **2.102 export, schema id unchanged.** `export.json` gains two top-level sections, `measured` (`page`, `retrieval` with `charsInPassagesTotal` and `charsInPassagesUnique`, `passages` without their group, `losses`, `robots`, `technical`, `render`, and under `derived`: `charsPastCap`, the legacy `charsUnread`, `phrases`, `narrativeWords`, `checks`) and `judgement` (`agent`, `model`, `groups`, `assignment`, `duplicates`, `plan`, `queries`, `facts`), plus `layers` (what each section holds) and `metrics` (id → `layer`, `label`, `formula`, `unit`, `threshold`, `limits`: the same text as the report's "?"). Every v1 and v2 field also stays at its old path with its old meaning (`judgement.agent` and `judgement.model` are where v2 put them; `retrieval` only gains `charsPastCap` and `charsInPassagesUnique`), so the schema id stays `getlooploop/vectorscope-reading@1`: nothing a v1 or v2 consumer reads moved or changed. The cost is that some values appear twice; moving them would have broken every saved prompt that reads `phrases` or `labelSource`.
 - Compare mode writes `compare.json` (`getlooploop/vectorscope-compare@1`): every page's export under `pages[]`, plus `topics`, `topicTable`, `topicGaps`, `facts`, `factGaps`, `queries` (each with its `winner`) and `plan`. 2.102 adds `layers`, `metrics`, `measured.lossTable` (each page's waterfall and how many sections were cut) and, inside `judgement` beside `agent` and `model`, the shared `topics`, `facts`, `queries` and `plan`. The compare report ends with *Losses by page*, folded like the single report's panel: the table, then each page's waterfall and section map, each folded again.
-- `reading.json` (`getlooploop/vectorscope-skill-reading@1`) gains `technical`, `robots`, `layout`, `losses` (2.102: the waterfall, the passages' placement, the removals and the section map), `headers` (2.109: the response headers, null for a saved copy) and `accessibility` (2.109: the images and their alt text, the heading order) and, with `--render`, `render`. Its passages are unchanged from v1, and lens still accepts a v1 reading (as a baseline, for example); the checks that need the new fields are then skipped.
+- `reading.json` (`getlooploop/vectorscope-skill-reading@1`) gains `technical`, `robots`, `layout`, `losses` (2.102: the waterfall, the passages' placement, the removals and the section map), `headers` (2.109: the response headers, null for a saved copy), `accessibility` (2.109: the images and their alt text, the heading order), `sections` (2.111: the kept text by section, the intro marked, which the Pattern score reads; a reading without it gets the block with "read again" instead of a score) and, with `--render`, `render`. Its passages are unchanged from v1, and lens still accepts a v1 reading (as a baseline, for example); the checks that need the new fields are then skipped.
 
 ## Limits
 

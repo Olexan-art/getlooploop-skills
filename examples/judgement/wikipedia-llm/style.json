@@ -1,0 +1,32 @@
+{
+  "agent": "Claude Code",
+  "model": "claude-opus-5-5",
+  "passages": [
+    { "passage": 0, "verdict": "generic", "evidence": "Large language model - Wikipedia", "why": "Only the page title; nothing here but the name." },
+    { "passage": 1, "verdict": "generic", "evidence": "A large language model (LLM) is an AI model (typically a neural network) trained on a vast amount of text for natural language processing tasks", "why": "Standard definition and framing any article on LLMs opens with; no number, date or distinct claim." },
+    { "passage": 2, "verdict": "specific", "evidence": "In 2001, a smoothed n-gram model, such as those employing Kneser–Ney smoothing, trained on 300 million words, achieved state-of-the-art perplexity", "why": "Dated milestones with a figure and a citation." },
+    { "passage": 3, "verdict": "specific", "evidence": "At the 2017 NeurIPS conference, Google researchers introduced the transformer architecture in their landmark paper \"Attention Is All You Need\".", "why": "Named paper, venue and year." },
+    { "passage": 4, "verdict": "specific", "evidence": "In January 2025, DeepSeek released DeepSeek R1, a 671-billion-parameter open-weight model", "why": "Dated release with a parameter count." },
+    { "passage": 5, "verdict": "specific", "evidence": "\"Ġ\" denotes a preceding whitespace in RoBERTa and GPT and \"##\" denotes continuation of a preceding word in BERT.", "why": "Concrete token conventions and a worked BPE procedure." },
+    { "passage": 6, "verdict": "specific", "evidence": "A trained LLM can be used to clean datasets for training a further LLM.", "why": "Cited claims about data cleaning and synthetic data." },
+    { "passage": 7, "verdict": "specific", "evidence": "the training of GPT-2 (i.e. a 1.5-billion-parameter model) in 2019 cost $50,000, while training of the PaLM (i.e. a 540-billion-parameter model) in 2022 cost $8 million", "why": "Named models with years and training costs." },
+    { "passage": 8, "verdict": "generic", "evidence": "Hosted inference runs a language model on remote AI data centers and makes the output available to users over the Internet.", "why": "Plain definitions of inference that any page could carry unchanged." },
+    { "passage": 9, "verdict": "specific", "evidence": "the small (i.e. 117M parameter sized) GPT-2 model has had twelve attention heads and a context window of only 1k tokens.", "why": "Exact model dimensions with a citation." },
+    { "passage": 10, "verdict": "specific", "evidence": "One float16 has 16 bits, or 2 bytes, and so one billion parameters require 2 gigabytes.", "why": "Concrete arithmetic plus dated parameter records." },
+    { "passage": 11, "verdict": "specific", "evidence": "Dynamic quantization allows for the use of a different quantization codebook per layer, either a lookup table of values or a linear mapping (scaling factor and bias)", "why": "A concrete technical mechanism, not framing." },
+    { "passage": 12, "verdict": "specific", "evidence": "under a \"Instruction: [...], Input: [...], Output:\" format", "why": "Dated findings and the exact prompt format used." },
+    { "passage": 13, "verdict": "specific", "evidence": "A program separate from the LLM watches the output stream of the LLM for a special tool-calling syntax.", "why": "Describes the procedure behind RAG and tool calls." },
+    { "passage": 14, "verdict": "specific", "evidence": "In the DEPS (\"describe, explain, plan and select\") method, an LLM is first connected to the visual world via image descriptions.", "why": "Named methods with cited procedures." },
+    { "passage": 15, "verdict": "specific", "evidence": "GPT-4o achieved 13% accuracy while o1 reached 83%.", "why": "Benchmark figures with dates and model names." },
+    { "passage": 16, "verdict": "specific", "evidence": "the Flamingo model uses cross-attention layers to inject visual information into its pre-trained language model.", "why": "Step-by-step construction of image tokens and named models." },
+    { "passage": 17, "verdict": "specific", "evidence": "Meta hosts ESM Atlas, a database of 772 million structures of metagenomic proteins predicted using ESMFold.", "why": "Named system with a figure." },
+    { "passage": 18, "verdict": "specific", "evidence": "meaning that it costs 6 FLOPs per parameter to train on one token.", "why": "Chinchilla scaling law with its fitted constants." },
+    { "passage": 19, "verdict": "specific", "evidence": "chain-of-thought prompting only improved the performance for models that had at least 62B parameters.", "why": "Cited threshold and a named counter-argument." },
+    { "passage": 20, "verdict": "specific", "evidence": "plot is a straight line (before it hits the plateau at zero), which does not look like emergence.", "why": "Specific mathematical cases of the emergence argument." },
+    { "passage": 21, "verdict": "specific", "evidence": "The resulting models were reverse-engineered, and it turned out they used discrete Fourier transform.", "why": "A concrete research finding, plus a dated survey." },
+    { "passage": 22, "verdict": "specific", "evidence": "Conjecture CEO Connor Leahy considers untuned LLMs to be like inscrutable alien \"Shoggoths\"", "why": "Named people with attributed quotes." },
+    { "passage": 23, "verdict": "specific", "evidence": "In his 2014 book titled The Language Myth: Why Language Is Not An Instinct, British cognitive linguist and digital communication technologist Vyvyan Evans", "why": "Named author, book and year." },
+    { "passage": 24, "verdict": "specific", "evidence": "was able to compress ImageNet to 43% of its size, beating PNG with 58%.", "why": "Dated study with exact figures." },
+    { "passage": 25, "verdict": "specific", "evidence": "The results demonstrated moderate proficiency, with GPT-4 achieving the highest accuracy at 71%, lagging behind human fact-checkers.", "why": "Named benchmarks and a cited accuracy figure." }
+  ]
+}

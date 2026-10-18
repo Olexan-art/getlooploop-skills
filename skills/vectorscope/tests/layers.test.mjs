@@ -27,14 +27,14 @@ async function judged(html = fixture, url = "https://example.org/removals") {
   return { reading, lens, checks: pageChecks(reading, lens) };
 }
 
-test("metrics: every entry has a layer and EN and UK for each part", () => {
+test("metrics: every entry has a layer and EN, UK and PL for each part", () => {
   for (const [id, m] of Object.entries(METRICS)) {
     assert.ok(LAYERS.includes(m.layer), `${id}: layer`);
-    for (const part of ["label", "formula", "unit", "limits"]) assert.ok(m[part]?.en && m[part]?.uk, `${id}.${part}`);
-    assert.ok(m.threshold === null || (m.threshold.en && m.threshold.uk), `${id}.threshold`);
+    for (const part of ["label", "formula", "unit", "limits"]) assert.ok(m[part]?.en && m[part]?.uk && m[part]?.pl, `${id}.${part}`);
+    assert.ok(m.threshold === null || (m.threshold.en && m.threshold.uk && m.threshold.pl), `${id}.threshold`);
   }
-  for (const layer of LAYERS) assert.ok(LAYER_COPY[layer].label.en && LAYER_COPY[layer].label.uk && LAYER_COPY[layer].what.uk);
-  for (const reason of REMOVAL_REASONS) assert.ok(S[`rs_${reason}`]?.en && S[`rs_${reason}`]?.uk, `copy for ${reason}`);
+  for (const layer of LAYERS) assert.ok(LAYER_COPY[layer].label.en && LAYER_COPY[layer].label.uk && LAYER_COPY[layer].what.uk && LAYER_COPY[layer].label.pl && LAYER_COPY[layer].what.pl);
+  for (const reason of REMOVAL_REASONS) assert.ok(S[`rs_${reason}`]?.en && S[`rs_${reason}`]?.uk && S[`rs_${reason}`]?.pl, `copy for ${reason}`);
   const dict = metricsDictionary();
   assert.deepEqual(Object.keys(dict), Object.keys(METRICS));
   assert.deepEqual(Object.keys(dict.chars_past_cap), ["layer", "label", "formula", "unit", "threshold", "limits"]);

@@ -7,7 +7,7 @@
 import { judgeRequestedUrl } from "./guards.mjs";
 import { fetchPublicPage } from "./fetchPage.mjs";
 import { analyseHtml } from "./extract.mjs";
-import { chunkPage, CHUNKS_PER_PAGE } from "./chunk.mjs";
+import { chunkPage, CHUNKS_PER_PAGE, extractSections } from "./chunk.mjs";
 import { contentRole } from "./lens.mjs";
 import { readTechnical } from "./technical.mjs";
 import { readAccessibility } from "./accessibility.mjs";
@@ -48,6 +48,17 @@ function chunkHtml(html, finalUrl, urlKey, host, analysed = analyse(html, finalU
   };
   const chunks = chunkPage(chunkerPage);
   return { analysed, chunks, chunkerPage };
+}
+
+/**
+ * 2.111: the kept text's sections as the chunker splits it, the intro (title, h1, description)
+ * marked. "How generated the text sounds" scores this text, whole and past the cap included, the
+ * same text AI Search Audit's writing patterns read.
+ */
+export function keptSections(chunkerPage) {
+  const h1 = Array.isArray(chunkerPage.h1) ? chunkerPage.h1 : chunkerPage.h1 ? [chunkerPage.h1] : [];
+  const hasIntro = [chunkerPage.title, h1.join(" "), chunkerPage.metaDescription].some((x) => String(x || "").trim());
+  return extractSections(chunkerPage).map((s, i) => ({ heading: s.heading ?? null, text: s.text, ...(i === 0 && hasIntro ? { intro: true } : {}) }));
 }
 
 /**
@@ -212,6 +223,8 @@ export async function readPage({ url, html, finalUrl, robots, render = false, on
     hosting,
     layout,
     losses,
+    // 2.111: the kept text by section, for the Pattern score and the marker words.
+    sections: keptSections(chunkerPage),
     ...(rendered ? { render: rendered } : {}),
   };
 }

@@ -234,6 +234,41 @@ The agent's list of the concrete facts, figures and claims the passages state.
 - A test of one URL takes about twenty seconds. (#9)
 - Free with a rate limit, no account; the fetched page is not retained. (#13 #14)
 
+## How generated the text sounds `derived` `judgement`
+
+Stock phrasing, marker words and generic passages. Not an authorship detector: who wrote the text cannot be shown from the text.
+
+- **Pattern score** `derived`: 1/100, low (6 points over 2,387 words = 2.51 per 1,000; PatternScope det-1/score-1, language en).
+- **Marker words** `derived`: 0 per 1,000 words, rare (0 occurrences; not part of the score; thresholds not yet calibrated).
+- **Generic passages** `judgement`: 4 of 17, 13% of passage characters (the agent's swap test).
+- **Too short for a score** `measured`: 6 of 17 passages under 60 words (#0, #2, #3, #4, #14, #16).
+
+The script and the agent disagree on #10 and #12: #10 low score, generic text; #12 low score, generic text. Shown, not averaged.
+
+### Where the score comes from `derived`
+
+- Repeated sentence shape: 2 findings, 6 points — “" contributes the question itself.”, “Not an AI detector.”
+
+| # | Heading | Score | Markers /1k | Agent | Evidence |
+|---|---|---|---|---|---|
+| #0 | Semantic Chunking Visualizer for Any URL — Vectorscope | — (45 words) | 0 | specific | “what falls past the 26-passage cap” — names the tool's own cap |
+| #1 | — | 0 low | 0 | specific | “cut at h2, then 2,000-char windows” — the tool's exact cut, as interface copy |
+| #2 | What does this mean? | — (46 words) | 0 | generic | “The reading shows which passages of your page a retriever can receive” — any chunking visualiser could say this |
+| #3 | Important passage outside the cap? | — (29 words) | 0 | specific | “This reading takes at most 26 passages from a page.” — a number a reader can check |
+| #4 | Models and retrieval caps vary. | — (41 words) | 0 | generic | “This does not establish that any assistant has indexed the page.” — a disclaimer any such tool could carry |
+| #5 | How to read your result | 0 low | 0 | specific | “Vectorscope applies the same cap the product applies and names the passages that fell outside it.” |
+| #6 | How to read your result | 0 low | 0 | specific | “change the heading, run the page again, ask the same question” — a concrete test procedure |
+| #7 | What is semantic chunking? | 0 low | 0 | specific | “a window of 2,000 characters with 200 characters of overlap” |
+| #8 | Is my content ready for AI search? | 0 low | 0 | specific | “a noindex directive is reported rather than ignored” |
+| #9 | Using Vectorscope to test a RAG pipeline | 0 low | 0 | specific | “point at any URL in about twenty seconds” |
+| #10 | Who is Vectorscope for? | 0 low | 0 | generic ≠ script | “Vectorscope is for anyone whose page has to be read in passages” — an audience list a competitor's page could carry |
+| #11 | Words used on this page | 0 low | 0 | specific | “On this page the meaning-based step is the grouping of passages that are already cut, not the cut itself.” — definitions tied to this tool |
+| #12 | Keep reading | 0 low | 0 | generic ≠ script | “Longer answers to the questions this page can only summarise.” — a link list with no fact of its own |
+| #13 | Questions people ask about this | 0 low | 0 | specific | “the fetched page itself is not retained after the reading is produced” |
+| #14 | Questions people ask about this | — (57 words) | 0 | specific | “with a rate limit rather than a paywall” |
+| #15 | Other free AI search tools | 0 low | 0 | specific | “first without naming a platform, then naming all twelve” |
+| #16 | What this cannot show you | — (53 words) | 0 | specific | “those need a corpus of the whole site, measured over time” |
+
 ## Where the text goes `measured` `derived`
 
 Characters, whitespace runs folded to one space. "Text in the raw HTML" is the kept text plus every removal, so the stages sum exactly.
@@ -343,3 +378,7 @@ This is a preview of the machine's view, not a guarantee of what any assistant d
 - **Citable facts** `judgement` (`facts`). The agent's list of concrete facts the passages state, each with the passages that state it. *Unit:* facts. *Limits:* Fact gaps are only as fair as this list is complete.
 - **Topic × page cells** `derived` (`topic_cells`). Passages and characters of the groups the agent assigned to each shared topic. *Unit:* characters, as the passage text holds them. *Limits:* Computed over the agent's groups and topics.
 - **Changes since the baseline** `derived` (`diff_counts`). Passages matched by identical text, then by the same heading in order; the rest are added or removed. *Unit:* passages. *Limits:* A passage that moved and changed heading counts as removed plus added.
+- **Pattern score** `derived` (`pattern_score`). PatternScope's four detector families (det-1) over the page's kept text, without the title, h1 and description intro: stock phrases; sentences sharing one shape; three or more sentences opening the same way; an evaluative word on an abstract noun with no number or name in the sentence. A finding scores 1, 3 or 6 by severity, one identical finding at most 4 times; points per 1,000 words over 250, capped at 100 (score-1). A passage's own score is the same formula over its text, from 60 words. *Unit:* 0–100. *Threshold:* 0–29 low · 30–59 moderate · 60+ high *Limits:* Calibrated on 60–300-word texts; a long page is an extrapolation. Lexicons for English, Ukrainian and Spanish only: any other language gets no score, not a zero. Signals of worn writing, not of who wrote it. Two changes from the web tool, for whole pages rather than pasted text: a sentence shape needs at least one function word (a reference list is not a template), and a few words with letters such as ł or ß do not make an English page another language.
+- **Marker words** `derived` (`marker_words`). Occurrences of words from a fixed per-language list (seamless, unlock, delve; «безшовний», «на новий рівень»; «sin fisuras»…) per 1,000 words of the same text as the Pattern score. The English core follows published excess-vocabulary studies (Kobak et al., 2024); the Ukrainian and Spanish lists are written natively. *Unit:* hits per 1,000 words. *Threshold:* 0–9 rare · 10–24 noticeable · 25+ frequent; not yet calibrated *Limits:* Not part of the Pattern score, so the score stays PatternScope's. Marketing copy written by people uses these words too.
+- **Generic passages** `judgement` (`generic_share`). The agent reads every passage and marks it specific or generic by one question: would it fit a competitor's page with only the brand name changed? Each verdict carries a verbatim quote the script checks. Share = characters of generic passages / characters of all passages. *Unit:* % of passage characters. *Limits:* A model's reading, not a measurement: another model may draw the line elsewhere. Where it disagrees with the script, both are shown, never averaged.
+- **Passages too short for a score** `measured` (`short_passages`). Passages with fewer than 60 words, PatternScope's floor. *Unit:* passages. *Limits:* Their text still counts in the page score; only a score of their own is withheld, because a density over a few dozen words swings on a comma.
