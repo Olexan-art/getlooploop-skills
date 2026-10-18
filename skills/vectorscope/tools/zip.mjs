@@ -5,8 +5,9 @@
 //
 //   npm run zip
 //
-// In: SKILL.md, dist/ (the bundled scripts, which need no npm install), scripts/ (the readable
-// source the bundles are built from) and the repository's LICENSE. Out: node_modules, tests,
+// In: SKILL.md, references/ (the reference files SKILL.md points to), dist/ (the bundled scripts,
+// which need no npm install), scripts/ (the readable source the bundles are built from) and the
+// repository's LICENSE. Out: node_modules, tests,
 // tools, examples, docs. Before writing, it checks the frontmatter rules the upload enforces:
 // a name of lowercase letters, digits and hyphens (64 at most) that matches the folder, and a
 // description of 1,024 characters at most, with no XML tags. The archive is deterministic (sorted
@@ -124,7 +125,7 @@ function zip(entries) {
   return Buffer.concat([...locals, ...centrals, end]);
 }
 
-for (const required of ["SKILL.md", "dist/read.mjs", "dist/lens.mjs", "scripts/read.mjs", "scripts/lens.mjs"]) {
+for (const required of ["SKILL.md", "references", "dist/read.mjs", "dist/lens.mjs", "scripts/read.mjs", "scripts/lens.mjs"]) {
   if (!existsSync(join(SKILL_DIR, required))) fail(`${required} is missing${required.startsWith("dist/") ? "; run npm run build" : ""}.`);
 }
 const license = join(REPO_DIR, "LICENSE");
@@ -134,7 +135,12 @@ if (!existsSync(license)) fail("LICENSE is missing at the repository root.");
 const lf = (path) => (/\.(mjs|md)$|LICENSE$/.test(path) ? Buffer.from(readFileSync(path, "utf8").replace(/\r\n/g, "\n"), "utf8") : readFileSync(path));
 
 const fm = checkFrontmatter(readFileSync(join(SKILL_DIR, "SKILL.md"), "utf8"));
-const files = [join(SKILL_DIR, "SKILL.md"), ...walk(join(SKILL_DIR, "dist")), ...walk(join(SKILL_DIR, "scripts"))];
+const files = [
+  join(SKILL_DIR, "SKILL.md"),
+  ...walk(join(SKILL_DIR, "references")),
+  ...walk(join(SKILL_DIR, "dist")),
+  ...walk(join(SKILL_DIR, "scripts")),
+];
 const entries = files
   .map((path) => ({ name: `${FOLDER}/${relative(SKILL_DIR, path).replace(/\\/g, "/")}`, data: lf(path) }))
   .concat([{ name: `${FOLDER}/LICENSE`, data: lf(license) }])
