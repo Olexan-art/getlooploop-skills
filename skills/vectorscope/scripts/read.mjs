@@ -65,7 +65,7 @@ function summarise(reading, file, prefix = "") {
     console.log(`${prefix}REFUSED  ${reading.reasonCode}${reading.status ? ` (HTTP ${reading.status})` : ""}`);
     if (isRefusalCode(reading.reasonCode)) {
       console.log(`${prefix}reason    ${refusalWhy(reading)}; nothing of the page was kept`);
-      console.log(`${prefix}report    run lens.mjs on this reading alone to write the report that says why`);
+      console.log(`${prefix}report    run lens.mjs on this reading with no groups file; the report gives the reason`);
     }
     console.log(`${prefix}reading  ${file}`);
     return;

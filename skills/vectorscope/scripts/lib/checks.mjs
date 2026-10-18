@@ -142,7 +142,9 @@ function lostFaq(passages) {
     }
   }
   if (!hits.length) return [];
-  return [{ code: "lost_faq_questions", severity: "high", passages: hits.map((h) => h.passage), evidence: { samples: hits.slice(0, MAX_SAMPLES) } }];
+  // The totals feed the sentence in the report; the samples show where.
+  const sum = (k) => hits.reduce((n, h) => n + h[k], 0);
+  return [{ code: "lost_faq_questions", severity: "high", passages: hits.map((h) => h.passage), evidence: { answers: sum("answers"), questions: sum("questions"), samples: hits.slice(0, MAX_SAMPLES) } }];
 }
 
 function isIntro(p, page) {

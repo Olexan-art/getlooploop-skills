@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { runChecks, shortLineRuns, withoutOverlap, THIN_SECTION_CHARS } from "../scripts/lib/checks.mjs";
 import { reading, filler } from "./helpers.mjs";
+import { CHECK_COPY } from "../scripts/lib/i18n.mjs";
 
 const codes = (findings) => findings.map((f) => f.code);
 const find = (findings, code) => findings.find((f) => f.code === code);
@@ -16,6 +17,9 @@ test("lost_faq_questions: answers without question marks", () => {
   assert.ok(f, "fires");
   assert.deepEqual(f.passages, [1]);
   assert.equal(f.severity, "high");
+  // The report sentence reads the totals: no "undefined" in any language.
+  assert.equal(f.evidence.answers, 4);
+  for (const lang of ["en", "uk", "pl"]) assert.ok(!CHECK_COPY.lost_faq_questions.what[lang](f.evidence).includes("undefined"), lang);
 });
 
 test("lost_faq_questions: quiet when the questions are kept", () => {
