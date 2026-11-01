@@ -9,7 +9,7 @@ Agent Skills od [GetLoopLoop](https://www.getlooploop.com) dla claude.ai i aplik
 | Skill | Co robi |
 |---|---|
 | [`vectorscope`](skills/vectorscope/SKILL.md) | Pokazuje, jak system wyszukiwania czyta publiczne strony: dokładnie te same pobieranie, wyodrębnianie tekstu, podział na fragmenty i limit 26 fragmentów co w produkcie, werdykty robots.txt dla crawlerów AI, automatyczne kontrole struktury, na ile tekst brzmi jak wygenerowany, a także grupowanie, test zapytań i plan przeredagowania przygotowane przez agenta. Porównuje od 2 do 5 stron. Raport jest po angielsku, ukraińsku i polsku. |
-| [`sitemap-watch`](skills/sitemap-watch/SKILL.md) | Zapamiętuje, jakie strony wymieniają mapy witryny, i pokazuje, co się zmieniło od ostatniego razu: nowe strony, usunięte strony, zmieniony `lastmod` oraz nowe strony pogrupowane według sekcji. Zrobiony z myślą o pytaniu „co nowego u konkurencji”: skrypt liczy i porównuje, a agent mówi, co sugerują nowe sekcje. Tylko wbudowane moduły Node, bez instalacji. |
+| [`sitemap-watch`](https://github.com/Olexan-art/sitemap-watch) | Zapamiętuje, jakie strony wymieniają mapy witryny, i pokazuje, co się zmieniło od ostatniego razu: nowe strony, usunięte strony, zmieniony `lastmod` oraz nowe strony pogrupowane według sekcji. Zrobiony z myślą o pytaniu „co nowego u konkurencji”: skrypt liczy i porównuje, a agent mówi, co sugerują nowe sekcje. Tylko wbudowane moduły Node, bez instalacji. |
 
 ## Po ludzku
 
@@ -207,22 +207,9 @@ node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 
 Skrypty nie wywołują żadnych modeli ani embeddingów i nie wysyłają niczego nigdzie poza żądaniami GET po stronę i jej robots.txt (a z `--render` stronę wczytuje jeszcze lokalna przeglądarka). Pola, które wymagałyby wektorów (spójność, samopodobieństwo, projekcja), są podawane jako `null`, a nie szacowane. Raport HTML escapuje każdy kawałek tekstu strony i ma politykę bezpieczeństwa treści (CSP), która blokuje z niego wszystkie żądania sieciowe, bo fragmenty to treść pochodząca od osób trzecich.
 
-## Sitemap watch w skrócie
+## Sitemap watch
 
-Wersja **1.101**. Instaluje się tak samo jak Vectorscope (`npx skills add Olexan-art/getlooploop-skills --skill sitemap-watch` albo skopiuj `skills/sitemap-watch` do folderu skilli swojego agenta), a potem poproś: **„sprawdź, co nowego u konkurencji: example.com, example.org”**. Pierwsze uruchomienie zapisuje punkt odniesienia i mówi, że nie ma jeszcze czego porównać; każde kolejne pokazuje nowe strony i nowe sekcje. Migawki są zapisywane w `~/.sitemap-watch/<site>/`.
-
-![Pierwsze uruchomienie: punkt odniesienia dla mapy witryny getlooploop.com, 1852 adresy, nie ma jeszcze czego porównać](docs/sitemap-watch-baseline.png)
-
-![Dwa tygodnie później: 126 nowych stron, wszystkie w nowej sekcji /uk/glossary/, a potem własne odczytanie agenta, tak podpisane](docs/sitemap-watch-diff.png)
-
-```
-node scripts/sitemap-watch.mjs snapshot example.com          # robots.txt → mapy witryny (indeksy, .xml.gz) → zapisana lista adresów
-node scripts/sitemap-watch.mjs diff example.com --fresh      # nowa migawka porównana z poprzednią
-node scripts/sitemap-watch.mjs diff example.com --from 2026-10-01 --json
-node scripts/sitemap-watch.mjs list example.com
-```
-
-Skill czyta robots.txt i mapy witryny po jednym żądaniu, z własnym User-Agent, zatrzymuje się na 500 mapach i 200 000 adresów na migawkę i mówi, czego nie przeczytał, jeśli się zatrzymał. Samych stron nie otwiera.
+Sitemap watch, skill, który zapamiętuje, jakie strony wymieniają mapy witryny, i pokazuje, co nowego od ostatniego razu, ma własne repozytorium: **[Olexan-art/sitemap-watch](https://github.com/Olexan-art/sitemap-watch)**, z instrukcją instalacji i zrzutami. Instalacja: `npx skills add Olexan-art/sitemap-watch --skill sitemap-watch`.
 
 ## AI Search Audit Lite
 

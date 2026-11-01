@@ -9,7 +9,7 @@ Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and 
 | Skill | What it does |
 |---|---|
 | [`vectorscope`](skills/vectorscope/SKILL.md) | Shows how a retrieval system reads public pages: the product's exact fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers, automatic structure checks, how generated the text sounds, and the agent's grouping, query test and rewrite plan. Compares 2 to 5 pages. The report is in English, Ukrainian and Polish. |
-| [`sitemap-watch`](skills/sitemap-watch/SKILL.md) | Remembers which pages a site's sitemaps list and shows what changed since the last look: new pages, removed pages, changed `lastmod`, and the new pages grouped by section. Built for "what's new at my competitors": the script counts and compares, the agent says what the new sections suggest. Node built-ins only, no install. |
+| [`sitemap-watch`](https://github.com/Olexan-art/sitemap-watch) | Remembers which pages a site's sitemaps list and shows what changed since the last look: new pages, removed pages, changed `lastmod`, and the new pages grouped by section. Built for "what's new at my competitors": the script counts and compares, the agent says what the new sections suggest. Node built-ins only, no install. |
 
 ## In plain words
 
@@ -207,22 +207,9 @@ node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 
 The scripts make no model or embedding calls and send nothing anywhere except the GETs for the page and its robots.txt (and, with `--render`, the local browser loading the page). Fields that would need vectors (cohesion, self-similarity, the projection) are reported as `null` instead of being estimated. The HTML report escapes every piece of page text and carries a content security policy that blocks all network requests from it, because the passages are third-party content.
 
-## Sitemap watch, in short
+## Sitemap watch
 
-Version **1.101**. Install it like Vectorscope (`npx skills add Olexan-art/getlooploop-skills --skill sitemap-watch`, or copy `skills/sitemap-watch` into your agent's skills folder), then ask: **"check what's new at my competitors: example.com, example.org"**. The first run takes a baseline and says there is nothing to compare yet; every later run lists the new pages and the new sections. Snapshots are kept in `~/.sitemap-watch/<site>/`.
-
-![First run: the skill takes a baseline of getlooploop.com's sitemap, 1,852 URLs, nothing to compare yet](docs/sitemap-watch-baseline.png)
-
-![Two weeks later: 126 new pages, all in a new section /uk/glossary/, then the agent's own reading, labelled as such](docs/sitemap-watch-diff.png)
-
-```
-node scripts/sitemap-watch.mjs snapshot example.com          # robots.txt → sitemaps (indexes, .xml.gz) → a stored list of URLs
-node scripts/sitemap-watch.mjs diff example.com --fresh      # a new snapshot, compared with the previous one
-node scripts/sitemap-watch.mjs diff example.com --from 2026-10-01 --json
-node scripts/sitemap-watch.mjs list example.com
-```
-
-It reads robots.txt and the sitemaps one request at a time with its own User-Agent, stops at 500 sitemaps and 200,000 URLs per snapshot, and says what it left out when it does. It never opens the pages themselves.
+Sitemap watch, the skill that remembers which pages a site's sitemaps list and shows what is new since the last look, has its own repository: **[Olexan-art/sitemap-watch](https://github.com/Olexan-art/sitemap-watch)**, with its install steps and pictures. Install it with `npx skills add Olexan-art/sitemap-watch --skill sitemap-watch`.
 
 ## AI Search Audit Lite
 
