@@ -1,0 +1,15 @@
+{
+  "name": "getlooploop-sitemap-watch-skill",
+  "version": "1.101.0",
+  "description": "Snapshots a site's sitemaps and diffs the snapshots over time: new, removed and lastmod-changed URLs, with new pages grouped by path prefix. Node built-ins only.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "test": "node --test tests/sitemap-watch.test.mjs",
+    "zip": "node tools/zip.mjs"
+  }
+}
