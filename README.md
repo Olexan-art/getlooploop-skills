@@ -211,6 +211,10 @@ The scripts make no model or embedding calls and send nothing anywhere except th
 
 Version **1.101**. Install it like Vectorscope (`npx skills add Olexan-art/getlooploop-skills --skill sitemap-watch`, or copy `skills/sitemap-watch` into your agent's skills folder), then ask: **"check what's new at my competitors: example.com, example.org"**. The first run takes a baseline and says there is nothing to compare yet; every later run lists the new pages and the new sections. Snapshots are kept in `~/.sitemap-watch/<site>/`.
 
+![First run: the skill takes a baseline of getlooploop.com's sitemap, 1,852 URLs, nothing to compare yet](docs/sitemap-watch-baseline.png)
+
+![Two weeks later: 126 new pages, all in a new section /uk/glossary/, then the agent's own reading, labelled as such](docs/sitemap-watch-diff.png)
+
 ```
 node scripts/sitemap-watch.mjs snapshot example.com          # robots.txt → sitemaps (indexes, .xml.gz) → a stored list of URLs
 node scripts/sitemap-watch.mjs diff example.com --fresh      # a new snapshot, compared with the previous one

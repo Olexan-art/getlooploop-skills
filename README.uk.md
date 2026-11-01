@@ -213,6 +213,10 @@ node dist/lens.mjs --compare readings/manifest.json --html readings/compare.html
 
 Версія **1.101**. Встановлюється так само, як Vectorscope (`npx skills add Olexan-art/getlooploop-skills --skill sitemap-watch` або скопіюйте `skills/sitemap-watch` у теку навичок свого агента), а далі просто попросіть: **«перевір, що нового в конкурентів: example.com, example.org»**. Перший запуск робить базовий знімок і каже, що порівнювати ще нема з чим; кожен наступний показує нові сторінки й нові розділи. Знімки зберігаються в `~/.sitemap-watch/<site>/`.
 
+![Перший запуск: скіл робить базовий знімок сайтмапа getlooploop.com, 1 852 URL, порівнювати ще нема з чим](docs/sitemap-watch-baseline-uk.png)
+
+![Через два тижні: 126 нових сторінок, усі в новому розділі /uk/glossary/, і далі власне прочитання агента, підписане як таке](docs/sitemap-watch-diff-uk.png)
+
 ```
 node scripts/sitemap-watch.mjs snapshot example.com          # robots.txt → сайтмапи (індекси, .xml.gz) → збережений список адрес
 node scripts/sitemap-watch.mjs diff example.com --fresh      # новий знімок, порівняний із попереднім

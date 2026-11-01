@@ -211,6 +211,10 @@ Skrypty nie wywołują żadnych modeli ani embeddingów i nie wysyłają niczego
 
 Wersja **1.101**. Instaluje się tak samo jak Vectorscope (`npx skills add Olexan-art/getlooploop-skills --skill sitemap-watch` albo skopiuj `skills/sitemap-watch` do folderu skilli swojego agenta), a potem poproś: **„sprawdź, co nowego u konkurencji: example.com, example.org”**. Pierwsze uruchomienie zapisuje punkt odniesienia i mówi, że nie ma jeszcze czego porównać; każde kolejne pokazuje nowe strony i nowe sekcje. Migawki są zapisywane w `~/.sitemap-watch/<site>/`.
 
+![Pierwsze uruchomienie: punkt odniesienia dla mapy witryny getlooploop.com, 1852 adresy, nie ma jeszcze czego porównać](docs/sitemap-watch-baseline.png)
+
+![Dwa tygodnie później: 126 nowych stron, wszystkie w nowej sekcji /uk/glossary/, a potem własne odczytanie agenta, tak podpisane](docs/sitemap-watch-diff.png)
+
 ```
 node scripts/sitemap-watch.mjs snapshot example.com          # robots.txt → mapy witryny (indeksy, .xml.gz) → zapisana lista adresów
 node scripts/sitemap-watch.mjs diff example.com --fresh      # nowa migawka porównana z poprzednią
