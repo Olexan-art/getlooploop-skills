@@ -136,9 +136,9 @@ Aby zaktualizować, uruchom to samo polecenie ponownie.
 
 Repozytorium zawiera `plugin.json` i `.agents/plugins/marketplace.json` dla Antigravity, `gemini-extension.json` dla Gemini CLI i `.claude-plugin/` dla Claude Code, a sam skill jest w `skills/`.
 
-### Sprawdzanie aktualizacji
+### Sprawdzanie aktualizacji i licznik uruchomień
 
-Skrypt raportu (`lens.mjs`) najwyżej raz na dobę pyta GitHub, czy jest nowsza wersja: jedno żądanie GET `https://raw.githubusercontent.com/Olexan-art/getlooploop-skills/main/plugin.json`, a odpowiedź trafia do `~/.getlooploop-skills/update-check.json`. Nic więcej nie jest wysyłane: ani adres strony, ani domena, ani dane audytu, ani identyfikator. Bez internetu lub przy dowolnym błędzie sprawdzanie milczy. O nowszej wersji powie jeden wiersz w terminalu i komunikat w raporcie; agent zaproponuje polecenie aktualizacji i uruchomi je tylko za twoją zgodą. Wyłączenie: `GETLOOPLOOP_NO_UPDATE_CHECK=1` albo `--no-update-check`; gdy ustawiono `CI`, sprawdzanie też jest pomijane.
+Raz na dobę skrypt raportu (`lens.mjs`) pyta getlooploop.com o najnowszą wersję skilla. Żądanie zawiera nazwę skilla, jego wersję, system operacyjny (win, mac, linux lub other), losowy identyfikator instalacji z pliku `~/.getlooploop-skills/install-id` i liczbę uruchomień skilla od ostatniego sprawdzenia. Nic więcej: żadnych danych o sprawdzanych stronach, ani adresu, ani domeny, ani nazwy użytkownika czy komputera. Serwer ustala kraj na podstawie połączenia i nie przechowuje adresu IP. Jeśli getlooploop.com nie odpowiada, skill odczytuje wersję z pliku `plugin.json` tego repozytorium na GitHubie. O nowszej wersji powie jeden wiersz w terminalu i komunikat w raporcie; agent zaproponuje polecenie aktualizacji i uruchomi je tylko za twoją zgodą. Wyłączenie: `GETLOOPLOOP_NO_UPDATE_CHECK=1` albo `--no-update-check` (gdy ustawiono `CI`, sprawdzanie też jest wyłączone); wtedy nic nie jest wysyłane i identyfikator nie powstaje. Aby zresetować identyfikator, usuń folder `~/.getlooploop-skills`.
 
 ### Jednym poleceniem (Claude Code, Codex, opencode i inni agenci)
 

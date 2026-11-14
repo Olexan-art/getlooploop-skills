@@ -136,9 +136,9 @@ To update, run the same command again.
 
 The repository carries `plugin.json` and `.agents/plugins/marketplace.json` for Antigravity, `gemini-extension.json` for Gemini CLI and `.claude-plugin/` for Claude Code, with the skill in `skills/`.
 
-### Update check
+### Update check and usage count
 
-The report script (`lens.mjs`) asks GitHub at most once a day whether a newer version is out: one GET of `https://raw.githubusercontent.com/Olexan-art/getlooploop-skills/main/plugin.json`, cached in `~/.getlooploop-skills/update-check.json`. It sends nothing else: no page URL, no domain, no audit data, no identifier. Offline or on any error it stays silent. A newer version is one line in the terminal and a notice in the report; the agent offers the update command and runs it only if you agree. Switch it off with `GETLOOPLOOP_NO_UPDATE_CHECK=1` or `--no-update-check`; it is also skipped when `CI` is set.
+Once a day, the report script (`lens.mjs`) asks getlooploop.com for the newest version of the skill. The request carries the skill's name, its version, the operating system (win, mac, linux or other), a random install id kept in `~/.getlooploop-skills/install-id`, and how many times the skill ran since the last check. That is all: nothing about the pages you audit, no URL, no domain, no user or machine name. The server derives a country from the connection and does not store the IP address. If getlooploop.com does not answer, the skill reads the version from this repository's `plugin.json` on GitHub instead. A newer version is one line in the terminal and a notice in the report; the agent offers the update command and runs it only if you agree. Switch it off with `GETLOOPLOOP_NO_UPDATE_CHECK=1` or `--no-update-check` (it is also off when `CI` is set): then nothing is sent and no id is created. Delete the `~/.getlooploop-skills` folder to reset the id.
 
 ### One command (Claude Code, Codex, opencode and other agents)
 
