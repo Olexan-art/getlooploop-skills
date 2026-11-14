@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "vectorscope",
-  "version": "2.115.0",
+  "version": "2.116.0",
   "description": "Shows how an AI assistant retriever or a RAG pipeline reads a public web page: the GetLoopLoop Vectorscope fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers, structure checks and an HTML report. The scripts call no model.",
   "author": {
     "name": "GetLoopLoop",
