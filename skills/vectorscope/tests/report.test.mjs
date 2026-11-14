@@ -139,3 +139,16 @@ test("html: severity and verdict pills carry a shape beside the word, not colour
   const html = renderHtml(r, lensOf(r, [[0, 1]]), { checks: runChecks(r) });
   for (const m of html.matchAll(/<span class="pill (sev-\w+|good|bad|mid)">(.{0,20})/g)) assert.ok(m[2].startsWith('<svg class="sv"'), m[0]);
 });
+
+test("html: a newer release is one notice in the header, in English, Ukrainian and Polish; none without one", async () => {
+  const { updateNotice, updateRoutes, updateHow } = await import("../scripts/lib/update-check.mjs");
+  const routes = updateRoutes({ repo: "getlooploop-skills", plugin: "vectorscope" });
+  const update = { current: "2.114", latest: "2.115.0", how: updateHow(routes), routes, plugin: "vectorscope" };
+  const r = reading(["Intro text.", "Body text."]);
+  const html = renderHtml(r, lensOf(r, [[0, 1]]), { updateText: updateNotice(update) });
+  const header = html.slice(html.indexOf("<header>"), html.indexOf("</header>"));
+  assert.match(header, /class="note update"/);
+  assert.ok(header.includes("2.115.0") && header.includes("/plugin marketplace update getlooploop-skills"));
+  assert.ok(header.includes('class="l-uk"') && header.includes("Доступна новіша версія") && header.includes("Dostępna jest nowsza wersja"));
+  assert.ok(!renderHtml(r, lensOf(r, [[0, 1]])).includes('class="note update"'));
+});

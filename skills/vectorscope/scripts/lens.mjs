@@ -30,6 +30,7 @@ import { checkCopy, tr } from "./lib/i18n.mjs";
 import { LAYER_COPY, METRICS, metricsDictionary } from "./lib/metrics.mjs";
 import { charsPastCap, hasLosses } from "./lib/losses.mjs";
 import { computeGenerated, generatedExport, generatedMarkdown, validateStyle } from "./lib/generatedText.mjs";
+import { checkForUpdate, NO_UPDATE_FLAG, updateExport, updateLine, updateNotice } from "./lib/update-check.mjs";
 
 // Kept for v1 callers that imported these from here.
 export { validateGrouping, buildJudgedLens };
@@ -43,6 +44,7 @@ const USAGE = [
   "Usage: node scripts/lens.mjs reading.json groups.json [--plan plan.json] [--queries queries.json] [--facts facts.json] [--style style.json]",
   "         [--topics topics.json] [--baseline old-reading.json [--baseline-groups old-groups.json]] [--json out.json] [--md out.md] [--html out.html]",
   "       node scripts/lens.mjs --compare readings/manifest.json [--json out.json] [--md out.md] [--html out.html]",
+  "       either form takes --no-update-check (or GETLOOPLOOP_NO_UPDATE_CHECK=1) to skip the daily version check",
 ].join("\n");
 
 function fail(message) {
@@ -55,7 +57,8 @@ function parseArgs(argv) {
   const flags = ["json", "md", "html", "plan", "queries", "facts", "style", "topics", "baseline", "baseline-groups", "compare"];
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
-    if (arg.startsWith("--") && flags.includes(arg.slice(2))) out[arg.slice(2)] = argv[++i];
+    if (arg === NO_UPDATE_FLAG) out.noUpdateCheck = true;
+    else if (arg.startsWith("--") && flags.includes(arg.slice(2))) out[arg.slice(2)] = argv[++i];
     else if (arg.startsWith("--")) throw new Error(`Unknown option: ${arg}`);
     else out.files.push(arg);
   }
@@ -372,11 +375,12 @@ export function renderRefusalMarkdown(reading) {
   return [`# Vectorscope: ${REFUSAL_COPY.title.en}`, "", `URL: ${cell(url)}`, "", ...refusalMarkdown("##", [reading.reasonCode])].join("\n");
 }
 
-function refusalExport(reading) {
+function refusalExport(reading, update = null) {
   return {
     schema: REFUSAL_SCHEMA,
     generatedAt: new Date().toISOString(),
     skillVersion: SKILL_VERSION,
+    update: updateExport(update),
     producedBy: { tool: "vectorscope-skill (local, no embeddings)", url: "https://www.getlooploop.com/vectorscope" },
     refused: true,
     reasonCode: reading.reasonCode,
@@ -390,7 +394,7 @@ function refusalExport(reading) {
 
 function runRefused(args, reading) {
   console.log(`REFUSED  ${reading.reasonCode}: ${refusalReason(reading.reasonCode, "en").replace(/^Why: /, "").replace(/\.$/, "")}; the report holds the reason and nothing of the page`);
-  writeOutputs(args, refusalExport(reading), renderRefusalMarkdown(reading), renderRefusalHtml(reading), "vectorscope-refused.json");
+  writeOutputs(args, refusalExport(reading, args.update), renderRefusalMarkdown(reading), renderRefusalHtml(reading), "vectorscope-refused.json");
 }
 
 /** Who did the reading, as groups.json states it; "model not stated by the agent" otherwise. */
@@ -425,6 +429,7 @@ export function renderMarkdown(reading, lens, extras = {}) {
 
   out.push(`# Vectorscope reading: ${cell(page.title || host || page.url)}`);
   out.push("");
+  if (extras.update) out.push(`> **${cell(updateNotice(extras.update).en)}**`, "");
   out.push(...infoMarkdown(cap, [{ n: 1, j: lens.judgement }]));
   out.push(...blockedBanner(reading.robots));
   out.push("| | |");
@@ -569,6 +574,7 @@ export function renderCompareMarkdown(data) {
   const { pages, topicCmp, facts, factCmp, queries, plan, topics } = data;
   const name = new Map(topics.map((t) => [t.id, t.name]));
   const out = [`# Vectorscope comparison: ${pages.length} pages, one topic dictionary`, ""];
+  if (data.update) out.push(`> **${cell(updateNotice(data.update).en)}**`, "");
   out.push(...infoMarkdown(pages[0].reading.page.chunkCap, pages.map((p) => ({ n: p.n, j: p.lens.judgement }))));
   out.push("> The agent grouped every page against one shared topic dictionary, so the topics line up across pages.", "");
   if (data.refused?.length) {
@@ -750,6 +756,8 @@ function singleExport(reading, lens, extras) {
     diff: extras.diff ?? null,
     // 2.111, additive: the Pattern score, the marker words and the swap test, as the block shows them.
     generatedText: extras.generated ? generatedExport(extras.generated) : null,
+    // 2.114: a newer release of the skill, when the daily check found one; else null.
+    update: updateExport(extras.update),
   };
 }
 
@@ -796,7 +804,7 @@ function runSingle(args) {
   const lens = buildJudgedLens(reading, grouping);
   const checks = pageChecks(reading, lens);
 
-  const extras = { checks, topicsById: topics ? new Map(topics.map((t) => [t.id, t])) : null };
+  const extras = { checks, topicsById: topics ? new Map(topics.map((t) => [t.id, t])) : null, update: args.update ?? null, updateText: args.update ? updateNotice(args.update) : null };
   const warnings = [];
   if (args.plan) {
     const fired = new Map([[1, new Set(checks.map((f) => f.code))]]);
@@ -882,7 +890,7 @@ function runCompare(args) {
 
   const topicCmp = compareTopics(pages, topics);
   const factCmp = facts ? compareFacts(pages, facts) : null;
-  const data = { pages, topics, topicCmp, facts, factCmp, queries, plan, refused };
+  const data = { pages, topics, topicCmp, facts, factCmp, queries, plan, refused, update: args.update ?? null, updateText: args.update ? updateNotice(args.update) : null };
 
   for (const w of warnings) console.log(`warning   ${w}`);
   for (const p of pages) {
@@ -899,6 +907,7 @@ function runCompare(args) {
     schema: COMPARE_SCHEMA,
     generatedAt: new Date().toISOString(),
     skillVersion: SKILL_VERSION,
+    update: updateExport(args.update),
     producedBy: { tool: "vectorscope-skill (local, no embeddings)", url: "https://www.getlooploop.com/vectorscope" },
     howToRead:
       "Each page is a full single-page export under pages[]. topics is the one dictionary every page was grouped against; topicTable gives passages and characters per topic per page; topicGaps lists, per page, topics the others cover and it does not; facts and factGaps are the agent's list of citable facts and where each is stated; queries carry a verdict per page and the winner. Grouping, facts and verdicts are judgements; chunking and the cap are the product's exact rules.",
@@ -941,6 +950,9 @@ if (isMain) {
     console.error(USAGE);
     process.exit(1);
   }
+  // At most one GET of plugin.json on GitHub a day, about 2 seconds at worst, silent on failure.
+  args.update = args.noUpdateCheck ? null : await checkForUpdate({ repo: "getlooploop-skills", plugin: "vectorscope", current: SKILL_VERSION });
+  if (args.update) console.error(updateLine(args.update));
   if (args.compare) runCompare(args);
   else runSingle(args);
 }

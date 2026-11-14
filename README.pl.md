@@ -115,23 +115,7 @@ W [`examples/`](examples) są trzy prawdziwe uruchomienia, a pliki napisane prze
 
 Skill potrzebuje Node 20.18 lub nowszego (tego wymaga cheerio) i **nie potrzebuje `npm install`**: `dist/read.mjs` i `dist/lens.mjs` to skrypty zbudowane razem z ich jedyną zależnością, [cheerio](https://cheerio.js.org/), więc uruchamia je zwykły `node`, także w piaskownicach, które blokują instalowanie pakietów. Czytelny kod źródłowy jest w `scripts/`; `dist/` jest z niego generowany (zob. *Praca nad skillem*).
 
-### Jednym poleceniem (Claude Code, Codex, opencode i inni agenci)
-
-```
-npx skills add Olexan-art/getlooploop-skills --skill vectorscope
-```
-
-[Narzędzie skills](https://skills.sh) zapyta, dla których agentów zainstalować skill (dodaj `-g`, żeby działał we wszystkich projektach, albo `-a claude-code`, żeby wybrać jednego agenta). Potem poproś agenta: „run vectorscope on <url>”.
-
-### Jako wtyczka (Google Antigravity, Claude Code)
-
-Repozytorium jest też wtyczką: `plugin.json` i `.agents/plugins/marketplace.json` dla Antigravity, `gemini-extension.json` dla Gemini CLI, `.claude-plugin/` dla Claude Code, a sam skill jest w `skills/`.
-
-Google Antigravity:
-
-```
-agy plugin install https://github.com/Olexan-art/getlooploop-skills
-```
+### Jako wtyczka (Claude Code, Google Antigravity), zalecane
 
 Claude Code:
 
@@ -139,6 +123,30 @@ Claude Code:
 /plugin marketplace add Olexan-art/getlooploop-skills
 /plugin install vectorscope@getlooploop-skills
 ```
+
+Potem włącz automatyczne aktualizacje: w `/plugin` otwórz **Marketplaces**, wybierz `getlooploop-skills` i kliknij **Enable auto-update**. Do tego czasu Claude Code trzyma zainstalowaną wersję; `/plugin marketplace update getlooploop-skills` pobiera nowszą ręcznie.
+
+Google Antigravity:
+
+```
+agy plugin install https://github.com/Olexan-art/getlooploop-skills
+```
+
+Aby zaktualizować, uruchom to samo polecenie ponownie.
+
+Repozytorium zawiera `plugin.json` i `.agents/plugins/marketplace.json` dla Antigravity, `gemini-extension.json` dla Gemini CLI i `.claude-plugin/` dla Claude Code, a sam skill jest w `skills/`.
+
+### Sprawdzanie aktualizacji
+
+Skrypt raportu (`lens.mjs`) najwyżej raz na dobę pyta GitHub, czy jest nowsza wersja: jedno żądanie GET `https://raw.githubusercontent.com/Olexan-art/getlooploop-skills/main/plugin.json`, a odpowiedź trafia do `~/.getlooploop-skills/update-check.json`. Nic więcej nie jest wysyłane: ani adres strony, ani domena, ani dane audytu, ani identyfikator. Bez internetu lub przy dowolnym błędzie sprawdzanie milczy. O nowszej wersji powie jeden wiersz w terminalu i komunikat w raporcie; agent zaproponuje polecenie aktualizacji i uruchomi je tylko za twoją zgodą. Wyłączenie: `GETLOOPLOOP_NO_UPDATE_CHECK=1` albo `--no-update-check`; gdy ustawiono `CI`, sprawdzanie też jest pomijane.
+
+### Jednym poleceniem (Claude Code, Codex, opencode i inni agenci)
+
+```
+npx skills add Olexan-art/getlooploop-skills --skill vectorscope
+```
+
+[Narzędzie skills](https://skills.sh) zapyta, dla których agentów zainstalować skill (dodaj `-g`, żeby działał we wszystkich projektach, albo `-a claude-code`, żeby wybrać jednego agenta). Potem poproś agenta: „run vectorscope on <url>”. Później `npx skills update vectorscope` go zaktualizuje.
 
 ### claude.ai i aplikacja Claude na komputer
 

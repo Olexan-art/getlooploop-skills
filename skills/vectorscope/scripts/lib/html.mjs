@@ -1283,6 +1283,12 @@ function countersBlock(reading) {
   return out;
 }
 
+/** 2.114: a newer release of the skill, as one line in the report's header, in all three languages ({en, uk, pl} from the update check). */
+function updateBlock(n) {
+  if (!n) return [];
+  return [`<p class="note update" role="status">${pair(esc(n.en), esc(n.uk), esc(n.pl))}</p>`];
+}
+
 export function renderHtml(reading, lens, extras = {}) {
   const { page } = reading;
   const cap = page.chunkCap;
@@ -1314,6 +1320,7 @@ export function renderHtml(reading, lens, extras = {}) {
   out.push(`<li class="tag">${L("headingsFound", { n: page.headings })}${tagged("headings")}</li>`);
   out.push(`${page.noindex ? `<li class="tag warn">${L("noindexYes")}` : `<li class="tag">${L("noindexNo")}`}${layerBadges("measured")}</li>`);
   out.push("</ul>");
+  out.push(...updateBlock(extras.updateText));
   out.push("</header>");
   out.push(...infoPanel(cap, [{ n: 1, j: lens.judgement }]));
   // If the AI crawlers that answer people are blocked, that is said first.
@@ -1498,6 +1505,7 @@ export function renderCompareHtml(data) {
   }
   for (const r of refused) out.push(`<li class="tag warn"><b>${r.n}</b> ${esc(clip(hostOf(r.url), 60))} · ${L("refusedTag")}</li>`);
   out.push("</ul>");
+  out.push(...updateBlock(data.updateText));
   out.push("</header>");
   out.push(...infoPanel(pages[0].reading.page.chunkCap, pages.map((p) => ({ n: p.n, j: p.lens.judgement }))));
   for (const p of pages) out.push(...bannerFor(p.reading.robots, `${L("pageN", { n: p.n })} · `));

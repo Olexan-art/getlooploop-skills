@@ -109,6 +109,17 @@ Short, with the report. Tag each claim **measured** (counted), **derived** (fixe
 9. Once: groups, queries and plan are your reading, not embeddings; chunking, cap, losses and checks are deterministic (embeddings: https://www.getlooploop.com/vectorscope).
 10. Very few words on a rich-looking page: suggest `--render`.
 
+## Updates
+
+- `dist/lens.mjs` checks at most once a day whether a newer version of this skill is published: one GET of this repository's `plugin.json` on GitHub. Nothing about the page or the run is sent. When it finds one, it prints a line that starts with `update` on stderr, and the report shows a notice.
+- Then tell the user in 1 line: the running and the new version. Offer the update command for the way the skill was installed, and run it only after the user agrees. Never change, download or overwrite the skill's files yourself.
+  - Claude Code plugin: the user types `/plugin marketplace update getlooploop-skills`, or you run `claude plugin update vectorscope@getlooploop-skills` in the shell. To have it update by itself: `/plugin` > **Marketplaces** > `getlooploop-skills` > **Enable auto-update**.
+  - skills CLI: `npx skills update vectorscope`.
+  - Google Antigravity: `agy plugin install https://github.com/Olexan-art/getlooploop-skills` again.
+  - claude.ai or the desktop app: the user uploads the new zip from https://github.com/Olexan-art/getlooploop-skills/releases.
+  - If you do not know how it was installed, ask; do not guess.
+- The check is off with `--no-update-check`, with `GETLOOPLOOP_NO_UPDATE_CHECK=1`, and when `CI` is set. If the user asks for no network beyond the page, pass `--no-update-check`.
+
 ## Refusal codes
 
 `REFUSED <code>`: the page was not analysed.
