@@ -4,6 +4,12 @@ import * as cheerio from "cheerio";
 
 // Elements nobody sees. Removed first; the h1 is read after this pass, so a page that titles
 // itself in its banner still has one.
+//
+// `hidden="until-found"` is not hidden in that sense: the browser keeps the text in the page,
+// finds it with Ctrl+F and opens it for a text-fragment link. It is the platform's way to fold an
+// FAQ answer or an accordion panel without taking the text out of the document (modern-web-guidance,
+// ui-behaviors/search-hidden-content), so it is kept; `hidden` and `hidden=""` still go. The
+// GetLoopLoop crawler uses the same selector (HIDDEN_NOT_FINDABLE).
 const NON_RENDERED = [
   "script",
   "style",
@@ -17,7 +23,7 @@ const NON_RENDERED = [
   "link",
   "meta",
   "head",
-  "[hidden]",
+  "[hidden]:not([hidden='until-found' i])",
   "[aria-hidden='true']",
 ];
 

@@ -77,3 +77,27 @@ test("the observer only looks: extraction with and without it is identical", () 
     assert.ok(calls.length >= 2, `${file}: the observer was called`);
   }
 });
+
+// modern-web-guidance, ui-behaviors/search-hidden-content: hidden="until-found" keeps the text in
+// the page for find-in-page and text-fragment links, so the reading keeps it too; plain hidden goes.
+test("hidden=until-found text is read, in any case; hidden and hidden=\"\" are not", () => {
+  const html = `<!doctype html><html><body><main>
+    <h1>Questions</h1>
+    <h2>Billing</h2>
+    <button aria-expanded="false" aria-controls="a1">Can I pay by invoice?</button>
+    <div id="a1" hidden="until-found"><p>Folded answer about invoices.</p></div>
+    <h2>Plans</h2>
+    <div hidden="UNTIL-FOUND"><p>Upper-case folded answer about plans.</p></div>
+    <details><summary>Is there a free tier?</summary><p>Closed details answer about the free tier.</p></details>
+    <div hidden><h2>Ghost</h2><p>Plain hidden text.</p></div>
+    <div hidden=""><p>Empty hidden text.</p></div>
+    <div hidden="hidden"><p>Hidden-hidden text.</p></div>
+  </main></body></html>`;
+  const r = extractVisiblePageText(cheerio.load(html));
+  assert.match(r.bodyText, /Folded answer about invoices\./);
+  assert.match(r.bodyText, /Upper-case folded answer about plans\./);
+  assert.match(r.bodyText, /Is there a free tier\?/);
+  assert.match(r.bodyText, /Closed details answer about the free tier\./);
+  assert.doesNotMatch(r.bodyText, /Plain hidden text|Empty hidden text|Hidden-hidden text/);
+  assert.deepEqual(r.h2, ["Billing", "Plans"]);
+});
