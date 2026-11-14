@@ -2,7 +2,7 @@ English · [Українська](README.uk.md) · [Polski](README.pl.md)
 
 # GetLoopLoop skills
 
-Vectorscope skill **2.112**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
+Vectorscope skill **2.113**. Versions count in thousandths (2.101, 2.102, …), so the first number moves only on a breaking change.
 
 Agent Skills from [GetLoopLoop](https://www.getlooploop.com), for claude.ai and the Claude desktop app, Claude Code, Codex, opencode, Hermes Agent and other agents that load `SKILL.md` skills.
 
@@ -122,6 +122,23 @@ npx skills add Olexan-art/getlooploop-skills --skill vectorscope
 ```
 
 The [skills CLI](https://skills.sh) asks which agents to install it for (add `-g` for every project, `-a claude-code` to pick one). Then ask your agent to "run vectorscope on <url>".
+
+### As a plugin (Google Antigravity, Claude Code)
+
+The repository is also a plugin: `plugin.json` and `.agents/plugins/marketplace.json` for Antigravity, `gemini-extension.json` for Gemini CLI, `.claude-plugin/` for Claude Code, with the skill in `skills/`.
+
+Google Antigravity:
+
+```
+agy plugin install https://github.com/Olexan-art/getlooploop-skills
+```
+
+Claude Code:
+
+```
+/plugin marketplace add Olexan-art/getlooploop-skills
+/plugin install vectorscope@getlooploop-skills
+```
 
 ### claude.ai and the Claude desktop app
 

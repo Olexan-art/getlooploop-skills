@@ -1,0 +1,20 @@
+{
+  "name": "vectorscope",
+  "description": "Shows how an AI assistant retriever or a RAG pipeline reads a public web page: the GetLoopLoop Vectorscope fetch, extraction, chunking and 26-passage cap, robots.txt verdicts for AI crawlers, structure checks and an HTML report. The scripts call no model.",
+  "version": "2.112.0",
+  "author": {
+    "name": "GetLoopLoop",
+    "url": "https://www.getlooploop.com"
+  },
+  "homepage": "https://www.getlooploop.com",
+  "repository": "https://github.com/Olexan-art/getlooploop-skills",
+  "license": "MIT",
+  "keywords": [
+    "seo",
+    "ai-search",
+    "geo",
+    "rag",
+    "robots-txt",
+    "agent-skill"
+  ]
+}

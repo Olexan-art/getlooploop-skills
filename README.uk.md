@@ -2,7 +2,7 @@
 
 # Навички GetLoopLoop
 
-Скіл Vectorscope **2.112**. Версії рахуються в тисячних (2.101, 2.102, …), тож перша цифра змінюється лише тоді, коли щось ламається несумісно.
+Скіл Vectorscope **2.113**. Версії рахуються в тисячних (2.101, 2.102, …), тож перша цифра змінюється лише тоді, коли щось ламається несумісно.
 
 Agent Skills від [GetLoopLoop](https://www.getlooploop.com) для claude.ai і застосунку Claude для комп’ютера, Claude Code, Codex, opencode, Hermes Agent та інших агентів, які завантажують навички у форматі `SKILL.md`.
 
@@ -124,6 +124,23 @@ npx skills add Olexan-art/getlooploop-skills --skill vectorscope
 ```
 
 [Програма skills](https://skills.sh) запитає, для яких агентів встановити навичку (додайте `-g`, щоб вона працювала в усіх проєктах, або `-a claude-code`, щоб вибрати одного агента). Далі попросіть агента: «прожени <адреса> через vectorscope».
+
+### Як плагін (Google Antigravity, Claude Code)
+
+Репозиторій — це ще й плагін: `plugin.json` і `.agents/plugins/marketplace.json` для Antigravity, `gemini-extension.json` для Gemini CLI, `.claude-plugin/` для Claude Code, а сама навичка лежить у `skills/`.
+
+Google Antigravity:
+
+```
+agy plugin install https://github.com/Olexan-art/getlooploop-skills
+```
+
+Claude Code:
+
+```
+/plugin marketplace add Olexan-art/getlooploop-skills
+/plugin install vectorscope@getlooploop-skills
+```
 
 ### claude.ai і застосунок Claude для комп’ютера
 
