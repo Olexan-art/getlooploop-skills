@@ -17,7 +17,8 @@ test("the decorations stay small", () => {
 
 test("brandmark.mjs matches the GetLoopLoop mark asset, and stays small", async () => {
   const { brandmarkModule } = await import("../tools/brandmark.mjs");
-  const { GLL_MARK, GLL_MARK_LIGHT } = await import("../scripts/lib/brandmark.mjs");
+  const { GLL_MARK, GLL_MARK_LIGHT, GLLMOLFAR_ICON } = await import("../scripts/lib/brandmark.mjs");
   assert.equal(readFileSync(new URL("../scripts/lib/brandmark.mjs", import.meta.url), "utf8"), brandmarkModule(), "out of date — run node tools/brandmark.mjs");
   for (const m of [GLL_MARK, GLL_MARK_LIGHT]) assert.ok(m.startsWith("data:image/webp;base64,") && m.length < 12000, String(m.length));
+  assert.ok(GLLMOLFAR_ICON.startsWith("data:image/png;base64,iVBORw0KGgo") && GLLMOLFAR_ICON.length < 13000, String(GLLMOLFAR_ICON.length));
 });

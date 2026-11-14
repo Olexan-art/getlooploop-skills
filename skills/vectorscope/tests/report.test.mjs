@@ -29,7 +29,7 @@ test("html: no network, bilingual chrome, footer links", () => {
   assert.ok(!/<link[^>]+stylesheet/.test(html) && !/src="https?:/.test(html));
   assert.ok(html.includes('data-set-lang="uk"') && html.includes('class="l-uk"'));
   assert.ok(html.includes('data-set-lang="pl"') && html.includes('class="l-pl"'));
-  for (const link of FOOTER_LINKS) assert.ok(html.includes(`href="${link.href}" rel="noopener noreferrer" target="_blank"`), link.name);
+  for (const link of FOOTER_LINKS) assert.ok(html.includes(`href="${link.href.replace(/&/g, "&amp;")}" rel="noopener noreferrer" target="_blank"`), link.name);
 });
 
 test("html: the footer glitches, in steps, and reduced motion turns it off", () => {
@@ -151,4 +151,18 @@ test("html: a newer release is one notice in the header, in English, Ukrainian a
   assert.ok(header.includes("2.115.0") && header.includes("/plugin marketplace update getlooploop-skills"));
   assert.ok(header.includes('class="l-uk"') && header.includes("Доступна новіша версія") && header.includes("Dostępna jest nowsza wersja"));
   assert.ok(!renderHtml(r, lensOf(r, [[0, 1]])).includes('class="note update"'));
+});
+
+test("html: the footer links to GLLmolfar with its own icon inline, its label in three languages and no number", () => {
+  const r = reading(["Intro text.", "Body text."]);
+  const html = renderHtml(r, lensOf(r, [[0, 1]]));
+  const foot = html.slice(html.indexOf('<footer class="foot">'));
+  const href = "https://www.getlooploop.com/gllmolfar?utm_source=vectorscope&amp;utm_medium=skill-report&amp;utm_campaign=gllmolfar";
+  assert.ok(foot.includes(`href="${href}"`), "the GLLmolfar link with its utm parameters");
+  assert.match(foot, /<img class="gm-ico" src="data:image\/png;base64,iVBORw0KGgo[^"]+" alt="" width="16" height="16">/);
+  assert.ok(foot.includes("GLLmolfar · <span") || foot.includes("GLLmolfar · "));
+  for (const t of ["crawl your whole site", "проскануйте весь сайт", "przeskanuj cały serwis"]) assert.ok(foot.includes(t), t);
+  const label = foot.slice(foot.indexOf(href), foot.indexOf("</a>", foot.indexOf(href)));
+  assert.doesNotMatch(label.replace(/<img[^>]*>/, ""), /\d/, "no page count or price in the label");
+  assert.equal(FOOTER_LINKS.length, 5);
 });

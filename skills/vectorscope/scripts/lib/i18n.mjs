@@ -517,6 +517,7 @@ export const S = {
     pl: "Wykonano skillem vectorscope: skrypty pobrały stronę i jej robots.txt i nigdzie niczego nie wysłały; nie wywołano żadnego modelu ani embeddingów.",
   },
   footerAuthor: { en: "the author", uk: "автор", pl: "autor" },
+  footerGllmolfar: { en: "crawl your whole site", uk: "проскануйте весь сайт", pl: "przeskanuj cały serwis" },
 };
 
 /**

@@ -13,7 +13,7 @@ import { FINDINGS, REFUSAL_COPY, SANCTIONS_LINKS, refusalReason } from "./refusa
 import { LAYER_COPY, METRICS } from "./metrics.mjs";
 import { charsPastCap, hasLosses } from "./losses.mjs";
 import { CORNER, MOTANKA, ORNAMENT } from "./sprites.mjs";
-import { GLL_MARK, GLL_MARK_LIGHT } from "./brandmark.mjs";
+import { GLL_MARK, GLL_MARK_LIGHT, GLLMOLFAR_ICON } from "./brandmark.mjs";
 import { GENERATED_CSS, renderGeneratedHtml } from "./generatedText.mjs";
 
 const VECTORSCOPE_URL = "https://www.getlooploop.com/vectorscope";
@@ -108,15 +108,22 @@ const ICONS = {
   x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
   bluesky:
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5.2 3.3C8 5.4 11 9.6 12 11.8c1-2.2 4-6.4 6.8-8.5 2-1.5 5.2-2.6 5.2 1 0 .7-.4 6-.6 6.9-.8 3-3.8 3.7-6.5 3.3 4.7.8 5.9 3.4 3.3 6.1-4.9 5-7-1.3-7.6-2.9l-.6-1.7-.6 1.7c-.6 1.6-2.7 7.9-7.6 2.9-2.6-2.7-1.4-5.3 3.3-6.1-2.7.4-5.7-.3-6.5-3.3C.4 10.3 0 5 0 4.3c0-3.6 3.2-2.5 5.2-1z"/></svg>',
+  // 2.116: the GLLmolfar desktop app's own icon; the label beside it names the app, so alt is empty.
+  gllmolfar: `<img class="gm-ico" src="${GLLMOLFAR_ICON}" alt="" width="16" height="16">`,
   linkedin:
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>',
 };
+
+/** The footer link to GLLmolfar, with the skill that sent the visit as utm_source. */
+export const gllmolfarHref = (skill) => `https://www.getlooploop.com/gllmolfar?utm_source=${encodeURIComponent(skill)}&utm_medium=skill-report&utm_campaign=gllmolfar`;
 
 export const FOOTER_LINKS = [
   { id: "getlooploop", name: "GetLoopLoop", href: "https://www.getlooploop.com" },
   { id: "x", name: "X", href: "https://x.com/Looploopnow" },
   { id: "bluesky", name: "Bluesky", href: "https://bsky.app/profile/getlooploop.bsky.social" },
   { id: "linkedin", name: "LinkedIn", href: "https://www.linkedin.com/in/olexandr-tsyrkin-07460539", key: "footerAuthor" },
+  // 2.116: GetLoopLoop's desktop crawler. The skills that vendor this list set their own utm_source.
+  { id: "gllmolfar", name: "GLLmolfar", href: gllmolfarHref("vectorscope"), key: "footerGllmolfar" },
 ];
 
 /** The report stylesheet; tools/contrast.mjs measures its colour tokens. */
@@ -375,6 +382,7 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .links a:hover{color:var(--text);border-color:var(--line-2)}
 .links svg{width:15px;height:15px;flex:none}
 .links .gll-ico{width:28px;height:15px;flex:none}
+.links .gm-ico{width:16px;height:16px;flex:none;border-radius:3px}
 .gll-ico--dark{display:none}
 :root[data-theme="dark"] .gll-ico--light{display:none}
 :root[data-theme="dark"] .gll-ico--dark{display:inline}
